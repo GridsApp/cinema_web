@@ -16,4 +16,5 @@ class Branch extends Model
             get: fn(mixed $value, array $attributes) => $attributes['label_'.app()->getLocale()]  
         );
     }
+    
 }

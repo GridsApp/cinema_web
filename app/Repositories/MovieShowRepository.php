@@ -20,7 +20,7 @@ class MovieShowRepository implements MovieShowRepositoryInterface
                 'movie_shows.id',
                 'times.label as time',
                 'price_groups.label as price_group',
-                'branches.label as branch',
+                'branches.label_'.app()->getLocale().' as branch',
                 'movie_shows.system_id as system_id',
                 'times.id as time_id',
                 'price_groups.id as price_group_id',
