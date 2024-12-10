@@ -6,15 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\MovieShow;
 use App\Models\PriceGroupZone;
 use App\Models\Theater;
+use App\Traits\APITrait;
 use Illuminate\Http\Request;
 
 class TheaterSeatsController extends Controller
 {
-    public function listSeats()
+    use APITrait;
+
+    public function listSeats($movie_show_id)
     {
+        try {
+            $movie_show = MovieShow::where('id' , $movie_show_id)->orderBy('id', 'DESC')->firstOrFail();
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Movie show not found', $e->getMessage()));
+        }
 
-
-        $movie_show = MovieShow::orderBy('id', 'DESC')->first();
+     
         $theater = Theater::whereNull('deleted_at')->where('id', $movie_show->theater_id)->first();
         $theater_map = json_decode($theater->theater_map, true);
 

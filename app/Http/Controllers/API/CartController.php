@@ -51,9 +51,9 @@ class CartController extends Controller
 
         $user = request()->user;
         $user_type = request()->user_type;
-        
 
- 
+
+
         $form_data = clean_request([]);
         $check = $this->validateRequiredFields($form_data, ['system_id']);
 
@@ -62,12 +62,11 @@ class CartController extends Controller
         }
 
         try {
-
             $this->cartRepository->getSystemById($form_data['system_id']);
-            // dd($cart);
         } catch (\Throwable $th) {
             return $this->response(notification()->error('System not found', $th->getMessage()));
         }
+
         try {
             $cart = $this->cartRepository->createCart($user->id, $user_type, $form_data['system_id']);
         } catch (\Exception $th) {
@@ -96,7 +95,7 @@ class CartController extends Controller
 
         try {
 
-            $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
@@ -118,12 +117,10 @@ class CartController extends Controller
             return $this->response(notification()->error('Error adding item to cart', $e->getMessage()));
         }
     }
-
-
-    public function addSeatCart()
+    public function addSeatsCart()
     {
         $form_data = clean_request([]);
-        $check = $this->validateRequiredFields($form_data, ['cart_id', 'seat', 'movie_show_id']);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'seats', 'movie_show_id']);
 
         if ($check) {
             return $this->response($check);
@@ -133,10 +130,11 @@ class CartController extends Controller
         $user_type = request()->user_type;
 
         try {
-            $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
+
         try {
             $movie_show = $this->movieShowRepository->getMovieShowById($form_data['movie_show_id']);
         } catch (\Exception $th) {
@@ -148,25 +146,85 @@ class CartController extends Controller
         } catch (\Exception $th) {
             return $this->response(notification()->error('Theater Not found', $th->getMessage()));
         }
-        // $movie_show = $this->movieShowRepository->getMovieShowById($form_data['movie_show_id']);
+
+        if (!is_array($form_data['seats']) || empty($form_data['seats'])) {
+            return $this->response(notification()->error('Invalid seat data', 'Seats must be an array and not empty'));
+        }
 
 
         try {
-            $seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $form_data['seat']);
+            $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
+            // dd($seats);
         } catch (\Exception $th) {
             return $this->response(notification()->error('seat not found', $th->getMessage()));
         }
 
-
         try {
-            $this->cartRepository->addSeatToCart($form_data['cart_id'], $form_data['seat'], $form_data['movie_show_id'], $seat['zone']);
+            $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
+           
+            if ($seats->isEmpty()) {
+                return $this->response(notification()->error('Invalid seat data', 'No valid seats found.'));
+            }
+           
+            foreach ($seats as $seat) {
+                // dd($seat['code']);
+            $this->cartRepository->addSeatToCart($form_data['cart_id'],$seat['code'], $form_data['movie_show_id'], $seat['zone']);
+            }
+    
         } catch (\Exception $th) {
-            return $this->response(notification()->error('Error adding seat to car', $th->getMessage()));
+            return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }
-
-
-        return $this->response(notification()->success('Seat added to the cart successfully', 'Seat added successfully'));
+        return $this->response(notification()->success('Seats added to the cart successfully', 'Seats added successfully'));
     }
+
+
+    // public function addSeatCart()
+    // {
+    //     $form_data = clean_request([]);
+    //     $check = $this->validateRequiredFields($form_data, ['cart_id', 'seats', 'movie_show_id']);
+
+    //     if ($check) {
+    //         return $this->response($check);
+    //     }
+
+    //     $user = request()->user;
+    //     $user_type = request()->user_type;
+
+    //     try {
+    //         $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+    //     } catch (\Exception $th) {
+    //         return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+    //     }
+    //     try {
+    //         $movie_show = $this->movieShowRepository->getMovieShowById($form_data['movie_show_id']);
+    //     } catch (\Exception $th) {
+    //         return $this->response(notification()->error('Movie Show Not found', $th->getMessage()));
+    //     }
+
+    //     try {
+    //         $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
+    //     } catch (\Exception $th) {
+    //         return $this->response(notification()->error('Theater Not found', $th->getMessage()));
+    //     }
+    //     // $movie_show = $this->movieShowRepository->getMovieShowById($form_data['movie_show_id']);
+
+
+    //     try {
+    //         $seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $form_data['seats']);
+    //     } catch (\Exception $th) {
+    //         return $this->response(notification()->error('seat not found', $th->getMessage()));
+    //     }
+
+
+    //     try {
+    //         $this->cartRepository->addSeatToCart($form_data['cart_id'], $form_data['seats'], $form_data['movie_show_id'], $seat['zone']);
+    //     } catch (\Exception $th) {
+    //         return $this->response(notification()->error('Error adding seat to car', $th->getMessage()));
+    //     }
+
+
+    //     return $this->response(notification()->success('Seat added to the cart successfully', 'Seat added successfully'));
+    // }
     public function addTopupToCart()
     {
         $form_data = clean_request([]);
@@ -182,19 +240,19 @@ class CartController extends Controller
         $maximum_recharge_amount = 50;
 
 
-        if($form_data['amount'] < $minimum_recharge_amount){
-            return $this->response(notification()->error('Invalid Amount', "Please enter amount greater than ".$minimum_recharge_amount ));
+        if ($form_data['amount'] < $minimum_recharge_amount) {
+            return $this->response(notification()->error('Invalid Amount', "Please enter amount greater than " . $minimum_recharge_amount));
         }
 
-        if($form_data['amount'] > $maximum_recharge_amount){
-            return $this->response(notification()->error('Invalid Amount', "Please enter amount less than ".$maximum_recharge_amount));
+        if ($form_data['amount'] > $maximum_recharge_amount) {
+            return $this->response(notification()->error('Invalid Amount', "Please enter amount less than " . $maximum_recharge_amount));
         }
-        
+
         $user = request()->user;
         $user_type = request()->user_type;
 
         try {
-            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
@@ -286,7 +344,7 @@ class CartController extends Controller
         }
 
         try {
-            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
@@ -332,7 +390,7 @@ class CartController extends Controller
         $user_type = request()->user_type;
 
         try {
-            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id , $user_type);
+            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
@@ -386,7 +444,7 @@ class CartController extends Controller
 
         try {
 
-            $cart = $this->cartRepository->checkCart($body['cart_id'], $user->id , $user_type);
+            $cart = $this->cartRepository->checkCart($body['cart_id'], $user->id, $user_type);
 
             $cartDetails = $this->cartRepository->getCartDetails($cart);
 

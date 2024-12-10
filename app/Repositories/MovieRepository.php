@@ -41,12 +41,16 @@ class MovieRepository implements MovieRepositoryInterface
 
         $age_rating = null;
         if ($movie->age_rating_id) {
-            $age_rating = MovieAgeRating::select("id", "label")->where('id', $movie->age_rating_id)->whereNull('deleted_at')->first();
+        
+            $age_rating = MovieAgeRating::where('id', $movie->age_rating_id)->whereNull('deleted_at')->first();
+
+            //    dd($age_rating);
         }
+       
 
         $language = null;
         if ($movie->language_id) {
-            $age_rating = MovieLanguage::select("id", "label")->where('id', $movie->language_id)->whereNull('deleted_at')->first();
+            $language_id = MovieLanguage::select("id", "label")->where('id', $movie->language_id)->whereNull('deleted_at')->first();
         }
 
 
@@ -54,6 +58,7 @@ class MovieRepository implements MovieRepositoryInterface
         if ($user) {
             $is_favorite = MovieFavorite::where('user_id', $user->id)->where('movie_id', $movie->id)->exists();
         }
+        // dd($age_rating->label);
 
         $movie = [
             'id' => $movie->id,
@@ -68,7 +73,7 @@ class MovieRepository implements MovieRepositoryInterface
             'director' => $director,
             'genres' => $genres,
             'casts' => $casts,
-            'age_rating' => $age_rating,
+            'age_rating' => $age_rating->label,
             'language' => $language,
             'imdb_rating' => $movie->imdb_rating,
             'imdb_vote' => $movie->imdb_vote,

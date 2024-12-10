@@ -29,13 +29,13 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         });
     });
 
-    Route::get('/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
+    Route::get('/movie-show/{movie_show_id}/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
 
     Route::group(['prefix' => 'cart', 'middleware' => AuthMiddleware::class], function () {
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemCart']);
         Route::post('/item/remove', [App\Http\Controllers\API\CartController::class, 'removeItemFromCart']);
-        Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatCart']);
+        Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsCart']);
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
         Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCoupnTocart']);
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);

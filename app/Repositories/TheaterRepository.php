@@ -41,12 +41,12 @@ class TheaterRepository implements TheaterRepositoryInterface
 
     }
 
-    public function getSeatFromTheaterMap($theater_map , $seat){
+    public function getSeatFromTheaterMap($theater_map , $seats){
 
       
        
         try {
-            $seat = $theater_map->where('code' , $seat)->first();
+            $seat = $theater_map->whereIn('code' , $seats)->first();
 
             
 
@@ -68,7 +68,8 @@ class TheaterRepository implements TheaterRepositoryInterface
         try {
             $object_seats = $theater_map->whereIn('code' , $seats)->values();
 
-            if(count($object_seats) == count($seats) ){
+            // dd($object_seats);
+            if(count($object_seats) !== count($seats) ){
                 throw new Exception("Seats are missing");
             }
 

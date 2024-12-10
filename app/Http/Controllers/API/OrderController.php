@@ -14,13 +14,8 @@ use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentAttempt;
-use App\Models\Theater;
-use App\Repositories\CardRepository;
 use App\Repositories\MovieShowRepository;
-use App\Repositories\OrderRepository;
-use App\Repositories\TheaterRepository;
 use App\Traits\APITrait;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -78,7 +73,6 @@ class  OrderController extends Controller
         $user_type = request()->user_type;
         $field = get_user_field_from_type($user_type);
 
-        // dd($field);
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->{$field} = $user_id;
         $payment_attempt->amount = $subtotal;
