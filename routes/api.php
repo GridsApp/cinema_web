@@ -54,6 +54,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::post("/order",  [\App\Http\Controllers\API\OrderController::class, 'get'])->middleware(UserMiddleware::class);
     Route::post("/order/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt'])->middleware(UserMiddleware::class);
     Route::post("/order/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(UserMiddleware::class);
+    Route::get('/list/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
 
 
 
@@ -90,7 +91,6 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::get('/card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
-        Route::get('/list/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
-
+      
     });
 });

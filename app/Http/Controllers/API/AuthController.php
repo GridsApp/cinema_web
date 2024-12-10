@@ -72,10 +72,6 @@ class AuthController extends Controller
         }
 
 
-        // if (!$user) {
-        // }
-
-
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -101,11 +97,6 @@ class AuthController extends Controller
   
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
-
-
-        // if (!$user) {
-        //     return $this->response(notification()->error("You have entered invalid phone/password", 'You have entered invalid phone/password'));
-        // }
 
         try {
             $user = $this->userRepository->getUserByPhone($phone_number);

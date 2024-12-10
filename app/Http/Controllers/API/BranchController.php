@@ -104,7 +104,7 @@ class BranchController extends Controller
         }
 
         $movie_shows = $this->movieShowRepository->getMovieShows($branch_id, $movie_id, $date);
-        // dd($movie_shows);
+       
         $result = [];
 
         foreach ($movie_shows->groupBy('branch') as $branch => $branch_shows) {
@@ -137,7 +137,6 @@ class BranchController extends Controller
                     })
                 ];
             }
-   
 
             $result[] = [
                 'id' => $branch_shows[0]["branch_id"],
@@ -146,9 +145,6 @@ class BranchController extends Controller
                 "price_groups" => $result_by_group
             ];
         }
-
-
-
         return $this->responseData($result);
     }
 }

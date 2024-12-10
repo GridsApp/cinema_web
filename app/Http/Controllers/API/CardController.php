@@ -52,9 +52,7 @@ class CardController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('Invalid barcode', $e->getMessage()));
         }
-        // if (!$user_id) {
-        //     return $this->response(notification()->error("Invalid barcode", "No user found for the provided barcode"));
-        // }
+     
         try {
 
             $user = $this->userRepository->getUserById($user_id);
@@ -62,10 +60,6 @@ class CardController extends Controller
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
 
-
-        // if (!$user) {
-        //     return $this->response(notification()->error("User not found", "The user associated with this barcode does not exist"));
-        // }
         $activeCard = $this->cardRepository->getActiveCard($user);
 
         if (!$activeCard) {
@@ -116,10 +110,7 @@ class CardController extends Controller
 
         UserCard::whereNull('deleted_at')->where('user_id', $form_data['user_id'])
             ->update($updateData);
-        // dd($existingBarcode);
-
-
-
+       
         return $this->response(notification()->success("User Card updated successfully!", "User Card updated successfully"));
     }
 }
