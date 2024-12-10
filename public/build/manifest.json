@@ -1,0 +1,17 @@
+{
+  "public/images/cinema_bg.jpeg": {
+    "file": "assets/cinema_bg-DbdPj9Sd.jpeg",
+    "src": "public/images/cinema_bg.jpeg"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-B6CXLKPe.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/scss/app.scss": {
+    "file": "assets/app-tHCHDpUf.css",
+    "src": "resources/scss/app.scss",
+    "isEntry": true
+  }
+}
