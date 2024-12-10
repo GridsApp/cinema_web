@@ -7,7 +7,7 @@ use App\Models\MovieShow;
 use App\Models\PriceGroupZone;
 use App\Models\Theater;
 use App\Traits\APITrait;
-use Illuminate\Http\Request;
+
 
 class TheaterSeatsController extends Controller
 {
@@ -64,13 +64,6 @@ class TheaterSeatsController extends Controller
             'map' => $map
         ];
 
-
-        return $result;
-        return response()->json([
-            'rows' => $rows,
-            'nbColumns' => $nbColumns,
-            'zones' => $zones,
-
-        ]);
+        return $this->responseData($result);
     }
 }

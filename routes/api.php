@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
     Route::group(['prefix' => 'cart', 'middleware' => AuthMiddleware::class], function () {
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);
+        Route::post('/expire', [App\Http\Controllers\API\CartController::class, 'expireCart']);
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemCart']);
         Route::post('/item/remove', [App\Http\Controllers\API\CartController::class, 'removeItemFromCart']);
         Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsCart']);

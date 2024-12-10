@@ -48,6 +48,11 @@ return [
 
             ],
             [
+                'label' => 'Casts',
+                'link' => routeObject('entity', ['slug' => 'movie-casts'])
+
+            ],
+            [
                 'label' => 'Screen Types',
                 'link' => routeObject('entity', ['slug' => 'screen-types'])
             ],

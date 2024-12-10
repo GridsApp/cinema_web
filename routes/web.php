@@ -27,6 +27,7 @@ Route::group(['middleware' => \App\Http\Middleware\CmsAuthMiddleware::class ] , 
     Route::get('/',function(){ return view("pages.dashboard"); })->name('dashboard');
     // Route::get('/settings',function(){ return view("pages.settings"); })->name('settings');
     Route::get('/settings',[App\Http\Controllers\SettingsController::class,'render'])->name('settings');
+    Route::get('/run-migrate', [App\Http\Controllers\EntityController::class, 'migrate']);
     Route::get('/{slug}', [EntityController::class , 'render'])->name('entity');
     Route::get('/{slug}/create',[EntityController::class , 'create'])->name('entity.create');
     Route::get('/{slug}/update/{id}',[EntityController::class , 'update'])->name('entity.update');

@@ -31,7 +31,17 @@ class MovieRepository implements MovieRepositoryInterface
 
         $casts = [];
         if (is_array($movie->cast_id) && count($movie->cast_id) > 0) {
-            $casts = MovieCast::select("id", "name")->whereIn('id', $movie->cast_id)->whereNull('deleted_at')->get();
+            $casts = MovieCast::select("id", "name", "image")
+                ->whereIn('id', $movie->cast_id)
+                ->whereNull('deleted_at')
+                ->get()
+                ->map(function ($cast) {
+                    return [
+                        'id' => $cast->id,
+                        'name' => $cast->name,
+                        'image' => get_image($cast->image), 
+                    ];
+                });
         }
 
         $director = null;
@@ -41,12 +51,9 @@ class MovieRepository implements MovieRepositoryInterface
 
         $age_rating = null;
         if ($movie->age_rating_id) {
-        
             $age_rating = MovieAgeRating::select("id", "label")->where('id', $movie->age_rating_id)->whereNull('deleted_at')->first();
-
-            //    dd($age_rating);
         }
-       
+
 
         $language = null;
         if ($movie->language_id) {
@@ -58,7 +65,6 @@ class MovieRepository implements MovieRepositoryInterface
         if ($user) {
             $is_favorite = MovieFavorite::where('user_id', $user->id)->where('movie_id', $movie->id)->exists();
         }
-        // dd($language);
 
         $movie = [
             'id' => $movie->id,
@@ -79,6 +85,7 @@ class MovieRepository implements MovieRepositoryInterface
             'imdb_vote' => $movie->imdb_vote,
             'youtube_video' => $movie->youtube_video,
             'is_favorite' => $is_favorite,
+            'disable_booking' => false,
         ];
 
         return $movie;
@@ -189,7 +196,7 @@ class MovieRepository implements MovieRepositoryInterface
 
     public function getMovieShows($branch_id, $movie_id, $date)
     {
-    
+
         $theaters = Theater::where('branch_id', $branch_id)
             ->whereNull('deleted_at')
             ->with(['movieShows' => function ($query) use ($movie_id, $date) {

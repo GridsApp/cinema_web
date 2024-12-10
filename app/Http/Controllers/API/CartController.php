@@ -79,6 +79,23 @@ class CartController extends Controller
         ]);
     }
 
+
+    public function expireCart()
+    {
+
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+        $cart_id = $form_data['cart_id'];
+        try {
+            $this->cartRepository->expireCart($cart_id);
+        } catch (\Exception $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
+        }
+    }
     public function addItemCart()
     {
 
@@ -161,16 +178,15 @@ class CartController extends Controller
 
         try {
             $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
-           
+
             if ($seats->isEmpty()) {
                 return $this->response(notification()->error('Invalid seat data', 'No valid seats found.'));
             }
-           
+
             foreach ($seats as $seat) {
                 // dd($seat['code']);
-            $this->cartRepository->addSeatToCart($form_data['cart_id'],$seat['code'], $form_data['movie_show_id'], $seat['zone']);
+                $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $form_data['movie_show_id'], $seat['zone']);
             }
-    
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }
