@@ -1,7 +1,8 @@
 <form wire:submit.prevent="handleSubmit">
     <div class="container-content-height no-breadcrumbs">
         <div class="container-fixed">
-            @foreach ($group_settings as $group => $settings)
+           
+            @forelse ($group_settings as $group => $settings)
                 @component('components.panels.default', ['title' => $group])
                     <div class="grid grid-cols-12 gap-3">
                         @foreach ($settings as $setting)
@@ -14,9 +15,14 @@
                             {!! field($field) !!}
                             @endforeach
                     </div>
-                @endforeach
+       
             @endcomponent
-     
+
+            @empty
+
+            <div>No settings found!</div>
+
+            @endforelse
         </div>
     </div>
 

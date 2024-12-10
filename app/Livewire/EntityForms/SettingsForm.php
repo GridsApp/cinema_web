@@ -21,6 +21,9 @@ class SettingsForm extends Component
 
         // dd(config('settings'));
         $this->group_settings = collect(config('settings'))->groupBy('group');
+       
+       
+       
         $data = [];
         $this->fields = (collect(config('settings')))->map(function($config) use(&$data){
            
@@ -39,6 +42,7 @@ class SettingsForm extends Component
             return config('fields.'.$field);
         })->filter()->values()->toArray();
 
+ 
         $this->resetForm((object)$data);
 
        
