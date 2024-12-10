@@ -197,6 +197,16 @@ return [
         'placeholder' => 'Enter movie key',
         'name' => 'movie_key'
     ],
+    'key' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'label' => 'Key',
+        'placeholder' => 'Enter key',
+        'name' => 'key'
+    ],
     'movie_name' => [
         'id' => uniqid(),
         'livewire' => [

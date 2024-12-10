@@ -18,6 +18,8 @@ class PaymentAttemptsEntity extends Entity
     public function fields()
     {
         $this->addField("user_id", ["container" => 'col-span-7']);
+        $this->addField("pos_user_id" , ["container" => 'col-span-6', 'required' => false]);
+
         $this->addField("reference", ["container" => 'col-span-7']);
         $this->addField("amount", ["container" => 'col-span-7']);
         $this->addField("payment_method_id", ["container" => 'col-span-7']);

@@ -171,6 +171,10 @@ return [
                 'label' => 'POS users',
                 'link' => routeObject('entity', ['slug' => 'pos-users'])
             ],
+            [
+                'label' => 'Payment Methods',
+                'link' => routeObject('entity', ['slug' => 'payment-methods'])
+            ],
            
 
 

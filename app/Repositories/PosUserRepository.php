@@ -60,19 +60,19 @@ class PosUserRepository implements PosUserRepositoryInterface
         }
         return $managers;
     }
-    public function getManagersByPin($id, $pincode,$branch_id)
+    public function getManagerByIdAndPin($id, $pincode,$branch_id)
     {
         try {
             $manager = PosUser::whereNull('deleted_at')
                 ->where('role', 'manager')
-                // ->where('id', $id)
+                ->where('id', $id)
                 ->where('pincode', $pincode)
                 ->where('branch_id', $branch_id)
-                ->get();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("manager with Pin {$pincode} and Id {$id} not found .");
         }
-        // dd($manager);
+      
         return $manager;
     }
 }

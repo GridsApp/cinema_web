@@ -17,6 +17,8 @@ class PaymentMethodsEntity extends Entity
     public function fields()
     {
         $this->addField("label", ["container" => 'col-span-7']);
+        $this->addField("key", ["container" => 'col-span-7']);
+        $this->addField("system", ["container" => 'col-span-7']);
         $this->addField("image", ["container" => 'col-span-7']);
 
         return $this->fields;
@@ -24,6 +26,8 @@ class PaymentMethodsEntity extends Entity
 
     public function columns()
     {
+        $this->addColumn("label");
+        $this->addColumn("key");
         return $this->columns;
     }
 }

@@ -49,6 +49,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function createOrderFromCart($payment_attempt)
     {
+       
 
         $cart_id = $payment_attempt->reference;
         $payment_method_id = $payment_attempt->payment_method_id;
@@ -177,44 +178,24 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $card;
     }
-    public function getOrderSeats($order_id, $order_seat_id)
+    public function getOrderSeatsByIds($order_id, $order_seat_ids)
     {
-
-
-
         try {
             $order_seats = OrderSeat::where('order_id', $order_id)
-                ->where('id', $order_seat_id)
+                ->whereIn('id', $order_seat_ids)
                 ->whereNull('refunded_at')
                 ->get();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+
+
+            if ($order_seats->isEmpty()) {
+                throw new ModelNotFoundException("No matching order seats found for the given order and seat IDs.");
+            }
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("Order Seats with IDs " . implode(', ', $order_seat_ids) . " and order id {$order_id} not found.");
         }
         return $order_seats;
     }
 
-    // public function refundOrderSeats($order_id, $order_seat_id, $branch_id)
-    // {
-
-    //     // $user_id = request()->user->id;
-    //     // $user_type = request()->user_type;
-    //     // $field = get_user_field_from_type($user_type);
-    //     // // $order = Order::findOrFail($order_id);
-
-    //     // $order_seats = $this->getOrderSeats($order_id, $order_seat_id);
-    //     // $managers = $this->posUserRepository->getManagers($branch_id);
-
-    //     // foreach ($order_seats as $order_seat) {
-    //     //     $order_seat->refunded_at = now();
-    //     //     $order_seat->refunded_cashier_id = $user_id;
-    //     //     foreach ($managers as $manager) {
-    //     //         $order_seat->refunded_manager_id = $manager['id'];
-    //     //     }
-
-    //     //     $order_seat->save();
-    //     // }
-    //     // return $order_seats;
-    // }
 
 
     public function createOrderItemsFromCart() {}

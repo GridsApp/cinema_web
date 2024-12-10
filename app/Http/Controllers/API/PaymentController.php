@@ -41,7 +41,7 @@ class PaymentController extends Controller
             return abort(404);
         }
 
-        $user_id = $payment_attempt->user_id ? $payment_attempt->user_id : 0;
+        $user_id = $payment_attempt->user_id ? $payment_attempt->user_id : ($payment_attempt->pos_user_id ?? 0);
 
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 

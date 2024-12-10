@@ -78,7 +78,7 @@ class  OrderController extends Controller
         $user_type = request()->user_type;
         $field = get_user_field_from_type($user_type);
 
-
+        // dd($field);
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->{$field} = $user_id;
         $payment_attempt->amount = $subtotal;
@@ -170,142 +170,77 @@ class  OrderController extends Controller
         ]);
     }
 
-    // public function refund()
-    // {
 
-    //     $form_data = clean_request([]);
-
-    //     $validator = Validator::make($form_data, [
-    //         'order_id' => 'required',
-    //         'order_seat_id' => 'required',
-    //         // 'branch_id' => 'required',
-    //         'manager_pin'=> 'required',
-    //         'manager_id' => 'required'
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return $this->responseValidation($validator);
-    //     }
-
-
-    //     try {
-    //         $user_id = request()->user->id;
-    //         $user_type = request()->user_type;
-    //         $field = get_user_field_from_type($user_type);
-    //         // $order = Order::findOrFail($order_id);
-
-    //         $order_seats = $this->orderRepository->getOrderSeats($form_data['order_id'], $form_data['order_seat_id']);
-    //         if (!isset($order_seats) || $order_seats->isEmpty()) {
-    //             throw new \Exception("No matching order seats found for the given order ID {$form_data['order_id']} and seat ID {$form_data['order_seat_id']}.");
-    //         }
-    //         $total_amount = 0;
-    //         $total_points = 0;
-
-
-    //         $managers = $this->posUserRepository->getManagerByPin($form_data['manager_pin'],$form_data['manager_id']);
-
-    //         foreach ($order_seats as $order_seat) {
-    //             $order_seat->refunded_at = now();
-    //             $order_seat->refunded_cashier_id = $user_id;
-    //             if (isset($managers)  && $managers->isNotEmpty()) {
-    //                 $order_seat->refunded_manager_id = $managers->last()['id'];
-    //             }
-
-    //             // $total_points += $order_seat->gained_points;
-    //             // $total_amount += $order_seat->price;
-
-    //             $order_seat->save();
-    //         }
-
-
-    //         // $this->orderRepository->refundOrderSeats(
-    //         //     $form_data['order_id'],
-    //         //     $form_data['order_seat_id'],
-    //         //     $form_data['branch_id'],
-    //         //     $user_id,
-    //         //     $user_type,
-    //         //     $field
-
-    //         // );
-
-
-    //         //if not cash
-    //         //out // 
-    //         //in total_amount        
-
-    //         return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
-    //     } catch (\Exception $e) {
-
-    //         return $this->response(notification()->error('Refund Failed', $e->getMessage()));
-    //     }
-    // }
     public function refund()
     {
         $form_data = clean_request([]);
 
         $validator = Validator::make($form_data, [
             'order_id' => 'required',
-            'order_seat_id' => 'required',
+            'order_seat_ids' => 'required|array',
             'manager_pin' => 'required',
             'manager_id' => 'required'
         ]);
-        $order_id = $form_data['order_id'];
+
 
         if ($validator->fails()) {
             return $this->responseValidation($validator);
         }
 
+
+        $user_id = request()->user->id;
+        $user_type = request()->user_type;
+        $field = get_user_field_from_type($user_type);
+        $user_branch = request()->user->branch_id;
+
+        $order_id = $form_data['order_id'];
+
         try {
-            $user_id = request()->user->id;
-            $user_type = request()->user_type;
-            $field = get_user_field_from_type($user_type);
-            $user_branch = request()->user->branch_id;
             $order = Order::findOrFail($order_id);
-            // dd($order);
-            $total_amount = 0;
-            $total_points = 0;
-            $order_seats = $this->orderRepository->getOrderSeats($form_data['order_id'], $form_data['order_seat_id']);
-            if (!isset($order_seats) || $order_seats->isEmpty()) {
-                throw new \Exception("No matching order seats found for the given order ID {$form_data['order_id']} and seat ID {$form_data['order_seat_id']}.");
-            }
-            try {
-                $managers = $this->posUserRepository->getManagersByPin($form_data['manager_id'], $form_data['manager_pin'], $user_branch);
-
-                if ($managers->isEmpty()) {
-                    return $this->response(notification()->error('Refund Failed', 'No matching manager found.'));
-                }
-            } catch (\Throwable $th) {
-                return $this->response(notification()->error('Refund Failed', $th->getMessage()));
-            }
-            foreach ($managers as $manager) {
-                foreach ($order_seats as $order_seat) {
-                    // dd($total_amount += $order_seat->price);
-                    $order_seat->refunded_at = now();
-                    $order_seat->refunded_cashier_id = $user_id;
-                    $order_seat->refunded_manager_id = $manager->id;
-                    $total_points += $order_seat->gained_points;
-                    $total_amount += $order_seat->price;
-                    $order_seat->save();
-                }
-            }
-            if ($order->payment_method_id == 2) {
-                return $this->response(notification()->success('cash', 'Cash.'));
-            }
-
-            $payment_method = $order->paymentMethod;
-            if ($payment_method) {
-                $user = $order->user;
-                // dd($user);
-                if (!$user) {
-                    throw new \Exception("User associated with the order seats not found.");
-                }
-
-                $this->cardRepository->createWalletTransaction("in", $total_amount, $user, "Recharge wallet");
-
-            }
-            return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Refund Failed', $e->getMessage()));
+        } catch (\Throwable $th) {
+            //throw $th;
         }
+
+        $payment_method = $order->paymentMethod;
+       
+        if (!$payment_method) {
+            return $this->response(notification()->success('Refund Failed', 'Refund Failed'));
+        }
+
+        try {
+            $manager = $this->posUserRepository->getManagerByIdAndPin($form_data['manager_id'], $form_data['manager_pin'], $user_branch);
+        } catch (\Throwable $th) {
+            return $this->response(notification()->error('Wrong Pin', $th->getMessage()));
+        }
+
+        try {
+            $order_seats = $this->orderRepository->getOrderSeatsByIds($form_data['order_id'], $form_data['order_seat_ids']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
+        }
+
+        if($order_seats->where('discount' , '>' , 0)){
+            return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount' , '>' , 0)->pluck('id')->implode(",")));
+        }
+        
+        $total_amount = 0;
+        $total_points = 0;
+
+        foreach ($order_seats as $order_seat) {
+            $order_seat->refunded_at = now();
+            $order_seat->refunded_cashier_id = $user_id;
+            $order_seat->refunded_manager_id = $manager["id"];
+            $total_points += $order_seat->gained_points;
+            $total_amount += $order_seat->price;
+            $order_seat->save();
+        }
+
+
+        if ($payment_method->key == 'CASH') {
+            return $this->response(notification()->success('cash', 'Cash.'));
+        }
+
+        $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet");
+        return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
     }
 }
