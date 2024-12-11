@@ -178,6 +178,19 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $card;
     }
+    public function getOrderByUserId($user_id)
+    {
+
+        try {
+            $user_order = Order::where('user_id', $user_id)
+                ->whereNull('deleted_at')->firstOrFail();
+               
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("Order with User ID {$user_id} not found .");
+        }
+
+        return $user_order;
+    }
     public function getOrderSeatsByIds($order_id, $order_seat_ids)
     {
         try {

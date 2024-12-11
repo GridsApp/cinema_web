@@ -169,13 +169,13 @@ class CartController extends Controller
         }
 
 
-        try {
-            $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
-            // dd($seats);
-        } catch (\Exception $th) {
-            return $this->response(notification()->error('seat not found', $th->getMessage()));
-        }
-
+        // try {
+        //     $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
+        //     // dd($seats);
+        // } catch (\Exception $th) {
+        //     return $this->response(notification()->error('seat not found', $th->getMessage()));
+        // }
+// dd($seats);
         try {
             $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
 

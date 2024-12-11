@@ -107,7 +107,7 @@ class  OrderController extends Controller
         try {
             $order = $this->orderRepository->getOrderByBarcode($form_data['barcode']);
         } catch (\Exception $e) {
-            return $this->response(notification()->error('Order not foun', $e->getMessage()));
+            return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
 
         $order_seats = OrderSeat::whereNull('deleted_at')

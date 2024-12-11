@@ -68,7 +68,7 @@ class TheaterRepository implements TheaterRepositoryInterface
         try {
             $object_seats = $theater_map->whereIn('code' , $seats)->values();
 
-            // dd($object_seats);
+          
             if(count($object_seats) !== count($seats) ){
                 throw new Exception("Seats are missing");
             }

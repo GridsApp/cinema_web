@@ -18,6 +18,9 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware(AuthMiddleware::class);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware(AuthMiddleware::class);
 
+            Route::get('/tickets/list', [App\Http\Controllers\API\TicketsController::class, 'list'])->middleware(AuthMiddleware::class);
+
+
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
             Route::post('/check', [App\Http\Controllers\API\AuthController::class, 'check']);
@@ -28,8 +31,6 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('/send', [App\Http\Controllers\API\OTPController::class, 'send']);
         });
     });
-
-    Route::get('/movie-show/{movie_show_id}/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
 
     Route::group(['prefix' => 'cart', 'middleware' => AuthMiddleware::class], function () {
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);
@@ -42,21 +43,19 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
         Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberTocart']);
         Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromcart']);
-       
-        
+
+
         Route::post('/topup/add', [App\Http\Controllers\API\CartController::class, 'addTopupToCart']);
         Route::post('/topup/remove', [App\Http\Controllers\API\CartController::class, 'removeTopupFromCart']);
 
         Route::get('/list', [App\Http\Controllers\API\CartController::class, 'list']);
     });
 
-
     Route::post("/order",  [\App\Http\Controllers\API\OrderController::class, 'get'])->middleware(UserMiddleware::class);
     Route::post("/order/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt'])->middleware(UserMiddleware::class);
     Route::post("/order/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(UserMiddleware::class);
     Route::get('/list/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
-
-
+    Route::get('/movie-show/{movie_show_id}/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
 
     Route::prefix('movies')->group(function () {
         Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware(UserMiddleware::class);
@@ -91,6 +90,5 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::get('/card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
-      
     });
 });
