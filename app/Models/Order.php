@@ -36,4 +36,21 @@ class Order  extends Model
     {
         return $this->belongsTo(PosUser::class, 'refunded_cashier_id', 'id');
     }
+
+
+    public function seats()
+    {
+        return $this->hasMany(OrderSeat::class, 'order_id')->whereNull('deleted_at');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->whereNull('deleted_at');
+    }
+
+    public function topups()
+    {
+        return $this->hasMany(OrderTopup::class, 'order_id')->whereNull('deleted_at');
+    }
+
 }

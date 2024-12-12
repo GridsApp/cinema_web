@@ -164,6 +164,21 @@ return [
         ],
 
     ],
+    'theater_map' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \App\Entities\FieldTypes\Map::class,
+        'label' => 'Theater Map',
+        'placeholder' => 'Theater Map',
+        'name' => 'theater_map',
+        'listen' =>  [
+            "init" => "pricegroupselectedvalue",
+            "change" =>  "pricegroupchangedvalue"
+        ],
+
+    ],
 
     'group' => [
         'id' => uniqid(),

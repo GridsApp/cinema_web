@@ -18,8 +18,12 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware(AuthMiddleware::class);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware(AuthMiddleware::class);
 
-            Route::get('/tickets/list', [App\Http\Controllers\API\TicketsController::class, 'list'])->middleware(AuthMiddleware::class);
+            Route::get('/tickets/list/history', [App\Http\Controllers\API\TicketsController::class, 'listHistory'])->middleware(AuthMiddleware::class);
+            Route::get('/tickets/list/upcoming', [App\Http\Controllers\API\TicketsController::class, 'upcoming'])->middleware(AuthMiddleware::class);
+          
+            Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware(AuthMiddleware::class);
 
+          
 
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);

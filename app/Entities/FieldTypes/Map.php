@@ -3,12 +3,12 @@
 namespace App\Entities\FieldTypes;
 
 
-class TheaterMap extends FieldType
+class Map extends FieldType
 {
 
     public function component()
     {
-        return "components.theater-map";
+        return "components.map";
     }
 
 

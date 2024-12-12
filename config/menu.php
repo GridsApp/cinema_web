@@ -88,6 +88,10 @@ return [
                 'label' => 'Theaters',
                 'link' => routeObject('entity', ['slug' => 'theaters'])
             ],
+            [
+                'label' => 'Movie Show Theater',
+                'link' => routeObject('entity', ['slug' => 'movie-show-theaters'])
+            ],
             // [
             //     'label' => 'Systems',
             //     'link' => routeObject('entity' , ['slug'=> 'systems'])

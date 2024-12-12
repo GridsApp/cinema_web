@@ -92,6 +92,8 @@ class CartController extends Controller
         $cart_id = $form_data['cart_id'];
         try {
             $this->cartRepository->expireCart($cart_id);
+            return $this->response(notification()->success('Cart Expired successfully', 'Cart Expired successfully'));
+            
         } catch (\Exception $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
@@ -175,7 +177,7 @@ class CartController extends Controller
         // } catch (\Exception $th) {
         //     return $this->response(notification()->error('seat not found', $th->getMessage()));
         // }
-// dd($seats);
+        // dd($seats);
         try {
             $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
 

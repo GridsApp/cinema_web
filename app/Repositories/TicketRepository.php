@@ -51,42 +51,42 @@ class TicketRepository implements TicketRepositoryInterface
         // return $list;
     }
 
-    public function getUserTickets($user_id)
-    {
+    // public function getUserTickets($user_id)
+    // {
  
 
-        try {
-            $order = $this->orderRepository->getOrderByUserId($user_id);
+    //     try {
+    //         // $order = $this->orderRepository->getOrderByUserId($user_id);
  
-      return $order;
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Order not found', $e->getMessage()));
-        }
+    //   return $order;
+    //     } catch (\Exception $e) {
+    //         return $this->response(notification()->error('Order not found', $e->getMessage()));
+    //     }
 
-        // $order_seats = OrderSeat::whereNull('deleted_at')
-        //     ->where('order_id', $order->id)
-        //     ->whereNull('refunded_at')
-        //     ->get()
-        //     ->map(function ($order_seat) {
+    //     // $order_seats = OrderSeat::whereNull('deleted_at')
+    //     //     ->where('order_id', $order->id)
+    //     //     ->whereNull('refunded_at')
+    //     //     ->get()
+    //     //     ->map(function ($order_seat) {
 
-        //         $movieShow = $order_seat->movieShow;
+    //     //         $movieShow = $order_seat->movieShow;
 
 
-        //         return [
-        //             'label' => $order_seat->label,
-        //             'seat' => $order_seat->seat,
-        //             'price' => currency_format($order_seat->price),
-        //             'discount' => currency_format($order_seat->discount),
-        //             'final_price' => currency_format($order_seat->final_price),
-        //             'gained_points' => $order_seat->gained_points,
-        //             'show_details' => [
-        //                 'movie_name' => $movieShow->movie->name ?? '',
-        //                 'theater' => $movieShow->theater->hall_number ?? '',
-        //                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-        //                 'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : ''
-        //             ]
-        //         ];
-        //     });
+    //     //         return [
+    //     //             'label' => $order_seat->label,
+    //     //             'seat' => $order_seat->seat,
+    //     //             'price' => currency_format($order_seat->price),
+    //     //             'discount' => currency_format($order_seat->discount),
+    //     //             'final_price' => currency_format($order_seat->final_price),
+    //     //             'gained_points' => $order_seat->gained_points,
+    //     //             'show_details' => [
+    //     //                 'movie_name' => $movieShow->movie->name ?? '',
+    //     //                 'theater' => $movieShow->theater->hall_number ?? '',
+    //     //                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
+    //     //                 'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : ''
+    //     //             ]
+    //     //         ];
+    //     //     });
 
 
 
@@ -112,5 +112,5 @@ class TicketRepository implements TicketRepositoryInterface
         // ]);
 
         // return  Order::whereNull('deleted_at')->where('user_id', $user_id)->get();
-    }
+    // }
 }

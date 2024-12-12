@@ -13,6 +13,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\CartSeat;
 use App\Models\CartTopup;
+use App\Models\OrderSeat;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -264,8 +265,10 @@ class CartRepository implements CartRepositoryInterface
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+        // dd($user_cart_seat);
         return $user_cart_seat;
     }
+   
 
 
     public function getCartItems($cart_id, $grouped = false)
@@ -310,8 +313,10 @@ class CartRepository implements CartRepositoryInterface
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+        
         return $user_cart_topup;
     }
+    
 
 
 

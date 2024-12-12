@@ -21,6 +21,7 @@ use App\Models\OrderTopup;
 use ErrorException;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class OrderRepository implements OrderRepositoryInterface
 {
@@ -178,19 +179,43 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $card;
     }
-    public function getOrderByUserId($user_id)
+    public function getUserOrders($user_id)
     {
 
         try {
             $user_order = Order::where('user_id', $user_id)
-                ->whereNull('deleted_at')->firstOrFail();
+                ->whereNull('deleted_at')->get();
                
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException("Order with User ID {$user_id} not found .");
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
         }
 
         return $user_order;
     }
+
+    public function getOrderSeats($order_id, $grouped = false)
+    {
+        try {
+
+            if ($grouped) {
+                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'order_id', 'zone_id', 'movie_show_id', DB::raw('count(*) as quantity')];
+            } else {
+                $select = "*";
+            }
+
+            $user_order_seat = OrderSeat::select($select)->whereNull('deleted_at')
+                ->where('order_id', $order_id)
+                ->when($grouped, function ($query) {
+                    $query->groupBy('identifier');
+                })
+                ->get();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        // dd($user_cart_seat);
+        return $user_order_seat;
+    }
+
     public function getOrderSeatsByIds($order_id, $order_seat_ids)
     {
         try {
@@ -215,7 +240,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function createOrderSeatsFromCart() {}
 
 
-
+   
     public function generateReference()
     {
         do {
