@@ -27,11 +27,11 @@ class ConsessionsController extends Controller
     }
 
 
-    public function getItems()
+    public function getItems($branch_id = null)
     {
         try {
 
-            $items = $this->itemRepository->getItems();
+            $items = $this->itemRepository->getItems($branch_id);
         } catch (\Throwable $th) {
             return $this->response(notification()->error('Error', $th->getMessage()));
         }

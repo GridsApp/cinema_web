@@ -18,6 +18,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
+use App\Models\ReservedSeat;
 use ErrorException;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -98,7 +99,20 @@ class OrderRepository implements OrderRepositoryInterface
                 throw new ModelNotFoundException("Movie with ID {$cart_seat['movie_show_id']} not found.");
             }
 
+
+            // Check if movie theater exists
+            // $theater_map = //getMovieShowTheaterMap()
+
+            // if doesn't exists create it for the next customer
+
+            // if(!$theater_map){
+            //     // $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
+            //     // Create it
+            // }
+
+
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
+            // dd($theater_map);
 
             $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
 
@@ -120,6 +134,15 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->discount = 0;
             $orderSeat->final_price = $orderSeat->price - $orderSeat->discount;
             $orderSeat->save();
+
+
+
+            $reservedSeat=new ReservedSeat();
+            // dd($cart_seat['movie_show_id']);
+            $reservedSeat->movie_show_id = $cart_seat['movie_show_id'];
+            $reservedSeat->seat = $cart_seat['seat'];
+            $reservedSeat->save();
+
         }
 
 

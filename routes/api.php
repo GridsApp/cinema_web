@@ -72,6 +72,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::get('/', [App\Http\Controllers\API\BranchController::class, 'list']);
         Route::get('/{branch_id}/active-movies', [App\Http\Controllers\API\BranchController::class, 'activeMovies']);
         Route::get('/{branch_id}/movies/{movie_id}/shows', [App\Http\Controllers\API\BranchController::class, 'moviesShows']);
+        Route::get('/{branch_id}/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
+    
     });
 
     Route::group([

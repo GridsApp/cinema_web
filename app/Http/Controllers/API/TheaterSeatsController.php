@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CartRepositoryInterface;
 use App\Models\MovieShow;
 use App\Models\PriceGroupZone;
 use App\Models\Theater;
@@ -12,6 +13,14 @@ use App\Traits\APITrait;
 class TheaterSeatsController extends Controller
 {
     use APITrait;
+
+    private CartRepositoryInterface $cartRepository;
+
+
+    public function __construct(CartRepositoryInterface $cartRepository)
+    {
+        $this->cartRepository = $cartRepository;
+    }
 
     public function listSeats($movie_show_id)
     {
@@ -31,6 +40,10 @@ class TheaterSeatsController extends Controller
             return (string) ($item['column'] ?? "");
         })->toArray();
 
+        $reserved_seats= $this->cartRepository->getReservedSeats($movie_show_id);
+
+        
+
 
 
         $rows =  collect($theater_map)->map(function ($item) {
@@ -46,7 +59,7 @@ class TheaterSeatsController extends Controller
             ->whereNull('deleted_at')
             ->get();
 
-        $map = collect($theater_map)->flatten(1)->map(function ($item) {
+        $map = collect($theater_map)->flatten(1)->map(function ($item ) use ($reserved_seats) {
 
             if (!$item['isSeat']) {
                 return null;
@@ -54,7 +67,7 @@ class TheaterSeatsController extends Controller
 
             return [
                 "color" => $item['color'],
-                "available" => true,
+                "available" => !in_array($item['code'] , $reserved_seats ),
                 "code" => $item['code']
             ];
         })->filter()->values()->keyBy('code');

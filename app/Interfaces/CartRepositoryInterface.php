@@ -25,6 +25,8 @@ interface CartRepositoryInterface
     public function getCouponByCode($code);
     public function getCartDetails($cart);
      public function getSystemById($system_id);
+     public function getReservedSeats($movie_show_id);
+
     
     // public function getCardByBarcode($card_number);
 

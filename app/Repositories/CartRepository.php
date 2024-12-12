@@ -14,6 +14,7 @@ use App\Models\CartItem;
 use App\Models\CartSeat;
 use App\Models\CartTopup;
 use App\Models\OrderSeat;
+use App\Models\ReservedSeat;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,7 @@ class CartRepository implements CartRepositoryInterface
     }
 
 
-    public function checkCart($cart_id, $user_id , $user_type)
+    public function checkCart($cart_id, $user_id, $user_type)
     {
         try {
 
@@ -268,7 +269,25 @@ class CartRepository implements CartRepositoryInterface
         // dd($user_cart_seat);
         return $user_cart_seat;
     }
-   
+
+    public function getReservedSeats($movie_show_id)
+    {
+        $cart_seats = CartSeat::whereNull('cart_seats.deleted_at')
+            ->where('cart_seats.movie_show_id', $movie_show_id)
+            ->join('carts', 'cart_seats.cart_id', '=', 'carts.id')
+            ->where('carts.expires_at', '>', now())
+            ->pluck('seat');
+
+
+        $reserved_seats = ReservedSeat::whereNull('deleted_at')
+            ->where('movie_show_id', $movie_show_id)->pluck('seat');
+
+        $booked = collect([]);
+        $booked = $booked->merge($cart_seats)->merge($reserved_seats)->unique()->values()->toArray();
+        return $booked;
+    }
+
+
 
 
     public function getCartItems($cart_id, $grouped = false)
@@ -313,10 +332,10 @@ class CartRepository implements CartRepositoryInterface
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-        
+
         return $user_cart_topup;
     }
-    
+
 
 
 
@@ -326,7 +345,7 @@ class CartRepository implements CartRepositoryInterface
         try {
 
             $cart_id = $cart->id;
-           
+
 
             $cart_seats = $this->getCartSeats($cart_id, true);
             $zone_ids = $cart_seats->pluck('zone_id');
@@ -399,6 +418,4 @@ class CartRepository implements CartRepositoryInterface
             throw new \Exception($e->getMessage());
         }
     }
-
-   
 }

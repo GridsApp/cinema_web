@@ -261,7 +261,7 @@ class  OrderController extends Controller
                 }
 
                 $unit_price = $zone->price;
-// $final_
+
                 return [
                     'id' => $order_seat['order_id'],
                     'type' => "Seat",
