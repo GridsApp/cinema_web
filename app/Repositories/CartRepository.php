@@ -336,10 +336,6 @@ class CartRepository implements CartRepositoryInterface
         return $user_cart_topup;
     }
 
-
-
-
-
     public function getCartDetails($cart)
     {
         try {
@@ -418,6 +414,7 @@ class CartRepository implements CartRepositoryInterface
             return [
                 'coupon_code' => $coupon_code,
                 'subtotal' => currency_format($total),
+                'discount'=> currency_format(0),
                 'lines' => [...$cart_items, ...$cart_seats, ...$cart_topups],
             ];
         } catch (\Exception $e) {
