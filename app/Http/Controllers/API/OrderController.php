@@ -15,6 +15,7 @@ use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentAttempt;
+use App\Models\PaymentMethod;
 use App\Repositories\MovieShowRepository;
 use App\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
@@ -48,9 +49,7 @@ class  OrderController extends Controller
     public function attempt()
     {
 
-
         $form_data = clean_request([]);
-
 
         $validator = Validator::make($form_data, [
             'payment_method_id' => 'required',
@@ -61,6 +60,8 @@ class  OrderController extends Controller
             return  $this->responseValidation($validator);
         }
 
+
+       $payment_method =  PaymentMethod::find($form_data['payment_method_id']);
 
 
         try {
@@ -85,12 +86,64 @@ class  OrderController extends Controller
         $payment_attempt->save();
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 
-        return $this->responseData([
-            'redirect' => route("payment.initialize", [
-                'payment_attempt_id' => $payment_attempt->id,
-                'token' => $token
-            ])
-        ]);
+
+        switch ($payment_method->key) {
+            case 'CASH':
+
+                try {
+                    $this->orderRepository->createOrderFromCart($payment_attempt);
+                } catch (\Throwable $th) {
+                    return $this->response(notification()->error('Order not completed' , 'Your order has not been completed'));
+                }
+ 
+                $payment_attempt->completed_at = now();
+                $payment_attempt->converted_at = now();
+                $payment_attempt->save();
+        
+                return $this->response(notification()->success('Order completed' , 'Your order has been successfully completed'));
+
+                break;
+           
+            case 'OP':    
+                
+                return $this->responseData([
+                    'redirect' => route("payment.initialize", [
+                        'payment_attempt_id' => $payment_attempt->id,
+                        'token' => $token
+                    ])
+                ]);
+
+            break;
+
+            case 'WP':   
+
+                // Check if user is identified by wallet card number from cart
+
+                // Check if the balance is enough
+
+
+                try {
+                    $this->orderRepository->createOrderFromCart($payment_attempt);
+                } catch (\Throwable $th) {
+                    return $this->response(notification()->error('Order not completed' , 'Your order has not been completed'));
+                }
+
+                $payment_attempt->completed_at = now();
+                $payment_attempt->converted_at = now();
+                $payment_attempt->save();
+
+                // Create wallet transaction of type OUT. of amount 
+
+
+                return $this->response(notification()->success('Order completed' , 'Your order has been successfully completed'));
+
+            default:
+                # code...
+                break;
+        }
+
+
+       
     }
 
 

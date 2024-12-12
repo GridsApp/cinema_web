@@ -41,10 +41,10 @@ class ItemRepository implements ItemRepositoryInterface
         try {
             $items = Item::whereNull('deleted_at')->where('branch_id',$branch_id)->get()->map(function ($item) {
                 return [
+                    'id' => $item->id,
                     'label' => $item->label,
                     'price' => currency_format($item->price),
                     'image' => get_image($item->image),
-
                 ];
             });
         } catch (ModelNotFoundException $e) {
