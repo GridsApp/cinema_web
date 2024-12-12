@@ -58,7 +58,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::post("/order",  [\App\Http\Controllers\API\OrderController::class, 'get'])->middleware(UserMiddleware::class);
     Route::post("/order/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt'])->middleware(UserMiddleware::class);
     Route::post("/order/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(UserMiddleware::class);
-    Route::get('/list/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
+    // Route::get('/list/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
     Route::get('/movie-show/{movie_show_id}/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
 
     Route::prefix('movies')->group(function () {

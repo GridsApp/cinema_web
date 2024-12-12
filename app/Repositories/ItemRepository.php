@@ -39,7 +39,7 @@ class ItemRepository implements ItemRepositoryInterface
     public function getItems($branch_id)
     {
         try {
-            $items = Item::whereNull('deleted_at')->get()->map(function ($item) {
+            $items = Item::whereNull('deleted_at')->where('branch_id',$branch_id)->get()->map(function ($item) {
                 return [
                     'label' => $item->label,
                     'price' => currency_format($item->price),
