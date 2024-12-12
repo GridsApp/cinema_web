@@ -145,8 +145,8 @@ class  OrderController extends Controller
                 $wallet_user =  User::find($user_card->user_id);
 
                 $wallet_card =  $this->cardRepository->getActiveCard($wallet_user);
-                //  dd($wallet_card);
-
+//               dd($subtotal);
+// dd($wallet_card['wallet_balance']['value'] < $subtotal);
                 if ($wallet_card['wallet_balance']['value'] < $subtotal) {
                     return $this->response(notification()->error('No enough balance', 'No enough balance'));
                 }

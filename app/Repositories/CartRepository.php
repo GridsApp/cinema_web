@@ -347,6 +347,11 @@ class CartRepository implements CartRepositoryInterface
             $cart_id = $cart->id;
 
 
+
+            // $cart = $this->getCartById($cart_id);
+    
+            $coupon_code = $cart->coupon ? $cart->coupon->code : null;
+ 
             $cart_seats = $this->getCartSeats($cart_id, true);
             $zone_ids = $cart_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
@@ -411,6 +416,7 @@ class CartRepository implements CartRepositoryInterface
 
 
             return [
+                'coupon_code' => $coupon_code,
                 'subtotal' => currency_format($total),
                 'lines' => [...$cart_items, ...$cart_seats, ...$cart_topups],
             ];

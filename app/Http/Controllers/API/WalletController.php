@@ -37,8 +37,8 @@ class WalletController extends Controller
 
         $form_data = clean_request([]);
 
-        $minimum_recharge_amount = 10;
-        $maximum_recharge_amount = 50;
+        $minimum_recharge_amount = 10000;
+        $maximum_recharge_amount = 50000;
 
         $validator = Validator::make($form_data, [
             'amount' => 'required|numeric|min:'.$minimum_recharge_amount.'|max:'.$maximum_recharge_amount,
