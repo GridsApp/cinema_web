@@ -16,6 +16,8 @@ use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentAttempt;
 use App\Models\PaymentMethod;
+use App\Models\User;
+use App\Models\UserCard;
 use App\Repositories\MovieShowRepository;
 use App\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
@@ -61,17 +63,18 @@ class  OrderController extends Controller
         }
 
 
-       $payment_method =  PaymentMethod::find($form_data['payment_method_id']);
+        $payment_method =  PaymentMethod::find($form_data['payment_method_id']);
 
 
         try {
             $cart = $this->cartRepository->getCartById($form_data['cart_id']);
-            $cart = $this->cartRepository->getCartDetails($cart);
+            $cart_details = $this->cartRepository->getCartDetails($cart);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Cart Error', $e->getMessage()));
         }
 
-        $subtotal = $cart['subtotal']['value'];
+
+        $subtotal = $cart_details['subtotal']['value'];
 
         $user_id = request()->user->id;
         $user_type = request()->user_type;
@@ -93,19 +96,19 @@ class  OrderController extends Controller
                 try {
                     $this->orderRepository->createOrderFromCart($payment_attempt);
                 } catch (\Throwable $th) {
-                    return $this->response(notification()->error('Order not completed' , 'Your order has not been completed'));
+                    return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
- 
+
                 $payment_attempt->completed_at = now();
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
-        
-                return $this->response(notification()->success('Order completed' , 'Your order has been successfully completed'));
+
+                return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
                 break;
-           
-            case 'OP':    
-                
+
+            case 'OP':
+
                 return $this->responseData([
                     'redirect' => route("payment.initialize", [
                         'payment_attempt_id' => $payment_attempt->id,
@@ -113,19 +116,46 @@ class  OrderController extends Controller
                     ])
                 ]);
 
-            break;
+                break;
 
-            case 'WP':   
+            case 'WP':
+
 
                 // Check if user is identified by wallet card number from cart
 
                 // Check if the balance is enough
 
+                $card_number = $cart->card_number ?? null;
+
+
+                if ($card_number) {
+                    $user_card = UserCard::where('barcode', $card_number)->first();
+                    if (!$user_card) {
+                        return $this->response(notification()->error('Card Error', 'The card number is not linked to any valid barcode.'));
+                    }
+                } elseif ($cart) {
+                    $user_card = UserCard::where('user_id', $cart->user_id)->first();
+                    if (!$user_card) {
+                        return $this->response(notification()->error('Card Error', 'No valid card found for this user.'));
+                    }
+                } else {
+                    return $this->response(notification()->error('No user card found', 'No user card found'));
+                }
+                // dd("here");
+                $wallet_user =  User::find($user_card->user_id);
+
+                $wallet_card =  $this->cardRepository->getActiveCard($wallet_user);
+                //  dd($wallet_card);
+
+                if ($wallet_card['wallet_balance']['value'] < $subtotal) {
+                    return $this->response(notification()->error('No enough balance', 'No enough balance'));
+                }
+
 
                 try {
-                    $this->orderRepository->createOrderFromCart($payment_attempt);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt);
                 } catch (\Throwable $th) {
-                    return $this->response(notification()->error('Order not completed' , 'Your order has not been completed'));
+                    return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
 
                 $payment_attempt->completed_at = now();
@@ -134,16 +164,15 @@ class  OrderController extends Controller
 
                 // Create wallet transaction of type OUT. of amount 
 
+                $this->cardRepository->createWalletTransaction("out", $subtotal, $wallet_user, "Wallet deducted for order", $order["order_id"]);
 
-                return $this->response(notification()->success('Order completed' , 'Your order has been successfully completed'));
+
+                return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
             default:
                 # code...
                 break;
         }
-
-
-       
     }
 
 
@@ -303,7 +332,7 @@ class  OrderController extends Controller
         $orders = $this->orderRepository->getUserOrders($user->id)->map(function ($order) {
 
             $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
-           
+
             $zone_ids = $order_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
             // return $zones;
@@ -405,4 +434,7 @@ class  OrderController extends Controller
 
 
     }
+
+
+
 }

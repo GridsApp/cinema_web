@@ -26,6 +26,8 @@ class UserRepository implements UserRepositoryInterface
         $user = new User;
         $user->phone = $phone_number;
         $user->token = $this->tokenRepository->createUserToken();
+        
+       
         if ($password) {
             $user->password = Hash::make($password);
         }

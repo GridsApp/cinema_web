@@ -270,6 +270,20 @@ class CardRepository implements CardRepositoryInterface
 
         return $card;
     }
+    public function getCardByUseId($barcode)
+    {
+        
+
+        try {
+            $card = UserCard::where('barcode', $barcode)
+            ->whereNull('disabled_at')
+            ->whereNull('deleted_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("card with ID {$barcode} not found .");
+        }
+
+        return $card;
+    }
 
 
     public function generateBarcode()

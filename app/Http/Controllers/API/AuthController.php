@@ -57,16 +57,17 @@ class AuthController extends Controller
         $phone_number = $phone->formatE164();
 
 
-       
+
         try {
             $user = $this->userRepository->getUserByPhone($phone_number);
         } catch (\Exception $e) {
+
             $user = $this->userRepository->createUser($phone_number, $form_data["password"]);
 
             // return $this->response(notification()->error('Card number not found', $e->getMessage()));
         }
-       
-        
+
+
         if ($user && $user->phone_verified) {
             return $this->response(notification()->error('You are already registered user', 'You are already registered user'));
         }
@@ -80,8 +81,8 @@ class AuthController extends Controller
 
     public function login()
     {
-        
-    
+
+
         $form_data = clean_request([
             'phone' => 'phone'
         ]);
@@ -94,16 +95,16 @@ class AuthController extends Controller
         if ($validator->errors()->count() > 0) {
             return  $this->responseValidation($validator);
         }
-  
+
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
 
         try {
             $user = $this->userRepository->getUserByPhone($phone_number);
-
         } catch (\Exception $e) {
             return $this->response(notification()->error('You have entered invalid phone/password', $e->getMessage()));
         }
+
 
 
         if (!Hash::check($form_data['password'], $user->password)) {
@@ -162,5 +163,4 @@ class AuthController extends Controller
             'verify_drivers' => $this->otpRepository->getDrivers()
         ]);
     }
- 
 }

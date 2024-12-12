@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\OmniPayRepositoryInterface;
 
 use App\Models\PaymentAttempt;
+use App\Models\PaymentMethod;
 use App\Traits\APITrait;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +24,18 @@ class PaymentController extends Controller
     public function __construct(OmniPayRepositoryInterface $omniPayRepository)
     {
         $this->omniPayRepository = $omniPayRepository;
+    }
+
+    public function list(){
+        $payment_methods= PaymentMethod::whereNull('deleted_at')->get()->map(function($payment_method){
+            return [
+                'id' => $payment_method->id,
+                'label' => $payment_method->label,
+                'image' => get_image($payment_method->image),
+            ];
+        });
+
+        return $this->responseData($payment_methods);
     }
 
 

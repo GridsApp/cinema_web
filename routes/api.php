@@ -21,10 +21,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('/tickets/list/history', [App\Http\Controllers\API\TicketsController::class, 'listHistory'])->middleware(AuthMiddleware::class);
             Route::get('/tickets/list/upcoming', [App\Http\Controllers\API\TicketsController::class, 'upcoming'])->middleware(AuthMiddleware::class);
           
-            Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware(AuthMiddleware::class);
-
           
-
+          
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
             Route::post('/check', [App\Http\Controllers\API\AuthController::class, 'check']);
@@ -54,6 +52,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
         Route::get('/list', [App\Http\Controllers\API\CartController::class, 'list']);
     });
+
+    Route::get('/payment-methods', [App\Http\Controllers\API\PaymentController::class, 'list'])->middleware(AuthMiddleware::class);
 
     Route::post("/order",  [\App\Http\Controllers\API\OrderController::class, 'get'])->middleware(UserMiddleware::class);
     Route::post("/order/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt'])->middleware(UserMiddleware::class);
