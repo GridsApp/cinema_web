@@ -9,6 +9,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\MovieShow;
 use App\Models\PriceGroupZone;
@@ -258,6 +259,52 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
+    public function getOrderItems($order_id, $grouped = false)
+    {
+        if ($grouped) {
+            $select = [DB::raw("CONCAT(COALESCE(item_id, '0'), '') as concatenated_item_id"), 'order_id', 'item_id', DB::raw('count(*) as quantity')];
+
+            // $select = [ DB::raw("CONCAT(COALESCE(item_id,'0')  as item_id") , 'item_id'  , DB::raw('count(*) as quantity')];
+        } else {
+            $select = "*";
+        }
+        try {
+            $user_order_item = OrderItem::select($select)->whereNull('deleted_at')
+                ->where('order_id', $order_id)
+                ->when($grouped, function ($query) {
+                    $query->groupBy('item_id');
+                })
+                ->get();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $user_order_item;
+    }
+
+    public function getOrderTopups($order_id, $grouped = false)
+    {
+        if ($grouped) {
+            $select = ['order_id', 'price', DB::raw('count(*) as quantity')];
+
+            // $select = [ DB::raw("CONCAT(COALESCE(item_id,'0')  as item_id") , 'item_id'  , DB::raw('count(*) as quantity')];
+        } else {
+            $select = "*";
+        }
+        try {
+            $user_order_topup = OrderTopup::select($select)->whereNull('deleted_at')
+                ->where('order_id', $order_id)
+                ->when($grouped, function ($query) {
+                    $query->groupBy('price');
+                })
+                ->get();
+
+ 
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        return $user_order_topup;
+    }
 
     public function createOrderItemsFromCart() {}
     public function createOrderSeatsFromCart() {}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
+use App\Interfaces\ItemRepositoryInterface;
 use App\Interfaces\MovieShowRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
@@ -35,9 +36,10 @@ class  OrderController extends Controller
     private CartRepositoryInterface $cartRepository;
     private CardRepositoryInterface $cardRepository;
     private ZoneRepositoryInterface $zoneRepository;
+    private ItemRepositoryInterface $itemRepository;
 
 
-    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -46,6 +48,7 @@ class  OrderController extends Controller
         $this->posUserRepository = $posUserRepository;
         $this->cardRepository = $cardRepository;
         $this->zoneRepository = $zoneRepository;
+        $this->itemRepository = $itemRepository;
     }
 
     public function attempt()
@@ -339,7 +342,7 @@ class  OrderController extends Controller
             $subtotal = 0;
 
 
-            $lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts) {
+            $seat_lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts) {
 
                 $zone = $zones[$order_seat['zone_id']];
                 if (!$zone) {
@@ -349,8 +352,8 @@ class  OrderController extends Controller
                 $unit_price = $order_seat['price'];
 
                 $total_discounts += $order_seat['total_discount'];
-               
-              
+
+
                 return [
                     'id' => $order_seat['order_id'],
                     'type' => "Seat",
@@ -362,23 +365,58 @@ class  OrderController extends Controller
                 ];
             })->filter();
 
+            $order_items = $this->orderRepository->getOrderItems($order->id, true);
+            // return $order_items;
+            $item_ids = $order_items->pluck('item_id');
+            $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
-        
-            $lines = $lines->merge($order->items->map(function ($item) {
+            $item_lines = $order_items->map(function ($order_item) use ($items) {
+                $item = $items[$order_item['item_id']];
+                $unit_price = $item->price;
+
                 return [
+                    'id' => $order_item['order_id'],
+                    'type' => "Item",
                     'label' => $item->label,
-                    'qualtity' => 1,
-                    'price' => currency_format($item->price),
+                    'unit_price' => currency_format($unit_price),
+                    'quantity' => $order_item['quantity'],
+                    'price' => currency_format($unit_price * $order_item['quantity']),
                 ];
-            }));
+            })->filter();
 
-            $lines = $lines->merge($order->topups->map(function ($topup) {
+
+
+            $order_topups = $this->orderRepository->getOrderTopups($order->id, true);
+            $topup_lines = $order_topups->map(function ($order_topup) {
+                $unit_price = $order_topup->price;
+
                 return [
-                    'label' => $topup->label,
-                    'qualtity' => 1,
-                    'price' => currency_format($topup->amount),
+                    'id' => $order_topup['order_id'],
+                    'type' => "Topup",
+                    'label' => "Top-up amount",
+                    'unit_price' => currency_format($unit_price),
+                    'quantity' => $order_topup['quantity'],
+                    'price' => currency_format($unit_price * $order_topup['quantity']),
                 ];
-            }));
+            });
+            // return $order_topups;
+            $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
+
+            // $lines = $lines->merge($order->items->map(function ($item) {
+            //     return [
+            //         'label' => $item->label,
+            //         'qualtity' => 1,
+            //         'price' => currency_format($item->price),
+            //     ];
+            // }));
+
+            // $lines = $lines->merge($order->topups->map(function ($topup) {
+            //     return [
+            //         'label' => $topup->label,
+            //         'qualtity' => 1,
+            //         'price' => currency_format($topup->amount),
+            //     ];
+            // }));
 
 
 
@@ -392,7 +430,7 @@ class  OrderController extends Controller
                 'quantity' => $order->seats->count(),
                 'subtotal' => currency_format($subtotal),
                 'total_discount' => currency_format($total_discounts),
-                'total' => currency_format($subtotal-$total_discounts),
+                'total' => currency_format($subtotal - $total_discounts),
                 'lines' => $lines
 
             ];
