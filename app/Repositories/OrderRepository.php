@@ -221,7 +221,7 @@ class OrderRepository implements OrderRepositoryInterface
         try {
 
             if ($grouped) {
-                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'order_id', 'zone_id', 'movie_show_id', DB::raw('count(*) as quantity')];
+                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'order_id', 'zone_id', 'movie_show_id','price','final_price','discount', DB::raw('count(*) as quantity'),DB::raw('sum(discount) as total_discount')];
             } else {
                 $select = "*";
             }

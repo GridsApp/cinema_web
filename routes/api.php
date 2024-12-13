@@ -20,6 +20,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
             Route::get('/tickets/list/history', [App\Http\Controllers\API\TicketsController::class, 'listHistory'])->middleware(AuthMiddleware::class);
             Route::get('/tickets/list/upcoming', [App\Http\Controllers\API\TicketsController::class, 'upcoming'])->middleware(AuthMiddleware::class);
+            Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware(AuthMiddleware::class);
           
           
           

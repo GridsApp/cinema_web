@@ -21,7 +21,7 @@ use App\Models\UserCard;
 use App\Repositories\MovieShowRepository;
 use App\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
-
+use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 
 class  OrderController extends Controller
 {
@@ -145,8 +145,8 @@ class  OrderController extends Controller
                 $wallet_user =  User::find($user_card->user_id);
 
                 $wallet_card =  $this->cardRepository->getActiveCard($wallet_user);
-//               dd($subtotal);
-// dd($wallet_card['wallet_balance']['value'] < $subtotal);
+                //               dd($subtotal);
+                // dd($wallet_card['wallet_balance']['value'] < $subtotal);
                 if ($wallet_card['wallet_balance']['value'] < $subtotal) {
                     return $this->response(notification()->error('No enough balance', 'No enough balance'));
                 }
@@ -335,42 +335,35 @@ class  OrderController extends Controller
 
             $zone_ids = $order_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
-            // return $zones;
-            $order_seats = $order_seats->map(function ($order_seat) use ($zones) {
+            $total_discounts = 0;
+            $subtotal = 0;
+
+
+            $lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts) {
+
                 $zone = $zones[$order_seat['zone_id']];
                 if (!$zone) {
                     return null;
                 }
 
-                $unit_price = $zone->price;
+                $unit_price = $order_seat['price'];
 
+                $total_discounts += $order_seat['total_discount'];
+               
+              
                 return [
                     'id' => $order_seat['order_id'],
                     'type' => "Seat",
                     'label' => $zone->label,
-                    'unit_price' => currency_format($unit_price),
+                    'unit_price' => currency_format($order_seat['price']),
                     'quantity' => $order_seat['quantity'],
-                    'price' => currency_format($unit_price * $order_seat['quantity']),
+                    'price' => currency_format(($unit_price * $order_seat['quantity'])),
+                    'discount' => currency_format($order_seat['total_discount']),
                 ];
             })->filter();
 
-            $total = $order_seats->sum('price.value');
-            return $order_seats;
-            // $total = $order->seats->sum('final_price');
 
-            // $lines = collect([]);
-
-            // $lines = $lines->merge($order->seats->map(function ($seat) {
-            //     return [
-            //         'label' => $seat->label,
-            //         'qualtity' => 1,
-            //         'price' => currency_format($seat->final_price),
-            //     ];
-            // }));
-
-
-
-
+        
             $lines = $lines->merge($order->items->map(function ($item) {
                 return [
                     'label' => $item->label,
@@ -389,11 +382,17 @@ class  OrderController extends Controller
 
 
 
+            $subtotal = $lines->sum('price.value');
+            $total_discounts = $lines->sum('discount.value');
+
+
             return [
                 'order_id' => $order->id,
                 'date' => $order->created_at,
                 'quantity' => $order->seats->count(),
-                'total_price' => currency_format($total),
+                'subtotal' => currency_format($subtotal),
+                'total_discount' => currency_format($total_discounts),
+                'total' => currency_format($subtotal-$total_discounts),
                 'lines' => $lines
 
             ];
@@ -434,7 +433,4 @@ class  OrderController extends Controller
 
 
     }
-
-
-
 }
