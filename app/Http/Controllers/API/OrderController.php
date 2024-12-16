@@ -97,7 +97,7 @@ class  OrderController extends Controller
             case 'CASH':
 
                 try {
-                    $this->orderRepository->createOrderFromCart($payment_attempt);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
@@ -106,7 +106,9 @@ class  OrderController extends Controller
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
 
-                return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
+                return $this->responseData([
+                    'order_id' => $order->id,
+                ] , notification()->success('Order completed', 'Your order has been successfully completed'));
 
                 break;
 
@@ -115,8 +117,10 @@ class  OrderController extends Controller
                 return $this->responseData([
                     'redirect' => route("payment.initialize", [
                         'payment_attempt_id' => $payment_attempt->id,
-                        'token' => $token
-                    ])
+                        
+                    ]
+                 
+                    )
                 ]);
 
                 break;

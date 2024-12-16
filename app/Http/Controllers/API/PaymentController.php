@@ -114,6 +114,7 @@ class PaymentController extends Controller
 
             return redirect()->route('payment.response', [
                 'type' => 'error',
+            
                 'title' => 'Payment Successfull but something went wrong',
                 'message' => 'Payment was successfull but something went wrong after it. Please contact our customer support'
             ]);
@@ -127,6 +128,7 @@ class PaymentController extends Controller
 
         return redirect()->route('payment.response', [
             'type' => 'success',
+            'id'=>$callback->id,
             'title' => 'Payment Successfull',
             'message' => 'Payment has been completed successfully'
         ]);
