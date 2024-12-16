@@ -121,6 +121,7 @@ class  OrderController extends Controller
                     'redirect' => route(
                         "payment.initialize",
                         [
+                            'token'=>$token,
                             'payment_attempt_id' => $payment_attempt->id,
 
                         ]
