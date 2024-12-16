@@ -113,7 +113,7 @@ class OrderRepository implements OrderRepositoryInterface
 
 
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
-            // dd($theater_map);
+           
 
             $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
 

@@ -101,13 +101,13 @@ class  OrderController extends Controller
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
-
+// dd($order);
                 $payment_attempt->completed_at = now();
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
 
                 return $this->responseData([
-                    'order_id' => $order->id,
+                    'order_id' => $order["order_id"],
                 ] , notification()->success('Order completed', 'Your order has been successfully completed'));
 
                 break;
@@ -441,38 +441,24 @@ class  OrderController extends Controller
         });
         return $this->responseData($orders);
 
-        // $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
-        //     ->join('orders', 'orders.id', 'order_seats.order_id')
-        //     ->where('orders.user_id', $user->id)
-        //     ->whereNull('order_seats.refunded_at')
-        //     ->get();
-        // ->groupBy('movie_show_id');
-
-        // if ($order_seats->isEmpty()) {
-        //     return $this->response(notification()->error('No Order Found', 'No Order Found'));
-        // }
-        // $order_seats = $order_seats->map(function ($seats, $movie_show_id) {
-        //     $movieShow = $seats->pluck('movieShow')->first();
-        //     $movie_image = get_image($movieShow->movie->main_image);
-
-        //     $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->label);
-
-        //     if (!$show_datetime->isToday() && !$show_datetime->isBefore(now())) {
-        //         return null;
-        //     }
-
-        //     return [
-        //         'movie_name' => $movieShow->movie->name ?? '',
-        //         'movie_image' => $movie_image ?? '',
-        //         'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-        //         'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : '',
-        //         'branch' => $movieShow->theater->branch->label ?? '',
-        //         'theater' => $movieShow->theater->label ?? '',
-        //         'seats' => $seats->pluck('seat')->implode(","),
-        //     ];
-        // })->filter()->values();
-
 
 
     }
+
+
+     public function details($order_id){
+        try {
+            $order = Order::where('id' , $order_id)->whereNull('deleted_at')->firstOrFail();
+          
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order not found', $e->getMessage()));
+        }
+
+
+        $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+
+
+        return $order_seats;
+    }
+      
 }

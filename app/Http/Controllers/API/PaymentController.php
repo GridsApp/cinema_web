@@ -128,7 +128,7 @@ class PaymentController extends Controller
 
         return redirect()->route('payment.response', [
             'type' => 'success',
-            'id'=>$callback->id,
+            'id'=>$callback["order_id"],
             'title' => 'Payment Successfull',
             'message' => 'Payment has been completed successfully'
         ]);
