@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PriceGroupZone extends Model
 {
     use HasFactory;
+    public function priceGroup(){
+        return $this->belongsTo(PriceGroup::class , 'price_group_id' , 'id');
+    }
 
 
     //conditions

@@ -41,7 +41,7 @@ class  OrderController extends Controller
     private UserRepositoryInterface $userRepository;
 
 
-    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository,UserRepositoryInterface $userRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository, UserRepositoryInterface $userRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -459,27 +459,34 @@ class  OrderController extends Controller
         $user_id = $order->user_id;
 
 
-        $user=$this->userRepository->getUserById($user_id);
-      
+        $user = $this->userRepository->getUserById($user_id);
 
-       $user_loyalty_balance= $this->cardRepository->getLoyaltyBalance($user);
+
+        $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($user);
 
 
 
         $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
-   
+
         $zone_ids = $order_seats->pluck('zone_id');
 
         $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
 
+        // $price_group= $zones->map(function ($zone) {
+        //     return $zone->priceGroup->label;
+        // });
+        // return $price_group_ids;
 
-        $order_seats = $order_seats->map(function ($seats) use ($order) {
+        $order_seats = $order_seats->map(function ($seats) use ($order, $zones) {
             $movieShow = $seats->movieShow;
             $movie = $movieShow->movie;
+            // $zone_label = $zones->get($seats->zone_id)['label'] ?? 'Unknown Zone';
             return [
-                'order_id'=>$order->id,
+                'order_id' => $order->id,
                 'movie_name' => $movie->name ?? '',
                 'movie_image' => get_image($movie->main_image) ?? '',
+
+                'duration' => minutes_to_human($movie->duration),
                 'order_barcode' => $order->barcode,
                 'booking_id' => $movieShow->created_at ? now()->parse($movieShow->created_at)->format('Y-m') . '-' . $order->id : '',
                 'order_barcode' => $order->barcode,
@@ -489,13 +496,17 @@ class  OrderController extends Controller
                 'theater' => $movieShow->theater->label ?? '',
                 'seats' => $seats->seats,
             ];
-        });    
-        return [
+        });
+
+        return $this->responseData([
             'loyalty_points_balance' => [
                 "value" => $user_loyalty_balance,
                 "display" => $user_loyalty_balance . ' points'
             ],
             'order' => $order_seats,
-        ];
+        ]);
+        // return [
+           
+        // ];
     }
 }

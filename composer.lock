@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1be21d59b7a754fb6db692ae5abcd4d0",
+    "content-hash": "2b53b485cc3297a8397ebd46b1112b07",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6252,6 +6252,44 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
             "time": "2023-12-08T13:03:43+00:00"
+        },
+        {
+            "name": "twa/cmsv2",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thewebaddicts/twacmsv2.git",
+                "reference": "c0a6652def0233cca52405235e9c12d433551aa4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/c0a6652def0233cca52405235e9c12d433551aa4",
+                "reference": "c0a6652def0233cca52405235e9c12d433551aa4",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "twa\\cmsv2\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hovig Senekjian",
+                    "email": "hovig@thewebaddicts.com"
+                }
+            ],
+            "description": "This package is for the content management system provided by thewebaddicts",
+            "support": {
+                "issues": "https://github.com/thewebaddicts/twacmsv2/issues",
+                "source": "https://github.com/thewebaddicts/twacmsv2/tree/main"
+            },
+            "time": "2024-12-16T13:07:39+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
