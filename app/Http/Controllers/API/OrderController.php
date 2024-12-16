@@ -10,6 +10,7 @@ use App\Interfaces\MovieShowRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -37,9 +38,10 @@ class  OrderController extends Controller
     private CardRepositoryInterface $cardRepository;
     private ZoneRepositoryInterface $zoneRepository;
     private ItemRepositoryInterface $itemRepository;
+    private UserRepositoryInterface $userRepository;
 
 
-    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository,UserRepositoryInterface $userRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -49,6 +51,7 @@ class  OrderController extends Controller
         $this->cardRepository = $cardRepository;
         $this->zoneRepository = $zoneRepository;
         $this->itemRepository = $itemRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function attempt()
@@ -101,25 +104,27 @@ class  OrderController extends Controller
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
-// dd($order);
+                // dd($order);
                 $payment_attempt->completed_at = now();
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
 
                 return $this->responseData([
                     'order_id' => $order["order_id"],
-                ] , notification()->success('Order completed', 'Your order has been successfully completed'));
+                ], notification()->success('Order completed', 'Your order has been successfully completed'));
 
                 break;
 
             case 'OP':
 
                 return $this->responseData([
-                    'redirect' => route("payment.initialize", [
-                        'payment_attempt_id' => $payment_attempt->id,
-                        
-                    ]
-                 
+                    'redirect' => route(
+                        "payment.initialize",
+                        [
+                            'payment_attempt_id' => $payment_attempt->id,
+
+                        ]
+
                     )
                 ]);
 
@@ -440,25 +445,57 @@ class  OrderController extends Controller
             ];
         });
         return $this->responseData($orders);
-
-
-
     }
 
 
-     public function details($order_id){
+    public function details($order_id)
+    {
         try {
-            $order = Order::where('id' , $order_id)->whereNull('deleted_at')->firstOrFail();
-          
+            $order = Order::where('id', $order_id)->whereNull('deleted_at')->firstOrFail();
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
 
+        $user_id = $order->user_id;
+
+
+        $user=$this->userRepository->getUserById($user_id);
+      
+
+       $user_loyalty_balance= $this->cardRepository->getLoyaltyBalance($user);
+
+
 
         $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+   
+        $zone_ids = $order_seats->pluck('zone_id');
+
+        $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
 
 
-        return $order_seats;
+        $order_seats = $order_seats->map(function ($seats) use ($order) {
+            $movieShow = $seats->movieShow;
+            $movie = $movieShow->movie;
+            return [
+                'order_id'=>$order->id,
+                'movie_name' => $movie->name ?? '',
+                'movie_image' => get_image($movie->main_image) ?? '',
+                'order_barcode' => $order->barcode,
+                'booking_id' => $movieShow->created_at ? now()->parse($movieShow->created_at)->format('Y-m') . '-' . $order->id : '',
+                'order_barcode' => $order->barcode,
+                'branch' => $movieShow->theater->branch->label ?? '',
+                'date' => $movieShow->date ? now()->parse($movieShow->date)->format('Y-m-d') : '', // Format as YYYY-MM-DD
+                'time' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : '',
+                'theater' => $movieShow->theater->label ?? '',
+                'seats' => $seats->seats,
+            ];
+        });    
+        return [
+            'loyalty_points_balance' => [
+                "value" => $user_loyalty_balance,
+                "display" => $user_loyalty_balance . ' points'
+            ],
+            'order' => $order_seats,
+        ];
     }
-      
 }

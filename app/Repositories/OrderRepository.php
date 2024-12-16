@@ -52,7 +52,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function createOrderFromCart($payment_attempt)
     {
-       
+
 
         $cart_id = $payment_attempt->reference;
         $payment_method_id = $payment_attempt->payment_method_id;
@@ -113,7 +113,7 @@ class OrderRepository implements OrderRepositoryInterface
 
 
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
-           
+
 
             $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
 
@@ -138,12 +138,11 @@ class OrderRepository implements OrderRepositoryInterface
 
 
 
-            $reservedSeat=new ReservedSeat();
+            $reservedSeat = new ReservedSeat();
             // dd($cart_seat['movie_show_id']);
             $reservedSeat->movie_show_id = $cart_seat['movie_show_id'];
             $reservedSeat->seat = $cart_seat['seat'];
             $reservedSeat->save();
-
         }
 
 
@@ -209,7 +208,6 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             $user_order = Order::where('user_id', $user_id)
                 ->whereNull('deleted_at')->get();
-               
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -219,10 +217,25 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrderSeats($order_id, $grouped = false)
     {
+
         try {
 
             if ($grouped) {
-                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'order_id', 'zone_id', 'movie_show_id','price','final_price','discount', DB::raw('count(*) as quantity'),DB::raw('sum(discount) as total_discount')];
+                $select = [
+                    DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"),
+                    'order_id',
+                    'seat',
+                    'zone_id',
+                    'movie_show_id',
+                    'price',
+                    'final_price',
+                    'discount',
+                    DB::raw('count(*) as quantity'),
+                    DB::raw('sum(discount) as total_discount'),
+
+
+                    DB::raw("GROUP_CONCAT(seat ORDER BY seat) AS seats")
+                ];
             } else {
                 $select = "*";
             }
@@ -297,8 +310,6 @@ class OrderRepository implements OrderRepositoryInterface
                     $query->groupBy('price');
                 })
                 ->get();
-
- 
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -310,7 +321,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function createOrderSeatsFromCart() {}
 
 
-   
+
     public function generateReference()
     {
         do {
