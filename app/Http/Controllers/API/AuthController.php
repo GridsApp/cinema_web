@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 
 class AuthController extends Controller

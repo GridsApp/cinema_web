@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

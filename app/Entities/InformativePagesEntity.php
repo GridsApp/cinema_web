@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Entities;
-use Illuminate\Support\Facades\Config;
 
 
+use twa\cmsv2\Entities\Entity;
 
 class InformativePagesEntity extends Entity
 {

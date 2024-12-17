@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('CMSView::layouts.main')
 
 @section('content')
 <div class="container-fixed" >

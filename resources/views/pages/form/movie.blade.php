@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('CMSView::layouts.main')
 
 @section('content')
 <livewire:entity-forms.movie-form :slug="$slug" :id="$id" />

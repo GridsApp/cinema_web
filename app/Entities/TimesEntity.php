@@ -4,6 +4,7 @@ namespace App\Entities;
 
 
 use Database\Seeders\TimeSeeder;
+use twa\cmsv2\Entities\Entity;
 
 class TimesEntity extends Entity
 {

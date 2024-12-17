@@ -7,7 +7,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\TicketRepositoryInterface;
 use App\Models\MovieShow;
 use App\Models\OrderSeat;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Http\Request;
 use Symfony\Component\Mailer\Transport\Dsn;
 

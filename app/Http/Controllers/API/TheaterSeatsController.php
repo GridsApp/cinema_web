@@ -7,7 +7,7 @@ use App\Interfaces\CartRepositoryInterface;
 use App\Models\MovieShow;
 use App\Models\PriceGroupZone;
 use App\Models\Theater;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 
 class TheaterSeatsController extends Controller

@@ -13,38 +13,23 @@
                         <i class="fa-regular fa-loader"></i>  Loading...
                     </div>
 
-                @component('components.panels.default', ['title' => 'Fetch Record'])
+                @component('CMSView::components.panels.default', ['title' => 'Fetch Record'])
                         <div class="grid grid-cols-12 gap-5 " >
                             {!! field('movie_key', 'col-span-9') !!}
 
                             <div class="col-span-1">
                                 <div style="min-height:27.5px"></div>
                                 <button
-
                                     wire:loading.class="opacity-50"
-{{--                                    wire:loading.attr="disabled"--}}
-
                                     class="btn btn-primary" type="button" wire:click="handleFetch">
-{{--                                    <div wire:loading class="loading-icon">--}}
-{{--                                        <i class="fa-regular fa-loader"></i>--}}
-{{--                                    </div>--}}
                                     Fetch
                                 </button>
                             </div>
                             <div class="col-span-2">
                                 <div style="min-height: 27.5px"></div>
                                 <button class="btn btn-secondary"
-
                                         wire:loading.class="opacity-50"
-{{--                                        wire:loading.attr="disabled"--}}
-
                                         type="button" wire:click="generateKey">
-
-{{--                                    <div wire:loading class="loading-icon">--}}
-{{--                                        <i class="fa-regular fa-loader"></i>--}}
-{{--                                    </div>--}}
-
-
                                     Generate
                                 </button>
 
@@ -54,7 +39,7 @@
                     @endcomponent
                 </div>
                 <div class="col-span-6">
-                    @component('components.panels.default', ['title' => 'Movie Information'])
+                    @component('CMSView::components.panels.default', ['title' => 'Movie Information'])
                         <div class="grid grid-cols-12 gap-5">
                             {!! field('name', 'col-span-6') !!}
                             {!! field('condensed_name', 'col-span-6') !!}
@@ -65,7 +50,7 @@
                     @endcomponent
                 </div>
                 <div class="col-span-6">
-                    @component('components.panels.default', ['title' => 'Detailed Information'])
+                    @component('CMSView::components.panels.default', ['title' => 'Detailed Information'])
                         <div class="grid grid-cols-12 gap-5">
                             {!! field('cast', 'col-span-12') !!}
                             {!! field('genre', 'col-span-12') !!}
@@ -77,7 +62,7 @@
                     @endcomponent
                 </div>
                 <div class="col-span-12">
-                    @component('components.panels.default', ['title' => 'Movie Media'])
+                    @component('CMSView::components.panels.default', ['title' => 'Movie Media'])
                         <div class="grid grid-cols-12 gap-5">
                             {!! field('main_image', 'col-span-12') !!}
                             {!! field('cover_image', 'col-span-12') !!}
@@ -86,7 +71,7 @@
                     @endcomponent
                 </div>
                 <div class="col-span-12">
-                    @component('components.panels.default', ['title' => 'Ratings & Votes'])
+                    @component('CMSView::components.panels.default', ['title' => 'Ratings & Votes'])
                         <div class="grid grid-cols-12 gap-5">
                             {!! field('imdb_rating', 'col-span-6') !!}
                             {!! field('imdb_vote', 'col-span-6') !!}
@@ -95,7 +80,7 @@
                 </div>
 
                 <div class="col-span-12 mb-4">
-                    @component('components.panels.default' , ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
+                    @component('CMSView::components.panels.default' , ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
                         <div class="flex justify-center gap-4">
                             {!! link_button("Cancel" , '#' , 'secondary') !!}
                             {!! button("'Submit'" ,'primary', '' ,'submit',  'text-[12px]') !!}

@@ -8,7 +8,12 @@ export default {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
 
+    "./vendor/twa/cmsv2/src/Resources/**/*.blade.php",
+    "./vendor/twa/cmsv2/src/Resources/**/*.js",
+
+
   ],
+
   theme: {
     extend: {
       colors: {

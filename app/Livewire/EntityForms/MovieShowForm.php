@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\MovieShow;
 use App\Models\Movie;
 use App\Rules\TimeConflictRule;
-use App\Traits\ToastTrait;
+use twa\cmsv2\Traits\ToastTrait;
 
 
 class MovieShowForm extends Component

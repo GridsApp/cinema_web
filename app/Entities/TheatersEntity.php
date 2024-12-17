@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Support\Facades\DB;
-
+use twa\cmsv2\Entities\Entity;
 class TheatersEntity extends Entity
 {
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Models\PaymentAttempt;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

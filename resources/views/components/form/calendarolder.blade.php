@@ -255,7 +255,7 @@
         </div>
     </div>
 
-    @component('components.drawer', [
+    @component('CMSView::components.drawer', [
         'showHandler' => 'drawerOpenEdit',
         'closeHandler' => 'drawerOpenEdit = false',
         'title' => 'Edit Movie Show',

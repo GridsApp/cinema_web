@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="my-4">
-            @component('components.panels.default', ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
+            @component('CMSView::components.panels.default', ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
                 <div class="flex justify-center gap-4">
                     @if (!$uniqeid)
                         {!! link_button('Cancel', '#', 'secondary') !!}

@@ -7,7 +7,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'ID',
         'placeholder' => 'ID',
         'name' => 'id'
@@ -19,7 +19,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Slug',
         'placeholder' => 'Slug',
         'name' => 'slug',
@@ -31,7 +31,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Title',
         'placeholder' => 'Title',
         'name' => 'title',
@@ -44,7 +44,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Created',
         'placeholder' => 'Created at',
         'name' => 'created_at'
@@ -55,7 +55,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Updated',
         'placeholder' => 'Updated at',
         'name' => 'updated_at'
@@ -67,7 +67,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Converted',
         'placeholder' => 'Converted at',
         'name' => 'converted_at'
@@ -78,7 +78,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Completed',
         'placeholder' => 'Completed at',
         'name' => 'completed_at'
@@ -91,7 +91,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Display',
         'placeholder' => 'Display',
         'name' => 'display'
@@ -101,7 +101,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'One Time Usage',
         'placeholder' => 'One Time Usage',
         'name' => 'one_time_usage'
@@ -112,7 +112,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' =>  \App\Entities\FieldTypes\Colorpicker::class,
+        'type' =>  \twa\cmsv2\Entities\FieldTypes\Colorpicker::class,
         'label' => 'Color',
         'placeholder' => 'Choose color',
         'name' => 'color'
@@ -123,9 +123,9 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        // 'type' => \App\Entities\FieldTypes\Textfield::class,
+        // 'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Label',
         'placeholder' => 'Enter label',
@@ -141,7 +141,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Action',
         'placeholder' => 'Enter Action',
         'name' => 'action',
@@ -154,7 +154,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\TheaterMap::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\TheaterMap::class,
         'label' => 'Theater Map',
         'placeholder' => 'Theater Map',
         'name' => 'theater_map',
@@ -169,7 +169,7 @@ return [
     //     'livewire' => [
     //         'wire:model' => 'form.{name}',
     //     ],
-    //     'type' => \App\Entities\FieldTypes\Map::class,
+    //     'type' => \twa\cmsv2\Entities\FieldTypes\Map::class,
     //     'label' => 'Theater Map',
     //     'placeholder' => 'Theater Map',
     //     'name' => 'theater_map',
@@ -184,7 +184,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Hidden::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Hidden::class,
         'label' => 'Group',
         'placeholder' => 'Enter Group',
         'name' => 'group'
@@ -195,7 +195,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Hidden::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Hidden::class,
         'label' => 'Label',
         'placeholder' => 'Enter label',
         'name' => 'label'
@@ -206,7 +206,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Movie Key (ex. tt3501632)',
         'placeholder' => 'Enter movie key',
         'name' => 'movie_key'
@@ -216,7 +216,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Key',
         'placeholder' => 'Enter key',
         'name' => 'key'
@@ -226,7 +226,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Name',
         'placeholder' => 'Enter Movie Name',
         'name' => 'name'
@@ -237,7 +237,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Name',
         'placeholder' => 'Enter Name',
         'name' => 'name'
@@ -248,7 +248,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Condensed name',
         'placeholder' => 'Enter Movie Condensed Name',
         'name' => 'condensed_name'
@@ -259,7 +259,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textarea::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textarea::class,
         'label' => 'Description',
         'placeholder' => 'Enter description',
         'name' => 'description'
@@ -269,7 +269,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => ' Duration in Minutes',
         'placeholder' => 'Enter duration',
         'name' => 'duration'
@@ -281,7 +281,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'NB  Seats ',
         'placeholder' => 'NB seats',
         'name' => 'nb_seats'
@@ -292,7 +292,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date',
         'placeholder' => 'Enter date',
         'name' => 'date'
@@ -305,7 +305,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Genres',
         'placeholder' => 'Select movie genre',
         'name' => 'genre_id',
@@ -324,7 +324,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Cast',
         'placeholder' => 'Select movie casts',
         'name' => 'cast_id',
@@ -343,7 +343,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Director',
         'placeholder' => 'Select movie director',
         'name' => 'director_id',
@@ -362,7 +362,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Language',
         'placeholder' => 'Select movie language',
         'name' => 'language_id',
@@ -381,7 +381,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Systems',
         'placeholder' => 'Select systems',
         'name' => 'system_id',
@@ -400,7 +400,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Age Rating',
         'placeholder' => 'Select age',
         'name' => 'age_rating_id',
@@ -419,7 +419,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Zone',
         'placeholder' => 'Select zone',
         'name' => 'price_group_zone_id',
@@ -442,7 +442,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\FileUpload::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
         'label' => 'Image',
         'placeholder' => 'Upload Image',
         'name' => 'image',
@@ -454,7 +454,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\FileUpload::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
         'label' => 'Main Image',
         'placeholder' => 'Upload Image',
         'name' => 'main_image',
@@ -467,7 +467,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\FileUpload::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
         'label' => 'Cover Image',
         'placeholder' => 'Upload Image',
         'aspect_ratio' => 3 / 2,
@@ -480,7 +480,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Youtube Video',
         'placeholder' => 'Enter Youtube Video Link',
         'name' => 'youtube_video'
@@ -490,7 +490,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Payment Method Id',
         'placeholder' => 'Enter Payment Method Id',
         'name' => 'payment_method_id'
@@ -501,7 +501,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Release Date ',
         'placeholder' => 'Enter date',
         'name' => 'release_date',
@@ -513,7 +513,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'IMDB Rating',
         'placeholder' => 'Enter movie imdb rating',
         'name' => 'imdb_rating'
@@ -523,7 +523,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'IMDB Votes',
         'placeholder' => 'Enter movie imdb votes',
         'name' => 'imdb_vote'
@@ -536,7 +536,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\FileUpload::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
         'label' => 'Profile Image',
         'placeholder' => 'Upload Image',
         'aspect_ratio' => 1 / 1,
@@ -549,7 +549,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Movie',
         'placeholder' => 'Select Movie',
         'name' => 'movie_id',
@@ -569,7 +569,7 @@ return [
         'livewire' => [
             'wire:model' => '{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Theatre',
         'placeholder' => 'Select Theatre',
         'name' => 'theater_id',
@@ -605,7 +605,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Visibility',
         'placeholder' => 'Visibility',
         'name' => 'visibility'
@@ -616,7 +616,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Branch',
         'placeholder' => 'Select branch',
         'name' => 'branch_id',
@@ -635,7 +635,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Hall Number',
         'placeholder' => 'Enter Hall Number',
         'prefix' => 'Theater',
@@ -647,7 +647,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Type',
         'placeholder' => 'Select Type',
         'name' => 'price_group_id',
@@ -672,7 +672,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Colorpicker::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Colorpicker::class,
         'label' => 'Color',
         'placeholder' => 'Enter Color',
         'name' => 'color'
@@ -685,7 +685,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Price',
         'placeholder' => 'Enter Price',
         'name' => 'price'
@@ -697,7 +697,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Default',
         'placeholder' => 'Default',
         'name' => 'default'
@@ -710,7 +710,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date From',
         'placeholder' => 'Select date From',
         'name' => 'date_from'
@@ -720,7 +720,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date To',
         'placeholder' => 'Select date to`',
         'name' => 'date_to'
@@ -731,7 +731,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Time',
         'placeholder' => 'Select Times',
         'name' => 'end_time_id',
@@ -752,9 +752,9 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
-        // 'type' => \App\Entities\FieldTypes\Textfield::class,
+        // 'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Time',
         'placeholder' => 'Select Times',
@@ -774,7 +774,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Screen type',
         'placeholder' => 'Select movie Screen Type',
         'name' => 'screen_type_id',
@@ -794,7 +794,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Apply',
         'placeholder' => 'Apply date',
         'name' => 'apply_date',
@@ -806,7 +806,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Apply',
         'placeholder' => 'Apply',
         'name' => 'apply_time',
@@ -818,7 +818,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Apply',
         'placeholder' => 'Apply',
         'name' => 'apply_system',
@@ -831,7 +831,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Apply',
         'placeholder' => 'Apply Screen type',
         'name' => 'apply_screen_type',
@@ -842,7 +842,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Apply',
         'placeholder' => 'Apply color',
         'name' => 'apply_color',
@@ -855,7 +855,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'First Name',
         'placeholder' => 'First Name',
         'name' => 'first_name'
@@ -866,7 +866,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Last Name',
         'placeholder' => 'Last Name',
         'name' => 'last_name'
@@ -878,7 +878,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Email::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Email::class,
         'label' => 'Email',
         'placeholder' => 'Email',
         'name' => 'email'
@@ -889,7 +889,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Password::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Password::class,
         'label' => 'Password',
         'placeholder' => 'Password',
         'name' => 'password'
@@ -903,7 +903,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Question',
         'placeholder' => 'Enter Question',
         'name' => 'question',
@@ -916,7 +916,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textarea::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textarea::class,
         'label' => 'Answer',
         'placeholder' => 'Enter Answer',
         'name' => 'answer'
@@ -927,7 +927,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textarea::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textarea::class,
         'label' => 'Text',
         'placeholder' => 'Enter text',
         'name' => 'text'
@@ -938,7 +938,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'CTA Label',
         'placeholder' => 'Enter CTA label',
         'name' => 'cta_label',
@@ -949,7 +949,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'CTA Link',
         'placeholder' => 'Enter CTA Link',
         'name' => 'cta_link',
@@ -962,7 +962,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Latitude',
         'placeholder' => 'Enter Latitude',
         'name' => 'latitude',
@@ -975,7 +975,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Longitude',
         'placeholder' => 'Enter Longitude',
         'name' => 'longitude',
@@ -988,7 +988,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Number',
         'placeholder' => 'Enter Number',
         'name' => 'number',
@@ -1000,7 +1000,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Web Prefix',
         'placeholder' => 'Enter Web Prefix',
         'name' => 'web_prefix',
@@ -1012,7 +1012,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Editor::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Editor::class,
         'label' => 'Content',
         'placeholder' => 'Enter Content',
         'name' => 'content',
@@ -1025,7 +1025,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Facebook URL',
         'placeholder' => 'Enter Facebook URL',
         'name' => 'facebook',
@@ -1037,7 +1037,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Facebook Label',
         'placeholder' => 'Enter Facebook Label',
         'name' => 'facebook_label',
@@ -1049,7 +1049,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Instagram Label',
         'placeholder' => 'Enter Instagram Label',
         'name' => 'instagram_label',
@@ -1061,7 +1061,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Instagram URL',
         'placeholder' => 'Enter Instagram URL',
         'name' => 'instagram',
@@ -1072,7 +1072,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Whattsapp Label',
         'placeholder' => 'Enter Whattsapp Label',
         'name' => 'whattsapp_label',
@@ -1084,7 +1084,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Whattsapp Number',
         'placeholder' => 'Enter Whattsapp Number',
         'name' => 'whattsapp',
@@ -1096,7 +1096,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'X Label',
         'placeholder' => 'Enter X Label',
         'name' => 'x_label',
@@ -1108,7 +1108,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'X URL',
         'placeholder' => 'Enter X URL',
         'name' => 'x',
@@ -1121,7 +1121,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Full Name',
         'placeholder' => 'Enter full name',
@@ -1135,7 +1135,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Username',
         'placeholder' => 'Enter Username',
@@ -1148,7 +1148,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Passcode',
         'placeholder' => 'Enter passcode',
         'name' => 'passcode',
@@ -1160,7 +1160,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Role',
         'placeholder' => 'Select role',
         'name' => 'role',
@@ -1183,7 +1183,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Phone',
         'placeholder' => 'Enter phone',
         'name' => 'phone',
@@ -1196,7 +1196,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\FileUpload::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
         'label' => 'Profile Picture',
         'placeholder' => 'Profile Picture',
         'name' => 'profile_picture',
@@ -1215,7 +1215,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Gender',
         'placeholder' => 'Select gender',
         'name' => 'gender_id',
@@ -1234,7 +1234,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Marital Status',
         'placeholder' => 'Select Marital Statu',
         'name' => 'marital_status_id',
@@ -1254,7 +1254,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date of Birth',
         'placeholder' => 'Enter date of birth',
         'name' => 'date_birth'
@@ -1265,7 +1265,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Date::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date of marriage',
         'placeholder' => 'Enter date of marriage',
         'name' => 'date_marriage'
@@ -1277,7 +1277,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Hidden::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Hidden::class,
         'label' => 'Login Provider',
         'placeholder' => 'Enter Login Provider',
         'name' => 'login_provider'
@@ -1289,7 +1289,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Token',
         'placeholder' => 'Enter token',
         'name' => 'token',
@@ -1301,7 +1301,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Token',
         'placeholder' => 'Enter token',
         'name' => 'access_token',
@@ -1314,7 +1314,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Otp',
         'placeholder' => 'Enter otp',
@@ -1327,7 +1327,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'User Id',
         'placeholder' => 'Enter user id',
@@ -1341,7 +1341,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'User Id',
         'placeholder' => 'Enter user id',
@@ -1355,7 +1355,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'Item Id',
         'placeholder' => 'Enter item id',
@@ -1368,7 +1368,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'Order Id',
         'placeholder' => 'Enter order id',
@@ -1381,7 +1381,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'Cart Id',
         'placeholder' => 'Enter cart id',
@@ -1394,7 +1394,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'Movie Show Id',
         'placeholder' => 'Enter Movie Show Id',
@@ -1408,7 +1408,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Seat',
         'placeholder' => 'Enter Seat',
@@ -1422,7 +1422,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'Reward Id',
         'placeholder' => 'Enter reward id',
@@ -1436,7 +1436,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Code',
         'placeholder' => 'Enter Code',
@@ -1449,7 +1449,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Flat',
         'placeholder' => 'Enter Flat',
@@ -1462,7 +1462,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Percentage',
         'placeholder' => 'Enter Percentage',
@@ -1476,7 +1476,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
 
         'label' => 'Used At',
         'placeholder' => 'Enter Used At',
@@ -1488,7 +1488,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'User Card Id',
         'placeholder' => 'Enter user card id',
         'name' => 'user_card_id',
@@ -1499,7 +1499,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Payment Method Id',
         'placeholder' => 'Payment Method Id',
         'name' => 'payment_method_id',
@@ -1511,7 +1511,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Zone',
         'placeholder' => 'Zone',
         'name' => 'zone_id',
@@ -1524,7 +1524,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Barcode',
         'placeholder' => 'Enter Barcode',
@@ -1537,7 +1537,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Card Number',
         'placeholder' => 'Enter Card Number',
@@ -1549,7 +1549,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Coupon',
         'placeholder' => 'Select Coupon ',
         'name' => 'coupon_id',
@@ -1571,7 +1571,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'Type',
         'placeholder' => 'Enter type',
@@ -1584,7 +1584,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
 
         'label' => 'Disabled At',
         'placeholder' => 'Enter Disabled At',
@@ -1600,7 +1600,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Date of expiry',
         'placeholder' => 'Enter date of expiry',
         'name' => 'expires_at'
@@ -1611,7 +1611,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Date of otp expiry',
         'placeholder' => 'Enter date of otp expiry',
         'name' => 'otp_expires_at'
@@ -1622,7 +1622,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Date of token expiry',
         'placeholder' => 'Enter date of token expiry',
         'name' => 'token_expires_at'
@@ -1633,7 +1633,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Email Verified',
         'placeholder' => 'Email Verified',
         'name' => 'email_verified'
@@ -1644,7 +1644,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Phone Verified',
         'placeholder' => 'Phone Verified',
         'name' => 'phone_verified'
@@ -1658,7 +1658,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
 
         'label' => 'IP',
         'placeholder' => 'Enter ip',
@@ -1671,7 +1671,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Driver',
         'placeholder' => 'Enter Driver',
         'name' => 'driver',
@@ -1682,7 +1682,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Address',
         'placeholder' => 'Enter Address',
         'name' => 'address',
@@ -1695,7 +1695,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Amount',
         'placeholder' => 'Enter Amount',
         'name' => 'amount',
@@ -1708,7 +1708,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Balance',
         'placeholder' => 'Enter Balance',
         'name' => 'balance',
@@ -1721,7 +1721,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Reference',
         'placeholder' => 'Enter Reference',
         'name' => 'reference',
@@ -1734,7 +1734,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Gateway Reference',
         'placeholder' => 'Enter Gateway Reference',
         'name' => 'gateway_reference',
@@ -1746,7 +1746,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Pincode',
         'placeholder' => 'Enter Pincode',
         'name' => 'pincode',
@@ -1758,7 +1758,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
         'label' => 'Type',
         'placeholder' => 'Enter Type',
         'name' => 'type',
@@ -1770,7 +1770,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => ' Redeem Points',
         'placeholder' => 'Redeem Points',
         'name' => 'redeem_points'
@@ -1781,7 +1781,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'One Time Usage',
         'placeholder' => 'One Time Usage',
         'name' => 'one_time_usage'
@@ -1792,7 +1792,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Toggle::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Toggle::class,
         'label' => 'Completed',
         'placeholder' => 'Completed',
         'name' => 'completed'
@@ -1803,7 +1803,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Price',
         'placeholder' => 'Enter Price',
         'name' => 'final_price'
@@ -1813,7 +1813,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Gained points',
         'placeholder' => 'Enter Gained points',
         'name' => 'gained_points'
@@ -1824,7 +1824,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Number::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Discount',
         'placeholder' => 'Enter Discount',
         'name' => 'discount'
@@ -1836,7 +1836,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'refunded Cashier ',
         'placeholder' => 'Enter refunded Cashier',
@@ -1849,7 +1849,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \App\Entities\FieldTypes\Select::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
 
         'label' => 'refunded Manager ',
         'placeholder' => 'Enter refunded Manager',
@@ -1862,7 +1862,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \App\Entities\FieldTypes\Datetime::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
         'label' => 'Refunded At',
         'placeholder' => 'Refunded at',
         'name' => 'refunded_at'

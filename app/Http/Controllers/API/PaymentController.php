@@ -9,15 +9,13 @@ use App\Interfaces\OmniPayRepositoryInterface;
 
 use App\Models\PaymentAttempt;
 use App\Models\PaymentMethod;
-use App\Traits\APITrait;
+
 use Illuminate\Support\Facades\DB;
+use twa\cmsv2\Traits\APITrait;
 
 class PaymentController extends Controller
 {
-
-
     use APITrait;
-
 
     private OmniPayRepositoryInterface $omniPayRepository;
     

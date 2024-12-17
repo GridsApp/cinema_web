@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use twa\cmsv2\Entities\Entity;
+
 
 class OrderTopupsEntity extends Entity
 {

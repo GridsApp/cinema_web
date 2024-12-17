@@ -9,7 +9,7 @@ use App\Interfaces\OTPRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 
 class OtpController extends Controller

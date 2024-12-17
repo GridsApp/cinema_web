@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Middleware\AuthMiddleware;
-use App\Http\Middleware\LanguageMiddleware;
+use twa\cmsv2\Http\Middleware\LanguageMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -80,7 +80,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
     Route::group([
         'prefix' => 'content',
-        'middleware' => [App\Http\Middleware\LanguageMiddleware::class]
+        'middleware' => [twa\cmsv2\Http\Middleware\LanguageMiddleware::class]
     ], function () {
         Route::get('/responses/{type}', [App\Http\Controllers\API\ContentController::class, 'responses']);
 

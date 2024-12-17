@@ -44,7 +44,7 @@ Artisan::command('twa:migrate', function () {
 
     $this->comment("Started");
 
-    (new App\Http\Controllers\EntityController)->migrate();
+    (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
 
     $this->comment("Finished");
 

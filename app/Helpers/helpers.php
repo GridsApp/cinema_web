@@ -284,7 +284,7 @@ if (!function_exists('field')) {
 
         if(isset($field['translatable']) && $field['translatable']){
          
-            $render = view("components.form.language", ['info' => $field]);
+            $render = view("CMSView::components.form.language", ['info' => $field]);
        
             $container = $field['container'] ?? $container;
 
@@ -315,18 +315,20 @@ if (!function_exists('field')) {
 if (!function_exists('button')) {
     function button($label, $type, $grid = null, $role = "submit", $classes = '', $handler = null)
     {
+     
+        // $directory = base_path('/src/Resources/views/components/buttons'); // Path to the views directory
+        // $files = collect(File::allFiles($directory))->map(function ($file) {
+        //     return str_replace(".blade.php", "", $file->getFilename());
+        // })->toArray();
 
-        $directory = resource_path('views/components/buttons'); // Path to the views directory
-        $files = collect(File::allFiles($directory))->map(function ($file) {
-            return str_replace(".blade.php", "", $file->getFilename());
-        })->toArray();
 
+        // if (!in_array($type, $files)) {
+        //     $type = "primary";
+        // }
 
-        if (!in_array($type, $files)) {
-            $type = "primary";
-        }
+        $type = "primary";
 
-        $render = view('components.buttons.' . $type, ['label' => $label, 'role' => $role, 'classes' => $classes, 'handler' => $handler])->render();
+        $render = view('CMSView::components.buttons.' . $type, ['label' => $label, 'role' => $role, 'classes' => $classes, 'handler' => $handler])->render();
 
         return $grid ? "<div class='" . $grid . "'>" . $render . "</div>" : $render;
     }
@@ -336,16 +338,18 @@ if (!function_exists('link_button')) {
     function link_button($label, $href, $type, $grid = null)
     {
 
-        $directory = resource_path('views/components/buttons'); // Path to the views directory
-        $files = collect(File::allFiles($directory))->map(function ($file) {
-            return str_replace(".blade.php", "", $file->getFilename());
-        })->toArray();
+        // $directory = resource_path('views/components/buttons'); // Path to the views directory
+        // $files = collect(File::allFiles($directory))->map(function ($file) {
+        //     return str_replace(".blade.php", "", $file->getFilename());
+        // })->toArray();
 
-        if (!in_array($type, $files)) {
-            $type = "primary";
-        }
+        // if (!in_array($type, $files)) {
+        //     $type = "primary";
+        // }
 
-        $render = view('components.buttons.' . $type, ['label' => $label, 'href' => $href])->render();
+        $type = "primary";
+
+        $render = view('CMSView::components.buttons.' . $type, ['label' => $label, 'href' => $href])->render();
 
         return $grid ? "<div class='" . $grid . "'>" . $render . "</div>" : $render;
     }
@@ -608,7 +612,7 @@ if (!function_exists('get_image')) {
 
 if (!function_exists('notification')) {
     function notification($action = null){
-        return (new \App\Classes\Notification($action));
+        return (new twa\cmsv2\Classes\Notification($action));
     }
 }
 

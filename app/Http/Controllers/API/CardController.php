@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 
 
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 
 class CardController extends Controller

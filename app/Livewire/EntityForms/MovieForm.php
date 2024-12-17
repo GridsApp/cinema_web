@@ -4,8 +4,8 @@ namespace App\Livewire\EntityForms;
 
 use App\Models\Movie;
 use App\Repositories\IMDBRepository;
-use App\Traits\FormTrait;
-use App\Traits\ToastTrait;
+use twa\cmsv2\Traits\FormTrait;
+use twa\cmsv2\Traits\ToastTrait;
 use Livewire\Component;
 
 class MovieForm extends Component
@@ -47,6 +47,9 @@ class MovieForm extends Component
     }
     public function render()
     {
+
+  
+
         return view('pages.form.components.movie-form');
     }
 

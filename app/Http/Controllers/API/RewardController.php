@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\RewardRepositoryInterface;
-use App\Traits\APITrait;
+
 use Illuminate\Support\Facades\DB;
+use twa\cmsv2\Traits\APITrait;
 
 class RewardController extends Controller
 {

@@ -1,7 +1,7 @@
 <div class="grid grid-cols-12 gap-4 mb-5" x-data="Functions.calendar()"  x-on:empty-selected.window='emptySelection'>
     <div class="col-span-12">
 
-        @component('components.panels.default')
+        @component('CMSView::components.panels.default')
             {!! field('theater') !!}
         @endcomponent
     </div>
@@ -193,7 +193,7 @@
                 </div>
             </div>
 
-            @component('components.drawer', [
+            @component('CMSView::components.drawer', [
                 'showHandler' => 'drawers.editDrawer',
                 'closeHandler' => "closeDrawer(event , 'editDrawer')",
                 'title' => 'Edit Movie Show',
@@ -202,7 +202,7 @@
                     :key="uniqid()" />
             @endcomponent
 
-            @component('components.drawer', [
+            @component('CMSView::components.drawer', [
                 'showHandler' => 'drawers.editAllDrawer',
                 'closeHandler' => "closeDrawer(event , 'editAllDrawer')",
                 'title' => 'Edit Movie Shows',
@@ -211,7 +211,7 @@
                     :key="uniqid()" />
             @endcomponent
 
-            @component('components.drawer', [
+            @component('CMSView::components.drawer', [
                 'showHandler' => 'drawers.createDrawer',
                 'closeHandler' => "closeDrawer(event , 'createDrawer')",
                 'title' => 'Create Movie Show',

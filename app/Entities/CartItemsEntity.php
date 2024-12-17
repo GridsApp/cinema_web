@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use twa\cmsv2\Entities\Entity;
 
 class CartItemsEntity extends Entity
 {

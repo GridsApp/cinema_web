@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\CardRepositoryInterface;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 

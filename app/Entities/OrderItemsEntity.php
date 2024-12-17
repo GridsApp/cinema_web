@@ -3,6 +3,8 @@
 namespace App\Entities;
 
 
+use twa\cmsv2\Entities\Entity;
+
 class OrderItemsEntity extends Entity
 {
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 use App\Interfaces\MovieRepositoryInterface;
 use App\Models\MovieFavorite;

@@ -8,7 +8,7 @@ use App\Models\Branch;
 use App\Models\Faq;
 use App\Models\InformativePages;
 use App\Models\Slideshow;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
 
 class ContentController extends Controller

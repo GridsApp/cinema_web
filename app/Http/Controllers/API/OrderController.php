@@ -21,9 +21,10 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Repositories\MovieShowRepository;
-use App\Traits\APITrait;
+
 use Illuminate\Support\Facades\Validator;
-use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
+
+use twa\cmsv2\Traits\APITrait;
 
 class  OrderController extends Controller
 {
