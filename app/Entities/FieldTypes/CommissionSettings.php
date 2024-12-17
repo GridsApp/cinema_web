@@ -1,6 +1,8 @@
 <?php
 
-namespace twa\cmsv2\Entities\FieldTypes;
+namespace App\Entities\FieldTypes;
+
+use twa\cmsv2\Entities\FieldTypes\FieldType;
 
 
 class CommissionSettings extends FieldType

@@ -1868,6 +1868,20 @@ return [
         'name' => 'refunded_at'
     ],
 
+    'commission_settings' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \App\Entities\FieldTypes\CommissionSettings::class,
+
+        'label' => 'Commission Settings',
+        'placeholder' => 'Commission Settings',
+        'name' => 'commission_settings',
+        'container' => 'col-span-12',
+    ],
+
 ];
 
 
