@@ -8,7 +8,7 @@ use App\Interfaces\ItemRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
 
 class ConsessionsController extends Controller

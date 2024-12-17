@@ -7,7 +7,7 @@ use App\Models\Movie;
 use App\Models\MovieGenre;
 use App\Models\System;
 use App\Models\Theater;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller

@@ -7,7 +7,7 @@ use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
 
 class CustomersController extends Controller

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
-use App\Traits\APITrait;
+use twa\cmsv2\Traits\APITrait;
 
 use Illuminate\Support\Facades\Validator;
 
