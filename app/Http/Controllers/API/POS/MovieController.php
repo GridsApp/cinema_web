@@ -62,7 +62,7 @@ class MovieController extends Controller
             $total_available_seats = 0;
             $total_reserved_seats = 0;
 
-            $movieShows = $movie->movieShows->map(function ($show ,
+            $movieShows = $movie->movieShows->map(function ($show) use(
                                                             &$total_seats ,
                                                             &$total_available_seats,
                                                             &$total_reserved_seats
