@@ -58,32 +58,55 @@ class MovieController extends Controller
 
         $customMovies = $movies->map(function ($movie) {
 
+            $total_seats = 0;
+            $total_available_seats = 0;
+            $total_reserved_seats = 0;
+
+            $movieShows = $movie->movieShows->map(function ($show ,
+                                                            &$total_seats ,
+                                                            &$total_available_seats,
+                                                            &$total_reserved_seats
+            ) {
+
+                $reserved_seats = 10;
+
+                $theater = $show->theater;
+
+                $nb_seats = $show->theater->nb_seats;
+
+                $total_seats +=$nb_seats;
+                $total_available_seats +=$nb_seats -$reserved_seats;
+                $total_reserved_seats += $reserved_seats;
+
+                return [
+                    'id' => $show->id,
+                    'time' => $show->time->label,
+                    'theater' => [
+                        'id' => $theater->id,
+                        'label' => $theater->label
+                    ],
+                    'screen_type' => $show->screenType->label,
+                    'seats' => [
+                        'total' => $nb_seats,
+                        'reserved' => $reserved_seats,
+                        'available' => $nb_seats - $reserved_seats
+                    ],
+                    'duration' => $show->duration,
+                    'price' => currency_format(10000)
+                ];
+            }),
+
             return [
                 'id' => $movie->id,
                 'image' => get_image($movie->main_image),
                 'name' => $movie->name,
                 'duration' => minutes_to_human($movie->duration),
-                'movieShows' => $movie->movieShows->map(function ($show) {
-
-                    $reserved_seats = 10;
-
-                    $theater = $show->theater;
-
-                    return [
-                        'id' => $show->id,
-                        'time' => $show->time->label,
-                        'theater' => [
-                            'id' => $theater->id,
-                            'label' => $theater->label
-                        ],
-                        'screen_type' => $show->screenType->label,
-                        'nb_seats' => $show->theater->nb_seats,
-                        'available_seats' => $show->theater->nb_seats - $reserved_seats,
-                        'reserved_seats' => $reserved_seats,
-                        'duration' => $show->duration,
-                        'price' => currency_format(10000)
-                    ];
-                }),
+                'seats' => [
+                    'total' => $total_seats,
+                    'reserved' => $total_reserved_seats,
+                    'available' => $total_available_seats
+                ],
+                'movieShows' => $movieShows
             ];
         });
         return $this->responseData($customMovies);
