@@ -89,12 +89,13 @@ class MovieController extends Controller
                     'seats' => [
                         'total' => $nb_seats,
                         'reserved' => $reserved_seats,
-                        'available' => $nb_seats - $reserved_seats
+                        'available' => $nb_seats - $reserved_seats,
+                        'percentage' => round($reserved_seats / $nb_seats,2)
                     ],
                     'duration' => $show->duration,
                     'price' => currency_format(10000)
                 ];
-            }),
+            });
 
             return [
                 'id' => $movie->id,
@@ -104,7 +105,8 @@ class MovieController extends Controller
                 'seats' => [
                     'total' => $total_seats,
                     'reserved' => $total_reserved_seats,
-                    'available' => $total_available_seats
+                    'available' => $total_available_seats,
+                    'percentage' => round($total_reserved_seats / $total_seats , 2)
                 ],
                 'movieShows' => $movieShows
             ];
