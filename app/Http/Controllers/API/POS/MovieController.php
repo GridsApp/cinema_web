@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class MovieController extends Controller
 {
     use APITrait;
-    
+
     public function getBranchPosActiveMovieShows($branch_id)
     {
 
@@ -64,13 +64,19 @@ class MovieController extends Controller
                 'name' => $movie->name,
                 'duration' => minutes_to_human($movie->duration),
                 'movieShows' => $movie->movieShows->map(function ($show) {
+
+                    $reserved_seats = 10;
+
                     return [
                         'id' => $show->id,
                         'time' => $show->time->label,
                         'theater' => $show->theater->label,
                         'screen_type' => $show->screenType->label,
                         'nb_seats' => $show->theater->nb_seats,
+                        'available_seats' => $show->theater->nb_seats - $reserved_seats,
+                        'reserved_seats' => $reserved_seats,
                         'duration' => $show->duration,
+                        'price' => currency_format(10000)
                     ];
                 }),
             ];

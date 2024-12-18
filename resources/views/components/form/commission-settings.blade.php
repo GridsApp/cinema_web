@@ -35,7 +35,7 @@
 
 
                     <div x-on:click="deleteCondition(index)">
-                        Delete
+                        <i class="fa-regular fa-trash"></i>
                     </div>
 
 
