@@ -4,13 +4,13 @@
     "src": "public/images/cinema_bg.jpeg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-COqpOzSs.js",
+    "file": "assets/app-DrbotRQT.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-DywLpOFQ.css",
+    "file": "assets/app-CwHmIfL-.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }
