@@ -14,8 +14,15 @@
 
     <div class="">
 
-        <div class="underline text-xs cursor-pointer py-2" x-on:click="open = !open">
+        <div class="underline text-xs cursor-pointer py-3" x-on:click="open = !open">
             Conditions
+{{--            <template x-if="open">--}}
+{{--               <div> Close </div>--}}
+{{--            </template>--}}
+{{--            <template x-if="!open">--}}
+{{--                <span >Open</span>--}}
+{{--            </template>--}}
+
         </div>
         <div x-show="open">
 
@@ -42,7 +49,7 @@
                 </div>
             </template>
 
-            <button class="btn btn-primary mt-5" type="button" x-on:click="conditions.push('')"> Add Week </button>
+            <button class="btn btn-primary mt-5" type="button" x-on:click="conditions.push('')"> <i class="fa-regular fa-plus"></i> Add Week </button>
 
         </div>
 

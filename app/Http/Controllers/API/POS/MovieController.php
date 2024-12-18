@@ -67,10 +67,15 @@ class MovieController extends Controller
 
                     $reserved_seats = 10;
 
+                    $theater = $show->theater;
+
                     return [
                         'id' => $show->id,
                         'time' => $show->time->label,
-                        'theater' => $show->theater->label,
+                        'theater' => [
+                            'id' => $theater->id,
+                            'label' => $theater->label
+                        ],
                         'screen_type' => $show->screenType->label,
                         'nb_seats' => $show->theater->nb_seats,
                         'available_seats' => $show->theater->nb_seats - $reserved_seats,
