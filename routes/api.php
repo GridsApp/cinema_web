@@ -51,7 +51,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/topup/add', [App\Http\Controllers\API\CartController::class, 'addTopupToCart']);
         Route::post('/topup/remove', [App\Http\Controllers\API\CartController::class, 'removeTopupFromCart']);
 
-        Route::get('/list', [App\Http\Controllers\API\CartController::class, 'list']);
+        Route::get('/details', [App\Http\Controllers\API\CartController::class, 'details']);
     });
 
     Route::get('/payment-methods', [App\Http\Controllers\API\PaymentController::class, 'list'])->middleware(AuthMiddleware::class);

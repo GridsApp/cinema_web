@@ -57,7 +57,6 @@ class UserRepository implements UserRepositoryInterface
 
     public function getUserByPhone($phone_number)
     {
-
             try {
                 $user = User::where('phone', $phone_number)
                    ->whereNull('deleted_at')->firstOrFail();

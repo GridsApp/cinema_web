@@ -36,7 +36,6 @@ class PosUserRepository implements PosUserRepositoryInterface
     public function getUserByUsername($username)
     {
 
-
         try {
             $user = PosUser::where('username', $username)
                 ->whereNull('deleted_at')->firstOrFail();

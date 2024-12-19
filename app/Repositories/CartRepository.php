@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\Coupon;
 use App\Models\System;
@@ -15,6 +16,7 @@ use App\Models\CartSeat;
 use App\Models\CartTopup;
 use App\Models\OrderSeat;
 use App\Models\ReservedSeat;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -23,13 +25,15 @@ class CartRepository implements CartRepositoryInterface
 {
     private ItemRepositoryInterface $itemRepository;
     private ZoneRepositoryInterface $zoneRepository;
+    private UserRepositoryInterface $userRepository;
 
 
 
-    public function __construct(ItemRepositoryInterface $itemRepository, ZoneRepositoryInterface $zoneRepository)
+    public function __construct(ItemRepositoryInterface $itemRepository, ZoneRepositoryInterface $zoneRepository, UserRepositoryInterface $userRepository)
     {
         $this->itemRepository = $itemRepository;
         $this->zoneRepository = $zoneRepository;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -336,17 +340,12 @@ class CartRepository implements CartRepositoryInterface
         return $user_cart_topup;
     }
 
-    public function getCartDetails($cart)
+    public function getCartDetails($cart , $coupon = null)
     {
         try {
 
             $cart_id = $cart->id;
 
-
-
-            // $cart = $this->getCartById($cart_id);
-
-            $coupon_code = $cart->coupon ? $cart->coupon->code : null;
 
             $cart_seats = $this->getCartSeats($cart_id, true);
             $zone_ids = $cart_seats->pluck('zone_id');
@@ -357,9 +356,6 @@ class CartRepository implements CartRepositoryInterface
                 if (!$zone) {
                     return null;
                 }
-
-
-
 
                 $unit_price = $zone->price;
 
@@ -411,13 +407,17 @@ class CartRepository implements CartRepositoryInterface
                 ];
             });
 
+
+
             $total += $cart_topups->sum('price.value');
 
 
             return [
-                'coupon_code' => $coupon_code,
+                'cart_id' => $cart->id,
+                'user_id' => $cart->user_id,
+                'card_number' => $cart->card_number,
                 'subtotal' => currency_format($total),
-                'discount'=> currency_format(0),
+                'discount' => currency_format(0),
                 'lines' => [...$cart_items, ...$cart_seats, ...$cart_topups],
             ];
         } catch (\Exception $e) {

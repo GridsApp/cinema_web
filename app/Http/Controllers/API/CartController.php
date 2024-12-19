@@ -5,10 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
+use App\Interfaces\CouponRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
 
 use App\Interfaces\MovieShowRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\Coupon;
 
@@ -27,6 +29,8 @@ class CartController extends Controller
     private ItemRepositoryInterface $itemRepository;
     private ZoneRepositoryInterface $zoneRepository;
     private CardRepositoryInterface $cardRepository;
+    private UserRepositoryInterface $userRepository;
+    private CouponRepositoryInterface $couponRepository;
 
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -34,7 +38,9 @@ class CartController extends Controller
         TheaterRepositoryInterface $theaterRepository,
         ItemRepositoryInterface $itemRepository,
         ZoneRepositoryInterface $zoneRepository,
-        CardRepositoryInterface $cardRepository
+        CardRepositoryInterface $cardRepository,
+        UserRepositoryInterface $userRepository,
+        CouponRepositoryInterface $couponRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -42,6 +48,8 @@ class CartController extends Controller
         $this->itemRepository = $itemRepository;
         $this->zoneRepository = $zoneRepository;
         $this->cardRepository = $cardRepository;
+        $this->userRepository = $userRepository;
+        $this->couponRepository = $couponRepository;
     }
 
 
@@ -447,7 +455,7 @@ class CartController extends Controller
         }
     }
 
-    public function list()
+    public function details()
     {
 
         $body = clean_request();
@@ -461,15 +469,78 @@ class CartController extends Controller
         $user_type = request()->user_type;
 
         try {
-
             $cart = $this->cartRepository->checkCart($body['cart_id'], $user->id, $user_type);
-
-            $cartDetails = $this->cartRepository->getCartDetails($cart);
-
-            return $this->responseData($cartDetails);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error', $e->getMessage()));
         }
+
+       
+
+
+        $coupon = null;
+        if($cart->coupon_id){
+            try {
+                $coupon = $this->couponRepository->checkCouponById($cart->coupon_id);     
+            } catch (\Throwable $th) {
+                $coupon = null;
+            }
+        }
+    
+        $cartDetails = $this->cartRepository->getCartDetails($cart , $coupon);
+   
+      
+       
+        if($cartDetails['user_id']){
+            
+            // get card info by user id
+           
+            dd("dd");
+           $user = $this->userRepository->getUserById($cartDetails['user_id']);
+           
+          
+   
+            $card = $this->cardRepository->getActiveCard($user);
+
+            $card_info = [
+                'fullname' => $user->full_name,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'card_number' => $card['barcode'],
+                'loyalty_balance' => $card['loyalty_balance'],
+                'wallet_balance' => $card['wallet_balance'],
+                'type' => $card['type']
+            ];
+
+        }elseif($cartDetails['card_number']){
+            // identify  user_id by  by card number;
+            
+            $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
+            $user = $this->userRepository->getUserById($card->user_id);
+            $card = $this->cardRepository->getActiveCard($user , $card);
+
+        
+            $card_info = [
+                'fullname' => $user->full_name,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'card_number' => $card['barcode'],
+                'loyalty_points_balance' => $card['loyalty_points_balance'],
+                'wallet_balance' => $card['wallet_balance'],
+                'type' => $card['type']
+            ];
+        }else{
+            $card_info = null;
+        }
+
+ 
+        return $this->responseData([
+            'coupon_code' => $coupon->coupon_code ?? null,
+            'card_info' => $card_info ?? null,
+            'subtotal' => $cartDetails["subtotal"],
+            'discount' => $cartDetails["discount"],
+            'lines' => $cartDetails["lines"],
+        ]);
+
       
     }
 }

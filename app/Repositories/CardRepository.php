@@ -15,10 +15,7 @@ class CardRepository implements CardRepositoryInterface
 
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null)
     {
-       
-
         $active_card = $this->getActiveCard($user);
-        // dd($active_card);
         if (!$active_card) {
             return false;
         }
@@ -36,9 +33,6 @@ class CardRepository implements CardRepositoryInterface
         if ($newBalance < 0) {
             return false;
         }
-
-
-
         $transaction = new UserWalletTransaction();
         $transaction->user_id = $user->id;
         $transaction->amount = $amount;
@@ -180,11 +174,13 @@ class CardRepository implements CardRepositoryInterface
         return $wallet_transactions;
     }
 
-    public function getActiveCard($user)
+
+
+    public function getActiveCard($user , $card = null)
     {
 
         // dd($user);
-        $active_card = $user->cards()
+        $active_card = $card ? $card : $user->cards()
             ->whereNull('disabled_at')
             ->first();
 

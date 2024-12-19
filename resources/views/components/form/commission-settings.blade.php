@@ -41,7 +41,7 @@
 
 
 
-                    <button class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50" x-on:click="deleteCondition(index)">
+                    <button type="button" class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50" x-on:click="deleteCondition(index)">
                         <i class="fa-regular fa-trash"></i>
                     </button>
 

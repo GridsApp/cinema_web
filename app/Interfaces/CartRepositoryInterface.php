@@ -23,7 +23,7 @@ interface CartRepositoryInterface
     public function getCartTopups($cart_id, $grouped = false);
     public function getCartById($cart_id);
     public function getCouponByCode($code);
-    public function getCartDetails($cart);
+    public function getCartDetails($cart , $coupon = null);
      public function getSystemById($system_id);
      public function getReservedSeats($movie_show_id);
 

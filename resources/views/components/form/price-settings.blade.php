@@ -14,7 +14,7 @@
 
     <div class="">
 
-        <div class="underline text-xs cursor-pointer py-3" x-on:click="addCondition" >
+        <div class="underline text-xs cursor-pointer py-3" x-on:click="addCondition">
             <i class="fa-regular fa-plus"></i> Add Condition
 
 
@@ -23,14 +23,11 @@
 
             <template x-for="(condition,index) in conditions">
                 <div class="flex gap-3 items-center mb-2" wire:key="index">
-
-
-{{--                    <input x-model="conditions[index].day" />--}}
-
+                    {{--                    <input x-model="conditions[index].day" /> --}}
                     <div class="twa-form-label min-w-[50px]">
 
                         <select class="twa-form-input-container twa-form-input-ring border-0"
-                                x-model="conditions[index].day" :key="'select'+index">
+                            x-model="conditions[index].day" :key="'select' + index">
 
                             <option value=""> Choose day</option>
                             <option value="monday">Monday</option>
@@ -49,7 +46,8 @@
                         <input class="twa-form-input " type="text" x-model="conditions[index].price">
                     </div>
 
-                    <button class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50" x-on:click="deleteCondition(index)">
+                    <button type="button" class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50"
+                        x-on:click="deleteCondition(index)">
                         <i class="fa-regular fa-trash"></i>
                     </button>
 
@@ -61,7 +59,7 @@
     </div>
 
     @error(get_field_modal($info) ?? 'value')
-    <span class="form-error-message">
+        <span class="form-error-message">
             {{ $message }}
         </span>
     @enderror

@@ -9,7 +9,7 @@ interface CardRepositoryInterface
     public function createCard($user, $barcode = null, $type = 'digital');
     public function getLoyaltyBalance($user);
     public function getWalletBalance($user);
-    public function getActiveCard($user);
+    public function getActiveCard($user , $card = null);
     public function getCardByBarcode($barcode);
     public function getLoyaltyTransactions($user);
     public function getWalletTransactions($user);
