@@ -19,7 +19,7 @@ class PaymentMethodsEntity extends Entity
     {
         $this->addField("label", ["container" => 'col-span-7']);
         $this->addField("key", ["container" => 'col-span-7']);
-        $this->addField("system", ["container" => 'col-span-7']);
+        $this->addField("system_id", ["container" => 'col-span-7']);
         $this->addField("image", ["container" => 'col-span-7']);
 
         return $this->fields;

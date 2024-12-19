@@ -27,6 +27,20 @@ if (!function_exists('get_user_field_from_type')) {
     }
 }
 
+
+if (!function_exists('get_system_from_type')) {
+    function get_system_from_type($type)
+    {
+       switch ($type) {
+            case 'USER': return 1;
+            case "POS" : return 2;
+       }
+
+       throw new Exception("Error Processing Field From User Type");
+       
+    }
+}
+
 if (!function_exists('currency_format')) {
     function currency_format($value)
     {

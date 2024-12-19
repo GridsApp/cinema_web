@@ -18,19 +18,29 @@ class PaymentController extends Controller
     use APITrait;
 
     private OmniPayRepositoryInterface $omniPayRepository;
-    
+
     public function __construct(OmniPayRepositoryInterface $omniPayRepository)
     {
         $this->omniPayRepository = $omniPayRepository;
     }
 
-    public function list(){
-        $payment_methods= PaymentMethod::whereNull('deleted_at')->get()->map(function($payment_method){
+    public function list()
+    {
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        $system_id = get_system_from_type($user_type);
+
+        $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)->get()->map(function ($payment_method) {
             return [
                 'id' => $payment_method->id,
                 'label' => $payment_method->label,
                 'key' => $payment_method->key,
-                'sublabel' => $payment_method->key=="WP" ? 'Current Balance : 46,000':'',
+
+
+                // 'system' => $payment_method->sytem_id,
+                'sublabel' => $payment_method->key == "WP" ? 'Current Balance : 46,000' : '',
                 'image' => get_image($payment_method->image),
 
             ];
@@ -44,7 +54,7 @@ class PaymentController extends Controller
     public function initialize($payment_attempt_id)
     {
 
-      
+
         $request_token = request()->input('token');
 
 
@@ -73,68 +83,66 @@ class PaymentController extends Controller
     {
 
         try {
-        
-
-        DB::beginTransaction();
 
 
-        $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->whereNull('converted_at')->first();
-
-        if (!$payment_attempt) {
-            return redirect()->route('payment.response', [
-                'type' => 'fail',
-                'title' => 'Payment already completed',
-                'message' => 'Payment was already completed'
-            ]);
-        }
+            DB::beginTransaction();
 
 
-        $check = $this->omniPayRepository->checkPayment($payment_attempt);
+            $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->whereNull('converted_at')->first();
 
-        if (!$check) {
-            return redirect()->route('payment.response', [
-                'type' => 'fail',
-                'title' => 'Payment Failure',
-                'message' => 'Payment has been failed to be completed'
-            ]);
-        }
-
-        $payment_attempt->completed_at = now();
+            if (!$payment_attempt) {
+                return redirect()->route('payment.response', [
+                    'type' => 'fail',
+                    'title' => 'Payment already completed',
+                    'message' => 'Payment was already completed'
+                ]);
+            }
 
 
+            $check = $this->omniPayRepository->checkPayment($payment_attempt);
 
-        $service = app(\App\Services\OmnipayCallbackService::class);
-        $callback = $service->callback($payment_attempt);
+            if (!$check) {
+                return redirect()->route('payment.response', [
+                    'type' => 'fail',
+                    'title' => 'Payment Failure',
+                    'message' => 'Payment has been failed to be completed'
+                ]);
+            }
+
+            $payment_attempt->completed_at = now();
 
 
-        if (!$callback) {
 
+            $service = app(\App\Services\OmnipayCallbackService::class);
+            $callback = $service->callback($payment_attempt);
+
+
+            if (!$callback) {
+
+                $payment_attempt->save();
+
+                return redirect()->route('payment.response', [
+                    'type' => 'error',
+
+                    'title' => 'Payment Successfull but something went wrong',
+                    'message' => 'Payment was successfull but something went wrong after it. Please contact our customer support'
+                ]);
+            }
+
+
+            $payment_attempt->converted_at = now();
             $payment_attempt->save();
 
+            DB::commit();
+
             return redirect()->route('payment.response', [
-                'type' => 'error',
-            
-                'title' => 'Payment Successfull but something went wrong',
-                'message' => 'Payment was successfull but something went wrong after it. Please contact our customer support'
+                'type' => 'success',
+                'id' => $callback["order_id"],
+                'title' => 'Payment Successfull',
+                'message' => 'Payment has been completed successfully'
             ]);
-        }
-
-
-        $payment_attempt->converted_at = now();
-        $payment_attempt->save();
-
-        DB::commit();
-
-        return redirect()->route('payment.response', [
-            'type' => 'success',
-            'id'=>$callback["order_id"],
-            'title' => 'Payment Successfull',
-            'message' => 'Payment has been completed successfully'
-        ]);
-
-    
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
 
             return redirect()->route('payment.response', [

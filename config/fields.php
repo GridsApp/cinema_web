@@ -395,6 +395,25 @@ return [
             'field' => 'label'
         ]
     ],
+    'system_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
+        'label' => 'Systems',
+        'placeholder' => 'Select systems',
+        'name' => 'system_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'quick_add' => null,
+        'options' => [
+            'type' => 'query',
+            'table' => 'systems',
+            'field' => 'label'
+        ]
+    ],
     'age_rating' => [
         'id' => uniqid(),
         'livewire' => [
