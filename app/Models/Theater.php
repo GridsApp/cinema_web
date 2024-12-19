@@ -21,4 +21,9 @@ class Theater extends Model
         return $this->hasMany(MovieShow::class, 'theater_id');
     }
 
+    public function priceGroup()
+    {
+        return $this->belongsTo(PriceGroup::class, 'price_group_id');
+    }
+
 }

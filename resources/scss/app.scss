@@ -1,16 +1,33 @@
-
 @import "../../vendor/twa/cmsv2/src/Resources/scss/app.scss";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
-.booking-management{
-    .day-box{
+.booking-management {
+    .day-box {
         padding: 10px;
-        border-radius:10px;
-     @apply bg-gray-100 text-[.8125rem] leading-[1.125rem] text-gray-800 font-medium;
+        border-radius: 10px;
+        @apply bg-gray-100 text-[.8125rem] leading-[1.125rem] text-gray-800 font-medium ;
+    
+        &.day-box-active{
+            @apply bg-gray-300;
+        }
+    
+    }
+
+    .title-label{
+        font-size: 0.9rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: #071437;
+    }
+
+    // .current-date{
+    //     @apply bg-red-600;
+    // }
+    .text-label {
+        @apply text-[12px];
+        line-height: 25px;
     }
 }

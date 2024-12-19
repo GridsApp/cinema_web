@@ -25,7 +25,7 @@ class MovieShow extends Model
     public function theater(){
         return $this->belongsTo(Theater::class , 'theater_id' , 'id');
     }
-    public function ScreenType(){
+    public function screenType(){
         return $this->belongsTo(ScreenType::class , 'screen_type_id' , 'id');
     }
 

@@ -49,6 +49,8 @@ class Calendar extends Component
     public function mount(){
 
 
+        if(!$this->date_from && !$this->date_to){
+
         $today = Carbon::now();
 
         if(in_array($today->format('l') , ["Monday" , "Tuesday" , "Wednesday"])){
@@ -60,6 +62,7 @@ class Calendar extends Component
         $this->date_from = $referenceDate->copy()->addDays(3)->format("d-m-Y");
         $this->date_to = $referenceDate->copy()->addDays(9)->format("d-m-Y");
 
+    }
         $this->times = Time::whereNull('deleted_at')->get()->pluck('label')->toArray();
 
 

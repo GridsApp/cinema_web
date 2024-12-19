@@ -1,5 +1,60 @@
 import collect from "collect.js";
 export default class GeneralFunctions {
+
+
+    initManageBooking(states){
+
+        return {
+        
+            toggle : {
+
+            },
+
+            init(){
+                this.toggle = JSON.parse(states);
+            },
+
+            toggleChanged(model){
+
+                let newValue = this.toggle[model];            
+                let final = {};
+
+                let movie_shows = [];
+
+                collect(this.toggle).map((t , k) => {
+
+                    let splitted = k.split("_");
+
+                    if(k.startsWith(model) && k != model){
+                        final = {...final , [k] : newValue};
+
+                        if(splitted.length - 1 === 3){
+                            movie_shows.push({movie_show_id : splitted[splitted.length - 1] , visibility : newValue });
+                        }
+
+                    }else{
+                        final = {...final , [k] : t};
+
+                         if(splitted.length - 1 === 3){
+                            movie_shows.push({movie_show_id : splitted[splitted.length - 1], visibility : t });
+                         }
+                    }
+                    return t;
+                });
+
+                this.toggle = final;
+             
+
+
+
+                this.$wire.updateVisibility(movie_shows);
+
+            }
+            
+        }
+
+    }
+
     initPriceSettings(){
         return {
             conditions: [{day : "" , price : "0" }],
