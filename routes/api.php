@@ -41,6 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemCart']);
         Route::post('/item/remove', [App\Http\Controllers\API\CartController::class, 'removeItemFromCart']);
         Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsCart']);
+        Route::post('/imtiyaz/add', [App\Http\Controllers\API\CartController::class, 'addImtiyazToCart']);
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
         Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCoupnTocart']);
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
@@ -83,6 +84,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         'middleware' => [twa\cmsv2\Http\Middleware\LanguageMiddleware::class]
     ], function () {
         Route::get('/responses/{type}', [App\Http\Controllers\API\ContentController::class, 'responses']);
+
         Route::get('/slideshows', [App\Http\Controllers\API\ContentController::class, 'getSlideshows']);
         Route::get('/faqs', [App\Http\Controllers\API\ContentController::class, 'getFaqs']);
         Route::get('/page/{slug}', [App\Http\Controllers\API\ContentController::class, 'getPage']);

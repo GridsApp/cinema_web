@@ -11,6 +11,7 @@ use App\Models\Coupon;
 use App\Models\System;
 use App\Models\UserCard;
 use App\Models\Cart;
+use App\Models\CartImtiyaz;
 use App\Models\CartItem;
 use App\Models\CartSeat;
 use App\Models\CartTopup;
@@ -137,8 +138,6 @@ class CartRepository implements CartRepositoryInterface
 
     public function addTopupToCart($cart_id, $amount)
     {
-
-
         try {
             $cart_topup = new CartTopup();
             $cart_topup->amount = $amount;
@@ -149,6 +148,20 @@ class CartRepository implements CartRepositoryInterface
         }
 
         return $cart_topup;
+    }
+
+    public function addImtiyazToCart($cart_id, $phone)
+    {
+        try {
+            $cart_imtiyaz = new CartImtiyaz();
+            $cart_imtiyaz->phone = $phone;
+            $cart_imtiyaz->cart_id = $cart_id;
+            $cart_imtiyaz->save();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        return $cart_imtiyaz;
     }
     public function addCouponToCart($cart_id, $coupon_id)
     {
