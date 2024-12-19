@@ -44,8 +44,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
         Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCoupnTocart']);
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
-        Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberTocart']);
-        Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromcart']);
+        Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart']);
+        Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart']);
 
 
         Route::post('/topup/add', [App\Http\Controllers\API\CartController::class, 'addTopupToCart']);

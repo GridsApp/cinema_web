@@ -403,7 +403,7 @@ class CartController extends Controller
         }
     }
 
-    public function addCardNumberTocart()
+    public function addCardNumberToCart()
     {
         $form_data = clean_request([]);
         $check = $this->validateRequiredFields($form_data, ['cart_id', 'card_number']);
@@ -421,16 +421,15 @@ class CartController extends Controller
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
 
-
         try {
-
-            $existing_barcode =  $this->cardRepository->getcardByBarcode($form_data['card_number']);
+            $existing_barcode =  $this->cardRepository->getCardByBarcode($form_data['card_number']);
+            return $this->response(notification()->error('Card number already exists', "This card number already exists"));       
         } catch (\Exception $e) {
-            return $this->response(notification()->error('Card number not found', $e->getMessage()));
+            
         }
 
         try {
-            $this->cartRepository->addCardNumberTocart($form_data['cart_id'], $form_data['card_number']);
+            $this->cartRepository->addCardNumberToCart($form_data['cart_id'], $form_data['card_number']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error adding Card Number to cart', $th->getMessage()));
         }
@@ -439,7 +438,7 @@ class CartController extends Controller
         return $this->response(notification()->success('Card Number added to the cart successfully', 'Card Number added successfully'));
     }
 
-    public function removeCardNumberFromcart()
+    public function removeCardNumberFromCart()
     {
         $cart_id = request()->input('cart_id');
 
