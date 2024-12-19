@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\ManageBookingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -9,6 +9,9 @@ Route::prefix('payment')->group(function () {
     Route::get('/callback/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'callback'])->name('payment.callback');
     Route::get('/response', function(){  echo request()->input('type');  })->name('payment.response');
 });
+
+
+Route::get("/manage/bookings" , [ManageBookingController::class , 'render'])->name('manage-bookings');
 
 Route::get('reports/reports/reports' , function(){
 

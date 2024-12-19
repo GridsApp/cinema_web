@@ -5,3 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+.booking-management{
+    .day-box{
+        padding: 10px;
+        border-radius:10px;
+     @apply bg-gray-100 text-[.8125rem] leading-[1.125rem] text-gray-800 font-medium;
+    }
+}

@@ -98,8 +98,12 @@ class  OrderController extends Controller
 
 
         switch ($payment_method->key) {
+
+            // case 'CASH':
+            //     case 'CASH':
             case 'CASH':
 
+            
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt);
                 } catch (\Throwable $th) {
@@ -112,6 +116,8 @@ class  OrderController extends Controller
 
                 return $this->responseData([
                     'order_id' => $order["order_id"],
+
+                    ...$this->details($order["order_id"] , false),
                 ], notification()->success('Order completed', 'Your order has been successfully completed'));
 
                 break;
@@ -450,24 +456,34 @@ class  OrderController extends Controller
     }
 
 
-    public function details($order_id)
+    public function details($order_id , $API = true)
     {
         try {
             $order = Order::where('id', $order_id)->whereNull('deleted_at')->firstOrFail();
+     
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
+       
 
         $user_id = $order->user_id;
+       
 
+        try {
+            $user = $this->userRepository->getUserById($user_id);
+          
+        } catch (\Throwable $th) {
+            $user = null;
+        }
+      
 
-        $user = $this->userRepository->getUserById($user_id);
-
-
-        $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($user);
-
-
-
+        $user_loyalty_balance = null;
+        if($user){
+            $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($user);
+        }
+       
+       
+    
         $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
 
         $zone_ids = $order_seats->pluck('zone_id');
@@ -500,13 +516,25 @@ class  OrderController extends Controller
             ];
         });
 
-        return $this->responseData([
-            'loyalty_points_balance' => [
-                "value" => $user_loyalty_balance,
-                "display" => $user_loyalty_balance . ' points'
-            ],
-            'order' => $order_seats,
-        ]);
+        if($API){
+            return $this->responseData([
+                'loyalty_points_balance' => $user_loyalty_balance ? [
+                    "value" => $user_loyalty_balance,
+                    "display" => $user_loyalty_balance . ' points'
+                ] : null,
+                'order' => $order_seats,
+            ]);
+        }else{
+            return [
+                'loyalty_points_balance' => $user_loyalty_balance ?  [
+                    "value" => $user_loyalty_balance,
+                    "display" => $user_loyalty_balance . ' points'
+                ] : null,
+                'order' => $order_seats,
+            ];
+        }
+
+      
         // return [
            
         // ];
