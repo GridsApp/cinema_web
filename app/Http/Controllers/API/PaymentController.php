@@ -29,6 +29,7 @@ class PaymentController extends Controller
             return [
                 'id' => $payment_method->id,
                 'label' => $payment_method->label,
+                'key' => $payment_method->key,
                 'sublabel' => $payment_method->key=="WP" ? 'Current Balance : 46,000':'',
                 'image' => get_image($payment_method->image),
 

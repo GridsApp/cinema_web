@@ -83,7 +83,6 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         'middleware' => [twa\cmsv2\Http\Middleware\LanguageMiddleware::class]
     ], function () {
         Route::get('/responses/{type}', [App\Http\Controllers\API\ContentController::class, 'responses']);
-
         Route::get('/slideshows', [App\Http\Controllers\API\ContentController::class, 'getSlideshows']);
         Route::get('/faqs', [App\Http\Controllers\API\ContentController::class, 'getFaqs']);
         Route::get('/page/{slug}', [App\Http\Controllers\API\ContentController::class, 'getPage']);
