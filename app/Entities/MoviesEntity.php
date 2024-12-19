@@ -44,6 +44,8 @@ class MoviesEntity extends Entity
         $this->addField("imdb_vote" , ["container" => 'col-span-7']);
 
 
+        $this->addField('distributor' ,["container" => 'col-span-7', 'required' => true]);
+        $this->addField('distributor_commission_settings',["container" => 'col-span-7', 'required' => true]);
 
 
 

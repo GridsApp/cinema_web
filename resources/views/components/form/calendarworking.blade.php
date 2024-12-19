@@ -1,4 +1,4 @@
-<div  x-data="Functions.calendar()"
+<div  x-data="GeneralFunctions.calendar()"
     x-on:record-created-{{ $info['id'] }}.window='handleCreateCallback'
     {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
@@ -40,7 +40,7 @@
                         </template>
 
                         <template x-if="selected.length > 1">
-                 
+
 
 
                         <button  @click="openQuickEditAll($event)" type="button"
@@ -89,79 +89,79 @@
                         <div class="twa-table-calendar-td time-cell">
 
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 1)"
-                            
+
                             :data-time="time"
                             data-day="1"
-                             
-                            
-                           
+
+
+
                             >
 
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 2)"
                             :data-time="time"
                             data-day="2"
-                             
-                            
-                            
-                          
+
+
+
+
                             >
 
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 3)"
 
                             :data-time="time"
                             data-day="3"
-                             
-                            
-                            
-                          
+
+
+
+
                             >
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 4)"
 
                             :data-time="time"
                             data-day="4"
-                             
-                            
+
+
                            >
 
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 5)"
 
                             :data-time="time"
                             data-day="5"
-                             
+
                     >
 
                         </div>
-                        <div class="twa-table-calendar-td time-cell" 
-                            x-on:dragover="dragOver" 
+                        <div class="twa-table-calendar-td time-cell"
+                            x-on:dragover="dragOver"
                             x-on:dragleave="dragLeave"
                             x-on:drop="drop(time , 6)"
 
                             :data-time="time"
                             data-day="6"
-                             
-                            
-                            
-                            
+
+
+
+
                             >
 
                         </div>
@@ -169,7 +169,7 @@
                 </template>
             </div>
             <template x-if="loading == false && loadingCalendar == false">
-   
+
                 <template x-for="event in events">
                     <div :id="'event-box-'+event.details.id" class="twa-event twa-event-backdiv" draggable="true"
                         x-on:dragstart="dragStart(event.details.id)"
@@ -179,7 +179,7 @@
                         x-on:mousedown = "mouseDown"
                         x-on:mouseup = "mouseUp"
 
-                        x-on:dragend="dragEnd()" 
+                        x-on:dragend="dragEnd()"
                         :style="'top: ' + event.top + ' ; left:' + event.left + '; width: ' + event.width + '; height:' +
                             event
                             .height">
@@ -225,7 +225,7 @@
     @component('components.drawer', [ 'showHandler' => 'drawerOpenEdit', 'closeHandler' => 'drawerOpenEdit = false', 'title' => 'Edit Movie Show' ])
         @livewire('MovieShowFormEdit', [ 'uniqeid' => $info['id'] , 'type' => 'single' ])
     @endcomponent
-    
+
     @component('components.drawer', [ 'showHandler' => 'drawerOpenEditAll', 'closeHandler' => 'drawerOpenEditAll = false', 'title' => 'Edit Movie Shows' ])
         @livewire('MovieShowFormEdit', [ 'uniqeid' => $info['id'] , 'type' => 'multishow' ])
     @endcomponent

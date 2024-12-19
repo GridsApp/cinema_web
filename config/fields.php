@@ -1128,7 +1128,7 @@ return [
         'name' => 'full_name',
         'container' => 'col-span-6',
     ],
-    
+
     'username' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1174,7 +1174,7 @@ return [
                     ['value' => 'cashier' , 'label' => 'Cashier'],
                     ['value' => 'manager' , 'label' => 'Manager'],
                 ]
-            
+
         ]
     ],
 
@@ -1228,7 +1228,7 @@ return [
             'field' => 'label'
         ]
     ],
-    
+
     'marital_status' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1247,7 +1247,7 @@ return [
             'field' => 'label'
         ]
     ],
-    
+
 
     'date_birth' => [
         'id' => uniqid(),
@@ -1563,7 +1563,7 @@ return [
         ]
     ],
 
-    
+
 
 
     'type' => [
@@ -1829,7 +1829,7 @@ return [
         'placeholder' => 'Enter Discount',
         'name' => 'discount'
     ],
-    
+
     'refunded_cashier_id' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1868,6 +1868,37 @@ return [
         'name' => 'refunded_at'
     ],
 
+    'distributor' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
+
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+//        'quick_add' => 'movie-genres',
+        'options' => [
+            'type' => 'query',
+            'table' => 'distributors',
+            'field' => 'label'
+        ],
+
+        'label' => 'Distributor ',
+        'placeholder' => 'Select distributor',
+        'name' => 'distributor_id',
+        'container' => 'col-span-12',
+
+
+
+        'dispatch' => [
+            "init" => "distributorselectedvalue",
+            "change" =>  "distributorchangedvalue"
+        ],
+    ],
+
     'commission_settings' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1881,6 +1912,43 @@ return [
         'name' => 'commission_settings',
         'container' => 'col-span-12',
     ],
+    'price_settings' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \App\Entities\FieldTypes\PriceSettings::class,
+
+        'label' => 'Price Settings',
+        'placeholder' => 'Price Settings',
+        'name' => 'price_settings',
+        'container' => 'col-span-12',
+    ],
+
+    'distributor_commission_settings' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \App\Entities\FieldTypes\CommissionSettings::class,
+
+        'label' => 'Commission Settings',
+        'placeholder' => 'Commission Settings',
+        'name' => 'commission_settings',
+        'container' => 'col-span-12',
+
+        'listen' =>  [
+//            "init" => "distributorselectedvalue",
+            "change" =>  "distributorchangedvalue"
+        ]
+    ],
+
+
+
+
+
 
 ];
 

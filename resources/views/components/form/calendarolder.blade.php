@@ -1,4 +1,4 @@
-<div x-data="Functions.calendar()" x-on:record-created-{{ $info['id'] }}.window='handleCreateCallback'
+<div x-data="GeneralFunctions.calendar()" x-on:record-created-{{ $info['id'] }}.window='handleCreateCallback'
     {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
 
@@ -215,7 +215,7 @@
                 </div>
             </div>
             {{-- <template x-if="loading == false && loadingCalendar == false">
-   
+
                 <template x-for="event in events">
                     <div :id="'event-box-'+event.details.id" class="twa-event twa-event-backdiv">
                         <div>

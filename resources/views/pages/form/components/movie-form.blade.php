@@ -57,7 +57,7 @@
                             {!! field('director', 'col-span-12') !!}
                             {!! field('age_rating', 'col-span-12') !!}
                             {!! field('language', 'col-span-12') !!}
-                  
+
                         </div>
                     @endcomponent
                 </div>
@@ -79,6 +79,15 @@
                     @endcomponent
                 </div>
 
+                <div class="col-span-12">
+                    @component('CMSView::components.panels.default', ['title' => 'Commission Settings'])
+                        <div class="grid grid-cols-12 gap-5">
+                            {!! field('distributor', 'col-span-6') !!}
+                            {!! field('distributor_commission_settings', 'col-span-6') !!}
+                        </div>
+                    @endcomponent
+                </div>
+
                 <div class="col-span-12 mb-4">
                     @component('CMSView::components.panels.default' , ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
                         <div class="flex justify-center gap-4">
@@ -88,6 +97,10 @@
 
                     @endcomponent
                 </div>
+
+
+
+
             </div>
 
         </form>

@@ -15,34 +15,34 @@ class PriceGroupZonesEntity extends Entity
         [
             "operation" => "delete",
             "action" => "disabled",
-            "condition" => [ 
-                "field" => 'default' , 
-                "operand" => '=' , 
-                "value" => 1 
+            "condition" => [
+                "field" => 'default' ,
+                "operand" => '=' ,
+                "value" => 1
             ]
         ],
         // [
         //     "operation" => "edit",
         //     "action" => "disabled",
-        //     "condition" => [ 
-        //         "field" => 'default' , 
-        //         "operand" => '=' , 
-        //         "value" => 1 
+        //     "condition" => [
+        //         "field" => 'default' ,
+        //         "operand" => '=' ,
+        //         "value" => 1
         //     ]
         // ],
         [
             "operation" => "selection",
             "action" => "disabled",
-            "condition" => [ 
-                "field" => 'default' , 
-                "operand" => '=' , 
-                "value" => 1 
+            "condition" => [
+                "field" => 'default' ,
+                "operand" => '=' ,
+                "value" => 1
             ]
         ]
     ];
 
     public $params = [
-        'pagination' => 20, 
+        'pagination' => 20,
     ];
 
     public function fields(){
@@ -52,6 +52,8 @@ class PriceGroupZonesEntity extends Entity
         $this->addField("price" , ["container" => 'col-span-7']);
         $this->addField("price_groups" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("default" , ["container" => 'col-span-7 hidden']);
+
+        $this->addField("price_settings" , ["container" => 'col-span-7']);
 
         return $this->fields;
     }

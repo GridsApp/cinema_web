@@ -10,6 +10,22 @@ Route::prefix('payment')->group(function () {
     Route::get('/response', function(){  echo request()->input('type');  })->name('payment.response');
 });
 
+Route::get('reports/reports/reports' , function(){
+
+    $report = (new \App\Reports\DailyAdmitsReport());
+
+    $columns = $report->columns;
+
+    $data = [
+      'id'=>1,
+      'label' => "hovig"
+    ];
+
+    $report->setRow($data);
+
+    dd($report->rows);
+
+});
 
 
 

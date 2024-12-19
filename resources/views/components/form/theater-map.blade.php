@@ -1,4 +1,4 @@
-<div x-data="Functions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
+<div x-data="GeneralFunctions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
     {{-- <input type="hidden" x-ref="availableSeats" x-model="availableSeats"> --}}
     <div x-show="!managingSeats">
@@ -112,7 +112,7 @@
                     class="text-[12px]  bg-secondary-500 hover:bg-secondary-600 text-white px-4 py-2 rounded-md ">
                     Reset
                 </button>
-              
+
             </div>
         </div>
         <div class="table-container">
@@ -198,7 +198,7 @@
                         </td>
                     </tr>
                     {{-- <tr>
-                       
+
                     </tr> --}}
                 </tbody>
             </table>

@@ -5,12 +5,12 @@ namespace App\Entities\FieldTypes;
 use twa\cmsv2\Entities\FieldTypes\FieldType;
 
 
-class CommissionSettings extends FieldType
+class PriceSettings extends FieldType
 {
 
     public function component()
     {
-        return "components.commission-settings";
+        return "components.price-settings";
     }
 
 
@@ -22,19 +22,16 @@ class CommissionSettings extends FieldType
     {
 
 
-
-
-
         if(!isset($data->{$this->field['name']}) || (isset($data->{$this->field['name']}) && !$data->{$this->field['name']})){
             return [
-                "defaultPercentage" => "",
+                "defaultPrice" => "",
                 "conditions" => []
             ];
         }
 
         return json_decode($data->{$this->field['name']} ?? '
                     {
-                      defaultPercentage : "",
+                      defaultPrice : "",
                       conditions : []
                     }
         ');
