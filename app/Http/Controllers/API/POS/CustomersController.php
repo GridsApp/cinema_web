@@ -110,7 +110,7 @@ class CustomersController extends Controller
         try {
             $user = $this->userRepository->getUserByPhone($phone_number);
         } catch (\Throwable $th) {
-            return $this->responseData(notification()->error("User not found", "User not found"));
+            return $this->response(notification()->error("User not found", "User not found"));
         }
 
         return $this->responseData($user);
@@ -131,7 +131,7 @@ class CustomersController extends Controller
         try {
             $user = $this->userRepository->getUserById($form_data['user_id']);
         } catch (\Throwable $th) {
-            return $this->responseData(notification()->error("User not found", "User not found"));
+            return $this->response(notification()->error("User not found", "User not found"));
         }
 
         

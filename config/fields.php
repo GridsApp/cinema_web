@@ -1567,6 +1567,7 @@ return [
         'placeholder' => 'Enter Card Number',
         'name' => 'card_number',
         'container' => 'col-span-6',
+        'required' => true
     ],
     'coupon_id' => [
         'id' => uniqid(),

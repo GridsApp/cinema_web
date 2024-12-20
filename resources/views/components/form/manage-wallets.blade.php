@@ -2,14 +2,18 @@
 
 
     @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Manage Wallets'])
-        <form method="POST" wire:submit.prevent="searchByCard">
+        <form  wire:key="{{uniqid()}}" method="POST" wire:submit.prevent="searchByCard">
             @csrf
 
             <div class="mb-5">
-                {!! field('card_number') !!}
+
+                {{-- <input type="text" wire:model="form.card_number">
+                @error('form.card_number') {{$message}} @enderror --}}
+
+                {!! field('card_number' ) !!}
             </div>
 
-            <button class="btn btn-primary"> Search </button>
+            <button type="submit" class="btn btn-primary"> Search </button>
         </form>
     @endcomponent
 
@@ -63,7 +67,7 @@
 
     @if($form["card_number"])
     @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Topup/Deduct'])
-        <form method="POST" wire:submit.prevent="submitForm">
+        <form wire:key="{{uniqid()}}" method="POST" wire:submit.prevent="submitForm">
             @csrf
 
             <div class="mb-5 grid grid-cols-12 gap-4">
@@ -75,5 +79,5 @@
             <button class="btn btn-primary"> Submit </button>
         </form>
     @endcomponent
-@endif
+    @endif
 </div>

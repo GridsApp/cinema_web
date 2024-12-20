@@ -64,7 +64,6 @@ class UserRepository implements UserRepositoryInterface
             } catch (ModelNotFoundException $e) {
                 throw new ModelNotFoundException("User with Phone {$phone_number} not found.");
             }
-    
             return $user;
     }
 

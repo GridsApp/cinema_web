@@ -15,7 +15,7 @@ class ManageWallets extends Component
     public $form = [];
     public $transactions = [];
     public $balance = 0;
-    
+
 
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
@@ -27,8 +27,9 @@ class ManageWallets extends Component
     }
 
 
-    public function mount(){
-        $this->form['card_number'] = "";
+    public function mount()
+    {
+        $this->form['card_number'] = null;
 
         $this->form['transaction_type'] = null;
         $this->form['amount'] = null;
@@ -38,52 +39,79 @@ class ManageWallets extends Component
         $this->transactions = collect($this->transactions);
     }
 
-    public function searchByCard(){
+    public function searchByCard()
+    {
 
-    
+        
+
         $this->validate([
             'form.card_number' => 'required'
-        ]);
+        ] , ['form.card_number' =>'Card number is required']);
 
 
-        $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
+        // dd("sd");
         
-   
-        $this->transactions = $this->cardRepository->getWalletTransactions($user);
-       
+
+
+        try {
+            $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
+        } catch (\Throwable $th) {
+
+            $this->sendError("Error", "User Card Not Found");
+            return;
+        }
+
+        try {
+            $this->transactions = $this->cardRepository->getWalletTransactions($user);
+        } catch (\Throwable $th) {
+            $this->sendError("Error", "Failed to retrieve wallet transactions for the user.");
+            return;
+        }
+
         $this->balance = collect($this->transactions)->last()['balance'] ?? 0;
-
-
-        // dd($transactions);
-
     }
 
-    public function submitForm(){
-       
+    public function submitForm()
+    {
+
 
         $this->validate([
             'form.card_number' => 'required',
-
             'form.transaction_type' => 'required',
             'form.amount' => 'required',
             'form.description' => 'required',
-            
+        ], [
+             'form.card_number' => 'Card number is required',
+            'form.transaction_type' => 'Transaction Type is required',
+            'form.amount' => 'Amount is required',
+            'form.description' => 'Description is required',
         ]);
 
-        $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
-        
-
-        if($this->form['transaction_type'] == 'topup'){
-            $type = "in";
-        }elseif($this->form['transaction_type'] == 'deduct'){
-            $type = "out";
-        }else{
-            dd("someyhing wen wrony");
+        try {
+            $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
+        } catch (\Throwable $th) {
+            $this->sendError("Error", "User Card Not Found");
+            return;
         }
 
 
-        $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS");
-       
+        if ($this->form['transaction_type'] == 'topup') {
+            $type = "in";
+        } elseif ($this->form['transaction_type'] == 'deduct') {
+            $type = "out";
+        } else {
+            $this->sendError("Error", "Invalid transaction type.");
+            return;
+        }
+
+        try {
+            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS");
+            $this->sendSuccess("Success", "Transaction created successfully.");
+        } catch (\Throwable $th) {
+            $this->sendError("Error", "Failed to create the transaction. Please try again later.");
+        }
+
+
 
         $this->form['transaction_type'] = null;
         $this->form['amount'] = null;
@@ -92,9 +120,6 @@ class ManageWallets extends Component
         $this->render();
 
         $this->searchByCard();
-
-        
-
     }
 
 
@@ -104,7 +129,7 @@ class ManageWallets extends Component
 
 
 
-    
+
         return view('components.form.manage-wallets');
     }
 }
