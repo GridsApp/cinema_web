@@ -83,9 +83,7 @@ class CustomersController extends Controller
         } else {
             $this->cardRepository->createCard($user, $generated_barcode, 'physical');
         }
-        return $this->responseData([
-            'user_token' =>  $user->token,
-        ]);
+        return $this->response(notification()->success("User added" , "User was successfully added"));
     }
 
     public function getPhone()
