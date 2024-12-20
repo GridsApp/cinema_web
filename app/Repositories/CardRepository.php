@@ -160,13 +160,18 @@ class CardRepository implements CardRepositoryInterface
             ->where('user_id', $user->id)
             ->get();
 
+           
+
 
             foreach ($transactions as $transaction) {
                 $wallet_transactions[] = [
                     'id' => $transaction->id,
                     'amount' => $transaction->amount,
+                    'balance' => $transaction->balance,
                     'type' => $transaction->type,
                     'description' => $transaction->description,
+                    'date' => now()->parse($transaction->created_at)->format('d-m-Y H:i'),
+                    'reference' => "ORDER: " .$transaction->reference
                 ];
             }
 

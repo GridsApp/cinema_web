@@ -61,12 +61,15 @@ class CustomersController extends Controller
             
         }
 
-        $user_email = $this->userRepository->getUserByEmail($email);
 
-        if ($user_email) {
+        try {
+            $this->userRepository->getUserByEmail($email);
             return $this->response(notification()->error('Email already registered', 'Email already registered'));
+        } catch (\Exception $th) {
+            
         }
 
+      
         $user = $this->userRepository->createCustomer(
             $phone_number,
             $form_data["password"],
@@ -104,9 +107,9 @@ class CustomersController extends Controller
 
         $phone_number = $phone->formatE164();
 
-        $user = $this->userRepository->getUserByPhone($phone_number);
-
-        if (!$user) {
+        try {
+            $user = $this->userRepository->getUserByPhone($phone_number);
+        } catch (\Throwable $th) {
             return $this->responseData(notification()->error("User not found", "User not found"));
         }
 
@@ -125,12 +128,13 @@ class CustomersController extends Controller
             return  $this->responseValidation($validator);
         }
 
-        $user = $this->userRepository->getUserById($form_data['user_id']);
-
-        if (!$user) {
+        try {
+            $user = $this->userRepository->getUserById($form_data['user_id']);
+        } catch (\Throwable $th) {
             return $this->responseData(notification()->error("User not found", "User not found"));
         }
 
+        
         $updateData = [];
 
 

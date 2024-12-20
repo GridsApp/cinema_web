@@ -7,6 +7,7 @@ use App\Interfaces\UserRepositoryInterface;
 use App\Models\PosUser;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\UserCard;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository implements UserRepositoryInterface
@@ -66,6 +67,31 @@ class UserRepository implements UserRepositoryInterface
     
             return $user;
     }
+
+
+    public function getUserByCardNumber($card_number){
+
+
+        try {
+            $user_card = UserCard::where('barcode', $card_number)
+               ->whereNull('deleted_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+
+        try {
+            $user = User::where('id', $user_card->user_id)
+               ->whereNull('deleted_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+
+        return $user;
+
+
+    }
+
+
     public function getUserByEmail($email)
     {
         return User::whereNull('deleted_at')

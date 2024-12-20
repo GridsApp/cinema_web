@@ -9,6 +9,7 @@ interface UserRepositoryInterface
     public function changePassword($user, $password);
     public function getUserByPhone($phone_number);
     public function getUserByEmail($email);
+    public function getUserByCardNumber($card_number);
     // public function getPosUserByUsername($username);
     public function getUserByToken($token);
     public function getUserById($user_id);

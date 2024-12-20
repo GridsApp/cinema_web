@@ -262,7 +262,8 @@ return [
         'type' => \twa\cmsv2\Entities\FieldTypes\Textarea::class,
         'label' => 'Description',
         'placeholder' => 'Enter description',
-        'name' => 'description'
+        'name' => 'description',
+        'container' => 'col-span-12',
     ],
     'duration' => [
         'id' => uniqid(),
@@ -1722,7 +1723,7 @@ return [
         'label' => 'Amount',
         'placeholder' => 'Enter Amount',
         'name' => 'amount',
-        'container' => 'col-span-6',
+        'container' => 'col-span-12',
     ],
 
 
@@ -1966,6 +1967,31 @@ return [
 //            "init" => "distributorselectedvalue",
             "change" =>  "distributorchangedvalue"
         ]
+    ],
+
+    'transaction_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
+        'label' => 'Type',
+        'placeholder' => 'Select Type',
+        'name' => 'transaction_type',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        
+        'options' => [
+            'type' => 'static',
+            'list' => [
+
+                    ['value' => 'topup' , 'label' => 'Top-Up'],
+                    ['value' => 'deduct' , 'label' => 'Deduct'],
+                ]
+
+            ],
+            'container' => 'col-span-12',
     ],
 
 
