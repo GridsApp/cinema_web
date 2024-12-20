@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface UserRepositoryInterface
 {
-    public function createPosUser($phone_number, $password = null, $full_name, $email, $gender = null);
+    public function createCustomer($phone_number, $password, $full_name, $email, $gender = null , $dom = null , $dob = null) ;
     public function createUser($phone_number, $password = null);
     public function changePassword($user, $password);
     public function getUserByPhone($phone_number);

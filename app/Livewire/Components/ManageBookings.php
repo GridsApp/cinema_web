@@ -9,7 +9,7 @@ use Carbon\CarbonPeriod;
 use Livewire\Attributes\Url;
 use twa\cmsv2\Traits\ToastTrait;
 
-class ManageBooking extends Component
+class ManageBookings extends Component
 {
 
     use ToastTrait;
@@ -120,7 +120,7 @@ class ManageBooking extends Component
             }
 
 
-        return view('components.form.manage-booking',[
+        return view('components.form.manage-bookings',[
             'date' => $date,
             'states' =>  json_encode($states), 
             'period' => $period,'movie_shows'=>$movie_shows]);

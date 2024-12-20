@@ -40,7 +40,7 @@ class CustomersController extends Controller
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => 'required',
-            'full_name' => 'required',
+            'name' => 'required',
             'email' => 'required|email',
         ]);
 
@@ -53,9 +53,7 @@ class CustomersController extends Controller
 
         $email = $form_data['email'];
 
-        // $user_phone = $this->userRepository->getUserByPhone($phone_number);
-
-       
+    
         try {
             $this->userRepository->getUserByPhone($phone_number);
             return $this->response(notification()->error('You are already registered user', 'You are already registered user'));
@@ -63,23 +61,20 @@ class CustomersController extends Controller
             
         }
 
-
-
         $user_email = $this->userRepository->getUserByEmail($email);
 
         if ($user_email) {
             return $this->response(notification()->error('Email already registered', 'Email already registered'));
         }
 
-
-        $user = $this->userRepository->createPosUser(
+        $user = $this->userRepository->createCustomer(
             $phone_number,
             $form_data["password"],
-            $form_data["full_name"],
+            $form_data["name"],
             $form_data["email"],
-            $form_data["gender_id"] ?? null,
-            $form_data["marital_status_id"] ?? null,
-            $form_data["date_birth"] ?? null
+            $form_data["gender"] ?? null,
+            $form_data["dom"] ?? null,
+            $form_data["dob"] ?? null
         );
 
         $generated_barcode = $this->cardRepository->generateBarcode();

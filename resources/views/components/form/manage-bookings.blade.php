@@ -1,5 +1,5 @@
 
-    <div x-data="GeneralFunctions.initManageBooking('{{$states}}')" class="container-fixed booking-management">
+    <div x-data="GeneralFunctions.initManageBooking('{{$states}}')" class="booking-management">
 
 
         <div class="flex flex-col gap-10">

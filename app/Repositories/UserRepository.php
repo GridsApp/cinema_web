@@ -35,15 +35,15 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
-    public function createPosUser($phone_number, $password = null, $full_name, $email, $gender = null, $marital_status = null, $date_birth = null)
+    public function createCustomer($phone_number, $password, $full_name, $email , $gender = null , $dom = null , $dob = null)
     {
         $user = new User;
         $user->phone = $phone_number;
         $user->full_name = $full_name;
         $user->email = $email;
-        $user->gender_id = $gender;
-        $user->marital_status_id = $marital_status;
-        $user->date_birth = $date_birth;
+        $user->gender = $gender;
+        $user->dob = $dom;
+        $user->dom = $dom;
         $user->token = $this->tokenRepository->createUserToken();
 
         if ($password) {

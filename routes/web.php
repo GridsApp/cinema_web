@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ManageBookingController;
+use App\Http\Controllers\ManageWalletController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -12,6 +13,7 @@ Route::prefix('payment')->group(function () {
 
 
 Route::get("/manage/bookings" , [ManageBookingController::class , 'render'])->name('manage-bookings');
+Route::get("/manage/wallets" , [ManageWalletController::class , 'render'])->name('manage-wallets');
 
 Route::get('reports/reports/reports' , function(){
 

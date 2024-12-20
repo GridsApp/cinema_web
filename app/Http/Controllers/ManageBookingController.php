@@ -24,6 +24,6 @@ class ManageBookingController extends Controller
             // dd($movie_shows);
       
 
-        return view('pages.manage-booking');
+        return view('pages.manage-bookings');
     }
 }

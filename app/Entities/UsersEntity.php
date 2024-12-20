@@ -33,7 +33,7 @@ class UsersEntity extends Entity
         $this->addField("password", ["container" => 'col-span-7', 'required' => true]);
         $this->addField("gender", ["container" => 'col-span-7']);
         $this->addField("date_birth", ["container" => 'col-span-7']);
-        $this->addField("marital_status", ["container" => 'col-span-7']);
+        // $this->addField("marital_status", ["container" => 'col-span-7']);
         $this->addField("date_marriage", ["container" => 'col-span-7']);
 
 

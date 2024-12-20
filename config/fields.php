@@ -1237,14 +1237,18 @@ return [
         'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
         'label' => 'Gender',
         'placeholder' => 'Select gender',
-        'name' => 'gender_id',
+        'name' => 'gender',
         'multiple' => false,
         'visible_selections' => 3,
         'query_limit' => 50,
         'options' => [
-            'type' => 'query',
-            'table' => 'genders',
-            'field' => 'label'
+            'type' => 'static',
+            'list' => [
+
+                    ['value' => 'male' , 'label' => 'Male'],
+                    ['value' => 'female' , 'label' => 'Female'],
+                ]
+
         ]
     ],
 
@@ -1276,7 +1280,7 @@ return [
         'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date of Birth',
         'placeholder' => 'Enter date of birth',
-        'name' => 'date_birth'
+        'name' => 'dob'
     ],
 
     'date_marriage' => [
@@ -1287,7 +1291,7 @@ return [
         'type' => \twa\cmsv2\Entities\FieldTypes\Date::class,
         'label' => 'Date of marriage',
         'placeholder' => 'Enter date of marriage',
-        'name' => 'date_marriage'
+        'name' => 'dom'
     ],
 
 
