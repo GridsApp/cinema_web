@@ -92,7 +92,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     });
 
     Route::group(['prefix' => 'pos'], function () {
-        Route::post('/create', [App\Http\Controllers\API\POS\CustomersController::class, 'CreateUser']);
+        Route::post('/create', [App\Http\Controllers\API\POS\CustomersController::class, 'createUser']);
         Route::post('/check/phone', [App\Http\Controllers\API\POS\CustomersController::class, 'getPhone']);
         Route::post('/edit', [App\Http\Controllers\API\POS\CustomersController::class, 'editUser']);
         Route::post('/card/info', [App\Http\Controllers\API\CardController::class, 'getCardInfo']);

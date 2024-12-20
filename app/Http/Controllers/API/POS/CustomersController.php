@@ -31,7 +31,7 @@ class CustomersController extends Controller
     }
 
     //HERE NOURHANE
-    public function CreateUser()
+    public function createUser()
     {
 
         $form_data = clean_request([]);
@@ -136,8 +136,8 @@ class CustomersController extends Controller
         $updateData = [];
 
 
-        if (isset($form_data['full_name'])) {
-            $updateData['full_name'] = $form_data['full_name'];
+        if (isset($form_data['name'])) {
+            $updateData['full_name'] = $form_data['name'];
         }
         if (isset($form_data['email'])) {
             $updateData['email'] = $form_data['email'];
@@ -148,16 +148,16 @@ class CustomersController extends Controller
         if (isset($form_data['password'])) {
             $updateData['password'] = $form_data['password'];
         }
-        if (isset($form_data['gender_id'])) {
-            $updateData['gender_id'] = $form_data['gender_id'];
+        if (isset($form_data['gender'])) {
+            $updateData['gender'] = $form_data['gender'];
         }
 
-        if (isset($form_data['marital_status_id'])) {
-            $updateData['marital_status_id'] = $form_data['marital_status_id'];
+        if (isset($form_data['dom'])) {
+            $updateData['dom'] = $form_data['dom'];
         }
 
-        if (isset($form_data['date_birth'])) {
-            $updateData['date_birth'] = $form_data['date_birth'];
+        if (isset($form_data['dob'])) {
+            $updateData['dob'] = $form_data['dob'];
         }
 
         User::whereNull('deleted_at')->where('id', $form_data['user_id'])
