@@ -94,9 +94,13 @@ class UserRepository implements UserRepositoryInterface
 
     public function getUserByEmail($email)
     {
-        return User::whereNull('deleted_at')
-            ->where('email', $email)
-            ->first();
+        try {
+            return User::whereNull('deleted_at')
+                ->where('email', $email)
+                ->first();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
     }
 
     public function getUserByToken($token)
