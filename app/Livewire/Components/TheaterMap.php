@@ -24,9 +24,6 @@ class TheaterMap extends Component
 
     public function render()
     {
-        
-
-        
         return view('components.form.theater-map');
     }
 }

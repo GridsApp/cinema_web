@@ -38,9 +38,14 @@ class MovieShowsEntity extends Entity
         $this->addField("duration" , ["container" => 'col-span-7']);
         $this->addField("visibility" , ["container" => 'col-span-7']);
 
-        $this->addField("system" , ["container" => 'col-span-7']);
+        // $this->addField("system" , ["container" => 'col-span-7']);
+        $this->addField("week" , ["container" => 'col-span-7']);
 
 
+
+
+
+    
 
         return $this->fields;
     }

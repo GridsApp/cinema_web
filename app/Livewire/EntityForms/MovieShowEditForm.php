@@ -47,7 +47,8 @@ class MovieShowEditForm extends Component
             'apply_time',
             'apply_screen_type',
             'apply_color',
-            'system'
+            // 'system',
+            'week'
         ];
 
 
@@ -122,7 +123,8 @@ class MovieShowEditForm extends Component
                 'time_id' => $this->form['time_id'],
                 'date' => $this->form['date'],
                 'color' => $this->form['color'],
-                'system_id' => $this->form['system_id']
+                // 'system_id' => $this->form['system_id'],
+                'week' => $this->form['week']
             ]);
         } else {
 

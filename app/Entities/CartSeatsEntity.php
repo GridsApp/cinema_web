@@ -20,7 +20,6 @@ class CartSeatsEntity extends Entity
 
         $this->addField("movie_show_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("zone_id" , ["container" => 'col-span-6', 'required' => true]);
-      
         $this->addField("seat" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("cart_id" , ["container" => 'col-span-6', 'required' => true]);
   

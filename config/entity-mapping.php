@@ -14,6 +14,7 @@ return array (
   'genders' => 'App\\Entities\\GendersEntity',
   'informative-pages' => 'App\\Entities\\InformativePagesEntity',
   'items' => 'App\\Entities\\ItemsEntity',
+  'kiosk-users' => 'App\\Entities\\KioskUsersEntity',
   'marital_status' => 'App\\Entities\\MaritualStatusEntity',
   'movie-age-ratings' => 'App\\Entities\\MovieAgeRatingsEntity',
   'movie-casts' => 'App\\Entities\\MovieCastsEntity',

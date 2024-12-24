@@ -2,21 +2,24 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\PosUserRepositoryInterface;
+use App\Interfaces\KioskUserRepositoryInterface;
 
-use App\Models\PosUser;
+use App\Models\KioskUser;
+
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-class PosUserRepository implements PosUserRepositoryInterface
+
+class KioskUserRepository implements KioskUserRepositoryInterface
 {
+
 
     public function getUserById($id)
     {
 
         try {
-            return PosUser::where('id', $id)
+            return KioskUser::where('id', $id)
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
@@ -27,7 +30,7 @@ class PosUserRepository implements PosUserRepositoryInterface
     {
 
         try {
-            $user = PosUser::where('username', $username)
+            $user = KioskUser::where('username', $username)
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("User with Username {$username} not found .");
@@ -38,7 +41,7 @@ class PosUserRepository implements PosUserRepositoryInterface
     public function getManagers($branch_id)
     {
         try {
-            $managers = PosUser::whereNull('deleted_at')
+            $managers = KioskUser::whereNull('deleted_at')
                 ->where('role', 'manager')
                 ->where('branch_id', $branch_id)
                 ->get();
@@ -50,7 +53,7 @@ class PosUserRepository implements PosUserRepositoryInterface
     public function getManagerByIdAndPin($id, $pincode, $branch_id)
     {
         try {
-            $manager = PosUser::whereNull('deleted_at')
+            $manager = KioskUser::whereNull('deleted_at')
                 ->where('role', 'manager')
                 ->where('id', $id)
                 ->where('pincode', $pincode)

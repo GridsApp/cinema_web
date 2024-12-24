@@ -23,12 +23,12 @@
                 @endif
 
 
-                @if($this->type == "single")
+                {{-- @if($this->type == "single")
                 {!! field('system', 'col-span-12') !!}
                 @else
                 {!! field('system', 'col-span-10') !!}
                 {!! field('apply_system', 'col-span-2 toggle-custom') !!}
-                @endif
+                @endif --}}
 
 
                 @if($this->type == "single")
@@ -37,8 +37,9 @@
                     {!! field('color', 'col-span-10') !!}
                     {!! field('apply_color', 'col-span-2 toggle-custom') !!}
                 @endif
+ 
 
-
+                {!! field('week', 'col-span-12') !!}
 
             </div>
 

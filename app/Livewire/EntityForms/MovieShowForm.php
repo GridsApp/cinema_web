@@ -6,6 +6,7 @@ use Carbon\CarbonPeriod;
 use Livewire\Component;
 use App\Models\MovieShow;
 use App\Models\Movie;
+use App\Models\Theater;
 use App\Rules\TimeConflictRule;
 use twa\cmsv2\Traits\ToastTrait;
 
@@ -92,6 +93,13 @@ class MovieShowForm extends Component
             return;
         }
 
+
+        //get week of a movie from movie_id , branch
+
+        $theater = Theater::find($this->theater_id);
+
+        $first_show_date = $this->getDateOfFirstMovieShowInBranch($this->form['movie_id'] , $theater->branch_id);
+
         $period = CarbonPeriod::create($this->form['date_from'], $this->form['date_to']);
 
         $required_array = [
@@ -106,9 +114,12 @@ class MovieShowForm extends Component
        
         $slots = ceil($movie->duration / 15);;
         
+        if(!$first_show_date){
+            $first_show_date = $period->first() ?? null;
+        }
 
         foreach ($period as $date) {
-
+            $week = $this->calculateWeekNumber($date , $first_show_date);
             $movie_show =  new MovieShow;
             $movie_show->screen_type_id = $this->form['screen_type_id'];
             $movie_show->theater_id = $this->theater_id;
@@ -118,10 +129,12 @@ class MovieShowForm extends Component
             $movie_show->duration = $movie->duration;
             $movie_show->date = $date;
             $movie_show->visibility = 1;
-            $movie_show->system_id = ["1"];
+            // $movie_show->system_id = ["1"];
             $movie_show->group = $group;
             $movie_show->color = $this->form['color'];
+            $movie_show->week = $week;
             $movie_show->save();
+         
         }
 
         $this->resetForm();
@@ -130,5 +143,43 @@ class MovieShowForm extends Component
     }
 
 
+    public function getDateOfFirstMovieShowInBranch($movie_id , $branch_id){
+
+
+        $theaters_ids = Theater::where('branch_id' , $branch_id)
+        ->whereNull('deleted_at')
+        ->pluck('id');
+
+        $firstShow = MovieShow::where('movie_id' , $movie_id)->whereIn('theater_id' , $theaters_ids)
+        ->orderBy('date' , 'ASC')
+        ->orderBy('time_id' , 'ASC')
+        ->first();
+
+        return $firstShow->date ?? null;
+
+    }
+
     
+
+    public function calculateWeekNumber($current_date , $first_show_date = null){
+
+        if(!$first_show_date){
+            return 1;
+        }
+
+        $period = CarbonPeriod::create($first_show_date , $current_date)->count();
+
+
+        // return intdiv($period , 8) + 1;
+        return intdiv($period - 1, 7) + 1;
+
+    //     $nb_mondays = 0;
+    //     foreach($period as $date){
+    //         if($date->isMonday()){
+    //             $nb_mondays++;
+    //         }
+    //     }
+
+    //    return $nb_mondays+1;
+    }
 }

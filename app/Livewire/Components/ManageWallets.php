@@ -73,8 +73,9 @@ class ManageWallets extends Component
 
     public function submitForm()
     {
+        $cms_user = session('cms_user');
 
-
+        // dd($cms_user->id);
         $this->validate([
             'form.card_number' => 'required',
             'form.transaction_type' => 'required',
@@ -105,7 +106,15 @@ class ManageWallets extends Component
         }
 
         try {
-            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS");
+
+
+        
+
+
+            $operator_id = $cms_user->id;
+            // dd($operator_id);
+
+            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS", null , $operator_id , "twa\cmsv2\Models");
             $this->sendSuccess("Success", "Transaction created successfully.");
         } catch (\Throwable $th) {
             $this->sendError("Error", "Failed to create the transaction. Please try again later.");

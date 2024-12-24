@@ -131,6 +131,22 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->order_id = $order->id;
 
             $orderSeat->movie_show_id = $cart_seat['movie_show_id'];
+
+
+
+            // Order Seat  (movie_id , screen_type_id , theater_id , date ,  time_id , week)
+
+
+            $orderSeat->movie_id =$movie_show->movie_id;
+            $orderSeat->screen_type_id =$movie_show->screen_type_id;
+            $orderSeat->theater_id =$movie_show->theater_id;
+            $orderSeat->date =$movie_show->date;
+            $orderSeat->time_id =$movie_show->time_id;
+            $orderSeat->week = $movie_show->week;
+
+
+
+
             $orderSeat->zone_id = $cart_seat['zone_id'];
             $orderSeat->discount = 0;
             $orderSeat->final_price = $orderSeat->price - $orderSeat->discount;

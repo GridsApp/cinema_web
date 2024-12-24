@@ -100,4 +100,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
     });
+    Route::group(['prefix' => 'kiosk'], function () {
+     Route::post('/login', [App\Http\Controllers\API\KIOSK\KioskUserController::class, 'login']);
+   });
 });

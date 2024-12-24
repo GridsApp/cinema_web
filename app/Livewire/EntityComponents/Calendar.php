@@ -178,6 +178,7 @@ class Calendar extends Component
             'movies.name as label',
             'times.label as time',
             'movie_shows.duration',
+            'movie_shows.week',
             DB::raw("DATE_FORMAT(movie_shows.date, '%d-%m-%Y') as date")
         ])
             ->where('movie_shows.theater_id', $this->theater_id)
@@ -187,7 +188,6 @@ class Calendar extends Component
             ->whereNull('movie_shows.deleted_at')
             ->get()->map(function ($event) use($dayIndex){
                 $minutes = $this->getMinutesDifference($this->times[0] , $event->time);
-
                 return [
                         'details' => $event,
                         'id' => $event->id,

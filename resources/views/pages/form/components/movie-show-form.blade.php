@@ -10,14 +10,12 @@
 >
     <form wire:submit.prevent="save">
         <div class="container-content-height-2">
-
             <div class="grid grid-cols-12 gap-5">
                 {!! field('movie' , 'col-span-12' , null , false , false) !!}
                 {!! field('date_from', 'col-span-12') !!}
                 {!! field('date_to', 'col-span-12') !!}
                 {!! field('time', 'col-span-12' , null , false , false) !!}
                 {!! field('screen_type', 'col-span-12' , null , false , false) !!}
-                {!! field('system', 'col-span-12') !!}     
                 {!! field('movie_show_color', 'col-span-12') !!}
             </div>
         </div>

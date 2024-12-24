@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class CardRepository implements CardRepositoryInterface
 {
 
-    public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null)
+    public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null ,$operator_type = null)
     {
         $active_card = $this->getActiveCard($user);
         if (!$active_card) {
@@ -42,6 +42,9 @@ class CardRepository implements CardRepositoryInterface
         $transaction->reference = $reference;
         $transaction->gateway_reference = $gateway_reference;
         $transaction->user_card_id = $active_card["id"];
+        $transaction->transactionable_id = $operator_id;
+        $transaction->transactionable_type = $operator_type;
+
         $transaction->save();
         return true;
     }
@@ -164,6 +167,7 @@ class CardRepository implements CardRepositoryInterface
 
 
             foreach ($transactions as $transaction) {
+               
                 $wallet_transactions[] = [
                     'id' => $transaction->id,
                     'amount' => $transaction->amount,
@@ -171,7 +175,8 @@ class CardRepository implements CardRepositoryInterface
                     'type' => $transaction->type,
                     'description' => $transaction->description,
                     'date' => now()->parse($transaction->created_at)->format('d-m-Y H:i'),
-                    'reference' => "ORDER: " .$transaction->reference
+                    'reference' => "ORDER: " .$transaction->reference,
+                    'created_by' => $transaction->transaction->id ?? "-"
                 ];
             }
 

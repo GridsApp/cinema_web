@@ -288,6 +288,19 @@ return [
         'name' => 'nb_seats'
     ],
 
+    'week' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+        'label' => 'Week ',
+        'placeholder' => 'Week',
+        'name' => 'week'
+    ],
+
+    
+
     'date' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1996,7 +2009,30 @@ return [
     ],
 
 
+    'transactionable_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Transactionable Id',
+        'placeholder' => 'EnterTransactionable Id',
+        'name' => 'transactionable_id'
+    ],
 
+
+    'transactionable_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Transactionable type',
+        'placeholder' => 'Enter Transactionable Type',
+        'name' => 'transactionable_type'
+    ],
+
+    
 
 
 

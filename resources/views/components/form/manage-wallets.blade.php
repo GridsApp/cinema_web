@@ -26,8 +26,8 @@
                     <th> Type </th>
                     <th> Date </th>
                     <th> Description </th>
-                    {{-- <th> System </th>
-                    <th> Cashier </th> --}}
+                    {{-- <th> System </th> --}}
+                    <th> Created By </th> 
                     <th> Amount </th>
                     <th> Balance </th>
 
@@ -37,11 +37,18 @@
             <tbody>
 
                 @forelse($transactions as $transaction)
+
+                {{-- @dd($transaction); --}}
                     <tr>
                         <td> #{{$transaction['id']}} </td>
                         <td> {{$transaction['type'] == 'in' ? 'Topup' : 'Deduct' }} </td>
                         <td> {{$transaction['date']}} </td>
                         <td> {{$transaction['description']}} </td>
+
+                        <td> {{$transaction['created_by']}} </td>
+
+                        {{-- <td> {{  }}</td> --}}
+
                         {{-- <td> App </td>
                         <td> </td> --}}
                         <td>{{currency_format($transaction['amount'])['display']}} </td>
@@ -50,12 +57,12 @@
 
                 @empty
                     <tr>
-                        <td colspan="6"> No Transactions </td>
+                        <td colspan="7"> No Transactions </td>
 
                     </tr>
                 @endforelse
                 <tr>
-                    <th colspan="5" class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">BALANCE
+                    <th colspan="6" class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">BALANCE
                     </th>
                     <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]"> {{ currency_format($balance)['display'] }}
                     </th>

@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface CardRepositoryInterface
 {
-    public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null);
+    public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null , $operator_id = null ,$operator_type = null);
     public function createLoyaltyTransaction($type, $amount, $user, $description, $reference = null);
     public function createCard($user, $barcode = null, $type = 'digital');
     public function getLoyaltyBalance($user);

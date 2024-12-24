@@ -22,10 +22,7 @@ return [
                 'link' => routeObject('entity', ['slug' => 'cms-users'])
 
             ],
-            // [
-            //     'label' => 'Manage Passwords',
-            //     'link' => "/cms-user/manage-passwords"
-            // ],
+        
             [
                 'label' => 'Roles & Permissions',
                 'link' => "/cms-user/roles-permissions"
@@ -64,6 +61,13 @@ return [
                 'label' => 'Movie Shows',
                 'link' => routeObject('entity', ['slug' => 'movie-shows'])
             ]
+            ,
+            [
+                'label' => 'Manage Shows',
+                'link' => "/manage/bookings"
+            ]
+            
+           
         ]
 
     ],
@@ -88,10 +92,10 @@ return [
                 'label' => 'Theaters',
                 'link' => routeObject('entity', ['slug' => 'theaters'])
             ],
-            [
-                'label' => 'Movie Show Theater',
-                'link' => routeObject('entity', ['slug' => 'movie-show-theaters'])
-            ],
+            // [
+            //     'label' => 'Movie Show Theater',
+            //     'link' => routeObject('entity', ['slug' => 'movie-show-theaters'])
+            // ],
             // [
             //     'label' => 'Systems',
             //     'link' => routeObject('entity' , ['slug'=> 'systems'])
@@ -112,6 +116,12 @@ return [
         ],
 
 
+    ],
+    [
+        'display' => true,
+        'label' => 'Manage Wallets',
+        'link' => "/manage/wallets",
+        'children' => []
     ],
 
     [
@@ -173,7 +183,7 @@ return [
 
     [
         'display' => true,
-        'label' => 'POS Settings',
+        'label' => 'Pos Settings',
         'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
         'children' => [
             [
@@ -184,6 +194,22 @@ return [
                 'label' => 'Payment Methods',
                 'link' => routeObject('entity', ['slug' => 'payment-methods'])
             ],
+           
+
+
+
+        ]
+    ],
+    [
+        'display' => true,
+        'label' => 'Kiosk Settings',
+        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
+        'children' => [
+            [
+                'label' => 'Kiosk users',
+                'link' => routeObject('entity', ['slug' => 'kiosk-users'])
+            ],
+          
            
 
 

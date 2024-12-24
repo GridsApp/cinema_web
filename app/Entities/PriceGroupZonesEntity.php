@@ -49,7 +49,7 @@ class PriceGroupZonesEntity extends Entity
 
         $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("color" , ["container" => 'col-span-7']);
-        $this->addField("price" , ["container" => 'col-span-7']);
+        // $this->addField("price" , ["container" => 'col-span-7']);
         $this->addField("price_groups" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("default" , ["container" => 'col-span-7 hidden']);
 

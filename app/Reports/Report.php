@@ -30,10 +30,10 @@ class Report
         return $row;
     }
     public function addColumn($name , $label){
-        $this->columns->push([
-            'name' => $name,
-            'label' => $label
-        ]);
+        // $this->columns->push([
+        //     'name' => $name,
+        //     'label' => $label
+        // ]);
     }
 
 

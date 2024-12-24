@@ -29,8 +29,17 @@ class OrderSeatsEntity extends Entity
         $this->addField("refunded_cashier_id" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("refunded_manager_id" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("movie_show_id" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("zone_id" , ["container" => 'col-span-6', 'required' => true]);
       
+        $this->addField("movie" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("screen_type" , ["container" => 'col-span-7']);       
+        $this->addField("theater" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("date" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("time" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("week" , ["container" => 'col-span-7']);
+
+        $this->addField("zone_id" , ["container" => 'col-span-6', 'required' => true]);
+
+
   
         return $this->fields;
     }

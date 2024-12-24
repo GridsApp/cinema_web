@@ -1,4 +1,4 @@
-<div class="grid grid-cols-12 gap-4 mb-5" x-data="Functions.calendar()"  x-on:empty-selected.window='emptySelection'>
+<div class="grid grid-cols-12 gap-4 mb-5" x-data="Functions.calendar()" x-on:empty-selected.window='emptySelection'>
     <div class="col-span-12">
 
         @component('CMSView::components.panels.default')
@@ -7,11 +7,7 @@
     </div>
     <div class="col-span-12">
         <div wire:key="{{ uniqid() }}" x-on:record-created-{{ $info['id'] }}.window='handleCreateCallback'
-        
-        
-        x-on:record-not-created-{{ $info['id'] }}.window='handleErrorCallback'
-
-        >
+            x-on:record-not-created-{{ $info['id'] }}.window='handleErrorCallback'>
             <div class="twa-table-card  @if (!$this->theater_id) twa-table-card-disabled @endif">
                 <div class="twa-table-card-disabled-message">
                     Please select theater to show calendar
@@ -131,6 +127,7 @@
 
 
                                         @foreach ($events->where('dayIndex', $i) as $event)
+                                        {{-- @dd($event); --}}
                                             <div class="event-box twa-event-backdiv"
                                                 style="
                                             height: {{ $event['height'] }}px;
@@ -172,12 +169,12 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div class="text-[10px]">
+                                                        <div class="text-[10px] mb-1" >
                                                             {{ $event['details']['time'] }} -
                                                             {{ $event['details']['duration'] }} min
                                                         </div>
                                                         <div class="text-[10px]">
-
+                                                            Week: {{ $event['details']['week'] ?? '-' }}
                                                         </div>
                                                     </label>
                                                 </div>

@@ -7,27 +7,24 @@
 
 
                 @component('CMSView::components.panels.default', ['main_class' => 'mb-5'])
+                    <div class="grid grid-cols-12 gap-4 ">
+                        {!! field('hall_number', 'col-span-12', null) !!}
 
-                <div class="grid grid-cols-12 gap-4 ">
-                    {!! field('hall_number', 'col-span-12' , null) !!}
+                        {!! field('branch', 'col-span-6') !!}
 
-                    {!! field('branch', 'col-span-6') !!}
-
-                    {!! field('price_groups', 'col-span-6') !!}
+                        {!! field('price_groups', 'col-span-6') !!}
 
 
-                </div>
-
+                    </div>
                 @endcomponent
 
 
                 @component('CMSView::components.panels.default', ['main_class' => 'mb-5'])
+                    <div class="grid grid-cols-12 gap-4 ">
 
-                <div class="grid grid-cols-12 gap-4 ">
+                        {!! field('theater_map_json', 'col-span-12') !!}
 
-                {!! field('theater_map_json', 'col-span-12') !!}
-
-                </div>
+                    </div>
                 @endcomponent
             </div>
 
@@ -35,6 +32,9 @@
                 <div class="flex justify-center gap-4">
                     {!! link_button('Cancel', '#', 'secondary') !!}
                     {!! button("'Submit'", 'primary', '', 'submit', 'text-[12px]') !!}
+                    {{-- <button type="submit" class="btn-primary text-[12px]" :disabled="!managingSeats">
+                        Submit
+                    </button> --}}
                 </div>
             @endcomponent
 

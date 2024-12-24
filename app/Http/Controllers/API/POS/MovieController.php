@@ -17,9 +17,9 @@ class MovieController extends Controller
     public function getBranchPosActiveMovieShows($branch_id)
     {
 
-        $system_id = request()->input('system_id', 2);
+        // $system_id = request()->input('system_id', 2);
         $theaters_ids = Theater::select('id')->whereNull('deleted_at')->where('branch_id', $branch_id)->pluck('id');
-        $system_ids = System::select('id')->whereNull('deleted_at')->where('id', $system_id)->pluck('id');
+        // $system_ids = System::select('id')->whereNull('deleted_at')->where('id', $system_id)->pluck('id');
 
         $date = request()->input('date');
         if ($date) {
@@ -35,22 +35,22 @@ class MovieController extends Controller
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
-            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids, $system_ids) {
+            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
                 $q->whereDate('date', $date)
-                    ->whereIn('theater_id', $theaters_ids)
-                    ->where(function ($query) use ($system_ids) {
-                        foreach ($system_ids as $id) {
-                            $query->orWhere('system_id', 'like', '%"' . $id . '"%');
-                        }
-                    });
+                    ->whereIn('theater_id', $theaters_ids);
+                    // ->where(function ($query) use ($system_ids) {
+                    //     foreach ($system_ids as $id) {
+                    //         $query->orWhere('system_id', 'like', '%"' . $id . '"%');
+                    //     }
+                    // });
             })
-            ->with(['movieShows' => function ($query) use ($theaters_ids, $system_ids, $date) {
+            ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
                 $query->whereIn('theater_id', $theaters_ids)
-                    ->where(function ($query) use ($system_ids) {
-                        foreach ($system_ids as $id) {
-                            $query->orWhere('system_id', 'like', '%"' . $id . '"%');
-                        }
-                    })
+                    // ->where(function ($query) use ($system_ids) {
+                    //     foreach ($system_ids as $id) {
+                    //         $query->orWhere('system_id', 'like', '%"' . $id . '"%');
+                    //     }
+                    // })
                     ->whereDate('date', $date);
             }])
             ->get();

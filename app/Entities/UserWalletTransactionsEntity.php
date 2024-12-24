@@ -26,6 +26,16 @@ class UserWalletTransactionsEntity extends Entity
         $this->addField("reference", ["container" => 'col-span-7']);
         $this->addField("gateway_reference", ["container" => 'col-span-7']);
 
+        $this->addField("transactionable_id", ["container" => 'col-span-7']);
+        $this->addField("transactionable_type", ["container" => 'col-span-7']);
+
+
+// transactionable_id 1
+// transactionable_type  App\Models\User | App\Models\PosUser | App\Models\CmsUser
+        // operator_id:  1
+        // operator_model (users , pos_users , cms_users)
+        
+
 
         return $this->fields;
     }

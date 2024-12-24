@@ -1,6 +1,6 @@
 <div x-data="GeneralFunctions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
-    {{-- <input type="hidden" x-ref="availableSeats" x-model="availableSeats"> --}}
+    
     <div x-show="!managingSeats">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
