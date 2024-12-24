@@ -15,14 +15,12 @@ class CMSUserSeeder extends Seeder
 
         $users = [
             [
-                'first_name' => "Hovig",
-                'last_name' => "Senekjian",
+                'name' => "Hovig Senekjian",
                 'email' => 'hovig@thewebaddicts.com',
                 'password' => md5('changeme')
             ],
             [
-                'first_name' => "Nourhane",
-                'last_name' => "Sarieddine",
+                'name' => "Nourhane Sarieddine",
                 'email' => 'nourhane.sarieddine@thewebaddicts.com',
                 'password' => md5('changeme')
             ]

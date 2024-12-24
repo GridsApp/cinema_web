@@ -96,7 +96,7 @@ class UserRepository implements UserRepositoryInterface
         try {
             return User::whereNull('deleted_at')
                 ->where('email', $email)
-                ->first();
+                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }

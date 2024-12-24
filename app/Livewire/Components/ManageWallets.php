@@ -29,7 +29,7 @@ class ManageWallets extends Component
 
     public function mount()
     {
-        $this->form['card_number'] = null;
+        $this->form['card_number'] = "1080108010801080";
 
         $this->form['transaction_type'] = null;
         $this->form['amount'] = null;
@@ -61,12 +61,12 @@ class ManageWallets extends Component
             return;
         }
 
-        try {
+        // try {
             $this->transactions = $this->cardRepository->getWalletTransactions($user);
-        } catch (\Throwable $th) {
-            $this->sendError("Error", "Failed to retrieve wallet transactions for the user.");
-            return;
-        }
+        // } catch (\Throwable $th) {
+        //     $this->sendError("Error", "Failed to retrieve wallet transactions for the user.");
+        //     return;
+        // }
 
         $this->balance = collect($this->transactions)->last()['balance'] ?? 0;
     }
@@ -114,7 +114,7 @@ class ManageWallets extends Component
             $operator_id = $cms_user->id;
             // dd($operator_id);
 
-            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS", null , $operator_id , "twa\cmsv2\Models");
+            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], "CMS", null , $operator_id , "twa\cmsv2\Models\CMSUser");
             $this->sendSuccess("Success", "Transaction created successfully.");
         } catch (\Throwable $th) {
             $this->sendError("Error", "Failed to create the transaction. Please try again later.");

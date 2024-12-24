@@ -15,6 +15,7 @@ Route::prefix('payment')->group(function () {
 Route::get("/manage/bookings" , [ManageBookingController::class , 'render'])->name('manage-bookings');
 Route::get("/manage/wallets" , [ManageWalletController::class , 'render'])->name('manage-wallets');
 
+
 Route::get('reports/reports/reports' , function(){
 
     $report = (new \App\Reports\DailyAdmitsReport());

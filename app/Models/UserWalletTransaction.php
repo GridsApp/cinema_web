@@ -13,6 +13,7 @@ class UserWalletTransaction extends Model
 
     public function transactionable(): MorphTo
     {
+
         return $this->morphTo();
     }
 
