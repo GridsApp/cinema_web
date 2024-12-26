@@ -9,12 +9,14 @@ use App\Interfaces\CouponRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
 
 use App\Interfaces\MovieShowRepositoryInterface;
+use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\CartImtiyaz;
 use App\Models\CartSeat;
 use App\Models\Coupon;
+use App\Repositories\PriceGroupZoneRepository;
 use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Traits\APITrait;
 
@@ -33,6 +35,7 @@ class CartController extends Controller
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
     private CouponRepositoryInterface $couponRepository;
+    private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
 
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -42,7 +45,8 @@ class CartController extends Controller
         ZoneRepositoryInterface $zoneRepository,
         CardRepositoryInterface $cardRepository,
         UserRepositoryInterface $userRepository,
-        CouponRepositoryInterface $couponRepository
+        CouponRepositoryInterface $couponRepository,
+        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -52,6 +56,7 @@ class CartController extends Controller
         $this->cardRepository = $cardRepository;
         $this->userRepository = $userRepository;
         $this->couponRepository = $couponRepository;
+        $this->priceGroupZoneRepository = $priceGroupZoneRepository;
     }
 
 
@@ -180,27 +185,20 @@ class CartController extends Controller
         }
 
 
-        // try {
-        //     $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
-        //     // dd($seats);
-        // } catch (\Exception $th) {
-        //     return $this->response(notification()->error('seat not found', $th->getMessage()));
-        // }
-        // dd($seats);
         try {
             $seats = $this->theaterRepository->getSeatsFromTheaterMap($theater_map, $form_data['seats']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Error getting seats', $th->getMessage()));
+        }
 
-            if ($seats->isEmpty()) {
-                return $this->response(notification()->error('Invalid seat data', 'No valid seats found.'));
-            }
-
+        try {
             foreach ($seats as $seat) {
-                // dd($seat['code']);
-                $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $form_data['movie_show_id'], $seat['zone']);
+                $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }
+
         return $this->response(notification()->success('Seats added to the cart successfully', 'Seats added successfully'));
     }
 
@@ -217,9 +215,8 @@ class CartController extends Controller
 
 
         //GET FROM SETTINGS
-        $minimum_recharge_amount = 10;
-        $maximum_recharge_amount = 50;
-
+        $minimum_recharge_amount = get_setting("minimum_topup_amount");
+        $maximum_recharge_amount =  get_setting("maximum_topup_amount");
 
         if ($form_data['amount'] < $minimum_recharge_amount) {
             return $this->response(notification()->error('Invalid Amount', "Please enter amount greater than " . $minimum_recharge_amount));
@@ -359,7 +356,7 @@ class CartController extends Controller
         }
     }
 
-    public function addCoupnTocart()
+    public function addCouponToCart()
     {
         $form_data = clean_request([]);
         $check = $this->validateRequiredFields($form_data, ['cart_id', 'code']);
@@ -375,13 +372,22 @@ class CartController extends Controller
 
             $coupon = $this->cartRepository->getCouponByCode($form_data['code']);
         } catch (\Throwable $th) {
-            return $this->response(notification()->error('Coupon not found', $th->getMessage()));
+            return $this->response(notification()->error('Coupon not found or expired', $th->getMessage()));
         }
 
+       
         try {
             $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+
+        try {
+            $this->cartRepository->checkCouponInCart($form_data['cart_id'], $coupon->id);
+            return $this->response(notification()->error('Coupon was already added to cart', "Coupon was already added to cart"));
+
+        } catch (\Exception $th) {
         }
 
 
@@ -482,15 +488,19 @@ class CartController extends Controller
         }
 
 
+        
 
 
         $coupon = null;
         if ($cart->coupon_id) {
+            
             try {
                 $coupon = $this->couponRepository->checkCouponById($cart->coupon_id);
             } catch (\Throwable $th) {
                 $coupon = null;
             }
+
+          
         }
 
         $cartDetails = $this->cartRepository->getCartDetails($cart, $coupon);
@@ -501,19 +511,21 @@ class CartController extends Controller
 
             // get card info by user id
 
-            dd("dd");
+       
             $user = $this->userRepository->getUserById($cartDetails['user_id']);
 
 
+          
 
             $card = $this->cardRepository->getActiveCard($user);
 
+            // dd("here");
             $card_info = [
-                'fullname' => $user->full_name,
+                'fullname' => $user->name,
                 'phone' => $user->phone,
                 'email' => $user->email,
                 'card_number' => $card['barcode'],
-                'loyalty_balance' => $card['loyalty_balance'],
+                'loyalty_balance' => $card['loyalty_points_balance'],
                 'wallet_balance' => $card['wallet_balance'],
                 'type' => $card['type']
             ];
@@ -526,7 +538,7 @@ class CartController extends Controller
 
 
             $card_info = [
-                'fullname' => $user->full_name,
+                'fullname' => $user->name,
                 'phone' => $user->phone,
                 'email' => $user->email,
                 'card_number' => $card['barcode'],
@@ -540,7 +552,7 @@ class CartController extends Controller
 
 
         return $this->responseData([
-            'coupon_code' => $coupon->coupon_code ?? null,
+            'coupon_code' => $coupon->code ?? null,
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
             'discount' => $cartDetails["discount"],

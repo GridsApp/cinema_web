@@ -190,6 +190,7 @@ class Calendar extends Component
                 $minutes = $this->getMinutesDifference($this->times[0] , $event->time);
                 return [
                         'details' => $event,
+                        'reserved' => $event->reserved->count(),
                         'id' => $event->id,
                         'group'=> $event->group,
                         'date'=> $event->date,

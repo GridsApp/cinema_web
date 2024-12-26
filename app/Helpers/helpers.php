@@ -13,6 +13,31 @@ if (!function_exists('get_timezone')) {
     }
 }
 
+if (!function_exists('get_setting')) {
+ function get_setting($key , $locale = "en"){
+
+    $setting = collect(config('settings'))->where('field' , $key)->first();
+
+   
+    if(!$setting){
+         return null;
+    }
+
+
+    $info = config('fields.' . $setting['field']);
+
+     if (!$info) {
+         return null;
+     }
+
+     $info['name'] = $setting['translatable'] ?? false ? 'value_' . $locale : 'value';
+     $value = (new $info['type']($info))->display($setting);
+
+       
+     return $value;
+ }
+}
+
 
 if (!function_exists('get_user_field_from_type')) {
     function get_user_field_from_type($type)

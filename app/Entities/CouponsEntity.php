@@ -18,18 +18,21 @@ class CouponsEntity extends Entity
 
     public function fields(){
 
-        $this->addField("code" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("percentage" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("flat" , ["container" => 'col-span-12', 'required' => true]);
+        $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("code" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("discount_flat" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("expires_at" , ["container" => 'col-span-7', 'required' => true]);
     
 
         return $this->fields;
     }
 
     public function columns(){
+        
+        $this->addColumn("label");
         $this->addColumn("code");
-        $this->addColumn("percentage");
-        $this->addColumn("flat");
+        $this->addColumn("discount_flat");
+        $this->addColumn("expires_at");
     
         return $this->columns;
     }

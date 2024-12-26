@@ -3,6 +3,7 @@
 return array (
   'access-tokens' => 'App\\Entities\\AccessTokensEntity',
   'branches' => 'App\\Entities\\BranchesEntity',
+  'cart-coupons' => 'App\\Entities\\CartCouponsEntity',
   'cart-imtiyaz' => 'App\\Entities\\CartImtiyazEntity',
   'cart-items' => 'App\\Entities\\CartItemsEntity',
   'cart-seats' => 'App\\Entities\\CartSeatsEntity',

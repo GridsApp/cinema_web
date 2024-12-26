@@ -20,10 +20,10 @@ class OrderSeatsEntity extends Entity
         $this->addField("seat" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("label" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
-
-        $this->addField("order_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("discount" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("final_price" , ["container" => 'col-span-6', 'required' => false]);
+
+        $this->addField("order_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("gained_points" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("refunded_at" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("refunded_cashier_id" , ["container" => 'col-span-6', 'required' => false]);

@@ -6,7 +6,7 @@ return [
         'display' => true,
         'label' => 'Dashboard',
         'icon' => '<i class="fa-regular fa-grid-2"></i>',
-        'link' => "/",
+        'link' => "/cms",
     ],
 
 
@@ -25,7 +25,7 @@ return [
         
             [
                 'label' => 'Roles & Permissions',
-                'link' => "/cms-user/roles-permissions"
+                'link' => "/cms/cms-user/roles-permissions"
             ]
         ]
 
@@ -39,20 +39,7 @@ return [
         'label' => 'Movie Settings',
         'icon' => '<i class="fa-light fa-screwdriver-wrench"></i>',
         'children' => [
-            [
-                'label' => 'Distributors',
-                'link' => routeObject('entity', ['slug' => 'distributors'])
 
-            ],
-            [
-                'label' => 'Casts',
-                'link' => routeObject('entity', ['slug' => 'movie-casts'])
-
-            ],
-            [
-                'label' => 'Screen Types',
-                'link' => routeObject('entity', ['slug' => 'screen-types'])
-            ],
             [
                 'label' => 'Movies',
                 'link' => routeObject('entity', ['slug' => 'movies'])
@@ -60,14 +47,21 @@ return [
             [
                 'label' => 'Movie Shows',
                 'link' => routeObject('entity', ['slug' => 'movie-shows'])
-            ]
-            ,
+            ],
             [
                 'label' => 'Manage Shows',
-                'link' => "/manage/bookings"
+                'link' => "/cms/manage/bookings"
+            ],
+            [
+                'label' => 'Distributors',
+                'link' => routeObject('entity', ['slug' => 'distributors'])
+
+            ],
+        
+            [
+                'label' => 'Screen Types',
+                'link' => routeObject('entity', ['slug' => 'screen-types'])
             ]
-            
-           
         ]
 
     ],
@@ -80,6 +74,11 @@ return [
                 'label' => 'Branches',
                 'link' => routeObject('entity', ['slug' => 'branches'])
             ],
+
+            [
+                'label' => 'Theaters',
+                'link' => routeObject('entity', ['slug' => 'theaters'])
+            ],
             [
                 'label' => 'Price Groups',
                 'link' => routeObject('entity', ['slug' => 'price-groups'])
@@ -87,42 +86,11 @@ return [
             [
                 'label' => 'Price Group Zones',
                 'link' => routeObject('entity', ['slug' => 'price-group-zones'])
-            ],
-            [
-                'label' => 'Theaters',
-                'link' => routeObject('entity', ['slug' => 'theaters'])
-            ],
-            // [
-            //     'label' => 'Movie Show Theater',
-            //     'link' => routeObject('entity', ['slug' => 'movie-show-theaters'])
-            // ],
-            // [
-            //     'label' => 'Systems',
-            //     'link' => routeObject('entity' , ['slug'=> 'systems'])
-            // ],
-
-            // [
-            //     'label' => 'Concessions',
-            //     'link' => routeObject('entity' , ['slug'=> 'concessions'])
-            // ],
-            // [
-            //     'label' => 'Cashiers',
-            //     'link' => routeObject('entity' , ['slug'=> 'cashiers'])
-            // ],
-            // [
-            //     'label' => 'Self Service Users',
-            //     'link' => routeObject('entity' , ['slug'=> 'self-service-users'])
-            // ]
+            ]
         ],
-
-
     ],
-    [
-        'display' => true,
-        'label' => 'Manage Wallets',
-        'link' => "/manage/wallets",
-        'children' => []
-    ],
+
+ 
 
     [
         'display' => true,
@@ -146,24 +114,37 @@ return [
 
         ]
     ],
+   
     [
         'display' => true,
-        'label' => 'Settings',
-        'icon' => '<i class="fa-regular fa-grid-2"></i>',
-        'link' => "/settings",
-    ],
-    [
-        'display' => true,
-        'label' => 'Users',
+        'label' => 'User Settings',
         'icon' => '<i class="fa-duotone fa-solid fa-users"></i>',
-        'link' => "/users",
+        'children' => [
+            [
+                'label' => 'Users',
+                'link' => routeObject('entity', ['slug' => 'users'])
+            ],
+            [
+                'label' => 'Manage Wallets',
+                'link' => "/cms/manage/wallets", 
+            ]
+        ]
     ],
 
     [
         'display' => true,
-        'label' => 'Cinema Settings',
+        'label' => 'Settings',
         'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
         'children' => [
+            [
+                'label' => 'Kiosk users',
+                'link' => routeObject('entity', ['slug' => 'kiosk-users'])
+            ],
+            [
+                'label' => 'POS users',
+                'link' => routeObject('entity', ['slug' => 'pos-users'])
+            ],
+         
             [
                 'label' => 'Rewards',
                 'link' => routeObject('entity', ['slug' => 'rewards'])
@@ -177,67 +158,14 @@ return [
                 'label' => 'Items',
                 'link' => routeObject('entity', ['slug' => 'items'])
             ],
-           
-        ]
-    ],
-
-    [
-        'display' => true,
-        'label' => 'Pos Settings',
-        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
-        'children' => [
-            [
-                'label' => 'POS users',
-                'link' => routeObject('entity', ['slug' => 'pos-users'])
-            ],
             [
                 'label' => 'Payment Methods',
                 'link' => routeObject('entity', ['slug' => 'payment-methods'])
             ],
            
-
-
-
-        ]
-    ],
-    [
-        'display' => true,
-        'label' => 'Kiosk Settings',
-        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
-        'children' => [
-            [
-                'label' => 'Kiosk users',
-                'link' => routeObject('entity', ['slug' => 'kiosk-users'])
-            ],
-          
-           
-
-
-
         ]
     ],
 
-
-
-
-
-    
-    // [
-    //    'display' => true,
-    //     'label' => 'Customer Settings',
-    //     'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
-    //     'children' => [
-    //         [
-    //             'label' => 'Customers',
-    //             'link' => routeObject('entity' , ['slug'=> 'customers'])
-    //         ],
-    //         [
-    //             'label' => 'Cinema Cards',
-    //             'link' => routeObject('entity' , ['slug'=> 'cinema-cards'])
-    //         ],
-
-    //     ]
-    // ]
-
+  
 
 ];

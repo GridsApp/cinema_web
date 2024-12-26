@@ -127,13 +127,13 @@
 
 
                                         @foreach ($events->where('dayIndex', $i) as $event)
-                                        {{-- @dd($event); --}}
+                                            {{-- @dd($event); --}}
                                             <div class="event-box twa-event-backdiv"
                                                 style="
                                             height: {{ $event['height'] }}px;
                                             top: {{ $event['top'] }}px
                                         "
-                                                draggable="true"
+                                                draggable="@if ($event['reserved'] > 0){{'false'}}@else{{'true'}}@endif"
                                                 x-on:dragstart="dragStart('{{ json_encode($event) }}')"
                                                 x-on:dragend="dragEnd" data-id="{{ $event['id'] }}"
                                                 data-group="{{ $event['group'] }}">
@@ -151,7 +151,7 @@
 
                                                     <input id="event-{{ $event['details']['id'] }}"
                                                         value="{{ $event['details']['id'] }}" type="checkbox"
-                                                        x-model="selected" />
+                                                        @if ($event['reserved'] <= 0) x-model="selected" @endif />
                                                     <label for="event-{{ $event['details']['id'] }}">
 
                                                         <div class="flex items-center mb-2">
@@ -160,7 +160,8 @@
                                                                 {{ $event['details']['label'] }}
 
                                                             </div>
-                                                            <div>
+                                                            <div
+                                                                class=" @if ($event['reserved'] > 0) hidden @endif">
                                                                 <span class="checkbox__inner__checked">
                                                                     <i class="fa-solid fa-circle-check"></i>
                                                                 </span>
@@ -169,13 +170,20 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div class="text-[10px] mb-1" >
+                                                        <div class="text-[10px] mb-1">
                                                             {{ $event['details']['time'] }} -
                                                             {{ $event['details']['duration'] }} min
                                                         </div>
                                                         <div class="text-[10px]">
                                                             Week: {{ $event['details']['week'] ?? '-' }}
                                                         </div>
+
+                                                        <div class="text-[10px]">
+                                                            Reserved: {{ $event['reserved'] ?? '-' }}
+                                                        </div>
+
+
+
                                                     </label>
                                                 </div>
                                             </div>

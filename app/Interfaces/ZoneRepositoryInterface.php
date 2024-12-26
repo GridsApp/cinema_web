@@ -4,5 +4,5 @@ namespace App\Interfaces;
 
 interface ZoneRepositoryInterface 
 {
-    public function getZonesPrices($zone_ids);
+    public function getZones($zone_ids);
 }

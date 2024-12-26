@@ -48,8 +48,8 @@ class PriceGroupZonesEntity extends Entity
     public function fields(){
 
         $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("condensed_label" , ["container" => 'col-span-7']);
         $this->addField("color" , ["container" => 'col-span-7']);
-        // $this->addField("price" , ["container" => 'col-span-7']);
         $this->addField("price_groups" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("default" , ["container" => 'col-span-7 hidden']);
 
@@ -59,11 +59,11 @@ class PriceGroupZonesEntity extends Entity
     }
 
     public function columns(){
-        $this->addColumn("label" , ["container" => 'col-span-7']);
-        $this->addColumn("color" , ["container" => 'col-span-7']);
-        $this->addColumn("price" , ["container" => 'col-span-7']);
-        $this->addColumn("price_groups" , ["container" => 'col-span-7']);
-        $this->addColumn("default" , ["container" => 'col-span-7']);
+        $this->addColumn("label");
+        $this->addColumn("condensed_label");
+        $this->addColumn("color");
+        $this->addColumn("price_groups");
+        $this->addColumn("default");
 
         return $this->columns;
     }

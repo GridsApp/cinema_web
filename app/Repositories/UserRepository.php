@@ -40,7 +40,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = new User;
         $user->phone = $phone_number;
-        $user->full_name = $full_name;
+        $user->name = $full_name;
         $user->email = $email;
         $user->gender = $gender;
         $user->dob = $dom;

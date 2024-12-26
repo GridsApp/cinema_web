@@ -5,12 +5,14 @@ namespace App\Repositories;
 
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
+use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\Coupon;
 use App\Models\System;
 use App\Models\UserCard;
 use App\Models\Cart;
+use App\Models\CartCoupon;
 use App\Models\CartImtiyaz;
 use App\Models\CartItem;
 use App\Models\CartSeat;
@@ -27,14 +29,16 @@ class CartRepository implements CartRepositoryInterface
     private ItemRepositoryInterface $itemRepository;
     private ZoneRepositoryInterface $zoneRepository;
     private UserRepositoryInterface $userRepository;
+    private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
 
 
 
-    public function __construct(ItemRepositoryInterface $itemRepository, ZoneRepositoryInterface $zoneRepository, UserRepositoryInterface $userRepository)
+    public function __construct(ItemRepositoryInterface $itemRepository, ZoneRepositoryInterface $zoneRepository, UserRepositoryInterface $userRepository, PriceGroupZoneRepositoryInterface $priceGroupZoneRepository)
     {
         $this->itemRepository = $itemRepository;
         $this->zoneRepository = $zoneRepository;
         $this->userRepository = $userRepository;
+        $this->priceGroupZoneRepository = $priceGroupZoneRepository;
     }
 
 
@@ -80,6 +84,7 @@ class CartRepository implements CartRepositoryInterface
 
         try {
             $coupon = Coupon::where('code', $code)
+                ->where('expires_at', '>', now())
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Coupon with Code {$code} not found .");
@@ -163,16 +168,37 @@ class CartRepository implements CartRepositoryInterface
 
         return $cart_imtiyaz;
     }
+
+
+    public function checkCouponInCart($cart_id , $coupon_id){
+
+        try {
+    
+            return CartCoupon::query()
+            ->whereNull('deleted_at')
+            ->where('coupon_id' , $coupon_id)
+            ->where('cart_id' , $cart_id)
+            ->firstOrFail();
+          
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+
+    }
+
     public function addCouponToCart($cart_id, $coupon_id)
     {
         try {
-            $cart = $this->getCartById($cart_id);
-            $cart->coupon_id = $coupon_id;
-            $cart->save();
+           
+            $cart_coupon = new CartCoupon();
+            $cart_coupon->coupon_id = $coupon_id;
+            $cart_coupon->cart_id = $cart_id;
+            $cart_coupon->save();
+
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-        return $cart;
+        return $cart_coupon;
     }
 
     public function addCardNumberTocart($cart_id, $card_number)
@@ -234,16 +260,25 @@ class CartRepository implements CartRepositoryInterface
     }
 
 
-    public function addSeatToCart($cart_id, $seat, $movie_show_id, $zone_id)
-    {
-        try {
 
+    public function addSeatToCart($cart_id, $seat, $movie_show, $zone_id)
+    {
+
+  
+        try {
+   
+            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id , $movie_show->date);
+          
             $cart_seat = new CartSeat();
             $cart_seat->seat = $seat;
             $cart_seat->cart_id = $cart_id;
             $cart_seat->zone_id = $zone_id;
-            $cart_seat->movie_show_id = $movie_show_id;
+            $cart_seat->movie_show_id = $movie_show->id;
+            $cart_seat->price = $price;
+            $cart_seat->final_price = $price;
+            $cart_seat->discount = 0;
             $cart_seat->save();
+
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -266,10 +301,11 @@ class CartRepository implements CartRepositoryInterface
 
     public function getCartSeats($cart_id, $grouped = false)
     {
+     
         try {
 
             if ($grouped) {
-                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'cart_id', 'zone_id', 'movie_show_id', DB::raw('count(*) as quantity')];
+                $select = [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"), 'cart_id', 'zone_id', 'movie_show_id','price','discount','final_price', DB::raw('count(*) as quantity')];
             } else {
                 $select = "*";
             }
@@ -353,7 +389,7 @@ class CartRepository implements CartRepositoryInterface
         return $user_cart_topup;
     }
 
-    public function getCartDetails($cart , $coupon = null)
+    public function getCartDetails($cart, $coupon = null)
     {
         try {
 
@@ -362,7 +398,7 @@ class CartRepository implements CartRepositoryInterface
 
             $cart_seats = $this->getCartSeats($cart_id, true);
             $zone_ids = $cart_seats->pluck('zone_id');
-            $zones = $this->zoneRepository->getZonesPrices($zone_ids)->keyBy('id');
+            $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
 
             $cart_seats = $cart_seats->map(function ($cart_seat) use ($zones) {
                 $zone = $zones[$cart_seat['zone_id']];
@@ -370,17 +406,19 @@ class CartRepository implements CartRepositoryInterface
                     return null;
                 }
 
-                $unit_price = $zone->price;
+                $unit_price = $cart_seat['price'];
 
+               
                 return [
                     'id' => $cart_seat['cart_id'],
                     'type' => "Seat",
-                    'label' => $zone->label,
+                    'label' => $zone->priceGroup->label.' '.($zone->default == 1 ? '' : $zone->condensed_label),
                     'unit_price' => currency_format($unit_price),
                     'quantity' => $cart_seat['quantity'],
                     'price' => currency_format($unit_price * $cart_seat['quantity']),
                 ];
             })->filter();
+
 
             $total = $cart_seats->sum('price.value');
 
@@ -423,6 +461,7 @@ class CartRepository implements CartRepositoryInterface
 
 
             $total += $cart_topups->sum('price.value');
+
 
 
             return [

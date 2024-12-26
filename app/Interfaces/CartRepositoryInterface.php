@@ -15,8 +15,12 @@ interface CartRepositoryInterface
     public function getCartSeats($cart_id , $grouped = false);
     public function getCartItems($cart_id,$grouped = false);
     public function addTopupToCart($cart_id,$amount);
+
     public function addCouponToCart($cart_id,$coupon_id);
     public function removeCouponFromCart($cart_id);
+
+    public function checkCouponInCart($cart_id , $coupon_id);
+
     public function addCardNumberTocart($cart_id, $card_number);
     public function removeCardNumberFromCart($cart_id);
     public function removeTopupFromCart($cart_id );
@@ -27,6 +31,7 @@ interface CartRepositoryInterface
      public function getSystemById($system_id);
      public function getReservedSeats($movie_show_id);
      public function addImtiyazToCart($cart_id, $phone);
+    
 
     
     // public function getCardByBarcode($card_number);

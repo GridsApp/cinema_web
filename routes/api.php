@@ -12,7 +12,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('/account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware(AuthMiddleware::class);
             Route::post('/change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware(AuthMiddleware::class);
             Route::post('/delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware(AuthMiddleware::class);
-            Route::post('/wallet/recharge', [App\Http\Controllers\API\WalletController::class, 'recharge'])->middleware(AuthMiddleware::class);
+          // Route::post('/wallet/recharge', [App\Http\Controllers\API\WalletController::class, 'recharge'])->middleware(AuthMiddleware::class);
 
             Route::post('/test', [App\Http\Controllers\API\WalletController::class, 'test'])->middleware(AuthMiddleware::class);
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware(AuthMiddleware::class);
@@ -43,7 +43,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsCart']);
         Route::post('/imtiyaz/add', [App\Http\Controllers\API\CartController::class, 'addImtiyazToCart']);
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
-        Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCoupnTocart']);
+        Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCouponToCart']);
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
         Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart']);
         Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart']);

@@ -15,6 +15,32 @@ class CardRepository implements CardRepositoryInterface
 
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null ,$operator_type = null)
     {
+
+
+        if(!$operator_type || !$operator_id){
+            return false;
+        }
+
+
+        switch ($operator_type) {
+            case "App\Models\PosUser":
+                $system_id = 2;
+                break;
+            
+            case "App\Models\User":
+                    $system_id = 1;
+                break;
+
+            case "twa\cmsv2\Models\CMSUser":
+                $system_id = 5;
+                break;
+            default:
+         
+                
+
+                break;
+        }
+
         $active_card = $this->getActiveCard($user);
         if (!$active_card) {
             return false;
@@ -44,6 +70,7 @@ class CardRepository implements CardRepositoryInterface
         $transaction->user_card_id = $active_card["id"];
         $transaction->transactionable_id = $operator_id;
         $transaction->transactionable_type = $operator_type;
+        $transaction->system_id = $system_id;
 
         $transaction->save();
         return true;
@@ -168,8 +195,8 @@ class CardRepository implements CardRepositoryInterface
 
             foreach ($transactions as $transaction) {
                
-                dd($transaction->transactionable);
-
+                
+                // dd($transaction->transactionable);
                 $wallet_transactions[] = [
                     'id' => $transaction->id,
                     'amount' => $transaction->amount,
@@ -178,7 +205,8 @@ class CardRepository implements CardRepositoryInterface
                     'description' => $transaction->description,
                     'date' => now()->parse($transaction->created_at)->format('d-m-Y H:i'),
                     'reference' => "ORDER: " .$transaction->reference,
-                    'created_by' => $transaction->transaction->id ?? "-"
+                    'created_by' => $transaction->transactionable->name ?? "-",
+                    'system' => $transaction->system->label ?? "-"
                 ];
             }
 

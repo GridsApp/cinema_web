@@ -39,7 +39,7 @@ class UserController extends Controller
             [
 
                 'id' => $user->id,
-                'full_name' => $user->full_name,
+                'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
                 'profile_picture' => get_image($user->profile_picture),

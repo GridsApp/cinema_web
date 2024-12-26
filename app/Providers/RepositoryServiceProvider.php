@@ -33,6 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Interfaces\TicketRepositoryInterface::class , \App\Repositories\TicketRepository::class);
 
         $this->app->bind(\App\Interfaces\CouponRepositoryInterface::class , \App\Repositories\CouponRepository::class);
+        $this->app->bind(\App\Interfaces\PriceGroupZoneRepositoryInterface::class , \App\Repositories\PriceGroupZoneRepository::class);
 
         
         

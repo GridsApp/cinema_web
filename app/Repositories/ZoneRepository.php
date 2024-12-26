@@ -8,7 +8,7 @@ use App\Models\PriceGroupZone;
 class ZoneRepository implements ZoneRepositoryInterface
 {
 
-    public function getZonesPrices($zone_ids){
+    public function getZones($zone_ids){
 
       $zones = PriceGroupZone::whereNull('deleted_at')->whereIn('id' , $zone_ids)->get();
 

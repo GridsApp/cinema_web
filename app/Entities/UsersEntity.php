@@ -22,7 +22,7 @@ class UsersEntity extends Entity
     public function fields()
     {
 
-        $this->addField("full_name", ["container" => 'col-span-7']);
+        $this->addField("name", ["container" => 'col-span-7']);
         $this->addField("email", ["container" => 'col-span-4', 'required' => true]);
         $this->addField("email_verified", ["container" => 'col-span-3']);
 
@@ -47,7 +47,7 @@ class UsersEntity extends Entity
 
     public function columns()
     {
-        $this->addColumn("full_name");
+        $this->addColumn("name");
         $this->addColumn("email");
 
 

@@ -12,7 +12,6 @@ class CMSUserSeeder extends Seeder
      */
     public function run(): void
     {
-
         $users = [
             [
                 'name' => "Hovig Senekjian",
@@ -25,13 +24,10 @@ class CMSUserSeeder extends Seeder
                 'password' => md5('changeme')
             ]
         ];
-
         foreach($users as $user){
             $existing_user = DB::table('cms_users')->where("email" , $user['email'])->first();
             if($existing_user){ continue; }
             DB::table('cms_users')->insert($user);
-        }
-
-         
+        }   
     }
 }

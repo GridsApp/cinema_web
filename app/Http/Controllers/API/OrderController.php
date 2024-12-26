@@ -99,7 +99,7 @@ class  OrderController extends Controller
 
         switch ($payment_method->key) {
 
-           
+
             case 'CASH':
             case 'CC-DC':
 
@@ -183,9 +183,22 @@ class  OrderController extends Controller
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
 
-                // Create wallet transaction of type OUT. of amount 
+                if ($subtotal > 0 && $user_id) {
+                    if ($cart->pos_user_id) {
+                        $operator_type = "App\Models\PosUser";
+                        $operator_id = $cart->pos_user_id;
+                    } elseif ($cart->user_id) {
+                        $operator_type = "App\Models\User";
+                        $operator_id = $cart->user_id;
+                    } else {
+                        $operator_type = null;
+                        $operator_id = null;
+                    }
 
-                $this->cardRepository->createWalletTransaction("out", $subtotal, $wallet_user, "Wallet deducted for order", $order["order_id"]);
+                    $this->cardRepository->createWalletTransaction("out", $subtotal, $wallet_user, "Wallet deducted for order", $order["order_id"], null, $operator_id, $operator_type);
+                }
+
+                // $this->cardRepository->createWalletTransaction("out", $subtotal, $wallet_user, "Wallet deducted for order", $order["order_id"]);
 
 
                 return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
@@ -348,8 +361,6 @@ class  OrderController extends Controller
     {
 
         $user = request()->user;
-
-
         $orders = $this->orderRepository->getUserOrders($user->id)->map(function ($order) {
 
             $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);

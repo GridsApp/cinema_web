@@ -22,14 +22,12 @@ class OmnipayCallbackService {
     public function callback($payment_attempt){
 
        return  $this->completePurchase($payment_attempt);
-
         // switch($payment_attempt->action){
             // case "RECHARGE_WALLET": return $this->rechargeWallet($payment_attempt);
             // case "COMPLETE_ORDER": return $this->completePurchase($payment_attempt);
         // }
       
         // return true;
-
     }
 
 

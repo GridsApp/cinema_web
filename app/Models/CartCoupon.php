@@ -6,10 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class CartSeat extends Model
+class CartCoupon  extends Model
 {
     use HasFactory;
-    public function zone(){
-        return $this->belongsTo(PriceGroupZone::class , 'zone_id' , 'id');
-    }
 }

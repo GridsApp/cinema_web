@@ -26,8 +26,9 @@
                     <th> Type </th>
                     <th> Date </th>
                     <th> Description </th>
-                    {{-- <th> System </th> --}}
+                  
                     <th> Created By </th> 
+                    <th> System </th>
                     <th> Amount </th>
                     <th> Balance </th>
 
@@ -46,6 +47,7 @@
                         <td> {{$transaction['description']}} </td>
 
                         <td> {{$transaction['created_by']}} </td>
+                        <td> {{$transaction['system']}} </td>
 
                         {{-- <td> {{  }}</td> --}}
 
@@ -57,12 +59,12 @@
 
                 @empty
                     <tr>
-                        <td colspan="7"> No Transactions </td>
+                        <td colspan="8"> No Transactions </td>
 
                     </tr>
                 @endforelse
                 <tr>
-                    <th colspan="6" class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">BALANCE
+                    <th colspan="7" class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">BALANCE
                     </th>
                     <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]"> {{ currency_format($balance)['display'] }}
                     </th>

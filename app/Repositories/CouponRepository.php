@@ -13,7 +13,7 @@ class CouponRepository implements CouponRepositoryInterface
     public function checkCouponById($coupon_id){
      
         try {
-            return Coupon::whereNull('deleted_at')->firstOrFail($coupon_id);
+            return Coupon::whereNull('deleted_at')->where('id' , $coupon_id)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }

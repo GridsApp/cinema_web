@@ -17,4 +17,10 @@ class UserWalletTransaction extends Model
         return $this->morphTo();
     }
 
+
+    public function system()
+    {
+        return $this->belongsTo(System::class, 'system_id' , 'id');
+    }
+
 }

@@ -7,6 +7,7 @@ use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
+use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\CartItem;
@@ -33,6 +34,7 @@ class OrderRepository implements OrderRepositoryInterface
     private CardRepositoryInterface $cardRepository;
     private TheaterRepositoryInterface $theaterRepository;
     private UserRepositoryInterface $userRepository;
+    private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
     private PosUserRepositoryInterface $posUserRepository;
 
     public function __construct(
@@ -40,13 +42,15 @@ class OrderRepository implements OrderRepositoryInterface
         TheaterRepositoryInterface $theaterRepository,
         CardRepositoryInterface $cardRepository,
         UserRepositoryInterface $userRepository,
-        PosUserRepositoryInterface $posUserRepository
+        PosUserRepositoryInterface $posUserRepository,
+        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->theaterRepository = $theaterRepository;
         $this->cardRepository = $cardRepository;
         $this->userRepository = $userRepository;
         $this->posUserRepository = $posUserRepository;
+        $this->priceGroupZoneRepository = $priceGroupZoneRepository;
     }
 
 
@@ -87,6 +91,8 @@ class OrderRepository implements OrderRepositoryInterface
         $order->user_id =  $user_id;
         $order->pos_user_id =  $cart->pos_user_id;
 
+
+    
         $order->payment_method_id = $payment_method_id;
         $order->save();
 
@@ -116,17 +122,15 @@ class OrderRepository implements OrderRepositoryInterface
 
 
             $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
-
-            $price_group_zone = PriceGroupZone::where('id', $object_seat['zone'])->first();
-            $price = $price_group_zone ? $price_group_zone->price : 0;
+           $price = $cart_seat['price'];
 
             $points_conversion = 1;
             $total_points += $price * $points_conversion;
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
-            $orderSeat->label =  $price_group_zone->label;
-            $orderSeat->price = $price;
+            $orderSeat->label =  $cart_seat->zone->label;
+            $orderSeat->price = $cart_seat['price'];
             $orderSeat->gained_points = $price * $points_conversion;
             $orderSeat->order_id = $order->id;
 
@@ -137,21 +141,20 @@ class OrderRepository implements OrderRepositoryInterface
             // Order Seat  (movie_id , screen_type_id , theater_id , date ,  time_id , week)
 
 
-            $orderSeat->movie_id =$movie_show->movie_id;
-            $orderSeat->screen_type_id =$movie_show->screen_type_id;
-            $orderSeat->theater_id =$movie_show->theater_id;
-            $orderSeat->date =$movie_show->date;
-            $orderSeat->time_id =$movie_show->time_id;
+            $orderSeat->movie_id = $movie_show->movie_id;
+            $orderSeat->screen_type_id = $movie_show->screen_type_id;
+            $orderSeat->theater_id = $movie_show->theater_id;
+            $orderSeat->date = $movie_show->date;
+            $orderSeat->time_id = $movie_show->time_id;
             $orderSeat->week = $movie_show->week;
 
 
 
 
             $orderSeat->zone_id = $cart_seat['zone_id'];
-            $orderSeat->discount = 0;
-            $orderSeat->final_price = $orderSeat->price - $orderSeat->discount;
+            $orderSeat->discount = $cart_seat['discount'];
+            $orderSeat->final_price = $cart_seat['final_price'];
             $orderSeat->save();
-
 
 
             $reservedSeat = new ReservedSeat();
@@ -186,8 +189,10 @@ class OrderRepository implements OrderRepositoryInterface
             $orderItem->save();
         }
 
+        $total = 0;
         foreach ($cart_topups as $cart_topup) {
 
+            $total += $cart_topup->amount;
             $orderTopup = new OrderTopup();
             $orderTopup->order_id = $order->id;
             $orderTopup->price = $cart_topup->amount;
@@ -195,9 +200,22 @@ class OrderRepository implements OrderRepositoryInterface
             $orderTopup->save();
         }
 
+        if ($total > 0 && $user_id) {
+            if($cart->pos_user_id){
+                $operator_type = "App\Models\PosUser";
+                $operator_id = $cart->pos_user_id;
+            }elseif($cart->user_id){
+                $operator_type = "App\Models\User";
+                $operator_id = $cart->user_id;
+            }else{
+                $operator_type = null;
+                $operator_id = null;
+            }
+
+            $this->cardRepository->createWalletTransaction("in", $total, $user, "Recharge wallet", $order->id, null , $operator_id , $operator_type);
+       }
+
         $this->cartRepository->expireCart($cart_id);
-
-
         return [
             'order_id' => $order->id,
             'cart_seats' => $cart_seats,

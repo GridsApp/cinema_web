@@ -254,6 +254,21 @@ return [
         'name' => 'condensed_name'
     ],
 
+    'condensed_label' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Condensed Label',
+        'placeholder' => 'Enter Condensed Label',
+        'name' => 'condensed_label'
+    ],
+
+
+
+    
+
     'description' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1480,17 +1495,17 @@ return [
         'name' => 'code',
         'container' => 'col-span-6',
     ],
-    'flat' => [
+    'discount_flat' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
 
-        'label' => 'Flat',
-        'placeholder' => 'Enter Flat',
-        'name' => 'flat',
+        'label' => 'Discount Flat',
+        'placeholder' => 'Enter Discount Flat',
+        'name' => 'discount_flat',
         'container' => 'col-span-6',
     ],
     'percentage' => [
@@ -1499,7 +1514,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
 
         'label' => 'Percentage',
         'placeholder' => 'Enter Percentage',
@@ -2033,6 +2048,29 @@ return [
     ],
 
     
+    'minimum_topup_amount' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+        'label' => 'Minimum Topup Amount',
+        'placeholder' => 'Minimum Topup Amount',
+        'name' => 'minimum_topup_amount',
+        'container' => 'col-span-6',
+    ],
+    'maximum_topup_amount' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+        'label' => 'Maximum Topup Amount',
+        'placeholder' => 'Maximum Topup Amount',
+        'name' => 'maximum_topup_amount',
+        'container' => 'col-span-6',
+    ]
+
 
 
 
