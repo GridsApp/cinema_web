@@ -17,6 +17,7 @@ use App\Models\CartImtiyaz;
 use App\Models\CartSeat;
 use App\Models\Coupon;
 use App\Repositories\PriceGroupZoneRepository;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Traits\APITrait;
 
@@ -67,90 +68,47 @@ class CartController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
-
-
         $form_data = clean_request([]);
-        $check = $this->validateRequiredFields($form_data, ['system_id']);
-
-        if ($check) {
-            return $this->response($check);
-        }
+        $system_id = get_system_from_type($user_type);
 
         try {
-            $this->cartRepository->getSystemById($form_data['system_id']);
-        } catch (\Throwable $th) {
-            return $this->response(notification()->error('System not found', $th->getMessage()));
-        }
-
-        try {
-            $cart = $this->cartRepository->createCart($user->id, $user_type, $form_data['system_id']);
+            $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id);
         } catch (\Exception $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
 
         return $this->responseData([
             'cart_id' => $cart->id,
+            'timezone' => config('app.timezone'),
             'expires_at' => $cart->expires_at
         ]);
     }
-
-
     public function expireCart()
     {
 
         $form_data = clean_request([]);
         $check = $this->validateRequiredFields($form_data, ['cart_id']);
-
         if ($check) {
             return $this->response($check);
         }
-        $cart_id = $form_data['cart_id'];
-        try {
-            $this->cartRepository->expireCart($cart_id);
-            return $this->response(notification()->success('Cart Expired successfully', 'Cart Expired successfully'));
-        } catch (\Exception $th) {
-            return  $this->response(notification()->error("Error", $th->getMessage()));
-        }
-    }
-    public function addItemCart()
-    {
-
-
-        $form_data = clean_request([]);
-
-        if (!$form_data['cart_id'] || !$form_data['item_id']) {
-            return $this->response(notification()->error('Missing form data cart_id , item_id', 'Missing form data cart_id , item_id'));
-        }
-
 
         $user = request()->user;
         $user_type = request()->user_type;
 
         try {
-
             $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
 
-
         try {
-
-            $this->itemRepository->getItemById($form_data['item_id']);
-            // dd($cart);
-        } catch (\Throwable $th) {
-            return $this->response(notification()->error('Item not found', $th->getMessage()));
-        }
-
-
-        try {
-            $this->cartRepository->addItemToCart($form_data['cart_id'], $form_data['item_id']);
-            return $this->response(notification()->success('Item added  to the cart successfully', 'Item added successfully'));
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Error adding item to cart', $e->getMessage()));
+            $this->cartRepository->expireCart($form_data['cart_id']);
+            return $this->response(notification()->success('Cart Expired successfully', 'Cart Expired successfully'));
+        } catch (\Exception $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
         }
     }
-    public function addSeatsCart()
+    public function addSeatsToCart()
     {
         $form_data = clean_request([]);
         $check = $this->validateRequiredFields($form_data, ['cart_id', 'seats', 'movie_show_id']);
@@ -191,19 +149,107 @@ class CartController extends Controller
             return $this->response(notification()->error('Error getting seats', $th->getMessage()));
         }
 
+        $reserved_seats = $this->cartRepository->getReservedSeats($form_data['movie_show_id']);
+
+        if ($seats->pluck('code')->intersect($reserved_seats)->count() > 0) {
+            return $this->response(notification()->error('Seats Alredy Reserved', 'Seats Alredy Reserved'));
+        }
+
+
         try {
+            DB::beginTransaction();
+
             foreach ($seats as $seat) {
+
+
+
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
+
+            DB::commit();
         } catch (\Exception $th) {
+
+            DB::rollBack();
             return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }
 
         return $this->response(notification()->success('Seats added to the cart successfully', 'Seats added successfully'));
     }
+    public function removeSeatFromCart()
+    {
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'seat', 'movie_show_id']);
 
+        if ($check) {
+            return $this->response($check);
+        }
+        $user = request()->user;
+        $user_type = request()->user_type;
 
+        try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+        try {
+            $this->cartRepository->removeSeatFromCart($form_data['cart_id'], $form_data['seat'], $form_data['movie_show_id']);
+            return $this->response(notification()->success('Seat removed successfully', 'Seat removed successfully'));
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error removing seat', $e->getMessage()));
+        }
+    }
+    public function addItemToCart()
+    {
+        $form_data = clean_request([]);
 
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'item_id']);
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+        try {
+            $this->itemRepository->getItemById($form_data['item_id']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Item not found', $th->getMessage()));
+        }
+
+        try {
+            $this->cartRepository->addItemToCart($form_data['cart_id'], $form_data['item_id']);
+            return $this->response(notification()->success('Item added  to the cart successfully', 'Item added successfully'));
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error adding item to cart', $e->getMessage()));
+        }
+    }
+    public function removeItemFromCart()
+    {
+
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'item_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+        try {
+            $this->itemRepository->getItemById($form_data['item_id']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Item not found', $th->getMessage()));
+        }
+        try {
+            $this->cartRepository->removeItemFromCart($form_data['cart_id'], $form_data['item_id']);
+            return $this->response(notification()->success('Item removed successfully', 'Item removed successfully'));
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error removing Item', $e->getMessage()));
+        }
+    }
     public function addTopupToCart()
     {
         $form_data = clean_request([]);
@@ -234,7 +280,7 @@ class CartController extends Controller
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
-        if (!$cart->user_id && !$cart->card_number) {
+        if (!$cart->card_number) {
             return $this->response(notification()->error("You don't have a card number", "This cart does not have a card number"));
         }
 
@@ -246,7 +292,68 @@ class CartController extends Controller
 
         return $this->response(notification()->success('Amount added to the cart successfully', 'Amount added successfully'));
     }
+    public function removeTopupFromCart()
+    {
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id']);
 
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+        if (!$cart->card_number) {
+            return $this->response(notification()->error("You don't have a card number", "This cart does not have a card number"));
+        }
+
+        try {
+            $this->cartRepository->removeTopupFromCart($form_data['cart_id']);
+            return $this->response(notification()->success('Top Up removed successfully', 'Top Up removed successfully'));
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error removing Top Up', $e->getMessage()));
+        }
+    }
+
+
+    public function removeImtiyazFromCart()
+    {
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+      
+
+        try {
+            $this->cartRepository->removeImtiyazFromCart($form_data['cart_id']);
+            return $this->response(notification()->success('Imtiyaz removed successfully', 'Imtiyaz removed successfully'));
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error removing Imtiyaz', $e->getMessage()));
+        }
+    }
+
+
+
+    
 
     public function addImtiyazToCart()
     {
@@ -271,30 +378,62 @@ class CartController extends Controller
         }
 
 
-        $cart_imtiyaz = CartImtiyaz::whereNull('deleted_at')->where('cart_id',$form_data['cart_id'])->get();
-        $count_imtiyaz= count($cart_imtiyaz);
+        $cart_coupon_count = $this->cartRepository->getCouponCountFromCart($form_data['cart_id']);
 
-        if($count_imtiyaz > 0){
-            return $this->response(notification()->error('Imityaz already added', 'Imityaz already added'));
+        if ($cart_coupon_count > 0) {
+            return $this->response(notification()->error('Imtiyaz can not be added with coupon', "Imtiyaz can not be added with coupon"));
         }
 
 
-        $cart_seats = CartSeat::whereNull('deleted_at')->where('cart_id',$form_data['cart_id'])->get();
-        $count_seats= count($cart_seats);
-    
-       
+        // $cart_imtiyaz = CartImtiyaz::whereNull('deleted_at')->where('cart_id', $form_data['cart_id'])->get();
+
+        try {
+            $cart_imtiyaz =  $this->cartRepository->getImtiyazByCartId($form_data['cart_id']);
+            $count_imtiyaz = count($cart_imtiyaz);
+        } catch (\Throwable $th) {
+            return $this->response(notification()->error('Imtiyaz not found ', $th->getMessage()));
+        }
+
+
+        if ($count_imtiyaz > 0) {
+            return $this->response(notification()->error('Imityaz already added', 'Imityaz already added'));
+        }
+
+        try {
+            $cart_seats = $this->cartRepository->getCartSeats($form_data['cart_id']);
+            $count_seats = count($cart_seats);
+        } catch (\Throwable $th) {
+            return $this->response(notification()->error('Seats not found ', $th->getMessage()));
+        }
+
+        //  CartSeat::whereNull('deleted_at')->where('cart_id', $form_data['cart_id'])->orderBy('price', 'DESC')->get();
+
+
+
         $eligibility = $count_seats % 2 == 0 ? $count_seats / 2 : ($count_seats - 1) / 2;
 
 
-        if(count($form_data['phones']) > $eligibility){
+        if (count($form_data['phones']) > $eligibility) {
             return $this->response(notification()->error('Not eligible', 'Not eligible'));
         }
 
 
         try {
             DB::beginTransaction();
+
+            $i = 1;
+
             foreach ($form_data['phones'] as $phone) {
                 $this->cartRepository->addImtiyazToCart($form_data['cart_id'], $phone);
+
+                $cart_seat = $cart_seats[$i] ?? null;
+
+                if ($cart_seat) {
+                    $cart_seat->imtiyaz_phone = $phone;
+                    $cart_seat->save();
+                }
+
+                $i = $i + 2;
             }
             DB::commit();
         } catch (\Exception $th) {
@@ -303,59 +442,6 @@ class CartController extends Controller
         }
         return $this->response(notification()->success('Imtiyaz Phone added to the cart successfully', 'Imtiyaz Phone added to the cart successfully'));
     }
-
-    public function removeTopupFromCart()
-    {
-        $cart_id = request()->input('cart_id');
-
-        if (!$cart_id) {
-            return $this->response(notification()->error('Missing parameters: cart_id ', 'Missing parameters'));
-        }
-
-        try {
-            $this->cartRepository->removeTopupFromCart($cart_id);
-            return $this->response(notification()->success('Top Up removed successfully', 'Top Up removed successfully'));
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Error removing Top Up', $e->getMessage()));
-        }
-    }
-    public function removeSeatFromCart()
-    {
-        $cart_id = request()->input('cart_id');
-        $seat = request()->input('seat');
-        $movie_show_id = request()->input('movie_show_id');
-
-
-        if (!$cart_id || !$seat  || !$movie_show_id) {
-            return $this->response(notification()->error('Missing parameters: cart_id or seat or Movie show id', 'Missing parameters'));
-        }
-
-        try {
-            $this->cartRepository->removeSeatFromCart($cart_id, $seat, $movie_show_id);
-            return $this->response(notification()->success('Seat removed successfully', 'Seat removed successfully'));
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Error removing seat', $e->getMessage()));
-        }
-    }
-    public function removeItemFromCart()
-    {
-        $cart_id = request()->input('cart_id');
-        $item_id = request()->input('item_id');
-
-        if (!$cart_id || !$item_id) {
-            return $this->response(notification()->error('Missing parameters: cart_id or Item id', 'Missing parameters'));
-        }
-
-        try {
-
-            $this->cartRepository->removeItemFromCart($cart_id, $item_id);
-
-            return $this->response(notification()->success('Item removed successfully', 'Item removed successfully'));
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Error removing Item', $e->getMessage()));
-        }
-    }
-
     public function addCouponToCart()
     {
         $form_data = clean_request([]);
@@ -369,13 +455,12 @@ class CartController extends Controller
         $user_type = request()->user_type;
 
         try {
-
-            $coupon = $this->cartRepository->getCouponByCode($form_data['code']);
+            $coupon = $this->couponRepository->getCouponByCode($form_data['code']);
         } catch (\Throwable $th) {
             return $this->response(notification()->error('Coupon not found or expired', $th->getMessage()));
         }
 
-       
+
         try {
             $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
@@ -383,16 +468,27 @@ class CartController extends Controller
         }
 
 
-        try {
-            $this->cartRepository->checkCouponInCart($form_data['cart_id'], $coupon->id);
-            return $this->response(notification()->error('Coupon was already added to cart', "Coupon was already added to cart"));
+        $cart_imtiyaz_count = $this->cartRepository->getImtiyazCountFromCart($form_data['cart_id']);
 
-        } catch (\Exception $th) {
+        if ($cart_imtiyaz_count > 0) {
+            return $this->response(notification()->error('Coupon can not be added with imtiyaz', "Coupon can not be added with imtiyaz"));
         }
 
 
         try {
-            $this->cartRepository->addCouponToCart($form_data['cart_id'], $coupon->id);
+            $this->cartRepository->checkCouponInCart($form_data['cart_id'], $coupon->id);
+            return $this->response(notification()->error('Coupon was already added to cart', "Coupon was already added to cart"));
+        } catch (\Exception $th) {
+        }
+
+
+
+
+        // Check if total of seats is > 0
+
+
+        try {
+            $this->cartRepository->addCouponToCart($form_data['cart_id'], $coupon);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error adding coupon to cart', $th->getMessage()));
         }
@@ -400,18 +496,27 @@ class CartController extends Controller
 
         return $this->response(notification()->success('Coupon added to the cart successfully', 'Coupon added successfully'));
     }
-
     public function removeCouponFromCart()
     {
-        $cart_id = request()->input('cart_id');
 
-        if (!$cart_id) {
-            return $this->response(notification()->error('Missing parameters: cart_id ', 'Missing parameters'));
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'coupon_id']);
+
+        if ($check) {
+            return $this->response($check);
         }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
         try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
 
-            $this->cartRepository->removeCouponFromCart($cart_id);
-
+        try {
+            $this->cartRepository->removeCouponFromCart($form_data["cart_id"], $form_data["coupon_id"]);
             return $this->response(notification()->success('Coupon removed successfully', 'Coupon removed successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error removing Coupon', $e->getMessage()));
@@ -431,13 +536,13 @@ class CartController extends Controller
         $user_type = request()->user_type;
 
         try {
-            $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
 
         try {
-            $existing_barcode =  $this->cardRepository->getCardByBarcode($form_data['card_number']);
+            $this->cardRepository->getCardByBarcode($form_data['card_number']);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Card number already exists', "This card number already exists"));
         }
@@ -448,29 +553,39 @@ class CartController extends Controller
             return $this->response(notification()->error('Error adding Card Number to cart', $th->getMessage()));
         }
 
-
         return $this->response(notification()->success('Card Number added to the cart successfully', 'Card Number added successfully'));
     }
 
     public function removeCardNumberFromCart()
     {
-        $cart_id = request()->input('cart_id');
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id']);
 
-        if (!$cart_id) {
-            return $this->response(notification()->error('Missing parameters: cart_id ', 'Missing parameters'));
+        if ($check) {
+            return $this->response($check);
         }
-        try {
-            $this->cartRepository->removeCardNumberFromCart($cart_id);
 
-            return $this->response(notification()->success('Card Number removed successfully', 'Card Number removed successfully'));
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+        try {
+            $this->cartRepository->removeCardNumberFromCart($form_data['cart_id']);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error Removing Card Number', $e->getMessage()));
         }
+
+        return $this->response(notification()->success('Card Number removed successfully', 'Card Number removed successfully'));
     }
 
     public function details()
     {
-
         $body = clean_request();
         $check = $this->validateRequiredFields($body, ['cart_id']);
 
@@ -486,40 +601,20 @@ class CartController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error', $e->getMessage()));
         }
-
-
-        
-
-
-        $coupon = null;
-        if ($cart->coupon_id) {
-            
-            try {
-                $coupon = $this->couponRepository->checkCouponById($cart->coupon_id);
-            } catch (\Throwable $th) {
-                $coupon = null;
-            }
-
-          
-        }
-
-        $cartDetails = $this->cartRepository->getCartDetails($cart, $coupon);
-
-
+        $cartDetails = $this->cartRepository->getCartDetails($cart);
 
         if ($cartDetails['user_id']) {
 
             // get card info by user id
 
-       
-            $user = $this->userRepository->getUserById($cartDetails['user_id']);
-
-
-          
+            try {
+                $user = $this->userRepository->getUserById($cartDetails['user_id']);
+            } catch (\Throwable $th) {
+                throw new Exception($th->getMessage());
+            }
 
             $card = $this->cardRepository->getActiveCard($user);
 
-            // dd("here");
             $card_info = [
                 'fullname' => $user->name,
                 'phone' => $user->phone,
@@ -530,10 +625,22 @@ class CartController extends Controller
                 'type' => $card['type']
             ];
         } elseif ($cartDetails['card_number']) {
-            // identify  user_id by  by card number;
 
-            $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
-            $user = $this->userRepository->getUserById($card->user_id);
+            try {
+                $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
+            } catch (\Exception $e) {
+                return $this->response(notification()->error('Card Not Found', 'The card number provided is invalid or does not exist.'));
+            }
+
+            // $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
+
+            try {
+                $user = $this->userRepository->getUserById($card->user_id);
+            } catch (\Exception $e) {
+                return $this->response(notification()->error('User Not Found', 'User Not Found.'));
+            }
+
+
             $card = $this->cardRepository->getActiveCard($user, $card);
 
 
@@ -549,13 +656,11 @@ class CartController extends Controller
         } else {
             $card_info = null;
         }
-
-
         return $this->responseData([
-            'coupon_code' => $coupon->code ?? null,
+            'coupon_code' => $cartDetails["coupon_codes"],
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
-            'discount' => $cartDetails["discount"],
+            // 'discount' => $cartDetails["discount"],
             'lines' => $cartDetails["lines"],
         ]);
     }

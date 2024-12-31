@@ -2,26 +2,27 @@
 
 namespace App\Repositories;
 
-use App\Entities\UserOrdersEntity;
+
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
+use App\Interfaces\CouponRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
-use App\Models\CartItem;
+use App\Models\CartCoupon;
+
 use App\Models\Item;
 use App\Models\MovieShow;
-use App\Models\PriceGroupZone;
-use App\Models\Theater;
-use App\Models\UserCard;
+
 use App\Models\Order;
+use App\Models\OrderCoupon;
 use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\ReservedSeat;
-use ErrorException;
+
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +37,7 @@ class OrderRepository implements OrderRepositoryInterface
     private UserRepositoryInterface $userRepository;
     private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
     private PosUserRepositoryInterface $posUserRepository;
+    private CouponRepositoryInterface $couponRepository;
 
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -43,7 +45,8 @@ class OrderRepository implements OrderRepositoryInterface
         CardRepositoryInterface $cardRepository,
         UserRepositoryInterface $userRepository,
         PosUserRepositoryInterface $posUserRepository,
-        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository
+        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository,
+        CouponRepositoryInterface $couponRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->theaterRepository = $theaterRepository;
@@ -51,6 +54,7 @@ class OrderRepository implements OrderRepositoryInterface
         $this->userRepository = $userRepository;
         $this->posUserRepository = $posUserRepository;
         $this->priceGroupZoneRepository = $priceGroupZoneRepository;
+        $this->couponRepository = $couponRepository;
     }
 
 
@@ -83,6 +87,7 @@ class OrderRepository implements OrderRepositoryInterface
         $cart_seats = $this->cartRepository->getCartSeats($cart_id);
         $cart_items = $this->cartRepository->getCartItems($cart_id);
         $cart_topups = $this->cartRepository->getCartTopups($cart_id);
+        $cart_coupons = $this->cartRepository->getCartCoupons($cart_id);
 
         $order = new Order();
         $order->system_id = $system_id;
@@ -90,13 +95,20 @@ class OrderRepository implements OrderRepositoryInterface
         $order->reference =  $this->generateReference();
         $order->user_id =  $user_id;
         $order->pos_user_id =  $cart->pos_user_id;
-
-
-    
         $order->payment_method_id = $payment_method_id;
         $order->save();
 
         $total_points = 0;
+
+
+
+        $cart_coupon_ids = CartCoupon::whereNull('deleted_at')->where('cart_id', $cart->id)->pluck('coupon_id');
+
+        $coupons = $this->couponRepository->getCouponsByIds($cart_coupon_ids);
+        foreach ($coupons as $coupon) {
+            $coupon->order_id = $order->id;
+            $coupon->save();
+        }
 
         foreach ($cart_seats as $cart_seat) {
 
@@ -122,7 +134,7 @@ class OrderRepository implements OrderRepositoryInterface
 
 
             $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
-           $price = $cart_seat['price'];
+            $price = $cart_seat['price'];
 
             $points_conversion = 1;
             $total_points += $price * $points_conversion;
@@ -133,13 +145,9 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->price = $cart_seat['price'];
             $orderSeat->gained_points = $price * $points_conversion;
             $orderSeat->order_id = $order->id;
-
             $orderSeat->movie_show_id = $cart_seat['movie_show_id'];
 
-
-
             // Order Seat  (movie_id , screen_type_id , theater_id , date ,  time_id , week)
-
 
             $orderSeat->movie_id = $movie_show->movie_id;
             $orderSeat->screen_type_id = $movie_show->screen_type_id;
@@ -147,13 +155,12 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->date = $movie_show->date;
             $orderSeat->time_id = $movie_show->time_id;
             $orderSeat->week = $movie_show->week;
-
-
-
-
             $orderSeat->zone_id = $cart_seat['zone_id'];
-            $orderSeat->discount = $cart_seat['discount'];
-            $orderSeat->final_price = $cart_seat['final_price'];
+            $orderSeat->imtiyaz_phone = $cart_seat['imtiyaz_phone'];
+
+            // $orderSeat->discount = $cart_seat['discount'];
+            // $orderSeat->final_price = $cart_seat['final_price'];
+            // $orderSeat->discout_type = $cart_seat['discount_type'];
             $orderSeat->save();
 
 
@@ -164,9 +171,6 @@ class OrderRepository implements OrderRepositoryInterface
             $reservedSeat->save();
         }
 
-
-
-
         if ($user_id) {
             try {
                 $user = $this->userRepository->getUserById($user_id);
@@ -175,9 +179,6 @@ class OrderRepository implements OrderRepositoryInterface
                 throw new Exception($th->getMessage());
             }
         }
-
-
-
 
         foreach ($cart_items as $cart_item) {
             $item = Item::find($cart_item['item_id']);
@@ -200,20 +201,29 @@ class OrderRepository implements OrderRepositoryInterface
             $orderTopup->save();
         }
 
+        foreach ($cart_coupons as $cart_coupon) {
+
+            $total += $cart_coupon->amount;
+            $orderCoupon = new OrderCoupon();
+            $orderCoupon->order_id = $order->id;
+            $orderCoupon->amount = $cart_coupon->amount;
+            $orderCoupon->save();
+        }
+
         if ($total > 0 && $user_id) {
-            if($cart->pos_user_id){
+            if ($cart->pos_user_id) {
                 $operator_type = "App\Models\PosUser";
                 $operator_id = $cart->pos_user_id;
-            }elseif($cart->user_id){
+            } elseif ($cart->user_id) {
                 $operator_type = "App\Models\User";
                 $operator_id = $cart->user_id;
-            }else{
+            } else {
                 $operator_type = null;
                 $operator_id = null;
             }
 
-            $this->cardRepository->createWalletTransaction("in", $total, $user, "Recharge wallet", $order->id, null , $operator_id , $operator_type);
-       }
+            $this->cardRepository->createWalletTransaction("in", $total, $user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
+        }
 
         $this->cartRepository->expireCart($cart_id);
         return [
@@ -309,7 +319,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function getOrderItems($order_id, $grouped = false)
     {
         if ($grouped) {
-            $select = [DB::raw("CONCAT(COALESCE(item_id, '0'), '') as concatenated_item_id"), 'order_id', 'item_id', DB::raw('count(*) as quantity')];
+            $select = [DB::raw("CONCAT(COALESCE(item_id, '0'), '') as concatenated_item_id"), 'order_id', 'item_id', 'price', 'label', DB::raw('count(*) as quantity')];
 
             // $select = [ DB::raw("CONCAT(COALESCE(item_id,'0')  as item_id") , 'item_id'  , DB::raw('count(*) as quantity')];
         } else {
@@ -353,7 +363,6 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function createOrderItemsFromCart() {}
     public function createOrderSeatsFromCart() {}
-
 
 
     public function generateReference()

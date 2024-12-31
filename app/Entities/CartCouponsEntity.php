@@ -21,7 +21,8 @@ class CartCouponsEntity extends Entity
 
         $this->addField("cart_id", ["container" => 'col-span-6', 'required' => true]);
         $this->addField("coupon_id", ["container" => 'col-span-6', 'required' => true]);
-
+        $this->addField("amount", ["container" => 'col-span-6', 'required' => true]);
+        
         return $this->fields;
     }
 

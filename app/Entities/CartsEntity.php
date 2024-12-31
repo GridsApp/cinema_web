@@ -28,13 +28,9 @@ class CartsEntity extends Entity
     }
 
     public function columns(){
-        $this->addColumn("label",['translatable'=>true] );
-        $this->addColumn("image" );
-        $this->addColumn("description",['translatable'=>true]);
-        $this->addColumn("latitude" );
-        $this->addColumn("longitude" );
-        $this->addColumn("address" ,['translatable'=>true]);
-        $this->addColumn("number" );
+        $this->addColumn("card_number");
+        $this->addColumn("user_id" );
+      
         return $this->columns;
     }
 

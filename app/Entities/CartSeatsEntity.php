@@ -23,8 +23,12 @@ class CartSeatsEntity extends Entity
         $this->addField("seat" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("cart_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("discount" , ["container" => 'col-span-6', 'required' => false]);
-        $this->addField("final_price" , ["container" => 'col-span-6', 'required' => false]);
+        $this->addField("imtiyaz_phone" , ["container" => 'col-span-6', 'required' => true]);
+        
+        // $this->addField("discount" , ["container" => 'col-span-6', 'required' => false]);
+        // $this->addField("final_price" , ["container" => 'col-span-6', 'required' => false]);
+        // $this->addField("discount_type", ["container" => 'col-span-6', 'required' => true]);
+
 
         return $this->fields;
     }

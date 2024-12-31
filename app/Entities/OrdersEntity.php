@@ -23,14 +23,15 @@ class OrdersEntity extends Entity
         $this->addField("reference" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("barcode" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("payment_method_id" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("total_price" , ["container" => 'col-span-6', 'required' => true]);
   
         return $this->fields;
     }
 
     public function columns(){
-        $this->addColumn("completed",['translatable'=>true] );
-        $this->addColumn("system",['translatable'=>true] );
-        $this->addColumn("reference_id",['translatable'=>true] );
+        $this->addColumn("user_id");
+        $this->addColumn("system");
+        $this->addColumn("reference");
        
         return $this->columns;
     }

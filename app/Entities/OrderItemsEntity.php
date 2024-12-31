@@ -20,9 +20,9 @@ class OrderItemsEntity extends Entity
     public function fields(){
         $this->addField("item_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("order_id" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("label" , ["container" => 'col-span-6', 'required' => true]);
-  
+        $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
+     
         return $this->fields;
     }
 

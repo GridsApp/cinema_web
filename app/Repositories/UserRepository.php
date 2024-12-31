@@ -120,9 +120,6 @@ class UserRepository implements UserRepositoryInterface
         }
 
         return $user;
-        // return User::whereNull('deleted_at')
-        //     ->where('id', $user_id)
-        //     ->first();
     }
 
     public function changePassword($user, $password)

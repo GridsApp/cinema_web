@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\ItemRepositoryInterface;
 use App\Models\Item;
 use App\Models\Theater;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,7 @@ class ItemRepository implements ItemRepositoryInterface
 
             return Item::where('id', $item_id)->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e->getMessage());
+            throw new Exception($e->getMessage());
         }
 
         return $item;

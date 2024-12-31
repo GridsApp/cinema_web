@@ -64,26 +64,11 @@ class KioskUserController extends Controller
 
         $access_token = $this->tokenRepository->createAccessToken($user , "KIOSK");
  
-        try {
-            $managers = $this->kioskUserRepository->getManagers($form_data['branch_id']);
-        } catch (\Exception $th) {
-            return $this->response(notification()->error('Error', $th->getMessage()));
-        }
-
-        $manager_details = $managers->map(function ($manager) {
-            return [
-                'id' => $manager->id,
-                'name' => $manager->name,
-                'pincode' => $manager->pincode,
-
-            ];
-        });
+     
         return $this->responseData([
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
-                'pincode' => $user->pincode,
-                'managers' => $manager_details,
             ],
             'access_token' => $access_token
         ]);

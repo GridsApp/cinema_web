@@ -251,51 +251,9 @@ class CardRepository implements CardRepositoryInterface
     }
 
 
-    // public function getCardInfo($user)
-    // {
-    //     $info_card = $user->cards()
-    //         ->whereNull('disabled_at')
-    //         ->first();
-
-    //     if (!$info_card) {
-    //         return null;
-    //     }
-
-
-
-    //     $wallet_balance = $this->getWalletBalance($user);
-    //     $loyalty_balance = $this->getLoyaltyBalance($user);
-    //             $loyalty_infos = $this->getLoyaltyInfo($user);
-    //     // dd( $loyalty_info);
-    //     $card = [
-    //         'id' => $info_card->id,
-    //         'barcode' => $info_card->barcode,
-    //         'type' => $info_card->type,
-    //         'wallet_balance' => currency_format($wallet_balance),
-    //         'loyalty_points_balance' => [
-    //             "value" => $loyalty_balance,
-    //             "display" => $loyalty_balance . ' points'
-    //         ],
-    //         foreach($loyalty_infos as $loyalty_info){
-    //         'amount' => $loyalty_info->amount,
-    //         'type' => $loyalty_info->type,
-    //         'description' => $loyalty_info->description,
-    //         }
-
-    //     ];
-
-    //     return $card;
-    // }
     public function getCardByBarcode($barcode)
     {
-        // $card = UserCard::where('barcode', $barcode)
-        //     ->whereNull('disabled_at')
-        //     ->whereNull('deleted_at')
-        //     ->first();
-        // // dd($card);
-
-        // return $card ? $card->user_id : null;
-
+       
         try {
             $card = UserCard::where('barcode', $barcode)
             ->whereNull('disabled_at')
@@ -308,8 +266,6 @@ class CardRepository implements CardRepositoryInterface
     }
     public function getCardByUseId($barcode)
     {
-        
-
         try {
             $card = UserCard::where('barcode', $barcode)
             ->whereNull('disabled_at')
@@ -317,7 +273,6 @@ class CardRepository implements CardRepositoryInterface
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("card with ID {$barcode} not found .");
         }
-
         return $card;
     }
 

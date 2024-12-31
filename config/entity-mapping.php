@@ -25,6 +25,7 @@ return array (
   'movie-languages' => 'App\\Entities\\MovieLanguagesEntity',
   'movie-shows' => 'App\\Entities\\MovieShowsEntity',
   'movies' => 'App\\Entities\\MoviesEntity',
+  'order-coupons' => 'App\\Entities\\OrderCouponsEntity',
   'order-items' => 'App\\Entities\\OrderItemsEntity',
   'order-seats' => 'App\\Entities\\OrderSeatsEntity',
   'order-topups' => 'App\\Entities\\OrderTopupsEntity',

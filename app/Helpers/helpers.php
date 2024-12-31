@@ -67,11 +67,11 @@ if (!function_exists('get_system_from_type')) {
 }
 
 if (!function_exists('currency_format')) {
-    function currency_format($value)
+    function currency_format($value,$prefix="")
     {
        return [
             "value" => (double) $value,
-            "display" => number_format($value,0,"." ,",") . ' USD'
+            "display" => $prefix.number_format($value,0,"." ,",")  . ' USD'
        ];
     }
 }

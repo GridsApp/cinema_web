@@ -739,7 +739,29 @@ return [
         'name' => 'price'
     ],
 
+    'total_price' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+        'label' => 'Total Price',
+        'placeholder' => 'Enter Total Price',
+        'name' => 'total_price'
+    ],
+    'imtiyaz_phone' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+        'label' => 'Imtiyaz Phone',
+        'placeholder' => 'Enter Imtiyaz Phone',
+        'name' => 'imtiyaz_phone'
+    ],
+    
 
+    
     'default' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2046,8 +2068,19 @@ return [
         'placeholder' => 'Enter Transactionable Type',
         'name' => 'transactionable_type'
     ],
+    
 
     
+    'discount_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Discount type',
+        'placeholder' => 'Enter Discount Type',
+        'name' => 'discount_type'
+    ],
     'minimum_topup_amount' => [
         'id' => uniqid(),
         'livewire' => [

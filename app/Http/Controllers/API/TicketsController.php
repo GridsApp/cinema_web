@@ -5,11 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\TicketRepositoryInterface;
-use App\Models\MovieShow;
+
 use App\Models\OrderSeat;
 use twa\cmsv2\Traits\APITrait;
-use Illuminate\Http\Request;
-use Symfony\Component\Mailer\Transport\Dsn;
+
 
 class TicketsController extends Controller
 {
@@ -25,7 +24,7 @@ class TicketsController extends Controller
         $this->ticketRepository = $ticketRepository;
         $this->orderRepository = $orderRepository;
     }
-    public function listHistory()
+    public function history()
     {
         $user = request()->user;
 

@@ -22,6 +22,8 @@ class CouponsEntity extends Entity
         $this->addField("code" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("discount_flat" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("expires_at" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("used_at" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("order_id" , ["container" => 'col-span-7', 'required' => true]);
     
 
         return $this->fields;
