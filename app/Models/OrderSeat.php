@@ -16,6 +16,22 @@ class OrderSeat extends Model
         return $this->belongsTo(MovieShow::class, 'movie_show_id')->whereNull('deleted_at');
     }
     
+
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id')->whereNull('deleted_at');
+    }
+    
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id')->whereNull('deleted_at');
+    }
+
+    public function time()
+    {
+        return $this->belongsTo(Time::class, 'time_id')->whereNull('deleted_at');
+    }
+    
   
     
 }

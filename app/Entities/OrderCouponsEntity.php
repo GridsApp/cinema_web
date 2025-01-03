@@ -17,20 +17,22 @@ class OrderCouponsEntity extends Entity
         'pagination' => 20,
     ];
 
-    public function fields(){
-        $this->addField("order_id" , ["container" => 'col-span-6']);
-       $this->addField("amount" , ["container" => 'col-span-6']);
-      
+    public function fields()
+    {
+        $this->addField("order_id", ["container" => 'col-span-6']);
+        $this->addField("amount", ["container" => 'col-span-6']);
+        $this->addField("coupon_id", ["container" => 'col-span-6', 'required' => true]);
+
+
         return $this->fields;
     }
 
-    public function columns(){
- 
+    public function columns()
+    {
+
         $this->addColumn("order_id");
         $this->addColumn("price");
         $this->addColumn("label");
         return $this->columns;
     }
-
-
 }

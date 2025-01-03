@@ -14,6 +14,9 @@ interface CardRepositoryInterface
     public function getLoyaltyTransactions($user);
     public function getWalletTransactions($user);
     public function generateBarcode();
+    public function checkIfBarcodeExists($barcode);
+    public function updateUserCard($user_id, $updateData);
+    public function getCardByUserId($user_id);
     // public function getActiveCardInfo($user);
     // public function getCardInfo($user);
 }

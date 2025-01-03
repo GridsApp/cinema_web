@@ -7,9 +7,9 @@ use twa\cmsv2\Entities\Entity;
 class OrdersEntity extends Entity
 {
 
-    public $entity = "User Orders";
-    public $tableName = "user_orders";
-    public $slug = "user-orders";
+    public $entity = "Orders";
+    public $tableName = "orders";
+    public $slug = "orders";
 
 
     public $params = [
@@ -24,6 +24,7 @@ class OrdersEntity extends Entity
         $this->addField("barcode" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("payment_method_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("total_price" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("printed_at" , ["container" => 'col-span-6', 'required' => true]);
   
         return $this->fields;
     }

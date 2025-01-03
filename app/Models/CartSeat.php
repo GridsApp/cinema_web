@@ -12,4 +12,11 @@ class CartSeat extends Model
     public function zone(){
         return $this->belongsTo(PriceGroupZone::class , 'zone_id' , 'id');
     }
+
+    public function movieShow()
+    {
+        return $this->belongsTo(MovieShow::class, 'movie_show_id', 'id')->whereNull('deleted_at');
+    }
+    
+    
 }

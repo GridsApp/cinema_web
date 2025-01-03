@@ -77,7 +77,10 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post("/",  [\App\Http\Controllers\API\OrderController::class, 'get']);
         Route::post("/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt']);
         Route::post("/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(POSUserMiddleware::class);
+        Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([POSUserMiddleware::class,AuthMandatoryMiddleware::class]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
+        Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
+
     
     });
 
@@ -124,6 +127,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         });
 
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
+        Route::post('/logout', [App\Http\Controllers\API\POS\PosUserController::class, 'logout'])->middleware((AuthMandatoryMiddleware::class));
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
     });
 

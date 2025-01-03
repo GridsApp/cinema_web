@@ -15,14 +15,12 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getItemById($item_id)
     {
-
         try {
 
             return Item::where('id', $item_id)->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         }
-
         return $item;
     }
     public function getItemsById($item_ids)

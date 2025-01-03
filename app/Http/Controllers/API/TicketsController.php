@@ -50,8 +50,6 @@ class TicketsController extends Controller
             if (!$end_datetime->isBefore(now())) {
                 return null;
             }
-
-
             return [
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',

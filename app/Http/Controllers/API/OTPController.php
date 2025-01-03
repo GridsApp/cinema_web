@@ -45,7 +45,6 @@ class OtpController extends Controller
         }
 
 
-
         $otp = $form_data['otp'];
         $token = $form_data['verify_token'];
 
@@ -118,10 +117,16 @@ class OtpController extends Controller
             return  $this->responseValidation($validator);
         }
 
-        $user = $this->userRepository->getUserByToken($form_data["user_token"]);;
-        if (!$user) {
+        try {
+            $user = $this->userRepository->getUserByToken($form_data["user_token"]);;
+            
+        } catch (\Exception $th) {
             return $this->response(notification()->error("Invalid token!", "Invalid token"));
         }
+      
+        // if (!$user) {
+        //     return $this->response(notification()->error("Invalid token!", "Invalid token"));
+        // }
 
         $driver = $form_data['driver'];
         if (!config('otp-drivers.' . $driver)) {

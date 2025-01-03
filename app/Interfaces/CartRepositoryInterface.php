@@ -21,6 +21,7 @@ interface CartRepositoryInterface
     public function getCartItems($cart_id,$grouped = false);
     public function getCartTopups($cart_id, $grouped = false);
     public function getCartCoupons($cart_id);
+    public function getCartCouponsIds($cart_id);
     public function addCouponToCart($cart_id,$coupon);
     public function removeCouponFromCart($cart_id , $coupon_id);
     public function checkCouponInCart($cart_id , $coupon_id);
@@ -33,7 +34,5 @@ interface CartRepositoryInterface
 
     public function getImtiyazCountFromCart($cart_id);
     public function getCouponCountFromCart($cart_id);
-    // public function getSeatsByCartId($cart_id);
-
     public function getImtiyazByCartId($cart_id);
 }

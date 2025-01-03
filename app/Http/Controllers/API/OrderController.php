@@ -12,16 +12,20 @@ use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
+use App\Models\MovieShow;
 use App\Models\Order;
+use App\Models\OrderCoupon;
 use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentAttempt;
 use App\Models\PaymentMethod;
+use App\Models\ReservedSeat;
+use App\Models\Time;
 use App\Models\User;
 use App\Models\UserCard;
 use App\Repositories\MovieShowRepository;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 use twa\cmsv2\Traits\APITrait;
@@ -69,9 +73,11 @@ class  OrderController extends Controller
             return  $this->responseValidation($validator);
         }
 
-
-        $payment_method =  PaymentMethod::find($form_data['payment_method_id']);
-
+        try {
+            $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
+        }
 
         try {
             $cart = $this->cartRepository->getCartById($form_data['cart_id']);
@@ -103,13 +109,13 @@ class  OrderController extends Controller
             case 'CASH':
             case 'CC-DC':
 
-
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', $th->getMessage()));
                 }
-            
+
+
                 $payment_attempt->completed_at = now();
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
@@ -144,23 +150,35 @@ class  OrderController extends Controller
 
 
                 if ($card_number) {
-                    $user_card = UserCard::where('barcode', $card_number)->first();
-                    if (!$user_card) {
-                        return $this->response(notification()->error('Card Error', 'The card number is not linked to any valid barcode.'));
+                    try {
+                        $user_card = $this->cardRepository->getCardByBarcode($card_number);
+                    } catch (\Exception $e) {
+                        return $this->response(notification()->error('The card number is not linked to any valid barcode', $e->getMessage()));
                     }
+
+                    // $user_card = UserCard::where('barcode', $card_number)->first();
+                    // if (!$user_card) {
+                    //     return $this->response(notification()->error('Card Error', 'The card number is not linked to any valid barcode.'));
+                    // }
                 } elseif ($cart) {
-                    $user_card = UserCard::where('user_id', $cart->user_id)->first();
-                    if (!$user_card) {
-                        return $this->response(notification()->error('Card Error', 'No valid card found for this user.'));
+                    // $this->cardRepository->getca
+                    try {
+                        $user_card = $this->cardRepository->getCardByUserId($cart->user_id);
+                    } catch (\Exception $e) {
+                        return $this->response(notification()->error('No valid card found for this user', $e->getMessage()));
                     }
+                    // $user_card = UserCard::where('user_id', $cart->user_id)->first();
+                    // if (!$user_card) {
+                    //     return $this->response(notification()->error('Card Error', 'No valid card found for this user.'));
+                    // }
                 } else {
                     return $this->response(notification()->error('No user card found', 'No user card found'));
                 }
-             
+
                 $wallet_user =  User::find($user_card->user_id);
 
                 $wallet_card =  $this->cardRepository->getActiveCard($wallet_user);
-            
+
                 if ($wallet_card['wallet_balance']['value'] < $subtotal) {
                     return $this->response(notification()->error('No enough balance', 'No enough balance'));
                 }
@@ -197,80 +215,6 @@ class  OrderController extends Controller
                 break;
         }
     }
-
-    public function get()
-    {
-
-        $form_data = clean_request([]);
-
-        $validator = Validator::make($form_data, [
-            'barcode' => 'required',
-        ]);
-
-        if ($validator->errors()->count() > 0) {
-            return $this->responseValidation($validator);
-        }
-
-        try {
-            $order = $this->orderRepository->getOrderByBarcode($form_data['barcode']);
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('Order not found', $e->getMessage()));
-        }
-
-        $order_seats = OrderSeat::whereNull('deleted_at')
-            ->where('order_id', $order->id)
-            ->whereNull('refunded_at')
-            ->get()
-            ->map(function ($order_seat) {
-
-                $movieShow = $order_seat->movieShow;
-
-
-                return [
-                    'label' => $order_seat->label,
-                    'seat' => $order_seat->seat,
-                    'price' => currency_format($order_seat->price),
-                    'discount' => currency_format(0),
-                    'final_price' => currency_format($order_seat->price),
-                    'gained_points' => $order_seat->gained_points,
-                    'show_details' => [
-                        'movie_name' => $movieShow->movie->name ?? '',
-                        'theater' => $movieShow->theater->hall_number ?? '',
-                        'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-                        'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : ''
-                    ]
-                ];
-            });
-
-
-
-        $order_items = OrderItem::whereNull('deleted_at')
-            ->where('order_id', $order->id)
-            ->get();
-
-        $order_topups = OrderTopup::whereNull('deleted_at')
-            ->where('order_id', $order->id)
-            ->get();
-
-
-        return $this->responseData([
-            'order' => [
-                'id' => $order->id,
-                'reference' => $order->reference,
-                'barcode' => $order->barcode,
-                'system' => $order->system->label ?? '',
-                'payment_method' => $order->paymentMethod->label ?? '',
-                'user' => $order->user?->only(['id', 'full_name', 'phone', 'email']),
-                'cashier' => $order->posUser?->only(['id', 'name']),
-                'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
-                'printed' => $order->printed
-            ],
-            'seats' => $order_seats,
-            'items' => $order_items,
-            'topups' => $order_topups
-        ]);
-    }
-
     public function refund()
     {
         $form_data = clean_request([]);
@@ -296,7 +240,8 @@ class  OrderController extends Controller
         $order_id = $form_data['order_id'];
 
         try {
-            $order = Order::findOrFail($order_id);
+            $order = $this->orderRepository->getOrderById($order_id);
+            // $order = Order::findOrFail($order_id);
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -319,7 +264,15 @@ class  OrderController extends Controller
             return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
         }
 
-        if ($order_seats->where('discount', '>', 0)) {
+        $order_coupons = OrderCoupon::where('order_id', $order_id)
+            ->get();
+
+
+        // if ($order_seats->where('discount', '>', 0)) {
+        //     // dd($order_seats->where('discount', '>', 0));
+        //     return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
+        // }
+        if ($order_coupons->count() > 0) {
             return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
         }
 
@@ -333,7 +286,19 @@ class  OrderController extends Controller
             $total_points += $order_seat->gained_points;
             $total_amount += $order_seat->price;
             $order_seat->save();
+
+
+            //  ReservedSeat::where('movie_show_id', $order_seat['movie_show_id'])
+            // ->where('seat', $order_seat['seat'])
+            // ->delete();
+            try {
+
+                $this->theaterRepository->removeFromReservedSeats($order_seat['movie_show_id'], $order_seat['seat']);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
         }
+
 
 
         if ($payment_method->key == 'CASH') {
@@ -343,14 +308,115 @@ class  OrderController extends Controller
         $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet");
         return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
     }
+    //To be checked By hovig
+    public function get()
+    {
 
+        $form_data = clean_request([]);
+        $validator = Validator::make($form_data, [
+            'barcode' => 'required',
+        ]);
+
+        if ($validator->errors()->count() > 0) {
+            return $this->responseValidation($validator);
+        }
+        try {
+            $order = $this->orderRepository->getOrderByBarcode($form_data['barcode']);
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Order not found', $e->getMessage()));
+        }
+
+
+        try {
+            $order_seats = $this->orderRepository->getOrderSeats($order->id,  false);
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+        }
+
+        $order_seats = $order_seats->map(function ($order_seat) {
+            return [
+                'label' => $order_seat->label,
+                'seat' => $order_seat->seat,
+                'price' => currency_format($order_seat->price),
+                'discount' => currency_format($order_seat->discount),
+                'final_price' => currency_format($order_seat->price),
+                'gained_points' => $order_seat->gained_points,
+                'show_details' => [
+                    'movie_name' => $order_seat->movie->name ?? '',
+                    'theater' => $order_seat->theater->hall_number ?? '',
+                    'showdate' => now()->parse($order_seat->date)->format('d M, Y') ?? '',
+                    'showtime' => isset($order_seat->time->label) ? convertTo12HourFormat($order_seat->time->label) : ''
+                ]
+            ];
+        });
+
+        try {
+            $order_items = $this->orderRepository->getOrderItems($order->id, false);
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order Items not found', $e->getMessage()));
+        }
+
+        $order_items = $order_items->map(function ($order_item) {
+            return [
+                'item_id' => $order_item->item_id,
+                'item_id' => $order_item->item_id,
+                'label' => $order_item->label,
+                'price' => currency_format($order_item->price),
+
+            ];
+        });
+
+        // $order_items = OrderItem::whereNull('deleted_at')
+        //     ->where('order_id', $order->id)
+        //     ->get();
+        try {
+            $order_topups =  $this->orderRepository->getOrderTopups($order->id, false);
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order Topups not found', $e->getMessage()));
+        }
+
+
+        // $order_topups = $order_topups->map(function ($order_topups) {
+        //     return [
+        //         'label' => $order_topups->label,
+        //         'price' => currency_format($order_topups->price),
+        //     ];
+        // });
+        // $order_topups = OrderTopup::whereNull('deleted_at')
+        //     ->where('order_id', $order->id)
+        //     ->get();
+
+
+        return $this->responseData([
+            'order' => [
+                'id' => $order->id,
+                'reference' => $order->reference,
+                'barcode' => $order->barcode,
+                'system' => $order->system->label ?? '',
+                'payment_method' => $order->paymentMethod->label ?? '',
+                'user' => $order->user?->only(['id', 'full_name', 'phone', 'email']),
+                'cashier' => $order->posUser?->only(['id', 'name']),
+                'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
+                'printed' => $order->printed
+            ],
+            'seats' => $order_seats,
+            'items' => $order_items,
+            'topups' => $order_topups
+        ]);
+    }
+
+    // To be testedd
     public function purchaseHistory()
     {
 
         $user = request()->user;
         $orders = $this->orderRepository->getUserOrders($user->id)->map(function ($order) {
 
-            $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+            try {
+                $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+            } catch (\Throwable $e) {
+                return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+            }
 
             $zone_ids = $order_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
@@ -381,8 +447,13 @@ class  OrderController extends Controller
                 ];
             })->filter();
 
-            $order_items = $this->orderRepository->getOrderItems($order->id, true);
-            // return $order_items;
+            try {
+                $order_items = $this->orderRepository->getOrderItems($order->id, true);
+            } catch (\Throwable $e) {
+                return $this->response(notification()->error('Order Items not found', $e->getMessage()));
+            }
+
+
             $item_ids = $order_items->pluck('item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
@@ -402,7 +473,13 @@ class  OrderController extends Controller
 
 
 
-            $order_topups = $this->orderRepository->getOrderTopups($order->id, true);
+
+            try {
+                $order_topups = $this->orderRepository->getOrderTopups($order->id, true);
+            } catch (\Throwable $e) {
+                return $this->response(notification()->error('Order Topups not found', $e->getMessage()));
+            }
+
             $topup_lines = $order_topups->map(function ($order_topup) {
                 $unit_price = $order_topup->price;
 
@@ -417,23 +494,6 @@ class  OrderController extends Controller
             });
             // return $order_topups;
             $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
-
-            // $lines = $lines->merge($order->items->map(function ($item) {
-            //     return [
-            //         'label' => $item->label,
-            //         'qualtity' => 1,
-            //         'price' => currency_format($item->price),
-            //     ];
-            // }));
-
-            // $lines = $lines->merge($order->topups->map(function ($topup) {
-            //     return [
-            //         'label' => $topup->label,
-            //         'qualtity' => 1,
-            //         'price' => currency_format($topup->amount),
-            //     ];
-            // }));
-
 
 
             $subtotal = $lines->sum('price.value');
@@ -453,57 +513,53 @@ class  OrderController extends Controller
         });
         return $this->responseData($orders);
     }
-
     public function details($order_id, $API = true)
     {
         try {
-            $order = Order::where('id', $order_id)->whereNull('deleted_at')->firstOrFail();
+            $order = $this->orderRepository->getOrderById($order_id);
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
 
         $user_id = $order->user_id;
-
         try {
             $user = $this->userRepository->getUserById($user_id);
         } catch (\Throwable $th) {
             $user = null;
         }
 
+
         $user_loyalty_balance = null;
         if ($user) {
             $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($user);
         }
+        $order_seats = null;
+        try {
 
-        $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+            $order_seats = $this->orderRepository->getOrderSeats($order->id, $grouped = true);
+        } catch (\Throwable $e) {
 
-        $zone_ids = $order_seats->pluck('zone_id');
+            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+        }
 
-        $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
-
-        // $price_group= $zones->map(function ($zone) {
-        //     return $zone->priceGroup->label;
-        // });
-        // return $price_group_ids;
-
-        $order_seats = $order_seats->map(function ($seats) use ($order, $zones) {
-            $movieShow = $seats->movieShow;
-            $movie = $movieShow->movie;
+        $order_seats = $order_seats->map(function ($seats) use ($order) {
+            $movie = $seats->movie;
             return [
                 'order_id' => $order->id,
                 'movie_name' => $movie->name ?? '',
                 'movie_image' => get_image($movie->main_image) ?? '',
                 'duration' => minutes_to_human($movie->duration),
                 'order_barcode' => $order->barcode,
-                'booking_id' => $movieShow->created_at ? now()->parse($movieShow->created_at)->format('Y-m') . '-' . $order->id : '',
+                'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
                 'order_barcode' => $order->barcode,
-                'branch' => $movieShow->theater->branch->label ?? '',
-                'date' => $movieShow->date ? now()->parse($movieShow->date)->format('Y-m-d') : '', // Format as YYYY-MM-DD
-                'time' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : '',
-                'theater' => $movieShow->theater->label ?? '',
+                'branch' => $seats->theater->branch->label ?? '',
+                'date' => $seats->date ? now()->parse($seats->date)->format('Y-m-d') : '', // Format as YYYY-MM-DD
+                'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
+                'theater' => $seats->theater->label ?? '',
                 'seats' => $seats->seats,
             ];
         });
+
 
         if ($API) {
             return $this->responseData([
@@ -523,4 +579,52 @@ class  OrderController extends Controller
             ];
         }
     }
-}
+    public function print()
+    {
+        $form_data = clean_request([]);
+
+        $validator = Validator::make($form_data, [
+            'order_id' => 'required',
+        ]);
+
+        if ($validator->errors()->count() > 0) {
+            return  $this->responseValidation($validator);
+        }
+        $order_id = $form_data['order_id'];
+
+        try {
+            $order = $this->orderRepository->getOrderById($order_id);
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Order Not Fount', $e->getMessage()));
+        }
+
+        $order->printed_at = now();
+        $order->save();
+
+        return $this->response(notification()->success('Order Printed Successfully', 'Order Printed Successfully'));
+    }
+
+
+    public function getReservedTotal()
+    {
+
+        $today = Carbon::today();
+        $currentTime = Carbon::now();
+        $times= Time::whereNull('deleted_at')
+        ->where('label','<',(clone $currentTime)->addHours(2)->format('H:i'))
+        ->where('label','>',(clone $currentTime)->format('H:i'))
+        ->get();
+       
+        $time_ids = $times->pluck('id');
+        $shows_ids = MovieShow::whereNull('deleted_at')
+            ->whereDate('date', $today)
+            ->whereIn('time_id', $time_ids)
+            ->orderBy('movie_id')
+            ->pluck('id');
+
+
+       return ReservedSeat::whereNull('deleted_at')->where('movie_show_id',$shows_ids)->count();
+          
+    } 
+    }
+

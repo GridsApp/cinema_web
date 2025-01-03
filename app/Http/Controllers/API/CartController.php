@@ -64,7 +64,6 @@ class CartController extends Controller
     public function createCart()
     {
 
-
         $user = request()->user;
         $user_type = request()->user_type;
 
@@ -321,8 +320,6 @@ class CartController extends Controller
             return $this->response(notification()->error('Error removing Top Up', $e->getMessage()));
         }
     }
-
-
     public function removeImtiyazFromCart()
     {
         $form_data = clean_request([]);
@@ -350,10 +347,6 @@ class CartController extends Controller
             return $this->response(notification()->error('Error removing Imtiyaz', $e->getMessage()));
         }
     }
-
-
-
-    
 
     public function addImtiyazToCart()
     {

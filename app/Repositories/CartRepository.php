@@ -118,9 +118,15 @@ class CartRepository implements CartRepositoryInterface
             $cart_seat->cart_id = $cart_id;
             $cart_seat->zone_id = $zone_id;
             $cart_seat->movie_show_id = $movie_show->id;
+            $cart_seat->movie_id = $movie_show->movie_id;
+            $cart_seat->date = $movie_show->date;
+            $cart_seat->week = $movie_show->week;
+            $cart_seat->screen_type_id = $movie_show->screen_type_id;
+            $cart_seat->theater_id = $movie_show->theater_id;
+            $cart_seat->time_id = $movie_show->time_id;
             $cart_seat->price = $price;
-            $cart_seat->final_price = $price;
-            $cart_seat->discount = 0;
+            // $cart_seat->final_price = $price;
+            // $cart_seat->discount = 0;
             $cart_seat->save();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -246,9 +252,8 @@ class CartRepository implements CartRepositoryInterface
                 ->when($grouped, function ($query) {
                     $query->groupBy('identifier');
                 })
-                ->orderBy('price' , 'DESC')
+                ->orderBy('price', 'DESC')
                 ->get();
-
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -300,6 +305,14 @@ class CartRepository implements CartRepositoryInterface
             throw new Exception($e->getMessage());
         }
     }
+    public function getCartCouponsIds($cart_id)
+    {
+        try {
+            return  CartCoupon::whereNull('deleted_at')->where('cart_id', $cart_id)->pluck('coupon_id');
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
 
 
     public function addImtiyazToCart($cart_id, $phone)
@@ -326,13 +339,11 @@ class CartRepository implements CartRepositoryInterface
                 $cart_imtiyaz->delete();
 
                 CartSeat::query()
-                ->where('cart_id', $cart_id)
-                ->whereNull('deleted_at')
-                ->update([
-                    'imtiyaz_phone' => null
-                ]);
-
-
+                    ->where('cart_id', $cart_id)
+                    ->whereNull('deleted_at')
+                    ->update([
+                        'imtiyaz_phone' => null
+                    ]);
             } else {
                 throw new Exception("No records found");
             }
@@ -412,6 +423,7 @@ class CartRepository implements CartRepositoryInterface
 
             $cart_seats = $this->getCartSeats($cart_id);
             $zone_ids = $cart_seats->pluck('zone_id');
+            
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
 
             $total_discount = 0;
@@ -427,7 +439,7 @@ class CartRepository implements CartRepositoryInterface
 
                 $total_discount += $cart_seat["total_discount"];
 
-                if(!($cart_seat['quantity'] ?? null)){
+                if (!($cart_seat['quantity'] ?? null)) {
                     $cart_seat['quantity'] = 1;
                 }
 
@@ -455,7 +467,7 @@ class CartRepository implements CartRepositoryInterface
                 $unit_price = $item->price;
 
 
-                if(!($cart_item['quantity'] ?? null)){
+                if (!($cart_item['quantity'] ?? null)) {
                     $cart_item['quantity'] = 1;
                 }
 
@@ -476,7 +488,7 @@ class CartRepository implements CartRepositoryInterface
             $cart_topups = $cart_topups->map(function ($cart_topup) {
                 $unit_price = $cart_topup->amount;
 
-                if(!($cart_topup['quantity'] ?? null)){
+                if (!($cart_topup['quantity'] ?? null)) {
                     $cart_topup['quantity'] = 1;
                 }
 
@@ -499,7 +511,7 @@ class CartRepository implements CartRepositoryInterface
                 $unit_price = $cart_coupon->amount;
 
 
-                if(!($cart_coupon['quantity'] ?? null)){
+                if (!($cart_coupon['quantity'] ?? null)) {
                     $cart_coupon['quantity'] = 1;
                 }
 
@@ -549,13 +561,13 @@ class CartRepository implements CartRepositoryInterface
         }
     }
 
-    public function getImtiyazByCartId($cart_id){
+    public function getImtiyazByCartId($cart_id)
+    {
         try {
-      return  CartImtiyaz::whereNull('deleted_at')->where('cart_id', $cart_id)->get();
-
-    } catch (Exception $e) {
-        throw new Exception($e->getMessage());
-    }
+            return  CartImtiyaz::whereNull('deleted_at')->where('cart_id', $cart_id)->get();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
 

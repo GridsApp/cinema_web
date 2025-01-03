@@ -1557,6 +1557,32 @@ return [
         'name' => 'used_at',
         'container' => 'col-span-6',
     ],
+    'login_time' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
+
+        'label' => 'Login Time',
+        'placeholder' => 'Enter login time',
+        'name' => 'login_time',
+        'container' => 'col-span-6',
+    ],
+    
+    'logout_time' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
+
+        'label' => 'Login Time',
+        'placeholder' => 'Enter Logout time',
+        'name' => 'logout_time',
+        'container' => 'col-span-6',
+    ],
+    
     'user_card_id' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1861,6 +1887,8 @@ return [
         'placeholder' => 'One Time Usage',
         'name' => 'one_time_usage'
     ],
+    
+
 
     "completed" => [
         'id' => uniqid(),
@@ -2102,8 +2130,18 @@ return [
         'placeholder' => 'Maximum Topup Amount',
         'name' => 'maximum_topup_amount',
         'container' => 'col-span-6',
-    ]
-
+    ],
+    "printed_at" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
+        'label' => 'Printed At',
+        'placeholder' => 'Printed At',
+        'name' => 'printed_at'
+    ],
+ 
 
 
 

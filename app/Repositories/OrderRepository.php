@@ -21,6 +21,7 @@ use App\Models\OrderCoupon;
 use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
+use App\Models\PaymentMethod;
 use App\Models\ReservedSeat;
 
 use Exception;
@@ -60,15 +61,15 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function createOrderFromCart($payment_attempt)
     {
-
-
+       
         $cart_id = $payment_attempt->reference;
         $payment_method_id = $payment_attempt->payment_method_id;
 
-        // GET CART
-
-        $cart = $this->cartRepository->getCartById($cart_id);
-
+        try {
+            $cart = $this->cartRepository->getCartById($cart_id);
+        } catch (\Throwable $th) {
+            throw new Exception($th->getMessage());
+        }
         $system_id = $cart->system_id;
         $user_id = $cart->user_id;
 
@@ -81,8 +82,6 @@ class OrderRepository implements OrderRepositoryInterface
                 $user_id = null;
             }
         }
-
-
 
         $cart_seats = $this->cartRepository->getCartSeats($cart_id);
         $cart_items = $this->cartRepository->getCartItems($cart_id);
@@ -100,40 +99,39 @@ class OrderRepository implements OrderRepositoryInterface
 
         $total_points = 0;
 
+        // $cart_coupon_ids = CartCoupon::whereNull('deleted_at')->where('cart_id', $cart->id)->pluck('coupon_id');
+        try {
+            $cart_coupon_ids = $this->cartRepository->getCartCouponsIds($cart->id);
+        } catch (\Throwable $th) {
+            throw new Exception($th->getMessage());
+        }
+        try {
+            $coupons = $this->couponRepository->getCouponsByIds($cart_coupon_ids);
+        } catch (\Throwable $th) {
+            throw new Exception($th->getMessage());
+        }
 
-
-        $cart_coupon_ids = CartCoupon::whereNull('deleted_at')->where('cart_id', $cart->id)->pluck('coupon_id');
-
-        $coupons = $this->couponRepository->getCouponsByIds($cart_coupon_ids);
+      
         foreach ($coupons as $coupon) {
             $coupon->order_id = $order->id;
+            $coupon->used_at = now();
             $coupon->save();
         }
 
+      
         foreach ($cart_seats as $cart_seat) {
-
-            try {
-                $movie_show = MovieShow::findOrFail($cart_seat['movie_show_id']);
-            } catch (ModelNotFoundException $e) {
-                throw new ModelNotFoundException("Movie with ID {$cart_seat['movie_show_id']} not found.");
-            }
-
-
-            // Check if movie theater exists
-            // $theater_map = //getMovieShowTheaterMap()
-
-            // if doesn't exists create it for the next customer
-
-            // if(!$theater_map){
-            //     // $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
-            //     // Create it
+            // $movieShow = $cart_seat->movieShow;
+            // try {
+            //     $movie_show = MovieShow::findOrFail($cart_seat['movie_show_id']);
+            // } catch (ModelNotFoundException $e) {
+            //     throw new ModelNotFoundException("Movie with ID {$cart_seat['movie_show_id']} not found.");
             // }
 
 
-            $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
+            // $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
 
 
-            $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
+            // $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
             $price = $cart_seat['price'];
 
             $points_conversion = 1;
@@ -146,31 +144,25 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->gained_points = $price * $points_conversion;
             $orderSeat->order_id = $order->id;
             $orderSeat->movie_show_id = $cart_seat['movie_show_id'];
-
-            // Order Seat  (movie_id , screen_type_id , theater_id , date ,  time_id , week)
-
-            $orderSeat->movie_id = $movie_show->movie_id;
-            $orderSeat->screen_type_id = $movie_show->screen_type_id;
-            $orderSeat->theater_id = $movie_show->theater_id;
-            $orderSeat->date = $movie_show->date;
-            $orderSeat->time_id = $movie_show->time_id;
-            $orderSeat->week = $movie_show->week;
+            $orderSeat->movie_id = $cart_seat['movie_id'];
+            $orderSeat->screen_type_id = $cart_seat['screen_type_id'];
+            $orderSeat->theater_id = $cart_seat['theater_id'];
+            $orderSeat->date = $cart_seat['date'];
+            $orderSeat->time_id = $cart_seat['time_id'];
+            $orderSeat->week = $cart_seat['week'];
             $orderSeat->zone_id = $cart_seat['zone_id'];
             $orderSeat->imtiyaz_phone = $cart_seat['imtiyaz_phone'];
-
             // $orderSeat->discount = $cart_seat['discount'];
             // $orderSeat->final_price = $cart_seat['final_price'];
             // $orderSeat->discout_type = $cart_seat['discount_type'];
             $orderSeat->save();
-
-
             $reservedSeat = new ReservedSeat();
             // dd($cart_seat['movie_show_id']);
             $reservedSeat->movie_show_id = $cart_seat['movie_show_id'];
             $reservedSeat->seat = $cart_seat['seat'];
             $reservedSeat->save();
         }
-
+    
         if ($user_id) {
             try {
                 $user = $this->userRepository->getUserById($user_id);
@@ -178,7 +170,7 @@ class OrderRepository implements OrderRepositoryInterface
             } catch (\Throwable $th) {
                 throw new Exception($th->getMessage());
             }
-        }
+        }   
 
         foreach ($cart_items as $cart_item) {
             $item = Item::find($cart_item['item_id']);
@@ -207,10 +199,13 @@ class OrderRepository implements OrderRepositoryInterface
             $orderCoupon = new OrderCoupon();
             $orderCoupon->order_id = $order->id;
             $orderCoupon->amount = $cart_coupon->amount;
+            $orderCoupon->coupon_id = $cart_coupon->coupon_id;
             $orderCoupon->save();
         }
 
+        
         if ($total > 0 && $user_id) {
+   
             if ($cart->pos_user_id) {
                 $operator_type = "App\Models\PosUser";
                 $operator_id = $cart->pos_user_id;
@@ -226,25 +221,13 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         $this->cartRepository->expireCart($cart_id);
+   
         return [
             'order_id' => $order->id,
             'cart_seats' => $cart_seats,
             'cart_items' => $cart_items,
             'cart_topups' => $cart_topups,
         ];
-    }
-
-    public function getOrderByBarcode($barcode)
-    {
-
-        try {
-            $card = Order::where('barcode', $barcode)
-                ->whereNull('deleted_at')->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException("Order with Barcode {$barcode} not found .");
-        }
-
-        return $card;
     }
     public function getUserOrders($user_id)
     {
@@ -258,10 +241,31 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $user_order;
     }
-
-    public function getOrderSeats($order_id, $grouped = false)
+    public function getOrderByBarcode($barcode)
     {
 
+        try {
+            $card = Order::where('barcode', $barcode)
+                ->whereNull('deleted_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("Order with Barcode {$barcode} not found .");
+        }
+
+        return $card;
+    }
+    public function getOrderById($order_id)
+    {
+
+        try {
+            $order = Order::where('id', $order_id)->whereNull('deleted_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+
+        return $order;
+    }
+    public function getOrderSeats($order_id, $grouped = false)
+    {
         try {
 
             if ($grouped) {
@@ -271,11 +275,18 @@ class OrderRepository implements OrderRepositoryInterface
                     'seat',
                     'zone_id',
                     'movie_show_id',
+                    'movie_id',
+                    'screen_type_id',
+                    'theater_id',
+                    'date',
+                    'time_id',
+                    'week',
+                    'created_at',
                     'price',
-                    'final_price',
-                    'discount',
+                    // 'final_price',
+                    // 'discount',
                     DB::raw('count(*) as quantity'),
-                    DB::raw('sum(discount) as total_discount'),
+                    // DB::raw('sum(discount) as total_discount'),
 
 
                     DB::raw("GROUP_CONCAT(seat ORDER BY seat) AS seats")
@@ -286,6 +297,7 @@ class OrderRepository implements OrderRepositoryInterface
 
             $user_order_seat = OrderSeat::select($select)->whereNull('deleted_at')
                 ->where('order_id', $order_id)
+                ->whereNull('refunded_at')
                 ->when($grouped, function ($query) {
                     $query->groupBy('identifier');
                 })
@@ -296,7 +308,6 @@ class OrderRepository implements OrderRepositoryInterface
         // dd($user_cart_seat);
         return $user_order_seat;
     }
-
     public function getOrderSeatsByIds($order_id, $order_seat_ids)
     {
         try {
@@ -314,8 +325,6 @@ class OrderRepository implements OrderRepositoryInterface
         }
         return $order_seats;
     }
-
-
     public function getOrderItems($order_id, $grouped = false)
     {
         if ($grouped) {
@@ -337,7 +346,6 @@ class OrderRepository implements OrderRepositoryInterface
         }
         return $user_order_item;
     }
-
     public function getOrderTopups($order_id, $grouped = false)
     {
         if ($grouped) {
@@ -360,11 +368,15 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $user_order_topup;
     }
-
-    public function createOrderItemsFromCart() {}
-    public function createOrderSeatsFromCart() {}
-
-
+    public function getPaymentMethodById($payment_method_id)
+    {
+        try {
+            return PaymentMethod::find($payment_method_id);
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+    }
+ 
     public function generateReference()
     {
         do {

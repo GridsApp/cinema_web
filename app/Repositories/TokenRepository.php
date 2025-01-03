@@ -36,6 +36,7 @@ class TokenRepository implements TokenRepositoryInterface
     }
 
     public function getActiveAccessToken($access_token){
+      
         return AccessToken::where('token', $access_token)
         ->where('expires_at', '>', now())
         ->whereNull('deleted_at')
