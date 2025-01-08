@@ -61,7 +61,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function createOrderFromCart($payment_attempt)
     {
-       
+
         $cart_id = $payment_attempt->reference;
         $payment_method_id = $payment_attempt->payment_method_id;
 
@@ -111,14 +111,14 @@ class OrderRepository implements OrderRepositoryInterface
             throw new Exception($th->getMessage());
         }
 
-      
+
         foreach ($coupons as $coupon) {
             $coupon->order_id = $order->id;
             $coupon->used_at = now();
             $coupon->save();
         }
 
-      
+
         foreach ($cart_seats as $cart_seat) {
             // $movieShow = $cart_seat->movieShow;
             // try {
@@ -162,7 +162,7 @@ class OrderRepository implements OrderRepositoryInterface
             $reservedSeat->seat = $cart_seat['seat'];
             $reservedSeat->save();
         }
-    
+
         if ($user_id) {
             try {
                 $user = $this->userRepository->getUserById($user_id);
@@ -170,7 +170,7 @@ class OrderRepository implements OrderRepositoryInterface
             } catch (\Throwable $th) {
                 throw new Exception($th->getMessage());
             }
-        }   
+        }
 
         foreach ($cart_items as $cart_item) {
             $item = Item::find($cart_item['item_id']);
@@ -203,9 +203,9 @@ class OrderRepository implements OrderRepositoryInterface
             $orderCoupon->save();
         }
 
-        
+
         if ($total > 0 && $user_id) {
-   
+
             if ($cart->pos_user_id) {
                 $operator_type = "App\Models\PosUser";
                 $operator_id = $cart->pos_user_id;
@@ -221,7 +221,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         $this->cartRepository->expireCart($cart_id);
-   
+
         return [
             'order_id' => $order->id,
             'cart_seats' => $cart_seats,
@@ -376,7 +376,18 @@ class OrderRepository implements OrderRepositoryInterface
             throw new ModelNotFoundException($e->getMessage());
         }
     }
- 
+    public function getPosuserLastOrder($pos_user_id)
+    {
+        try {
+           return Order::whereNull('deleted_at')
+                ->where('pos_user_id', $pos_user_id)
+                ->orderBy('id', 'desc')
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+    }
+
     public function generateReference()
     {
         do {

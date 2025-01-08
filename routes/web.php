@@ -13,7 +13,9 @@ Route::prefix('payment')->group(function () {
   })->name('payment.response');
 });
 
-Route::get('/', [\App\Http\Controllers\WebsiteController::class, 'home'])->name('home');
+Route::get('/', [\App\Http\Controllers\WEBSITE\HomePageController::class, 'home'])->name('home');
+Route::get('/movies/listing', [\App\Http\Controllers\WEBSITE\MovieController::class, 'listing'])->name('listing');
+Route::get('/about-us', [\App\Http\Controllers\WEBSITE\AboutController::class, 'about'])->name('about');
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');

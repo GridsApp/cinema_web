@@ -25,7 +25,7 @@
     
     
     @livewireScripts
-  
+    @include('website.partials.footer')
    
 </body>
 

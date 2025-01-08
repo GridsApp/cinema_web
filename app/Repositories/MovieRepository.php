@@ -10,8 +10,11 @@ use App\Models\MovieDirector;
 use App\Models\MovieFavorite;
 use App\Models\MovieGenre;
 use App\Models\MovieLanguage;
+use App\Models\MovieShow;
+use App\Models\Order;
+use App\Models\OrderSeat;
 use App\Models\Theater;
-
+use Carbon\Carbon;
 
 class MovieRepository implements MovieRepositoryInterface
 {
@@ -39,7 +42,7 @@ class MovieRepository implements MovieRepositoryInterface
                     return [
                         'id' => $cast->id,
                         'name' => $cast->name,
-                        'image' => get_image($cast->image), 
+                        'image' => get_image($cast->image),
                     ];
                 });
         }
@@ -65,6 +68,30 @@ class MovieRepository implements MovieRepositoryInterface
         if ($user) {
             $is_favorite = MovieFavorite::where('user_id', $user->id)->where('movie_id', $movie->id)->exists();
         }
+        $can_review = false;
+        if ($user) {
+
+            $orders = Order::whereNull('deleted_at')
+                ->where('user_id', $user->id)
+                ->pluck('id');
+
+            $order_seat = OrderSeat::whereNull('deleted_at')
+                ->whereNull('refunded_at')
+                ->whereIn('order_id', $orders)
+                ->where('movie_id', $movie->id)
+                ->first();
+
+            $can_review = !$order_seat;
+
+            if ($order_seat) {
+                $duration = $movie->duration;
+                $datetime = Carbon::parse($order_seat->date . ' ' . $order_seat->time->label)->addMinutes($duration);
+
+                $can_review = Carbon::now()->greaterThan($datetime);
+            }
+        }
+
+
 
         $movie = [
             'id' => $movie->id,
@@ -86,6 +113,7 @@ class MovieRepository implements MovieRepositoryInterface
             'youtube_video' => $movie->youtube_video,
             'is_favorite' => $is_favorite,
             'disable_booking' => false,
+            'can_review' => $can_review,
         ];
 
         return $movie;
@@ -157,7 +185,7 @@ class MovieRepository implements MovieRepositoryInterface
 
             return [
                 'id' => $movie->id,
-                'image' => get_image($movie->main_image),
+                'main_image' => get_image($movie->main_image),
                 'name' => $movie->name,
                 'duration' => minutes_to_human($movie->duration),
                 'genres' => $genres->whereIn('id', $movie->genre_id)->values(),

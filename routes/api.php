@@ -27,6 +27,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
           
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
+            Route::post('/login/social', [App\Http\Controllers\API\AuthController::class, 'loginUsingProvider']);
             Route::post('/check', [App\Http\Controllers\API\AuthController::class, 'check']);
         });
 
@@ -71,6 +72,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     });
 
     Route::get('/payment-methods', [App\Http\Controllers\API\PaymentController::class, 'list'])->middleware(AuthMandatoryMiddleware::class);
+    Route::get('/test', [App\Http\Controllers\API\CardController::class, 'test']);
 
 
     Route::group(['prefix' => 'order', 'middleware' => AuthOptionalMiddleware::class], function () {
@@ -80,16 +82,17 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([POSUserMiddleware::class,AuthMandatoryMiddleware::class]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
         Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
+        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([POSUserMiddleware::class,AuthMandatoryMiddleware::class]);
+
 
     
     });
 
-
-
     Route::prefix('movies')->group(function () {
-        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware(AuthOptionalMiddleware::class);
+        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class,UserMiddleware::class]);
         Route::get('/', [App\Http\Controllers\API\MovieController::class, 'search']);
         Route::get('/favorites/list', [App\Http\Controllers\API\FavoriteController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class ]);
+        Route::post('movie/review', [App\Http\Controllers\API\ReviewController::class, 'review'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
         Route::post('/{movie_id}/favorites/toggle', [App\Http\Controllers\API\FavoriteController::class, 'toggle'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class ] );
     });
 
@@ -128,6 +131,10 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::post('/logout', [App\Http\Controllers\API\POS\PosUserController::class, 'logout'])->middleware((AuthMandatoryMiddleware::class));
+        
+        //shiftSummary
+        Route::get("/shift-summary" , [App\Http\Controllers\API\POS\PosUserController::class, 'shiftSummary'])->middleware((AuthMandatoryMiddleware::class));
+        
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
     });
 

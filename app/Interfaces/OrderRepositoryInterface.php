@@ -13,5 +13,6 @@ interface OrderRepositoryInterface
     public function getOrderItems($order_id, $grouped = false);
     public function getOrderTopups($order_id, $grouped = false);
     public function getPaymentMethodById($payment_method_id);
+    public function getPosuserLastOrder($pos_user_id);
 
 }

@@ -46,7 +46,7 @@ class TicketsController extends Controller
             $movie_duration = $movieShow->movie->duration ?? 0; // Movie duration in minutes
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
-            // Filter: only include if the end time is less than the current time
+           
             if (!$end_datetime->isBefore(now())) {
                 return null;
             }

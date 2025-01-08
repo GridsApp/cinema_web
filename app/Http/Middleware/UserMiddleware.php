@@ -22,7 +22,9 @@ class UserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
 
-        if(request()->input("user_type") == "USER"){
+        $access_token = get_header_access_token();
+
+        if(!$access_token ||($access_token && request()->input("user_type") == "USER")){
             return $next($request);
         }
 

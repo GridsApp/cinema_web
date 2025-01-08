@@ -4,41 +4,40 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\HovigRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
-use App\Models\UserCard;
 use Illuminate\Support\Facades\Validator;
-
-
-
 use twa\cmsv2\Traits\APITrait;
 
 
 class CardController extends Controller
 {
-
-
     use APITrait;
-
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
+    private HovigRepositoryInterface $hovigRepository;
 
     public function __construct(
         CardRepositoryInterface $cardRepository,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        HovigRepositoryInterface $hovigRepository
 
     ) {
         $this->cardRepository = $cardRepository;
         $this->userRepository = $userRepository;
+        $this->hovigRepository = $hovigRepository;
     }
 
     public function getCardInfo()
     {
-        // dd("here");
+
         $form_data = clean_request([]);
         $validator = Validator::make($form_data, [
             'barcode' => 'required',
         ]);
+
+
 
         if ($validator->errors()->count() > 0) {
             return  $this->responseValidation($validator);
@@ -58,7 +57,7 @@ class CardController extends Controller
         $activeCard = $this->cardRepository->getActiveCard($user);
 
         if (!$activeCard) {
-            return $this->responseData(notification()->error("'No active card found for this user", "No active card found for this user"));
+            return $this->response(notification()->error("'No active card found for this user", "No active card found for this user"));
         }
 
         $activeCard["loyalty_transactions"] = $this->cardRepository->getLoyaltyTransactions($user);
@@ -86,10 +85,6 @@ class CardController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
-        // if (!$user) {
-        //     return $this->responseData(notification()->error("User not found", "User not found"));
-        // }
-
         $updateData = [];
 
 
@@ -107,17 +102,15 @@ class CardController extends Controller
             //throw $th;
         }
 
-        // $existingBarcode = UserCard::whereNull('deleted_at')->where('barcode', $form_data['barcode'])->exists();
 
-        // if ($existingBarcode) {
-        //     return $this->responseData(notification()->error("Barcode already exists", "The barcode is already in use by another user."));
-
-        // }
         $this->cardRepository->updateUserCard($form_data['user_id'], $updateData);
 
-        // UserCard::whereNull('deleted_at')->where('user_id', $form_data['user_id'])
-        //     ->update($updateData);
 
         return $this->response(notification()->success("User Card updated successfully!", "User Card updated successfully"));
+    }
+
+    public function test()
+    {
+        return $this->hovigRepository->getFirstName();
     }
 }

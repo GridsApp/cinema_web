@@ -166,6 +166,52 @@ return [
         ]
     ],
 
+
+    [
+        'display' => true,
+        'label' => 'About Section',
+        'icon' => '<i class="fa-regular fa-grid-2"></i>',
+        'children' => [
+            [
+                'label' => 'Banners',
+                'link' => routeObject('entity', ['slug' => 'about-banners'])
+
+            ],
+            [
+                'label' => 'Paragraphs',
+                'link' => routeObject('entity', ['slug' => 'about-paragraphs'])
+
+            ],
+            [
+                'label' => 'Company Purposes',
+                'link' => routeObject('entity', ['slug' => 'company-purposes'])
+
+            ],
+
+            [
+                'label' => 'Cinema Founders',
+                'link' => routeObject('entity', ['slug' => 'cinema-founders'])
+
+            ],
+            [
+                'label' => 'Cinema Growth Plans',
+                'link' => routeObject('entity', ['slug' => 'cinema-growth-plans'])
+
+            ],
+            [
+                'label' => 'Board Members',
+                'link' => routeObject('entity', ['slug' => 'board-members'])
+
+            ],
+
+
+           
+        
+        
+        ]
+
+    ],
+
   
 
 ];

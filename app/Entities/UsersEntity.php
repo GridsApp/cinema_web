@@ -38,9 +38,11 @@ class UsersEntity extends Entity
 
 
         $this->addField("token", ["container" => 'col-span-7', 'required' => true]);
-
-
         $this->addField("login_provider", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("identifier", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("signature", ["container" => 'col-span-7', 'required' => true]);
+        
+
 
         return $this->fields;
     }

@@ -163,4 +163,70 @@ class AuthController extends Controller
             'verify_drivers' => $this->otpRepository->getDrivers()
         ]);
     }
+
+    public function loginUsingProvider()
+    {
+
+        $form_data = clean_request([]);
+
+
+        $validator = Validator::make($form_data, [
+            'email' => 'required|email',
+            'identifier' => 'required',
+            'login_provider' => 'required',
+            'signature' => 'required',
+            'token' => 'required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return $this->responseValidation($validator);
+        }
+      
+
+        if ($form_data['signature'] !== md5($form_data['login_provider'] . $form_data['token'])) {
+            return $this->response(notification()->error('Signature did not match', 'Signature did not match'));
+        }
+
+
+        $login_provider = strtolower($form_data['login_provider']);
+        $identifier = $form_data['identifier'];
+        $email = $form_data['email'];
+
+
+        $user = null;
+        if (!empty($email)) {
+            $user = User::where("email", $email)->whereNull('deleted_at')->first();
+        }
+
+        if (!$user && !empty($identifier)) {
+            $user = User::where('identifier', $identifier)->whereNull('deleted_at')->first();
+        }
+
+
+        if (!$user) {
+            $user = new User();
+            $user->name = $form_data['name'];
+            $user->email = $form_data['email'];
+            $user->login_provider = $login_provider;
+            $user->token = $this->tokenRepository->createUserToken();
+        }
+
+
+        $user->identifier = $identifier;
+        $user->login_provider = $login_provider;
+        $user->save();
+
+
+        $access_token = $this->tokenRepository->createAccessToken($user);
+
+
+        $this->cardRepository->createCard($user);
+
+
+        return $this->responseData([
+            'user' => $user,
+            'access_token' => $access_token,
+        ]);
+    }
 }

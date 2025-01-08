@@ -205,7 +205,7 @@ class CardRepository implements CardRepositoryInterface
     public function getActiveCard($user, $card = null)
     {
 
-        // dd($user);
+
         $active_card = $card ? $card : $user->cards()
             ->whereNull('disabled_at')
             ->first();
@@ -216,7 +216,7 @@ class CardRepository implements CardRepositoryInterface
 
         $wallet_balance = $this->getWalletBalance($user);
         $loyalty_balance = $this->getLoyaltyBalance($user);
-        //nourhane
+
 
         $card = [
             'id' => $active_card->id,
@@ -227,9 +227,7 @@ class CardRepository implements CardRepositoryInterface
                 "value" => $loyalty_balance,
                 "display" => $loyalty_balance . ' points'
             ],
-            //nourhane
-            // 'loyalty_details' => $loyalty_details,
-            // 'wallet_details' => $wallet_details,
+           
 
         ];
 
@@ -239,14 +237,17 @@ class CardRepository implements CardRepositoryInterface
 
     public function getCardByBarcode($barcode)
     {
-
         try {
+           
             $card = UserCard::where('barcode', $barcode)
                 ->whereNull('disabled_at')
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException("card with ID {$barcode} not found .");
+            throw new Exception($e->getMessage());
+        }catch(\Exception $e){
+            throw new Exception($e->getMessage());
         }
+        
 
         return $card;
     }

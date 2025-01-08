@@ -38,6 +38,18 @@ return [
     ],
 
 
+    "position" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Position',
+        'placeholder' => 'position',
+        'name' => 'position',
+    ],
+
+
 
     "created_at" => [
         'id' => uniqid(),
@@ -497,6 +509,32 @@ return [
         'aspect_ratio' => 1 / 1,
         'multiple' => false
     ],
+    'top_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Top Image',
+        'placeholder' => 'Top Image',
+        'name' => 'top_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+    'bottom_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Bottom Image',
+        'placeholder' => 'Bottom Image',
+        'name' => 'bottom_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+
+    
     'main_image' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2143,8 +2181,56 @@ return [
     ],
  
 
+    'rate' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
+
+        'label' => 'Rate',
+        'placeholder' => 'Enter Rate',
+        'name' => 'rate',
+        'container' => 'col-span-6',
+    ],
+    'comment' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textarea::class,
+        'label' => 'Commnent',
+        'placeholder' => 'Enter comment',
+        'name' => 'comment',
+        'container' => 'col-span-12',
+    ],
+    'signature' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Signature',
+        'placeholder' => 'Enter signature',
+        'name' => 'signature',
+        'container' => 'col-span-12',
+    ],
+    'identifier' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Identifier',
+        'placeholder' => 'Enter identifier',
+        'name' => 'identifier',
+        'container' => 'col-span-12',
+    ],
+    
 
 
+    
 ];
 
 

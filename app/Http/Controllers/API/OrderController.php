@@ -366,26 +366,12 @@ class  OrderController extends Controller
             ];
         });
 
-        // $order_items = OrderItem::whereNull('deleted_at')
-        //     ->where('order_id', $order->id)
-        //     ->get();
+
         try {
             $order_topups =  $this->orderRepository->getOrderTopups($order->id, false);
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order Topups not found', $e->getMessage()));
         }
-
-
-        // $order_topups = $order_topups->map(function ($order_topups) {
-        //     return [
-        //         'label' => $order_topups->label,
-        //         'price' => currency_format($order_topups->price),
-        //     ];
-        // });
-        // $order_topups = OrderTopup::whereNull('deleted_at')
-        //     ->where('order_id', $order->id)
-        //     ->get();
-
 
         return $this->responseData([
             'order' => [
@@ -471,9 +457,6 @@ class  OrderController extends Controller
                 ];
             })->filter();
 
-
-
-
             try {
                 $order_topups = $this->orderRepository->getOrderTopups($order->id, true);
             } catch (\Throwable $e) {
@@ -492,7 +475,7 @@ class  OrderController extends Controller
                     'price' => currency_format($unit_price * $order_topup['quantity']),
                 ];
             });
-            // return $order_topups;
+
             $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
 
 
@@ -607,15 +590,19 @@ class  OrderController extends Controller
 
     public function getReservedTotal()
     {
-
         $today = Carbon::today();
         $currentTime = Carbon::now();
-        $times= Time::whereNull('deleted_at')
-        ->where('label','<',(clone $currentTime)->addHours(2)->format('H:i'))
-        ->where('label','>',(clone $currentTime)->format('H:i'))
-        ->get();
-       
+
+
+        $times = Time::whereNull('deleted_at')
+            ->where('label', '<', (clone $currentTime)->addHours(2)->format('H:i'))
+            ->where('label', '>', (clone $currentTime)->format('H:i'))
+            ->get();
+
+
         $time_ids = $times->pluck('id');
+
+
         $shows_ids = MovieShow::whereNull('deleted_at')
             ->whereDate('date', $today)
             ->whereIn('time_id', $time_ids)
@@ -623,8 +610,65 @@ class  OrderController extends Controller
             ->pluck('id');
 
 
-       return ReservedSeat::whereNull('deleted_at')->where('movie_show_id',$shows_ids)->count();
-          
-    } 
+        $reservedSeats = ReservedSeat::whereNull('deleted_at')
+            ->whereIn('movie_show_id', $shows_ids)
+            ->count();
+
+        return $this->responseData(
+            $reservedSeats
+
+        );
     }
 
+    public function PosGetLastOrderInfoforCashier()
+    {
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        // $order = Order::whereNull('deleted_at')
+        //     ->where('pos_user_id', $user->id)
+        //     ->orderBy('id', 'desc')
+        //     ->first();
+
+        try {
+            $order = $this->orderRepository->getPosuserLastOrder($user->id);
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('No orders found for the cashier.', $e->getMessage()));
+        }
+
+
+        // $order_seats = OrderSeat::whereNull('deleted_at')
+        //     ->where('order_id', $order->id)
+        //     ->get();
+        try {
+            $order_seats = $this->orderRepository->getOrderSeats($order->id);
+        } catch (\Exception $e) {
+
+            return $this->response(notification()->error('No seats found for the order.', $e->getMessage()));
+        }
+
+        $order_seats = $order_seats->map(function ($order_seat) {
+            return [
+                'label' => $order_seat->label,
+                'seat' => $order_seat->seat,
+                'price' => currency_format($order_seat->price),
+                'discount' => currency_format($order_seat->discount),
+                'final_price' => currency_format($order_seat->price - $order_seat->discount),
+                'gained_points' => $order_seat->gained_points,
+                'show_details' => [
+                    'movie_name' => $order_seat->movie->name ?? '',
+                    'theater' => $order_seat->theater->hall_number ?? '',
+                    'showdate' => now()->parse($order_seat->date)->format('d M, Y') ?? '',
+                    'showtime' => isset($order_seat->time->label) ? convertTo12HourFormat($order_seat->time->label) : ''
+                ]
+            ];
+        });
+
+
+        return $this->responseData([
+            'order_id' => $order->id,
+            'order_seats' => $order_seats,
+        ]);
+    }
+}

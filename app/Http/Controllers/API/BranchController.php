@@ -46,12 +46,8 @@ class BranchController extends Controller
         return $this->responseData($branches);
     }
 
-
-
     public function activeMovies($branch_id)
     {
-
-
 
         $date = request()->input('date');
         if ($date) {
@@ -63,16 +59,12 @@ class BranchController extends Controller
         } else {
             $date = now();
         }
-
         $movies = $this->movieRepository->getBranchActiveMovies($branch_id, $date);
-
-
         $categories = [
             ['key' => 'now-showing', 'label' => 'Now Showing'],
             ['key' => 'new-movies', 'label' => 'New Movies'],
             ['key' => 'coming-soon', 'label' => 'Coming Soon']
         ];
-
         $categories = collect($categories)->map(function ($category) use ($movies) {
             $category['movies'] =  (clone $movies)->filter(function ($item) use ($category) {
                 return in_array($category['key'], $item['categories']);

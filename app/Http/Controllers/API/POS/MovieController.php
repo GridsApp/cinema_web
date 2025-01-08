@@ -4,11 +4,10 @@ namespace App\Http\Controllers\API\POS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movie;
-use App\Models\MovieGenre;
 use App\Models\System;
 use App\Models\Theater;
 use twa\cmsv2\Traits\APITrait;
-use Illuminate\Http\Request;
+
 
 class MovieController extends Controller
 {
@@ -38,11 +37,7 @@ class MovieController extends Controller
             ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
                 $q->whereDate('date', $date)
                     ->whereIn('theater_id', $theaters_ids);
-                    // ->where(function ($query) use ($system_ids) {
-                    //     foreach ($system_ids as $id) {
-                    //         $query->orWhere('system_id', 'like', '%"' . $id . '"%');
-                    //     }
-                    // });
+                  
             })
             ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
                 $query->whereIn('theater_id', $theaters_ids)

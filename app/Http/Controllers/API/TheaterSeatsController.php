@@ -30,10 +30,10 @@ class TheaterSeatsController extends Controller
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Movie show not found', $e->getMessage()));
         }
-        // dd("here");
+        
      
         $theater = Theater::whereNull('deleted_at')->where('id', $movie_show->theater_id)->first();
-        // dd( json_decode($theater ->theater_map));
+
         $theater_map =$theater->theater_map;
 
         $columns =  collect($theater_map[0])->map(function ($item) {
@@ -43,15 +43,12 @@ class TheaterSeatsController extends Controller
         $reserved_seats= $this->cartRepository->getReservedSeats($movie_show_id);
 
         
-
-
-
         $rows =  collect($theater_map)->map(function ($item) {
             $item = collect($item)->where('isSeat', true)->first();
 
             return (string) ($item['row'] ?? "");
         })->toArray();
-        // dd($rows);
+
 
         $zone_ids =  collect($theater_map)->flatten(1)->pluck('zone')->unique()->values();
         $zones = PriceGroupZone::select('id', 'label', 'color')

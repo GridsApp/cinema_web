@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@alpinejs/sort": "^3.14.3",
+        "@fancyapps/fancybox": "^3.5.7",
         "@fancyapps/ui": "^5.0.36",
         "collect.js": "^4.36.1",
         "cropperjs": "^1.6.2",

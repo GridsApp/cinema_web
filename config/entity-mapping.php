@@ -1,7 +1,10 @@
 <?php
 
 return array (
+  'about-banners' => 'App\\Entities\\AboutBannersEntity',
+  'about-paragraphs' => 'App\\Entities\\AboutParagraphsEntity',
   'access-tokens' => 'App\\Entities\\AccessTokensEntity',
+  'board-members' => 'App\\Entities\\BoardMembersEntity',
   'branches' => 'App\\Entities\\BranchesEntity',
   'cart-coupons' => 'App\\Entities\\CartCouponsEntity',
   'cart-imtiyaz' => 'App\\Entities\\CartImtiyazEntity',
@@ -9,6 +12,9 @@ return array (
   'cart-seats' => 'App\\Entities\\CartSeatsEntity',
   'cart-topups' => 'App\\Entities\\CartTopupsEntity',
   'carts' => 'App\\Entities\\CartsEntity',
+  'cinema-founders' => 'App\\Entities\\CinemaFoundersEntity',
+  'cinema-growth-plans' => 'App\\Entities\\CinemaGrowthPlansEntity',
+  'company-purposes' => 'App\\Entities\\CompanyPurposesEntity',
   'coupons' => 'App\\Entities\\CouponsEntity',
   'distributors' => 'App\\Entities\\DistributorsEntity',
   'faqs' => 'App\\Entities\\FaqsEntity',
@@ -23,6 +29,7 @@ return array (
   'movie-favorites' => 'App\\Entities\\MovieFavoritesEntity',
   'movie-genres' => 'App\\Entities\\MovieGenresEntity',
   'movie-languages' => 'App\\Entities\\MovieLanguagesEntity',
+  'movie-reviews' => 'App\\Entities\\MovieReviewsEntity',
   'movie-shows' => 'App\\Entities\\MovieShowsEntity',
   'movies' => 'App\\Entities\\MoviesEntity',
   'order-coupons' => 'App\\Entities\\OrderCouponsEntity',

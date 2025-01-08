@@ -1,84 +1,76 @@
 import collect from "collect.js";
+import { Carousel } from "@fancyapps/ui/dist/carousel/carousel.esm.js";
+
 export default class GeneralFunctions {
-
-
-    initManageBooking(states){
-
+    initManageBooking(states) {
         return {
-        
-            toggle : {
+            toggle: {},
 
-            },
-
-            init(){
+            init() {
                 this.toggle = JSON.parse(states);
             },
 
-            toggleChanged(model){
-
-                let newValue = this.toggle[model];            
+            toggleChanged(model) {
+                let newValue = this.toggle[model];
                 let final = {};
 
                 let movie_shows = [];
 
-                collect(this.toggle).map((t , k) => {
-
+                collect(this.toggle).map((t, k) => {
                     let splitted = k.split("_");
 
-                    if(k.startsWith(model) && k != model){
-                        final = {...final , [k] : newValue};
+                    if (k.startsWith(model) && k != model) {
+                        final = { ...final, [k]: newValue };
 
-                        if(splitted.length - 1 === 3){
-                            movie_shows.push({movie_show_id : splitted[splitted.length - 1] , visibility : newValue });
+                        if (splitted.length - 1 === 3) {
+                            movie_shows.push({
+                                movie_show_id: splitted[splitted.length - 1],
+                                visibility: newValue,
+                            });
                         }
+                    } else {
+                        final = { ...final, [k]: t };
 
-                    }else{
-                        final = {...final , [k] : t};
-
-                         if(splitted.length - 1 === 3){
-                            movie_shows.push({movie_show_id : splitted[splitted.length - 1], visibility : t });
-                         }
+                        if (splitted.length - 1 === 3) {
+                            movie_shows.push({
+                                movie_show_id: splitted[splitted.length - 1],
+                                visibility: t,
+                            });
+                        }
                     }
                     return t;
                 });
 
                 this.toggle = final;
-             
-
-
 
                 this.$wire.updateVisibility(movie_shows);
-
-            }
-            
-        }
-
+            },
+        };
     }
 
-    initPriceSettings(){
+    initPriceSettings() {
         return {
-            conditions: [{day : "" , price : "0" }],
+            conditions: [{ day: "", price: "0" }],
             defaultPrice: "",
-            days : [
-                {key : "monday" , label : "Monday" , used : 0 },
-                {key : "tuesday" , label : "Tuesday" , used : 0 },
-                {key : "wednesday" , label : "Wednesday" , used : 0 },
-                {key : "thursday" , label : "Thursday" , used : 0 },
-                {key : "friday" , label : "Friday" , used : 0 },
-                {key : "saturday" , label : "Saturday" , used : 0 },
-                {key : "sunday" , label : "Sunday" , used : 0 }
+            days: [
+                { key: "monday", label: "Monday", used: 0 },
+                { key: "tuesday", label: "Tuesday", used: 0 },
+                { key: "wednesday", label: "Wednesday", used: 0 },
+                { key: "thursday", label: "Thursday", used: 0 },
+                { key: "friday", label: "Friday", used: 0 },
+                { key: "saturday", label: "Saturday", used: 0 },
+                { key: "sunday", label: "Sunday", used: 0 },
             ],
 
-            updateValueState(){
-                let conditions =  collect(this.conditions).filter().toArray();
+            updateValueState() {
+                let conditions = collect(this.conditions).filter().toArray();
                 this.$wire.value = {
-                    defaultPrice : this.defaultPrice,
-                    conditions : conditions
+                    defaultPrice: this.defaultPrice,
+                    conditions: conditions,
                 };
             },
 
-            init(){
-
+            init() {
                 let initalValue = this.$wire.value;
 
                 this.defaultPrice = initalValue.defaultPrice;
@@ -86,27 +78,18 @@ export default class GeneralFunctions {
 
                 console.log(this.conditions);
 
-                this.$watch('conditions' , (value)=>{
-
-                    this.updateValueState();
-
-
-
-                });
-
-                this.$watch('defaultPrice' , (value)=>{
+                this.$watch("conditions", (value) => {
                     this.updateValueState();
                 });
 
+                this.$watch("defaultPrice", (value) => {
+                    this.updateValueState();
+                });
             },
 
-
-
-            addCondition(){
-                this.conditions.push({day : "" , price : "0" });
+            addCondition() {
+                this.conditions.push({ day: "", price: "0" });
             },
-
-
 
             deleteCondition(index) {
                 this.conditions.splice(index, 1);
@@ -115,64 +98,53 @@ export default class GeneralFunctions {
         };
     }
 
-    initConditions(){
+    initConditions() {
         return {
             open: false,
             conditions: [""],
             defaultPercentage: "",
 
-
-            async handleValueChanged(event){
+            async handleValueChanged(event) {
                 let response = await this.$wire.getData(event.detail.selected);
-
 
                 this.defaultPercentage = response.original.defaultPercentage;
                 this.conditions = response.original.conditions;
-
-
 
                 // console.log("value changed" , event);
             },
 
-            async handleValueSelected(event){
+            async handleValueSelected(event) {
                 let response = await this.$wire.getData(event.detail.selected);
                 this.defaultPercentage = response.original.defaultPercentage;
                 this.conditions = response.original.conditions;
-
             },
 
-            updateValueState(){
-
-                let conditions =  collect(this.conditions).filter().toArray();
+            updateValueState() {
+                let conditions = collect(this.conditions).filter().toArray();
 
                 this.$wire.value = {
-                    defaultPercentage : this.defaultPercentage,
-                    conditions : conditions
+                    defaultPercentage: this.defaultPercentage,
+                    conditions: conditions,
                 };
             },
 
-            init(){
-
+            init() {
                 let initalValue = this.$wire.value;
 
                 this.defaultPercentage = initalValue.defaultPercentage;
                 this.conditions = initalValue.conditions;
 
-
-
-                this.$watch('conditions' , (value)=>{
+                this.$watch("conditions", (value) => {
                     this.updateValueState();
                 });
 
-                this.$watch('defaultPercentage' , (value)=>{
+                this.$watch("defaultPercentage", (value) => {
                     this.updateValueState();
                 });
-
             },
 
-            addCondition(){
+            addCondition() {
                 this.conditions.push("");
-
             },
 
             deleteCondition(index) {
@@ -180,7 +152,6 @@ export default class GeneralFunctions {
                 this.updateValueState();
             },
         };
-
     }
 
     calendar() {
@@ -770,4 +741,37 @@ export default class GeneralFunctions {
             },
         };
     }
+  
+     slideshow() {
+        const container = document.getElementById("slideshow");
+        const options = {
+            autoplay: {
+                enabled: true,  // Enable autoplay
+                timeout: 2000,  // Set timeout for 2 seconds
+            },
+        };
+    
+        new Carousel(container, options);  // Pass the options directly to Carousel
+    }
+     animation() {
+        return {
+          counter: 0,
+          animate(finalCount) {
+            let time = 1500
+            let interval = 9
+            let step = Math.floor(finalCount*interval/time)
+            let timer = setInterval(() => {
+              this.counter = this.counter + step;
+              if (this.counter >= finalCount + step) {
+                this.counter = finalCount
+                clearInterval(timer);
+                timer = null;
+                return;
+              }
+            }, interval);
+          }
+        };
+      }
+      
+    
 }
