@@ -8,6 +8,7 @@ use App\Models\PosUser;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserCard;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository implements UserRepositoryInterface
@@ -62,7 +63,7 @@ class UserRepository implements UserRepositoryInterface
                 $user = User::where('phone', $phone_number)
                    ->whereNull('deleted_at')->firstOrFail();
             } catch (ModelNotFoundException $e) {
-                throw new ModelNotFoundException("User with Phone {$phone_number} not found.");
+                throw new Exception($e->getMessage());
             }
             return $user;
     }
