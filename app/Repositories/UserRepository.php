@@ -44,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
         $user->name = $full_name;
         $user->email = $email;
         $user->gender = $gender;
-        $user->dob = $dom;
+        $user->dob = $dob;
         $user->dom = $dom;
         $user->token = $this->tokenRepository->createUserToken();
 

@@ -3,6 +3,10 @@
     <div class="flex flex-col ">
         @if (isset($cinema_founder['top_image']))
             <div class="border-image">
+
+
+                
+
                 <div class="asp asp-2-1">
                     <img src={{ get_image($cinema_founder['top_image']) }} alt="Godfather Image" class="image-bordered">
                 </div>
@@ -27,44 +31,53 @@
             {!! $cinema_founder['content'] !!}
         </div>
     @endif
-</div> --}}
+</div>
 
-<div class="paragraph mt-50 mb-50">
-
-
-    <div class="left">
+ --}}
 
 
+<div class="grid grid-cols-2  images-bordered">
 
-     
+    <div class="flex flex-col">
+        @if (isset($cinema_founder['top_image']))
+            <div class="border-image-wrapper flex  w-full">
+                <div class="relative ">
 
+                    <div class="border-image-top-right"> </div>
+                    <div class="border-image-bottom-left"> </div>
 
+                    <div class="w-[600px]">
+                        <div class="asp asp-2-1">
+                            <img src={{ get_image($cinema_founder['top_image']) }} alt="Godfather Image"
+                                class="image-bordered ">
 
-            <div class="image-tab opposite full">
-
-                <img src="{{ get_image($cinema_founder['top_image']) }}" alt="">
-
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="image-tab no-border no-image">
+        @endif
+        @if (isset($cinema_founder['top_image']))
+            <div class="border-image-wrapper justify-end flex  w-[90%]">
+                <div class="relative ">
 
-                {{--                    <img src="/assets/home_image.jpg" alt=""> --}}
+                    <div class="border-image-top-right"> </div>
+                    <div class="border-image-bottom-left"> </div>
 
+                    <div class="w-[400px]">
+                        <div class="asp asp-2-1">
+                            <img src={{ get_image($cinema_founder['bottom_image']) }} alt="Godfather Image"
+                                class="image-bordered ">
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="image-tab opposite">
-
-                <img src="{{ get_image($cinema_founder['bottom_image']) }}" alt="">
-
-            </div>
-
-
-
-        </div>
-        <div class="right">
-            {!! $cinema_founder['content'] !!}
-
-        </div>
-
-
-
-
+        @endif
     </div>
+
+    @if (isset($cinema_founder['content']))
+        <div>
+            {!! $cinema_founder['content'] !!}
+        </div>
+    @endif
+</div>

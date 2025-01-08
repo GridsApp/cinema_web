@@ -7,8 +7,12 @@
             </div>
         @endif
         @if (isset($cinema_growth_plan['image']))
-            <div class="flex justify-end w-full">
-                <div class="border-image2">
+            <div class="border-image-wrapper flex justify-end w-full">
+                <div class="relative ">
+
+                    <div class="border-image-top-right"> </div>
+                    <div class="border-image-bottom-left"> </div>
+
                     <div class="w-[500px]">
                         <div class="asp asp-4-3">
                             <img src={{ get_image($cinema_growth_plan['image']) }} alt="Godfather Image"

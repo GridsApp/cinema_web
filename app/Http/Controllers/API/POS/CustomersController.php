@@ -35,8 +35,6 @@ class CustomersController extends Controller
     {
 
         $form_data = clean_request([]);
-
-
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => 'required',
@@ -53,12 +51,11 @@ class CustomersController extends Controller
 
         $email = $form_data['email'];
 
-    
+
         try {
             $this->userRepository->getUserByPhone($phone_number);
             return $this->response(notification()->error('You are already registered user', 'You are already registered user'));
         } catch (\Exception $th) {
-            
         }
 
 
@@ -66,10 +63,8 @@ class CustomersController extends Controller
             $this->userRepository->getUserByEmail($email);
             return $this->response(notification()->error('Email already registered', 'Email already registered'));
         } catch (\Exception $th) {
-            
         }
 
-      
         $user = $this->userRepository->createCustomer(
             $phone_number,
             $form_data["password"],
@@ -86,12 +81,12 @@ class CustomersController extends Controller
         } else {
             $this->cardRepository->createCard($user, $generated_barcode, 'physical');
         }
-        return $this->response(notification()->success("User added" , "User was successfully added"));
+        return $this->response(notification()->success("User added", "User was successfully added"));
     }
 
     public function getPhone()
     {
-    
+
         $form_data = clean_request([
             'phone' => 'phone',
 
@@ -135,7 +130,7 @@ class CustomersController extends Controller
             return $this->response(notification()->error("User not found", "User not found"));
         }
 
-        
+
         $updateData = [];
 
 

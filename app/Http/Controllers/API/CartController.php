@@ -338,7 +338,7 @@ class CartController extends Controller
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
 
-      
+
 
         try {
             $this->cartRepository->removeImtiyazFromCart($form_data['cart_id']);
