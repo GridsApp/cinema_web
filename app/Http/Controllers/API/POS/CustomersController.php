@@ -139,7 +139,7 @@ class CustomersController extends Controller
 
 
         if (isset($form_data['name'])) {
-            $updateData['full_name'] = $form_data['name'];
+            $updateData['name'] = $form_data['name'];
         }
         if (isset($form_data['email'])) {
             $updateData['email'] = $form_data['email'];

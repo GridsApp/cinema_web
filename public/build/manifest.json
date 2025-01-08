@@ -1,16 +1,20 @@
 {
+  "public/images/arrow-drop-down.svg": {
+    "file": "assets/arrow-drop-down-CprKbBwh.svg",
+    "src": "public/images/arrow-drop-down.svg"
+  },
   "public/images/cinema_bg.jpeg": {
     "file": "assets/cinema_bg-DbdPj9Sd.jpeg",
     "src": "public/images/cinema_bg.jpeg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-D10MPfy5.js",
+    "file": "assets/app-D1j4INhb.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-B30jxdfp.css",
+    "file": "assets/app-B1l662c0.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }
