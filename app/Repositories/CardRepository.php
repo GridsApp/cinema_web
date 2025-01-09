@@ -167,7 +167,7 @@ class CardRepository implements CardRepositoryInterface
 
         foreach ($transactions as $transaction) {
             $loyalty_transactions[] = [
-                'date' =>now()->parse($transaction->created_at)->format('d-m-Y'),
+                'date' => now()->parse($transaction->created_at)->format('d-m-Y'),
                 'id' => $transaction->id,
                 'amount' => $transaction->amount,
                 'type' => $transaction->type,
@@ -200,13 +200,13 @@ class CardRepository implements CardRepositoryInterface
 
             // dd($transaction->transactionable);
             $wallet_transactions[] = [
-                'date' =>now()->parse($transaction->created_at)->format('d-m-Y'),
+                'date' => now()->parse($transaction->created_at)->format('d-m-Y'),
+              
                 'id' => $transaction->id,
                 'amount' => $transaction->amount,
                 'balance' => $transaction->balance,
                 'type' => $transaction->type,
                 'description' => $transaction->description,
-                'date' => now()->parse($transaction->created_at)->format('d-m-Y H:i'),
                 'reference' => "ORDER: " . $transaction->reference,
                 'created_by' => $transaction->transactionable->name ?? "-",
                 'system' => $transaction->system->label ?? "-"
