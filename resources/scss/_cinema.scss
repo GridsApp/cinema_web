@@ -29,6 +29,20 @@
     max-width: 1600px;
     margin: auto;
 }
+
+.height-spacing {
+ 
+
+    min-height: calc(100vh - 265px);
+}
+.main-spacing {
+    border-top: 70px solid transparent;
+
+    @media (max-width: 1023px) {
+        border-top: 81px solid transparent;
+    }
+}
+
 .primary-color {
     @apply text-[#c51a24];
 }
@@ -175,13 +189,7 @@ nav {
     background-size: 1em 1.5em;
 }
 
-.main-spacing {
-    border-top: 70px solid transparent;
 
-    @media (max-width: 1023px) {
-        border-top: 81px solid transparent;
-    }
-}
 .search-form-input {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1019607843);
     display: flex;

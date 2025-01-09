@@ -773,6 +773,55 @@ export default class GeneralFunctions {
             },
         };
     }
+
+    movieDetails() {
+        return {
+            dates: [],
+            selectedDate: null,
+            movieShows: [],
+
+            initializeDates() {
+                const today = new Date();
+                this.selectedDate = this.formatDate(today);
+                const monthDates = this.generateMonthDates(today);
+                this.dates = monthDates;
+            },
+
+            generateMonthDates(startDate) {
+                let dates = [];
+                for (let i = 0; i < 30; i++) {
+                    let newDate = new Date(startDate);
+                    newDate.setDate(startDate.getDate() + i);
+                    dates.push({
+                        day: newDate.getDate(),
+                        d_name: newDate.toLocaleString("en", {
+                            weekday: "short",
+                        }),
+                        formatted: this.formatDate(newDate),
+                    });
+                }
+                return dates;
+            },
+
+            formatDate(date) {
+                return date.toISOString().split("T")[0]; // "YYYY-MM-DD"
+            },
+
+            selectDate(date) {
+                this.selectedDate = date.formatted;
+                window.history.pushState({}, "", `?date=${this.selectedDate}`);
+                this.fetchMovieShows();
+            },
+
+            fetchMovieShows() {
+                fetch(`/movie-shows?date=${this.selectedDate}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.movieShows = data;
+                    });
+            },
+        };
+    }
     openYoutube(link) {
         new window.Fancybox([
             {

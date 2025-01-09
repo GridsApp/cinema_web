@@ -1,14 +1,15 @@
-<div class="px-4 sm:px-32 py-10 ">
-    <div class="antialiased main-container flex flex-wrap justify-center gap-8 max-w-screen-xl mx-auto">
+<div class="main-container ">
+    <div class="antialiased main-container flex flex-wrap justify-between sm:gap-8 gap-4">
         @foreach ($statistics as $statistic)
-        <div class="flex flex-col items-center text-center bg-white shadow-md rounded-lg p-6 w-64">
+        <div class="flex flex-col items-center text-center  sm:w-52 w-32">
             <span 
-                class="text-blue-600 font-extrabold text-4xl sm:text-5xl" 
+                class="primary-color font-extrabold text-[19px] sm:text-5xl" 
                 x-data="GeneralFunctions.animation()" 
                 x-init="animate({{ $statistic['number'] }})" 
-                x-text="counter">
+                x-text="'+' + counter">
+                +
             </span>
-            <p class="uppercase text-gray-700 font-semibold tracking-wider text-sm sm:text-base mt-3">
+            <p class="uppercase  font-semibold tracking-wider sm:text-[12px] text-[10px]  mt-3">
                 {{ $statistic['label'] }}
             </p>
         </div>

@@ -128,6 +128,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('card/info', [App\Http\Controllers\API\CardController::class, 'getCardInfo']);
             Route::get('card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
         });
+        Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware((AuthMandatoryMiddleware::class));
 
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::post('/logout', [App\Http\Controllers\API\POS\PosUserController::class, 'logout'])->middleware((AuthMandatoryMiddleware::class));

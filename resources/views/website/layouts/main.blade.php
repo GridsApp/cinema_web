@@ -15,12 +15,19 @@
 </head>
 
 <body>
+  @php
+
+        $is_home = request()->route()->getName() == 'home';
+       
 
 
+    @endphp
+
+  <main  class="@if (!$is_home ) height-spacing @endif">
     @yield('content')
 
 
-
+  </main>
     @yield('scripts')
     
     

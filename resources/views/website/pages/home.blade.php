@@ -7,7 +7,7 @@
 
         </div>
     @endif
-    <div class="mb-20">
+    <div class="sm:mb-20 mb-10">
         @include('website.components.separator-title', ['title' => 'About Us'])
 
     </div>
@@ -20,7 +20,7 @@
 
     </div>
     @if (isset($branches))
-        <div class="mb-20 mt-20">
+        <div class="sm:mb-20 mb-10 mt-20">
             @include('website.components.separator-title', ['title' => 'cinemas'])
 
         </div>
@@ -32,12 +32,12 @@
         </div>
     @endif
     @if (isset($movies))
-        <div class="mb-20 mt-20">
+    <div class="sm:mb-20 mb-10 mt-20">
             @include('website.components.separator-title', ['title' => 'latest movies'])
 
         </div>
         <div class=" main-container">
-            <div class="sm:grid-cols-4 grid-cols-2 sm:gap-5  gap-2 grid">
+            <div class="sm:grid-cols-4 grid-cols-1 sm:gap-5  gap-2 grid">
                 @foreach ($movies as $movie)
                     @include('website.components.card')
                 @endforeach

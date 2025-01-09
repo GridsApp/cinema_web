@@ -537,7 +537,7 @@ class CartController extends Controller
         try {
             $this->cardRepository->getCardByBarcode($form_data['card_number']);
         } catch (\Exception $e) {
-            return $this->response(notification()->error('Card number already exists', "This card number already exists"));
+            return $this->response(notification()->error('Card number not  found', $e->getMessage()));
         }
 
         try {

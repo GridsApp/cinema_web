@@ -235,9 +235,12 @@ class MovieRepository implements MovieRepositoryInterface
                     ->whereDate('date', $date)
                     ->with(['screenType', 'seats' => function ($seatQuery) {
                         $seatQuery->where('is_reserved', false);
-                    }]);
+                    }
+                ]);
             }])
             ->get();
+
+            dd($theaters);
 
         // Map the data to the desired format
         $theaterData = $theaters->flatMap(function ($theater) {
