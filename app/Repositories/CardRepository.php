@@ -238,25 +238,27 @@ class CardRepository implements CardRepositoryInterface
 
         $wallet_balance = $this->getWalletBalance($user);
         $loyalty_balance = $this->getLoyaltyBalance($user);
-        $response = [
+
+        $card = [
+
             'user' => [
-                'id' => $active_card->user_id,
+                'user_id' => $active_card->user_id,
                 'name' => $user_details->name,
                 'email' => $user_details->email,
                 'phone' => $user_details->phone,
             ],
-            'card' => [
-                'id' => $active_card->id,
-                'barcode' => $active_card->barcode,
-                'type' => $active_card->type,
-                'wallet_balance' => currency_format($wallet_balance),
-                'loyalty_points_balance' => [
-                    "value" => $loyalty_balance,
-                    "display" => $loyalty_balance . ' points'
-                ],
-            ]
+            'id' => $active_card->id,
+            'barcode' => $active_card->barcode,
+            'type' => $active_card->type,
+            'wallet_balance' => currency_format($wallet_balance),
+            'loyalty_points_balance' => [
+                "value" => $loyalty_balance,
+                "display" => $loyalty_balance . ' points'
+            ],
+
         ];
-        return $response;
+
+        return $card;
     }
 
 

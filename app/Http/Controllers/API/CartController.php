@@ -608,6 +608,7 @@ class CartController extends Controller
 
             $card = $this->cardRepository->getActiveCard($user);
 
+            // dd("here");
             $card_info = [
                 'fullname' => $user->name,
                 'phone' => $user->phone,
