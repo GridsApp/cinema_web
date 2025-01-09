@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Website;
 
 use App\Interfaces\MovieRepositoryInterface;
@@ -35,20 +36,19 @@ class MovieListing extends Component
 
     public function filterMovies()
     {
-        // Filter based on search term and selected branch
+
         if ($this->selectedBranch) {
-            // If a branch is selected, filter movies for that branch
+
             $this->movies = $this->movieRepository->getBranchActiveMovies(
                 $this->selectedBranch,
                 now()->format('Y-m-d')
             );
         } else {
-            // If no branch is selected, get movies from all branches
+
             if ($this->searchTerm) {
-               
+
                 $this->movies = $this->movieRepository->searchMovies($this->searchTerm);
-                // dd($this->movies);
-            } 
+            }
         }
     }
 
@@ -62,4 +62,3 @@ class MovieListing extends Component
         ]);
     }
 }
-

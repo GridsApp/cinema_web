@@ -20,14 +20,19 @@ class MoviesEntity extends Entity
         'form' => 'admin.forms.movie-form',
 
     ];
+    
 
     public function fields(){
-
+        $channel = "channel".uniqid();
+        $languages =config('languages');
+        $firstLanguage = $languages[0]['prefix'] ?? '';
 
 
         $this->addField("movie_key" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("condensed_name" , ["container" => 'col-span-7']);
+        $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true,'channel_type' => 'sender' , 'channel'  => $channel, 'channel_language' => $firstLanguage]);
+        // $this->addField("label", ["container" => 'col-span-7', 'required' => true,'translatable'=>true , 'channel_type' => 'sender' , 'channel'  => $channel, 'channel_language' => $firstLanguage]); 
+        // $this->addField("slug", ["container" => 'col-span-7', 'required' => true,'translatable'=>false , 'channel_type' => 'receiver' , 'channel'  => $channel ,'channel_language' => $firstLanguage,]); // sma3e ma3loumet menel label
+          $this->addField("condensed_name" , ["container" => 'col-span-7']);
         $this->addField("description" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("duration" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("cast" , ["container" => 'col-span-7', 'required' => true]);

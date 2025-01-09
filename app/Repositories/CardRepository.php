@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 
 use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\UserCard;
 use App\Models\UserLoyaltyTransaction;
 use App\Models\UserWalletTransaction;
@@ -13,6 +14,18 @@ use Illuminate\Support\Facades\DB;
 
 class CardRepository implements CardRepositoryInterface
 {
+
+
+
+    private UserRepositoryInterface $userRepository;
+
+
+
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
 
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null, $operator_type = null)
     {
@@ -151,7 +164,7 @@ class CardRepository implements CardRepositoryInterface
         $transactions = UserLoyaltyTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
             ->get();
-            
+
         foreach ($transactions as $transaction) {
             $loyalty_transactions[] = [
                 'id' => $transaction->id,
@@ -214,40 +227,52 @@ class CardRepository implements CardRepositoryInterface
             return null;
         }
 
+        // dd($active_card);
+
+        $user_details = $this->userRepository->getUserById($active_card->user_id);
+
+
+        if (!$user_details) {
+            return null;
+        }
+
         $wallet_balance = $this->getWalletBalance($user);
         $loyalty_balance = $this->getLoyaltyBalance($user);
-
-
-        $card = [
-            'id' => $active_card->id,
-            'barcode' => $active_card->barcode,
-            'type' => $active_card->type,
-            'wallet_balance' => currency_format($wallet_balance),
-            'loyalty_points_balance' => [
-                "value" => $loyalty_balance,
-                "display" => $loyalty_balance . ' points'
+        $response = [
+            'user' => [
+                'id' => $active_card->user_id,
+                'name' => $user_details->name,
+                'email' => $user_details->email,
+                'phone' => $user_details->phone,
             ],
-           
-
+            'card' => [
+                'id' => $active_card->id,
+                'barcode' => $active_card->barcode,
+                'type' => $active_card->type,
+                'wallet_balance' => currency_format($wallet_balance),
+                'loyalty_points_balance' => [
+                    "value" => $loyalty_balance,
+                    "display" => $loyalty_balance . ' points'
+                ],
+            ]
         ];
-
-        return $card;
+        return $response;
     }
 
 
     public function getCardByBarcode($barcode)
     {
         try {
-           
+
             $card = UserCard::where('barcode', $barcode)
                 ->whereNull('disabled_at')
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new Exception($e->getMessage());
         }
-        
+
 
         return $card;
     }
@@ -269,8 +294,7 @@ class CardRepository implements CardRepositoryInterface
         // dd("here");
 
         try {
-            $user_card= UserCard::whereNull('deleted_at')->where('barcode', $barcode)->exists();
-
+            $user_card = UserCard::whereNull('deleted_at')->where('barcode', $barcode)->exists();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

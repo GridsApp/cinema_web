@@ -1152,6 +1152,10 @@ return [
         'container' => 'col-span-6',
         'translatable' => true,
     ],
+
+   
+
+    
     'instagram_label' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2227,6 +2231,88 @@ return [
         'name' => 'identifier',
         'container' => 'col-span-12',
     ],
+
+     'financial_phone' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Financial Phone',
+        'placeholder' => 'Enter Financial Phone',
+        'name' => 'financial_phone',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+
+    'financial_email' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Financial Email',
+        'placeholder' => 'Enter Financial Email',
+        'name' => 'financial_email',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+
+    'operator_phone' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Operator Phone',
+        'placeholder' => 'Enter Operator Phone',
+        'name' => 'operator_phone',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+
+    'operator_email' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Operator Email',
+        'placeholder' => 'Enter Operator Email',
+        'name' => 'operator_email',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+
+
+    'management_email' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Managment Email',
+        'placeholder' => 'Enter Managment Email',
+        'name' => 'management_email',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+
+
+    'management_phone' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Managment Phone',
+        'placeholder' => 'Enter Managment Phone',
+        'name' => 'management_phone',
+        'container' => 'col-span-6',
+        'translatable' => false,
+    ],
+    
+    
     
 
 

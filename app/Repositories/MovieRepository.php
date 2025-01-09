@@ -151,7 +151,7 @@ class MovieRepository implements MovieRepositoryInterface
         $comingSoonOffset = now()->addMonths(8);
         $recentShowtimeCutoff = now()->subDays(1);
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')->whereNull('deleted_at')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id','slug')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids) {
                     $q->whereDate('date', $date); // Now Showing
@@ -170,6 +170,7 @@ class MovieRepository implements MovieRepositoryInterface
         $genres = MovieGenre::select("id", "label")->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
         return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset) {
+          
             $categories = [];
             $release_date = now()->parse($movie->release_date);
 
@@ -187,6 +188,8 @@ class MovieRepository implements MovieRepositoryInterface
                 'id' => $movie->id,
                 'main_image' => get_image($movie->main_image),
                 'name' => $movie->name,
+                'slug' => $movie->slug,
+
                 'duration' => minutes_to_human($movie->duration),
                 'genres' => $genres->whereIn('id', $movie->genre_id)->values(),
                 'categories' =>  $categories,

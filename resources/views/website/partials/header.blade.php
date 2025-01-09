@@ -9,11 +9,11 @@
     }">
     <div class="flex main-container justify-between items-center">
         <div>
-         <a href="/">
-            <img :src="!isHome ? '/images/iraqi-logo-white.png' : (scrolled ? '/images/iraqi-logo-white.png' :
-            '/images/normal-logo.svg')"
-            alt="Logo" class="w-[100px] transition-all duration-300">
-         </a>
+            <a href="/">
+                <img :src="!isHome ? '/images/iraqi-logo-white.png' : (scrolled ? '/images/iraqi-logo-white.png' :
+                    '/images/normal-logo.svg')"
+                    alt="Logo" class="w-[100px] transition-all duration-300">
+            </a>
         </div>
         <div class="flex flex-row gap-5 items-center">
             <a href="/about-us" class="nav-text">
@@ -22,12 +22,12 @@
             <a wire.navigate href="/movies/listing" class="nav-text">
                 What's On
             </a>
-            <div class="nav-text">
+            <a href="/branches/listing" class="nav-text">
                 cinemas
-            </div>
-            <div class="nav-text">
+            </a>
+            <a href="/contact-us" class="nav-text">
                 contact us
-            </div>
+            </a>
             <div>
                 <button
                     class="bg-primary-color hover:bg-black inline-flex px-10 py-2 rounded-full gap-3 text-[10px] items-center tracking-[1.95px] font-bold">

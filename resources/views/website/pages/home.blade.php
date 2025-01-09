@@ -18,23 +18,28 @@
 
     </div>
     @if (isset($branches))
-    <div class="mb-20 mt-20">
-        @include('website.components.separator-title', ['title' => 'cinemas'])
+        <div class="mb-20 mt-20">
+            @include('website.components.separator-title', ['title' => 'cinemas'])
 
-    </div>
-    <div class="grid grid-cols-4 gap-10 main-container ">
-        @include('website.components.mini-card')
+        </div>
+        <div class="grid grid-cols-4 gap-10 main-container ">
+            @foreach ($branches as $branch)
+                @include('website.components.mini-card')
+            @endforeach
 
-    </div>
+        </div>
     @endif
     @if (isset($movies))
         <div class="mb-20 mt-20">
             @include('website.components.separator-title', ['title' => 'latest movies'])
 
         </div>
-        {{-- <div class=" main-container">
-    @include('website.components.card')
-
-</div> --}}
+        <div class=" main-container">
+            <div class="sm:grid-cols-4 grid-cols-2 sm:gap-5  gap-2 grid">
+            @foreach ($movies as $movie)
+                @include('website.components.card')
+            @endforeach
+            </div>
+        </div>
     @endif
 @endsection

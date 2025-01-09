@@ -43,6 +43,8 @@
                         <div class="grid grid-cols-12 gap-5">
                             {!! field('name', 'col-span-6') !!}
                             {!! field('condensed_name', 'col-span-6') !!}
+                            {{-- {!! field('slug', 'col-span-6') !!}
+                            {!! field('label', 'col-span-6') !!} --}}
                             {!! field('description', 'col-span-12') !!}
                             {!! field('duration', 'col-span-12') !!}
                             {!! field('release_date', 'col-span-12') !!}

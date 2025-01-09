@@ -63,8 +63,8 @@
                     <div class="border-image-top-right"> </div>
                     <div class="border-image-bottom-left"> </div>
 
-                    <div class="w-[400px]">
-                        <div class="asp asp-2-1">
+                    <div class="w-[350px]">
+                        <div class="asp asp-4-3">
                             <img src={{ get_image($cinema_founder['bottom_image']) }} alt="Godfather Image"
                                 class="image-bordered ">
 

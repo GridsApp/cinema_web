@@ -137,6 +137,10 @@ return [
         'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
         'children' => [
             [
+                'label' => 'Settings',
+                'link' => routeObject('entity', ['slug' => 'settings'])
+            ],
+            [
                 'label' => 'Kiosk users',
                 'link' => routeObject('entity', ['slug' => 'kiosk-users'])
             ],

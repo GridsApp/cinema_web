@@ -6,9 +6,12 @@
                     class="custom-select lg:w-[400px] md:w-[400px] sm:w-full font-bold uppercase">
                     <option value="" selected>— Select Branch —</option>
                     @foreach ($branches as $branch)
+             
                         <option value="{{ $branch->id }}">{{ $branch->label }}</option>
                     @endforeach
+                  
                 </select>
+           
             </div>
             <div>
                 <button type="button" wire:click="filterMovies"
@@ -49,6 +52,7 @@
         @else
             <div class="grid grid-cols-4 gap-10">
                 @foreach ($movies as $movie)
+            
                     @include('website.components.card', ['movie' => $movie])
                 @endforeach
             </div>

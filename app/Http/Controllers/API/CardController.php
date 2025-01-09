@@ -60,6 +60,10 @@ class CardController extends Controller
             return $this->response(notification()->error("'No active card found for this user", "No active card found for this user"));
         }
 
+        
+
+
+        // dd($card);
         $activeCard["loyalty_transactions"] = $this->cardRepository->getLoyaltyTransactions($user);
         $activeCard["wallet_transactions"] = $this->cardRepository->getWalletTransactions($user);
 

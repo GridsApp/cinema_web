@@ -35,6 +35,9 @@
     .asp-2-3 {
         padding-bottom: calc(calc(100% * 3) / 2);
     }
+    .asp-3-2 {
+        padding-bottom: calc(calc(100% * 2) / 3);
+    }
     .asp-2-2 {
         padding-bottom: calc(calc(100% * 2) / 2);
     }
@@ -46,3 +49,8 @@
     .asp-4-3 {
         padding-bottom: calc(calc(100% * 3) / 4);
     }
+
+    .asp-16-9 {
+        padding-bottom: calc(calc(100% * 9) / 16);
+    }
+  

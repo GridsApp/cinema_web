@@ -1,10 +1,7 @@
-{{-- <div x-data="{ showAll: false }"> --}}
+<a href="{{ url('/movie-details/' . $movie['slug']) }}">
 
-
-    {{-- @foreach ($movies as $index => $movie) --}}
-    {{-- @dd($movie) --}}
     <div class="movie-card">
-        <div {{-- x-show="showAll || {{ $index }} < 4" --}} class="movie-card">
+        <div class="movie-card">
             <div class="no-overflow">
 
                 <div class="asp asp-2-3 img-div">
@@ -16,14 +13,13 @@
             <div class="card-bottom">
                 <div class="flex flex-wrap gap-3">
 
-                    {{-- @foreach ($movie['genres'] as $genre)
-                       
+                    @foreach ($movie['genres'] as $genre)
                         @if (isset($genre))
                             <div class="border border-gray-300 px-3 py-1 text-[12px] rounded-full">
                                 {{ $genre['label'] }}
                             </div>
                         @endif
-                    @endforeach --}}
+                    @endforeach
 
 
 
@@ -41,7 +37,8 @@
 
 
     </div>
-    {{-- @endforeach --}}
+{{-- </a> --}}
+
 
 {{-- @if (count($movies) > 4)
         <div class="text-center mt-4 flex items-center justify-center">

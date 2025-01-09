@@ -1,6 +1,8 @@
 import collect from "collect.js";
 import { Carousel } from "@fancyapps/ui/dist/carousel/carousel.esm.js";
-
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+window.Fancybox = Fancybox;
 export default class GeneralFunctions {
     initManageBooking(states) {
         return {
@@ -772,6 +774,14 @@ export default class GeneralFunctions {
           }
         };
       }
+
+      openYoutube(link) {
+        new window.Fancybox([
+            {
+                src: link,
+            },
+        ]);
+    }
       
     
 }
