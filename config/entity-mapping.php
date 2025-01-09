@@ -14,6 +14,7 @@ return array (
   'carts' => 'App\\Entities\\CartsEntity',
   'cinema-founders' => 'App\\Entities\\CinemaFoundersEntity',
   'cinema-growth-plans' => 'App\\Entities\\CinemaGrowthPlansEntity',
+  'cinema-statistics' => 'App\\Entities\\CinemaStatisticsEntity',
   'company-purposes' => 'App\\Entities\\CompanyPurposesEntity',
   'coupons' => 'App\\Entities\\CouponsEntity',
   'distributors' => 'App\\Entities\\DistributorsEntity',

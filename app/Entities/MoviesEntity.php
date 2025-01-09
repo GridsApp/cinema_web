@@ -29,9 +29,9 @@ class MoviesEntity extends Entity
 
 
         $this->addField("movie_key" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true,'channel_type' => 'sender' , 'channel'  => $channel, 'channel_language' => $firstLanguage]);
-        // $this->addField("label", ["container" => 'col-span-7', 'required' => true,'translatable'=>true , 'channel_type' => 'sender' , 'channel'  => $channel, 'channel_language' => $firstLanguage]); 
-        // $this->addField("slug", ["container" => 'col-span-7', 'required' => true,'translatable'=>false , 'channel_type' => 'receiver' , 'channel'  => $channel ,'channel_language' => $firstLanguage,]); // sma3e ma3loumet menel label
+        $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("label", ["container" => 'col-span-7', ]); 
+        $this->addField("slug", ["container" => 'col-span-7']); // sma3e ma3loumet menel label
           $this->addField("condensed_name" , ["container" => 'col-span-7']);
         $this->addField("description" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("duration" , ["container" => 'col-span-7', 'required' => true]);

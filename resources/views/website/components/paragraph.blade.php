@@ -9,7 +9,7 @@
 
     {{-- @dd($company_purposes); --}}
 
-    <div class="grid grid-cols-2 mt-10 gap-14 company_purpose">
+    <div class="grid sm:grid-cols-2 grid-cols-1 mt-10 gap-14 company_purpose">
 
         @foreach ($company_purposes as $company_purpose)
             @isset($company_purpose['content'])

@@ -136,6 +136,9 @@ if (!function_exists('get_class_name')) {
 if (!function_exists('get_entity')) {
     function get_entity($slug)
     {
+
+  
+   
         $className = config('entity-mapping.' . $slug);
 
         return new $className;

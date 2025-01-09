@@ -1,5 +1,5 @@
 @foreach ($cinema_growth_plans as $cinema_growth_plan)
-    <div class="grid grid-cols-2  images-bordered">
+    <div class="grid sm:grid-cols-2 grid-cols-1  images-bordered">
         @if (isset($cinema_growth_plan['content']))
             <div>
 
@@ -13,7 +13,7 @@
                     <div class="border-image-top-right"> </div>
                     <div class="border-image-bottom-left"> </div>
 
-                    <div class="w-[500px]">
+                    <div class="sm:w-[500px] w-[250px]">
                         <div class="asp asp-4-3">
                             <img src={{ get_image($cinema_growth_plan['image']) }} alt="Godfather Image"
                                 class="image-bordered ">

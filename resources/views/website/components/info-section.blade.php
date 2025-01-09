@@ -1,26 +1,17 @@
-<div class="px-32" x-data="GeneralFunctions.animation()">
-    <div class="antialiased main-container flex justify-between">
-        <div class="flex flex-col items-center text-center">
-            <span class="primary-color tracking-[2px] font-bold text-[35px]" x-data="animation()"
-                x-init="animate(400)" x-text="`${counter}+`">
-                0
+<div class="px-4 sm:px-32 py-10 ">
+    <div class="antialiased main-container flex flex-wrap justify-center gap-8 max-w-screen-xl mx-auto">
+        @foreach ($statistics as $statistic)
+        <div class="flex flex-col items-center text-center bg-white shadow-md rounded-lg p-6 w-64">
+            <span 
+                class="text-blue-600 font-extrabold text-4xl sm:text-5xl" 
+                x-data="GeneralFunctions.animation()" 
+                x-init="animate({{ $statistic['number'] }})" 
+                x-text="counter">
             </span>
-            <p class="uppercase tracking-[2.4px] font-bold text-[14px] leading-[20px]">Videos</p>
+            <p class="uppercase text-gray-700 font-semibold tracking-wider text-sm sm:text-base mt-3">
+                {{ $statistic['label'] }}
+            </p>
         </div>
-        <div class="flex flex-col items-center text-center">
-            <span class="primary-color tracking-[2px] font-bold text-[35px]" x-data="animation()"
-                x-init="animate(9400)" x-text="`${counter}+`">
-                0
-            </span>
-            <p class="uppercase tracking-[2.4px] font-bold text-[14px] leading-[20px]">Subscribers</p>
-        </div>
-        <div class="flex flex-col items-center text-center">
-            <span class="primary-color tracking-[2px] font-bold text-[35px]" x-data="animation()"
-                x-init="animate(11024)" x-text="`${counter}+`">
-                0
-            </span>
-            <p class="uppercase tracking-[2.4px] font-bold text-[14px] leading-[20px]">Likes</p>
-        </div>
+        @endforeach
     </div>
-
 </div>

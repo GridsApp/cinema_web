@@ -165,7 +165,7 @@ nav {
 }
 
 .custom-select {
-    @apply lg:w-[400px]  md:w-[400px] tracking-[1.95px] sm:w-full w-full sm:text-[12px] text-[13px];
+    @apply lg:w-[400px]  md:w-[400px] tracking-[1.95px] sm:w-full w-full sm:text-[12px] text-[10px];
     border: 1px solid rgba($color: #000000, $alpha: 0.3);
     border-radius: 10px;
     appearance: none !important;
@@ -190,7 +190,7 @@ nav {
         border: unset;
         outline: unset;
         width: 80%;
-        font-size: 13px;
+       @apply sm:text-[13px] text-[10px]
     }
     input::placeholder {
         @apply font-bold text-black tracking-[1.95px];
@@ -210,10 +210,10 @@ nav {
         justify-content: center;
     }
     .banner-title {
-        @apply text-white capitalize tracking-[1px] font-bold text-[19px];
+        @apply text-white capitalize tracking-[1px] font-bold sm:text-[19px] text-[14px] text-center;
     }
     .banner-description {
-        @apply opacity-60 text-white max-w-[340px] items-center text-center text-[12px];
+        @apply opacity-60 text-white max-w-[340px] items-center text-center sm:text-[12px] text-[10px];
     }
     img {
         @apply brightness-50;

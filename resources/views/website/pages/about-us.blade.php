@@ -35,7 +35,7 @@
             @include('website.components.separator-title', ['title' => 'Board members'])
         </div>
 
-        <div class="grid pt-10 gap-7 grid-cols-4 main-container ">
+        <div class="grid pt-10 gap-7 sm:grid-cols-4 grid-cols-1 main-container ">
             @include('website.components.members-card')
         </div>
     @endif

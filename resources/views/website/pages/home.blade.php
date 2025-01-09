@@ -12,9 +12,11 @@
 
     </div>
 
-    </div>
+
     <div>
-        @include('website.components.info-section')
+       
+            @include('website.components.info-section')
+        {{-- @endforeach --}}
 
     </div>
     @if (isset($branches))
@@ -36,9 +38,9 @@
         </div>
         <div class=" main-container">
             <div class="sm:grid-cols-4 grid-cols-2 sm:gap-5  gap-2 grid">
-            @foreach ($movies as $movie)
-                @include('website.components.card')
-            @endforeach
+                @foreach ($movies as $movie)
+                    @include('website.components.card')
+                @endforeach
             </div>
         </div>
     @endif

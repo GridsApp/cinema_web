@@ -1,7 +1,7 @@
 <div class="mt-10">
     <div class="flex sm:flex-row flex-col sm:gap-10 gap-5 filteration">
-        <div class="w-full flex flex-row gap-6" class="filteration-select">
-            <div>
+        <div class="w-full flex flex-row sm:gap-6 gap-4" class="filteration-select">
+            <div class="sm:w-fit w-full">
                 <select wire:model="selectedBranch"
                     class="custom-select lg:w-[400px] md:w-[400px] sm:w-full font-bold uppercase">
                     <option value="" selected>— Select Branch —</option>
@@ -15,7 +15,7 @@
             </div>
             <div>
                 <button type="button" wire:click="filterMovies"
-                    class="bg-primary-color text-[14px] rounded-full uppercase px-10 py-2 text-white font-bold tracking-[1.95px] hover:bg-black">
+                    class="bg-primary-color text-[14px] rounded-full uppercase sm:px-10 px-5 py-2 text-white font-bold tracking-[1.95px] hover:bg-black">
                     Go
                 </button>
             </div>
@@ -42,11 +42,11 @@
     <div class="mt-10">
 
         @if (is_null($selectedBranch) && empty($searchTerm))
-            <div class="text-left w-full text-gray-500 text-[16px] font-light mt-4">
+            <div class="text-left w-full text-gray-500 sm:text-[14px] text-[12px] font-light mt-4">
                 Please choose a branch to filter the movies.
             </div>
         @elseif (collect($movies)->isEmpty())
-            <div class="text-left w-full text-gray-500 text-[16px] font-light mt-4">
+            <div class="text-left w-full text-gray-500 sm:text-[14px] text-[12px] font-light mt-4">
                 No results found for the selected filters.
             </div>
         @else

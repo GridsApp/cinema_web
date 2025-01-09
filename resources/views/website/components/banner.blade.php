@@ -1,8 +1,15 @@
 <div class="banner">
-    <div class="asp asp-3-1 ">
-        <img src={{get_image($banner->image)}} alt="">
-    </div>
-    <div class="box-position">
+    @desktop
+        <div class="asp asp-3-1 ">
+            <img src={{ get_image($banner->image) }} alt="">
+        </div>
+    @elsedesktop
+        <div class="asp asp-16-9 ">
+            <img src={{ get_image($banner->image) }} alt="">
+        </div>
+    @enddesktop
+
+    <div class="box-position main-container">
 
         <div class="banner-title">
             Discover the history of iraqi cinemas

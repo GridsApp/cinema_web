@@ -1,6 +1,6 @@
 <footer class="mt-10">
-    <div class="grid grid-cols-12">
-        <div class="col-span-3">
+    <div class="grid sm:grid-cols-12 grid-cols-1">
+        <div class="sm:col-span-3 col-span-12">
             <div class="footer-title ">
                 GET IN TOUCH
             </div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-2">
+        <div class="sm:col-span-2 col-span-12 sm:pt-0 pt-10">
             <div class="footer-title ">
                 USEFUL LINKS
             </div>
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="col-span-2">
+        <div class="sm:col-span-2 col-span-12 sm:pt-0 pt-10">
             <div class="footer-title ">
                 SOCIAL MEDIA
             </div>

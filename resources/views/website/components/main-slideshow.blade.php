@@ -1,19 +1,35 @@
 <div x-init="GeneralFunctions.slideshow()">
     <div class="f-carousel" id="slideshow">
         @foreach ($slider as $slide)
-            <div class="f-carousel__slide asp asp-3-1">
-                <div>
+            @desktop
+                <div class="f-carousel__slide asp asp-3-1">
                     <div>
-                        <img src={{ get_image($slide['image']) }} alt="Slide 1" class="brightness-50 ">
-                    </div>
-                    <div class="main-container">
-                        <div class="absolute top-[80%] z-10 text-white font-bold text-[30px] capitalize" style="">
-                            {{ $slide['label_en'] }}
+                        <div>
+                            <img src={{ get_image($slide['image']) }} alt="Slide 1" class="brightness-50 ">
+                        </div>
+                        <div class="main-container">
+                            <div class="absolute top-[80%] z-10 text-white font-bold text-[30px] capitalize" style="">
+                                {{ $slide['label_en'] }}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
+            @elsedesktop
+                <div class="f-carousel__slide asp asp-9-16">
+                    <div>
+                        <div>
+                            <img src={{ get_image($slide['image']) }} alt="Slide 1" class="brightness-50 ">
+                        </div>
+                        <div class="main-container">
+                            <div class="absolute top-[80%] z-10 text-white font-bold text-[30px] capitalize" style="">
+                                {{ $slide['label_en'] }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            @enddesktop
         @endforeach
         <div class="carousel__nav main-container absolute text-white top-[80%] z-10 flex justify-end w-full">
             <button tabindex="0" title="Previous slide" class="f-button is-prev" data-carousel-prev="true">

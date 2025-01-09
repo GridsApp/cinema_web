@@ -1,5 +1,11 @@
 <?php
 
+
+
+$languages = config('languages');  
+$firstLanguage = $languages[0]['prefix'] ?? '';  
+$channel = "channel" . uniqid();  
+
 return [
 
     "id" => [
@@ -23,9 +29,25 @@ return [
         'label' => 'Slug',
         'placeholder' => 'Slug',
         'name' => 'slug',
+        'channel_type' => 'receiver',  
+        'channel' => $channel,          
+        'channel_language' => $firstLanguage  // Now this will work
     ],
 
-
+    'label' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Label',
+        'placeholder' => 'Enter label',
+        'name' => 'label',
+        'container' => 'col-span-6',
+        'channel_type' => 'sender',   // Channel type for 'label'
+        'channel' => $channel,        // Same channel for both fields
+        'channel_language' => $firstLanguage  // This will work as well
+    ],
     "title" => [
         'id' => uniqid(),
         'livewire' => [
@@ -130,21 +152,7 @@ return [
         'name' => 'color'
     ],
 
-    'label' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        // 'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
-
-        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
-
-        'label' => 'Label',
-        'placeholder' => 'Enter label',
-        'name' => 'label',
-
-        'container' => 'col-span-6',
-    ],
+  
 
 
     'action' =>[
@@ -1096,7 +1104,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'type' => \twa\cmsv2\Entities\FieldTypes\Number::class,
         'label' => 'Number',
         'placeholder' => 'Enter Number',
         'name' => 'number',

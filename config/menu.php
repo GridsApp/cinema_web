@@ -176,6 +176,12 @@ return [
         'label' => 'About Section',
         'icon' => '<i class="fa-regular fa-grid-2"></i>',
         'children' => [
+
+            [
+                'label' => 'Cinema Statistics',
+                'link' => routeObject('entity', ['slug' => 'cinema-statistics'])
+
+            ],
             [
                 'label' => 'Banners',
                 'link' => routeObject('entity', ['slug' => 'about-banners'])

@@ -743,45 +743,41 @@ export default class GeneralFunctions {
             },
         };
     }
-  
-     slideshow() {
+
+    slideshow() {
         const container = document.getElementById("slideshow");
         const options = {
             autoplay: {
-                enabled: true,  // Enable autoplay
-                timeout: 2000,  // Set timeout for 2 seconds
+                enabled: true, // Enable autoplay
+                timeout: 2000, // Set timeout for 2 seconds
             },
         };
-    
-        new Carousel(container, options);  // Pass the options directly to Carousel
-    }
-     animation() {
-        return {
-          counter: 0,
-          animate(finalCount) {
-            let time = 1500
-            let interval = 9
-            let step = Math.floor(finalCount*interval/time)
-            let timer = setInterval(() => {
-              this.counter = this.counter + step;
-              if (this.counter >= finalCount + step) {
-                this.counter = finalCount
-                clearInterval(timer);
-                timer = null;
-                return;
-              }
-            }, interval);
-          }
-        };
-      }
 
-      openYoutube(link) {
+        new Carousel(container, options); // Pass the options directly to Carousel
+    }
+    animation() {
+        return {
+            counter: 0,
+            animate(finalCount) {
+                let duration = 1000; // Total animation duration in ms
+                let interval = 15; // Update interval in ms
+                let step = Math.ceil(finalCount / (duration / interval)); // Calculate step value
+
+                let timer = setInterval(() => {
+                    this.counter += step;
+                    if (this.counter >= finalCount) {
+                        this.counter = finalCount; // Ensure the final count is accurate
+                        clearInterval(timer); // Stop the interval
+                    }
+                }, interval);
+            },
+        };
+    }
+    openYoutube(link) {
         new window.Fancybox([
             {
                 src: link,
             },
         ]);
     }
-      
-    
 }
