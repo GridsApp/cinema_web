@@ -200,6 +200,7 @@ class CardRepository implements CardRepositoryInterface
 
             // dd($transaction->transactionable);
             $wallet_transactions[] = [
+                'date' =>now()->parse($transaction->created_at)->format('d-m-Y'),
                 'id' => $transaction->id,
                 'amount' => $transaction->amount,
                 'balance' => $transaction->balance,
