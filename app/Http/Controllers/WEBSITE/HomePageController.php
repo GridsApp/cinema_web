@@ -28,7 +28,7 @@ class HomePageController extends Controller
         $branches = $this->branchRepository->getBranches();
         $first_branch = $branches->first();
         // dd($branches);
-        $branches = $this->branchRepository->getBranches();
+        // $branches = $this->branchRepository->getBranches();
         // $this->movieRepository->getMovies
 
         // $movies = Movie::whereNull('deleted_at')->get();
@@ -38,7 +38,7 @@ class HomePageController extends Controller
             now()->format('Y-m-d')
         );
 
-
+// dd($movies);
 
 
         // $genre_ids_array = $movies->pluck('genre_id')->flatten()->unique();

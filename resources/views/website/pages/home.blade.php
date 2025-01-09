@@ -22,7 +22,7 @@
             @include('website.components.separator-title', ['title' => 'cinemas'])
 
         </div>
-        <div class="grid grid-cols-4 gap-10 main-container ">
+        <div class="grid sm:grid-cols-4 grid-cols-1 gap-10 main-container ">
             @foreach ($branches as $branch)
                 @include('website.components.mini-card')
             @endforeach
