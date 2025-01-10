@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\AccessToken;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderSeat;
@@ -74,10 +75,10 @@ class PosUserController extends Controller
             return $this->response(notification()->error("You have entered invalid username/password or branch", 'You have entered invalid username/password or branch'));
         }
 
-        
-        $access_token = $this->tokenRepository->createAccessToken($pos_user , "POS");
 
-       
+        $access_token = $this->tokenRepository->createAccessToken($pos_user, "POS");
+
+
         $user_session = new UserSession();
         $user_session->pos_user_id = $pos_user->id;
         $user_session->type = "LOGIN";
@@ -102,6 +103,8 @@ class PosUserController extends Controller
                 'id' => $pos_user->id,
                 'name' => $pos_user->name,
                 'pincode' => $pos_user->pincode,
+                'branch' => $pos_user->branch->label,
+
                 'managers' => $manager_details,
             ],
             'access_token' => $access_token
@@ -110,11 +113,11 @@ class PosUserController extends Controller
 
     public function logout()
     {
-      
+
         $token = get_header_access_token();
 
         $access_token = $this->tokenRepository->getActiveAccessToken($token);
-  
+
         if ($access_token) {
             $access_token->expires_at = now();
             $access_token->save();
@@ -125,24 +128,58 @@ class PosUserController extends Controller
         $user_session->save();
 
         return $this->response(notification()->success('Logged Out Successfully', 'Logged Out Successfully'));
-
     }
-    public function shiftSummaryTable($array , $description_key , $total_key , $admits_key){
+
+    public function getUserFromAccessToken()
+    {
+       
+        $user = request()->user;
+
+        try {
+            $managers = $this->posUserRepository->getManagers($user->branch_id);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Error', $th->getMessage()));
+        }
+
+        $manager_details = $managers->map(function ($manager) {
+            return [
+                'id' => $manager->id,
+                'name' => $manager->name,
+                'pincode' => $manager->pincode,
+
+            ];
+        });
+
+        return $this->responseData([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'pincode' => $user->pincode,
+                'branch' => $user->branch->label,
+                'managers' => $manager_details,
+            ],
+        ]);
+
+      
+    }
+
+    public function shiftSummaryTable($array, $description_key, $total_key, $admits_key)
+    {
         $result = [];
         $total = 0;
         $count = 0;
 
-        foreach($array as $item){
+        foreach ($array as $item) {
             $total += $item->{$total_key};
             $count += $item->{$admits_key};
-            $result [] = [
+            $result[] = [
                 $item->{$description_key},
                 (string) $item->{$admits_key},
                 currency_format($item->{$total_key})
             ];
         }
 
-        return ['count' => $count , 'total' => $total , 'result' => $result];
+        return ['count' => $count, 'total' => $total, 'result' => $result];
     }
 
     public function shiftSummary()
@@ -151,7 +188,7 @@ class PosUserController extends Controller
 
         if (!$date) {
             $date = Carbon::now();
-        }else{
+        } else {
             $date = now()->parse($date);
         }
 
@@ -507,5 +544,4 @@ class PosUserController extends Controller
         // ];
 
     }
-        
 }

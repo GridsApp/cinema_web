@@ -16,14 +16,13 @@ class MovieController extends Controller
     private MovieRepositoryInterface $movieRepository;
     private BranchRepositoryInterface $branchRepository;
     private MovieShowRepositoryInterface $movieShowRepository;
-  
+
 
     public function __construct()
     {
         $this->movieRepository = app(MovieRepositoryInterface::class);
         $this->branchRepository = app(BranchRepositoryInterface::class);
         $this->movieShowRepository = app(MovieShowRepositoryInterface::class);
-     
     }
     public function listing()
     {
@@ -38,8 +37,9 @@ class MovieController extends Controller
     }
 
 
-    public function details($slug) {
-  
+    public function details($slug)
+    {
+
         $movie_id = Movie::where('slug', $slug)->whereNull('deleted_at')->pluck('id');
         if (!$movie_id) {
             abort(404, 'Movie not found');
@@ -49,9 +49,9 @@ class MovieController extends Controller
         $first_branch = $branches->first();
         $date = now()->parse(now()->format('Y-m-d'));
         $movie_shows = $this->movieShowRepository->getMovieShows($first_branch['id'], $movie_id, $date);
-    //    dd($movie_shows);
+        //    dd($movie_shows);
         return view('website.pages.movie.details', [
-            
+
             'movie_details' => $movie_details,
             'movie_shows' => $movie_shows,
         ]);

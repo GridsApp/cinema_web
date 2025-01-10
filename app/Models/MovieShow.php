@@ -32,7 +32,6 @@ class MovieShow extends Model
         return $this->belongsTo(ScreenType::class , 'screen_type_id' , 'id');
     }
 
-   
     public function reserved()
     {
         return $this->hasMany(ReservedSeat::class , 'movie_show_id');

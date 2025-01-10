@@ -121,7 +121,7 @@ class UserRepository implements UserRepositoryInterface
         try {
             $user = User::where('id', $user_id)
                ->whereNull('deleted_at')->firstOrFail();
-            //    dd($user);
+
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("User with ID {$user_id} not found.");
         }

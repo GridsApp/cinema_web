@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="title">
+                        {{-- <div class="title">
                             {{ now()->format('l, F j, Y') }}
                         </div>
 
@@ -183,7 +183,9 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
+
+                        <livewire:website.movie-show />
                     </div>
 
                 </div>

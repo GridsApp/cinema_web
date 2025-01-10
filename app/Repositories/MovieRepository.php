@@ -154,8 +154,9 @@ class MovieRepository implements MovieRepositoryInterface
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id','slug')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids) {
-                    $q->whereDate('date', $date); // Now Showing
-                    $q->whereIn('theater_id', $theaters_ids);
+                    $q->whereNull('deleted_at')
+                    ->whereDate('date', $date) // Now Showing
+                    ->whereIn('theater_id', $theaters_ids);
                 })
                     ->orWhereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
                     ->orWhereBetween('release_date', [$today, $comingSoonOffset]); // Coming Soon

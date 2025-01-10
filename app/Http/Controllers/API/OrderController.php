@@ -211,7 +211,7 @@ class  OrderController extends Controller
                 return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
             default:
-                # code...
+               
                 break;
         }
     }

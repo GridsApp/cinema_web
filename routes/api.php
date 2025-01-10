@@ -11,20 +11,20 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], function () {
     Route::prefix('auth')->group(function () {
         Route::prefix('user')->group(function () {
-            Route::get('account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class ]);
-            Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class]);
-            Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class]);
+            Route::get('account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
-            Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class]);
-            Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class]);
+            Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::prefix('tickets/list')->group(function () {
-                Route::get('history', [App\Http\Controllers\API\TicketsController::class, 'history'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class ]);
-                Route::get('upcoming', [App\Http\Controllers\API\TicketsController::class, 'upcoming'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);    
+                Route::get('history', [App\Http\Controllers\API\TicketsController::class, 'history'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+                Route::get('upcoming', [App\Http\Controllers\API\TicketsController::class, 'upcoming'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             });
 
-            Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class ]);
-          
+            Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
             Route::post('/login/social', [App\Http\Controllers\API\AuthController::class, 'loginUsingProvider']);
@@ -38,25 +38,25 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     });
 
     Route::group(['prefix' => 'cart', 'middleware' => AuthMandatoryMiddleware::class], function () {
-        
+
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);
         Route::post('/expire', [App\Http\Controllers\API\CartController::class, 'expireCart']);
         Route::get('/details', [App\Http\Controllers\API\CartController::class, 'details']);
 
-        
+
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemToCart']);
         Route::post('/item/remove', [App\Http\Controllers\API\CartController::class, 'removeItemFromCart']);
-       
+
         Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsToCart']);
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
 
         Route::post('/imtiyaz/add', [App\Http\Controllers\API\CartController::class, 'addImtiyazToCart'])->middleware(POSUserMiddleware::class);
         Route::post('/imtiyaz/remove', [App\Http\Controllers\API\CartController::class, 'removeImtiyazFromCart'])->middleware(POSUserMiddleware::class);
 
-        
+
         Route::post('/coupon/add', [App\Http\Controllers\API\CartController::class, 'addCouponToCart']);
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
-        
+
 
         //ONLY for POS
         Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart'])->middleware(POSUserMiddleware::class);
@@ -65,10 +65,6 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         //ONLY for POS
         Route::post('/topup/add', [App\Http\Controllers\API\CartController::class, 'addTopupToCart'])->middleware(POSUserMiddleware::class);
         Route::post('/topup/remove', [App\Http\Controllers\API\CartController::class, 'removeTopupFromCart'])->middleware(POSUserMiddleware::class);
-
-
-        
-
     });
 
     Route::get('/payment-methods', [App\Http\Controllers\API\PaymentController::class, 'list'])->middleware(AuthMandatoryMiddleware::class);
@@ -79,21 +75,18 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post("/",  [\App\Http\Controllers\API\OrderController::class, 'get']);
         Route::post("/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt']);
         Route::post("/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(POSUserMiddleware::class);
-        Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([POSUserMiddleware::class,AuthMandatoryMiddleware::class]);
+        Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([POSUserMiddleware::class, AuthMandatoryMiddleware::class]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
         Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
-        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([POSUserMiddleware::class,AuthMandatoryMiddleware::class]);
-
-
-    
+        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([POSUserMiddleware::class, AuthMandatoryMiddleware::class]);
     });
 
     Route::prefix('movies')->group(function () {
-        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class,UserMiddleware::class]);
+        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class, UserMiddleware::class]);
         Route::get('/', [App\Http\Controllers\API\MovieController::class, 'search']);
-        Route::get('/favorites/list', [App\Http\Controllers\API\FavoriteController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class ]);
+        Route::get('/favorites/list', [App\Http\Controllers\API\FavoriteController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
         Route::post('movie/review', [App\Http\Controllers\API\ReviewController::class, 'review'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-        Route::post('/{movie_id}/favorites/toggle', [App\Http\Controllers\API\FavoriteController::class, 'toggle'])->middleware([AuthMandatoryMiddleware::class , UserMiddleware::class ] );
+        Route::post('/{movie_id}/favorites/toggle', [App\Http\Controllers\API\FavoriteController::class, 'toggle'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
     });
 
     Route::get('/movie-show/{movie_show_id}/theater-seats', [App\Http\Controllers\API\TheaterSeatsController::class, 'listSeats']);
@@ -120,27 +113,32 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::group(['prefix' => 'pos'], function () {
 
         Route::group([
-            'prefix' => 'user' , 
-            'middlewares' => [ AuthMandatoryMiddleware::class , POSUserMiddleware::class ]],function () {
+            'prefix' => 'user',
+            'middlewares' => [AuthMandatoryMiddleware::class, POSUserMiddleware::class]
+        ], function () {
             Route::post('create', [App\Http\Controllers\API\POS\CustomersController::class, 'createUser']);
             Route::post('check/phone', [App\Http\Controllers\API\POS\CustomersController::class, 'getPhone']);
             Route::post('edit', [App\Http\Controllers\API\POS\CustomersController::class, 'editUser']);
             Route::post('card/info', [App\Http\Controllers\API\CardController::class, 'getCardInfo']);
             Route::get('card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
         });
+
+
+
         Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware((AuthMandatoryMiddleware::class));
+
+        Route::post('/user', [App\Http\Controllers\API\POS\PosUserController::class, 'getUserFromAccessToken'])->middleware([AuthMandatoryMiddleware::class, POSUserMiddleware::class]);
 
         Route::post('/login', [App\Http\Controllers\API\POS\PosUserController::class, 'login']);
         Route::post('/logout', [App\Http\Controllers\API\POS\PosUserController::class, 'logout'])->middleware((AuthMandatoryMiddleware::class));
-        
+
         //shiftSummary
-        Route::get("/shift-summary" , [App\Http\Controllers\API\POS\PosUserController::class, 'shiftSummary'])->middleware((AuthMandatoryMiddleware::class));
-        
+        Route::get("/shift-summary", [App\Http\Controllers\API\POS\PosUserController::class, 'shiftSummary'])->middleware((AuthMandatoryMiddleware::class));
+
         Route::get('/branches/{branch_id}/movies/active-shows', [App\Http\Controllers\API\POS\MovieController::class, 'getBranchPosActiveMovieShows']);
     });
 
     Route::group(['prefix' => 'kiosk'], function () {
         Route::post('/login', [App\Http\Controllers\API\KIOSK\KioskUserController::class, 'login']);
     });
-
 });
