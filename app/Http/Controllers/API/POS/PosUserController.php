@@ -133,10 +133,10 @@ class PosUserController extends Controller
     public function getUserFromAccessToken()
     {
        
-        $user = request()->user;
+        $pos_user = request()->user;
 
         try {
-            $managers = $this->posUserRepository->getManagers($user->branch_id);
+            $managers = $this->posUserRepository->getManagers($pos_user->branch_id);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error', $th->getMessage()));
         }
@@ -152,10 +152,12 @@ class PosUserController extends Controller
 
         return $this->responseData([
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'pincode' => $user->pincode,
-                'branch' => $user->branch->label,
+                'id' => $pos_user->id,
+                'name' => $pos_user->name,
+                'pincode' => $pos_user->pincode,
+                'branch_id' => $pos_user->branch_id,
+                'branch' => $pos_user->branch->label,
+
                 'managers' => $manager_details,
             ],
         ]);

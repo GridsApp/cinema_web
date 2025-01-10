@@ -30,11 +30,11 @@ class UserController extends Controller
 
     public function getAccount()
     {
-
+       
         $user = request()->user;
 
         $active_card = $this->cardRepository->getActiveCard($user);
-       
+      
          $account= 
             [
 
