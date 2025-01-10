@@ -46,7 +46,7 @@ class UserController extends Controller
                 'date_birth' => $user->date_birth,
                 'date_marriage' => $user->date_marriage,
                 'login_provider' => $user->login_provider,
-                'gender' => $user->gender?->label,
+                'gender' => $user->gender ,
                 'card' => $active_card,
             ];
 
