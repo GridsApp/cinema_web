@@ -103,6 +103,7 @@ class PosUserController extends Controller
                 'id' => $pos_user->id,
                 'name' => $pos_user->name,
                 'pincode' => $pos_user->pincode,
+                'branch_id' => $pos_user->branch_id,
                 'branch' => $pos_user->branch->label,
 
                 'managers' => $manager_details,

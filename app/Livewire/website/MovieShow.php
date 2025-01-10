@@ -53,14 +53,16 @@ class MovieShow extends Component
 
     public function fetchMovieShows()
     {
-        $branchId = 1; // Replace with the actual branch ID or make it dynamic
-        $movieId = 5;  // Replace with the actual movie ID or make it dynamic
+
+
+        $branchId = 1; 
+        $movieId = 5;  
         $date = $this->selectedDate;
     
-        // Fetch movie shows directly from the repository
+        
         $shows = $this->movieShowRepository->getMovieShows($branchId, $movieId, $date)->toArray();
     
-        // Group by branch and then by price group
+       
         $this->movieShows = collect($shows)->groupBy('branch')->map(function ($branchShows) {
             return $branchShows->groupBy('price_group');
         })->toArray();

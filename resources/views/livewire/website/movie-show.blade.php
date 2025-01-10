@@ -60,6 +60,7 @@
         <!-- Show other branches with transition -->
         <div x-show="expanded" x-collapse>
             @foreach ($otherBranches as $branch)
+            @dd($branch);
                 <div class="theater-data-container mt-6">
                     <h2 class="theater-name">{{ $branch }}</h2>
                     @foreach ($movieShows[$branch] as $priceGroup => $shows)
