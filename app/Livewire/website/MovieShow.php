@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Website;
 
+use App\Interfaces\BranchRepositoryInterface;
 use App\Interfaces\MovieShowRepositoryInterface;
+use App\Models\Movie;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -11,28 +13,33 @@ class MovieShow extends Component
     public $selectedDate;
     public $dates = [];
     public $movieShows = [];
-    private  $movieShowRepository;
+    public $currentMovieSlug;
+    public $firstBranch;
+
+
+    private MovieShowRepositoryInterface $movieShowRepository;
+    private BranchRepositoryInterface $branchRepository;
 
     public function __construct()
     {
         $this->movieShowRepository = app(MovieShowRepositoryInterface::class);
+        $this->branchRepository = app(BranchRepositoryInterface::class);
     }
 
     public function mount()
     {
-        // Default selected date is today
         $this->selectedDate = Carbon::now()->format('Y-m-d');
-
-        // Generate a list of dates for the user to choose from
         $this->generateDates();
 
-        // Fetch the available movie shows for the current selected date
-        $this->fetchMovieShows();
+        $defaultMovie = Movie::whereNull('deleted_at')->first();
+        if ($defaultMovie) {
+            $this->currentMovieSlug = $defaultMovie->slug; // Save the slug
+            $this->fetchMovieShows($defaultMovie->slug);
+        }
     }
 
     public function generateDates()
     {
-       
         $this->dates = [];
         for ($i = 0; $i < 30; $i++) {
             $date = Carbon::now()->addDays($i);
@@ -44,34 +51,52 @@ class MovieShow extends Component
         }
     }
 
-    public function selectDate($date)
+    public function selectDate($date, $slug)
     {
-        // Update the selected date and fetch the new movie shows
         $this->selectedDate = $date;
-        $this->fetchMovieShows();
+        $this->fetchMovieShows($slug);
     }
 
-    public function fetchMovieShows()
+    public function fetchMovieShows($slug)
     {
-
-
-        $branchId = 1; 
-        $movieId = 5;  
+        $movie_id = Movie::where('slug', $slug)->whereNull('deleted_at')->pluck('id');
+        if (!$movie_id) {
+            abort(404, 'Movie not found');
+        }
+    
         $date = $this->selectedDate;
+        $branches = $this->branchRepository->getBranches(); // Assuming this is an array or collection
     
-        
-        $shows = $this->movieShowRepository->getMovieShows($branchId, $movieId, $date)->toArray();
+        $first_branch = $branches->first();
+        $first_branch_shows = $this->movieShowRepository->getMovieShows($first_branch['id'], $movie_id, $date)->toArray();
     
-       
-        $this->movieShows = collect($shows)->groupBy('branch')->map(function ($branchShows) {
-            return $branchShows->groupBy('price_group');
+        // Initialize an array to hold shows for all branches, starting with the first branch
+        $all_shows = [
+            $first_branch['id'] => $first_branch_shows
+        ];
+    
+        // Fetch shows for the other branches
+        foreach ($branches->skip(1) as $branch) {
+            dd($branch['id']);
+            // Get the shows for each branch and add them to the $all_shows array
+            $branch_shows = $this->movieShowRepository->getMovieShows($branch['id'], $movie_id, $date)->toArray();
+      
+            $all_shows[$branch['id']] = $branch_shows;
+
+            
+        }
+    
+        // Group the shows by branch and price group
+        $this->movieShows = collect($all_shows)->mapWithKeys(function ($shows, $branchId) use ($branches) {
+            $branchName = collect($branches)->where('id', $branchId)->first()['label'];  // Assuming branches is an array
+            return [
+                $branchName => collect($shows)->groupBy('price_group')
+            ];
         })->toArray();
-
-
-
+        dd($this->movieShows);
     }
     
-    
+
     public function render()
     {
         return view('livewire.website.movie-show');

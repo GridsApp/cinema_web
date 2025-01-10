@@ -135,6 +135,8 @@ class PosUserController extends Controller
     {
        
         $pos_user = request()->user;
+        $access_token = get_header_access_token(); //in other projects to be replaced
+        // dd($pos_user);
 
         try {
             $managers = $this->posUserRepository->getManagers($pos_user->branch_id);
@@ -161,6 +163,7 @@ class PosUserController extends Controller
 
                 'managers' => $manager_details,
             ],
+            'access_token' => $access_token
         ]);
 
       
