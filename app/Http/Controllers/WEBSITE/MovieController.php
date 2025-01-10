@@ -44,16 +44,17 @@ class MovieController extends Controller
         if (!$movie_id) {
             abort(404, 'Movie not found');
         }
-        $branches = $this->branchRepository->getBranches();
+        // $branches = $this->branchRepository->getBranches();
         $movie_details = $this->movieRepository->getMovie($movie_id);
-        $first_branch = $branches->first();
+        // $first_branch = $branches->first();
         $date = now()->parse(now()->format('Y-m-d'));
-        $movie_shows = $this->movieShowRepository->getMovieShows($first_branch['id'], $movie_id, $date);
+        // $movie_shows = $this->movieShowRepository->getMovieShows($first_branch['id'], $movie_id, $date);
         //    dd($movie_shows);
         return view('website.pages.movie.details', [
 
+            'slug' => $slug,
+            // 'movie_shows' => $movie_shows,
             'movie_details' => $movie_details,
-            'movie_shows' => $movie_shows,
         ]);
     }
 }

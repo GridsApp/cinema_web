@@ -27,8 +27,6 @@ class WalletController extends Controller
     public function walletTopup()
     {
 
-
-
         $user = request()->user;
         $user_type = request()->user_type;
 
@@ -74,5 +72,7 @@ class WalletController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order Attempt Failed', $e->getMessage()));
         }
+
+        
     }
 }

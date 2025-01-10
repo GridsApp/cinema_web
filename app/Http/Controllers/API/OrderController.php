@@ -211,7 +211,7 @@ class  OrderController extends Controller
                 return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
             default:
-               
+
                 break;
         }
     }
@@ -496,6 +496,8 @@ class  OrderController extends Controller
         });
         return $this->responseData($orders);
     }
+
+
     public function details($order_id, $API = true)
     {
         try {
@@ -511,6 +513,7 @@ class  OrderController extends Controller
             $user = null;
         }
 
+    
 
         $user_loyalty_balance = null;
         if ($user) {
@@ -519,47 +522,99 @@ class  OrderController extends Controller
         $order_seats = null;
         try {
 
-            $order_seats = $this->orderRepository->getOrderSeats($order->id, $grouped = true);
+            $order_seats = $this->orderRepository->getOrderSeats($order->id, $grouped = false);
         } catch (\Throwable $e) {
 
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
 
+        $order_items = null;
+        try {
+
+            $order_items = $this->orderRepository->getOrderItems($order->id, $grouped = false);
+        } catch (\Throwable $e) {
+
+            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+        }
+        $order_topups = null;
+        try {
+
+            $order_topups = $this->orderRepository->getOrderTopups($order->id, $grouped = false);
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+        }
+
         $order_seats = $order_seats->map(function ($seats) use ($order) {
+            
             $movie = $seats->movie;
             return [
-                'order_id' => $order->id,
+                // 'order_id' => $order->id,
                 'movie_name' => $movie->name ?? '',
                 'movie_image' => get_image($movie->main_image) ?? '',
                 'duration' => minutes_to_human($movie->duration),
-                'order_barcode' => $order->barcode,
+                // 'order_barcode' => $order->barcode,
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
-                'order_barcode' => $order->barcode,
+                // 'order_barcode' => $order->barcode,
                 'branch' => $seats->theater->branch->label ?? '',
                 'date' => $seats->date ? now()->parse($seats->date)->format('Y-m-d') : '', // Format as YYYY-MM-DD
                 'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
                 'theater' => $seats->theater->label ?? '',
-                'seats' => $seats->seats,
+                'seats' => $seats->seat,
             ];
         });
 
+        $order_items = $order_items->map(function ($items) {
+            return [
+                'label' => $items->label,
+                'price' => currency_format($items->price),
+
+            ];
+        });
+        $order_topups = $order_topups->map(function ($topups) {
+            return [
+                'label' => $topups->label,
+                'price' => currency_format($topups->price),
+            ];
+        });
+
+        $pos_user_id = $order->pos_user_id;
+        try {
+            $pos_user_id = $this->posUserRepository->getUserById($pos_user_id);
+        } catch (\Throwable $th) {
+            $pos_user = null;
+        }
+// dd($pos_user_id->name);
+
+        // $user_by_barcode= $this->userRepository->getUserByCardNumber($form_data['car'])
+
+        $result = [
+            'loyalty_points_balance' => $user_loyalty_balance ? [
+                "value" => $user_loyalty_balance,
+                "display" => $user_loyalty_balance . ' points'
+            ] : null,
+            'order' => [
+                'id' => $order->id,
+                'long_id' => $order->id,
+                'barcode' =>  $order->barcode,
+                'cashier'=>$pos_user_id->name,
+                'customer'=>$user->name,
+                // 'customer'=>$user,
+            ],
+            'tickets' => $order_seats,
+            'items' =>  $order_items,
+            'topups' => $order_topups,
+
+            // 'topups' => [],
+
+            // 'coupons' => [],
+
+           
+        ];
 
         if ($API) {
-            return $this->responseData([
-                'loyalty_points_balance' => $user_loyalty_balance ? [
-                    "value" => $user_loyalty_balance,
-                    "display" => $user_loyalty_balance . ' points'
-                ] : null,
-                'order' => $order_seats,
-            ]);
+            return $this->responseData($result);
         } else {
-            return [
-                'loyalty_points_balance' => $user_loyalty_balance ?  [
-                    "value" => $user_loyalty_balance,
-                    "display" => $user_loyalty_balance . ' points'
-                ] : null,
-                'order' => $order_seats,
-            ];
+            return $result;
         }
     }
     public function print()

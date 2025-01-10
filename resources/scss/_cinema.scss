@@ -517,6 +517,10 @@ nav {
         }
     }
 
+
+    .no-shows-message{
+        @apply rounded-full bg-primary-color w-fit px-4 py-2 text-white uppercase text-[10px] font-bold tracking-[1.9px] ; 
+    }
     .dates-list-cont {
         display: flex;
         overflow-y: auto;
@@ -585,6 +589,7 @@ nav {
         }
         .timing-list {
             display: flex;
+            gap: 4px;
             flex-wrap: nowrap;
             width: 100%;
             overflow: auto;

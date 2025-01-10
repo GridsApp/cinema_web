@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- @dd($movie_details); --}}
-    <div class=" main-spacing movie-details-page" x-data="GeneralFunctions.movieDetails()" x-init="initializeDates()">
+    <div class=" main-spacing movie-details-page"  >
         <div class="grid sm:grid-cols-12 grid-cols-1  ">
             <div class="col-span-6 relative">
                 {{-- @if (isset($movie_details['cover_image'])) --}}
@@ -185,7 +185,7 @@
 
                         </div> --}}
 
-                        <livewire:website.movie-show />
+                        <livewire:website.movie-show :slug="$slug" />
                     </div>
 
                 </div>

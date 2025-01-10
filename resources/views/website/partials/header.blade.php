@@ -16,7 +16,7 @@
                 </a>
             </div>
             <div class="flex md:hidden">
-                <!-- Hamburger Icon -->
+            
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white">
                     <i class="fa-solid fa-bars text-black"></i>
                 </button>
@@ -27,13 +27,13 @@
                 <a href="/branches/listing" class="nav-text">Cinemas</a>
                 <a href="/contact-us" class="nav-text">Contact us</a>
                 <div>
-                    <button class="bg-primary-color hover:bg-black inline-flex px-10 py-2 rounded-full gap-3 text-[10px] items-center tracking-[1.95px] font-bold">
+                    <a href="/register" class="bg-primary-color hover:bg-black inline-flex px-10 py-2 rounded-full gap-3 text-[10px] items-center tracking-[1.95px] font-bold">
                         <svg xmlns="http://www.w3.org/2000/svg" width="17.324" height="17.324" viewBox="0 0 17.324 17.324">
                             <path id="Icon_awesome-user-alt" data-name="Icon awesome-user-alt"
                                 d="M8.662,9.745A4.872,4.872,0,1,0,3.79,4.872,4.874,4.874,0,0,0,8.662,9.745Zm4.331,1.083H11.129a5.89,5.89,0,0,1-4.933,0H4.331A4.331,4.331,0,0,0,0,15.159V15.7a1.625,1.625,0,0,0,1.624,1.624H15.7A1.625,1.625,0,0,0,17.324,15.7v-.541A4.331,4.331,0,0,0,12.993,10.828Z" fill="#fff"></path>
                         </svg>
                         <span class="text-white uppercase">Sign in</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

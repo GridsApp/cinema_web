@@ -13,8 +13,7 @@ class Branch extends Model
     protected function label(): Attribute
     {
         return Attribute::make(
-            get: fn(mixed $value, array $attributes) => $attributes['label_'.app()->getLocale()]  
+            get: fn(mixed $value, array $attributes) => $attributes['label_' . app()->getLocale()]
         );
     }
-    
 }
