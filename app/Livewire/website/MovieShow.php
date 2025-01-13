@@ -58,29 +58,43 @@ class MovieShow extends Component
 
     public function fetchMovieShows()
     {
-       
+
         $movie = Movie::where('slug', $this->slug)->whereNull('deleted_at')->first();
         if (!$movie) {
             abort(404, 'Movie not found');
         }
 
         $branchPrefix = Request::segment(1);
-        $branch= Branch::whereNull("deleted_at")->where('web_prefix',$branchPrefix)->first();
+        $branch = Branch::whereNull("deleted_at")->where('web_prefix', $branchPrefix)->first();
 
 
         $movie_id = $movie->id;
         $date = $this->selectedDate;
-        $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
 
-            $this->movieShows = collect($shows)->groupBy('branch')->map(function ($branchShows) {
-                return $branchShows->groupBy('price_group');
-            })->toArray();
+        $branchShows = $this->movieShowRepository->getMovieShows($branch->id, $movie->id, $date)->toArray();
 
-            // $branches = array_keys($this->movieShows);
-            // dd($branches);
-            // $this->firstBranch = $branch->label;
-            // $this->otherBranches = array_slice($branches, 1);
-        
+        // $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
+
+
+
+        $otherBranches = Branch::whereNull('deleted_at')
+            ->where('id', '!=', $branch->id)
+            ->get();
+
+      
+        $otherBranchShows = [];
+        foreach ($otherBranches as $otherBranch) {
+            $otherBranchShows[$otherBranch->id] = $this->movieShowRepository
+                ->getMovieShows($otherBranch->id, $movie->id, $date)
+                ->toArray();
+        }
+
+        $allShows = [
+            'currentBranchShows' => $branchShows,
+            'otherBranchShows' => $otherBranchShows,
+        ];
+    
+        return $allShows; 
     }
 
     public function render()

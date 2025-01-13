@@ -75,7 +75,9 @@ class TheaterSeatsController extends Controller
             "rows" => $rows,
             'map' => $map
         ];
+        return $this->responseData($result, notification()->success('Seats Fetched', '`seats` fetched successfully.'));
 
-        return $this->responseData($result);
+
+        // return $this->responseData($result);
     }
 }

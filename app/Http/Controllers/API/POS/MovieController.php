@@ -103,6 +103,6 @@ class MovieController extends Controller
                 'movieShows' => $movieShows
             ];
         });
-        return $this->responseData($customMovies, notification()->success('Movies Fetched', 'Movies fetched successfully.'));
+        return $this->responseData($customMovies);
     }
 }
