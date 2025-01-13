@@ -72,16 +72,14 @@ class MovieShow extends Component
         $date = $this->selectedDate;
         $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
 
-
-       
-      
             $this->movieShows = collect($shows)->groupBy('branch')->map(function ($branchShows) {
                 return $branchShows->groupBy('price_group');
             })->toArray();
 
-            $branches = array_keys($this->movieShows);
-            $this->firstBranch = $branches[0];
-            $this->otherBranches = array_slice($branches, 1);
+            // $branches = array_keys($this->movieShows);
+            // dd($branches);
+            // $this->firstBranch = $branch->label;
+            // $this->otherBranches = array_slice($branches, 1);
         
     }
 

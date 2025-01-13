@@ -43,7 +43,9 @@ class BranchController extends Controller
 
         $branches = $this->branchRepository->getBranches($display);
 
-        return $this->responseData($branches);
+        // return $this->responseData($branches);
+        return $this->responseData($branches, notification()->success('Branches Fetched', 'Branches fetched successfully.'));
+
     }
 
     public function activeMovies($branch_id)
