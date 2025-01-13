@@ -650,12 +650,13 @@ class CartController extends Controller
         } else {
             $card_info = null;
         }
-        return $this->responseData([
+       
+        return $this->responseData(([
             'coupon_code' => $cartDetails["coupon_codes"],
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
-            // 'discount' => $cartDetails["discount"],
             'lines' => $cartDetails["lines"],
-        ]);
+        ]), notification()->success('Successfuly Fetched', 'Fetched successfully.'));
+
     }
 }

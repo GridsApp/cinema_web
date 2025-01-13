@@ -513,7 +513,7 @@ class  OrderController extends Controller
             $user = null;
         }
 
-    
+
 
         $user_loyalty_balance = null;
         if ($user) {
@@ -545,7 +545,7 @@ class  OrderController extends Controller
         }
 
         $order_seats = $order_seats->map(function ($seats) use ($order) {
-            
+
             $movie = $seats->movie;
             return [
                 // 'order_id' => $order->id,
@@ -583,9 +583,9 @@ class  OrderController extends Controller
         } catch (\Throwable $th) {
             $pos_user = null;
         }
-// dd($pos_user_id->name);
 
-        // $user_by_barcode= $this->userRepository->getUserByCardNumber($form_data['car'])
+        // dd($pos_user_id->name);
+
 
         $result = [
             'loyalty_points_balance' => $user_loyalty_balance ? [
@@ -596,19 +596,16 @@ class  OrderController extends Controller
                 'id' => $order->id,
                 'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
-                'cashier'=>$pos_user_id->name,
-                'customer'=>$user->name,
+                'cashier' => $pos_user_id->name,
+                'customer' => $user->name,
                 // 'customer'=>$user,
             ],
             'tickets' => $order_seats,
             'items' =>  $order_items,
             'topups' => $order_topups,
 
-            // 'topups' => [],
 
-            // 'coupons' => [],
 
-           
         ];
 
         if ($API) {
