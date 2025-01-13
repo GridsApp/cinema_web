@@ -396,7 +396,13 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $reference;
     }
-    public function generateBarcode()
+
+    public function generateLongId($id){
+        return date("Y")."-".date("m").'-'.str_pad($id, 6, '0', STR_PAD_LEFT);  
+    }
+
+
+   public function generateBarcode()
     {
         do {
             $number = (string) rand(10000000000000000, 99999999999999999);

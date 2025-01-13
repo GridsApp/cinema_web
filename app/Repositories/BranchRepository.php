@@ -23,7 +23,8 @@ class BranchRepository implements BranchRepositoryInterface
                     'latitude' => $branch->latitude,
                     'longitude' => $branch->longitude,
                     'address' => $branch->address,
-                    'number' => $branch->number
+                    'number' => $branch->number,
+                    'web_prefix' => $branch->web_prefix,
                 ];
             });
     }

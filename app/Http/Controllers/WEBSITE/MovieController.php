@@ -9,7 +9,8 @@ use App\Interfaces\MovieShowRepositoryInterface;
 use App\Models\Branch;
 use App\Models\Movie;
 use App\Repositories\MovieShowRepository;
-use Illuminate\Http\Request;
+use Livewire\Component;
+use Illuminate\Support\Facades\Request;
 
 class MovieController extends Controller
 {
@@ -26,35 +27,35 @@ class MovieController extends Controller
     }
     public function listing()
     {
-        $movies = Movie::whereNull('deleted_at')->get();
-        $branches = Branch::whereNull('deleted_at')->get();
+        // $movies = Movie::whereNull('deleted_at')->get();
+        // $branches = Branch::whereNull('deleted_at')->get();
 
         return view('website.pages.movie.listing', [
-            'movies' => $movies,
-            'branches' => $branches,
+            // 'movies' => $movies,
+            // 'branches' => $branches,
 
         ]);
     }
 
 
-    public function details($slug)
+
+    public function details($cinema_prefix, $language_prefix, $slug)
     {
+
 
         $movie_id = Movie::where('slug', $slug)->whereNull('deleted_at')->pluck('id');
         if (!$movie_id) {
             abort(404, 'Movie not found');
         }
-        // $branches = $this->branchRepository->getBranches();
-        $movie_details = $this->movieRepository->getMovie($movie_id);
-        // $first_branch = $branches->first();
-        $date = now()->parse(now()->format('Y-m-d'));
-        // $movie_shows = $this->movieShowRepository->getMovieShows($first_branch['id'], $movie_id, $date);
-        //    dd($movie_shows);
-        return view('website.pages.movie.details', [
 
+        $movie_details = $this->movieRepository->getMovie($movie_id);
+        $date = now()->parse(now()->format('Y-m-d'));
+
+        return view('website.pages.movie.details', [
             'slug' => $slug,
-            // 'movie_shows' => $movie_shows,
             'movie_details' => $movie_details,
+            'cinema_prefix' => $cinema_prefix,
+            'language_prefix' => $language_prefix,
         ]);
     }
 }

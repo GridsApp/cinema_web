@@ -594,7 +594,7 @@ class  OrderController extends Controller
             ] : null,
             'order' => [
                 'id' => $order->id,
-                'long_id' => $order->id,
+                'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
                 'cashier'=>$pos_user_id->name,
                 'customer'=>$user->name,

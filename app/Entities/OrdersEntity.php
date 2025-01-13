@@ -24,6 +24,7 @@ class OrdersEntity extends Entity
         $this->addField("barcode" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("payment_method_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("total_price" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("long_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("printed_at" , ["container" => 'col-span-6', 'required' => true]);
   
         return $this->fields;

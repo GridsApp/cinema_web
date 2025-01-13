@@ -2,15 +2,16 @@
     <div class="flex sm:flex-row flex-col sm:gap-10 gap-5 filteration">
         <div class="w-full flex flex-row sm:gap-6 gap-4" class="filteration-select">
             <div class="sm:w-fit w-full">
-                <select wire:model="selectedBranch"
-                    class="custom-select lg:w-[400px] md:w-[400px] sm:w-full font-bold uppercase">
-                    <option value="" selected>— Select Branch —</option>
-                    @foreach ($branches as $branch)
-             
-                        <option value="{{ $branch->id }}">{{ $branch->label }}</option>
-                    @endforeach
-                  
-                </select>
+                <select wire:model="selectedBranch" 
+                class="custom-select lg:w-[400px] md:w-[400px] sm:w-full font-bold uppercase">
+            <option value="" selected>— Select Branch —</option>
+            @foreach ($branches as $branch)
+                <option value="{{ $branch['id'] }}">
+                    {{ $branch['label']  }}
+                </option>
+            @endforeach
+        </select>
+        
            
             </div>
             <div>
@@ -53,7 +54,11 @@
             <div class="grid grid-cols-4 gap-10">
                 @foreach ($movies as $movie)
             
-                    @include('website.components.card', ['movie' => $movie])
+                @include('website.components.card', [
+                    'movie' => $movie
+                ])
+                
+                
                 @endforeach
             </div>
         @endif

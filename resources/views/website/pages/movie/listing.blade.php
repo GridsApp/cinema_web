@@ -8,7 +8,10 @@
         @include('website.components.title',['title'=>'WHAT’S ON'])
     </div>
  <div>
-    <livewire:website.movie-listing />
+    <livewire:website.movie-listing   cinemaPrefix="{{ request()->segment(1) }}"
+        languagePrefix="{{ request()->segment(2) }}" 
+    
+/>
  </div>
 </div>
 @endsection

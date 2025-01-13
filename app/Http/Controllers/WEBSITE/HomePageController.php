@@ -32,7 +32,10 @@ class HomePageController extends Controller
         );
 
         $statistics=CinemaStatistic::whereNull('deleted_at')->get();
+        $cinemaPrefix = request()->segment(1);
+        $languagePrefix = request()->segment(2);
         // dd($statistics);
-        return view('website.pages.home', compact('slider', 'branches', 'movies','statistics'));
+        return view('website.pages.home', compact('slider', 'branches', 'movies','statistics',  'cinemaPrefix',
+        'languagePrefix'));
     }
 }

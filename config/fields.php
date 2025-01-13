@@ -48,6 +48,19 @@ return [
         'channel' => $channel,        // Same channel for both fields
         'channel_language' => $firstLanguage  // This will work as well
     ],
+
+    'long_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+        'label' => 'Long Id',
+        'placeholder' => 'Enter Long Id',
+        'name' => 'long_id',
+        
+    ],
+    
     "title" => [
         'id' => uniqid(),
         'livewire' => [

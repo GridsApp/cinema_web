@@ -16,9 +16,7 @@ class MovieController extends Controller
     public function getBranchPosActiveMovieShows($branch_id)
     {
 
-        // $system_id = request()->input('system_id', 2);
         $theaters_ids = Theater::select('id')->whereNull('deleted_at')->where('branch_id', $branch_id)->pluck('id');
-        // $system_ids = System::select('id')->whereNull('deleted_at')->where('id', $system_id)->pluck('id');
 
         $date = request()->input('date');
         if ($date) {
@@ -37,7 +35,6 @@ class MovieController extends Controller
             ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
                 $q->whereDate('date', $date)
                     ->whereIn('theater_id', $theaters_ids);
-                  
             })
             ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
                 $query->whereIn('theater_id', $theaters_ids)
@@ -57,10 +54,10 @@ class MovieController extends Controller
             $total_available_seats = 0;
             $total_reserved_seats = 0;
 
-            $movieShows = $movie->movieShows->map(function ($show) use(
-                                                            &$total_seats ,
-                                                            &$total_available_seats,
-                                                            &$total_reserved_seats
+            $movieShows = $movie->movieShows->map(function ($show) use (
+                &$total_seats,
+                &$total_available_seats,
+                &$total_reserved_seats
             ) {
 
                 $reserved_seats = 10;
@@ -69,8 +66,8 @@ class MovieController extends Controller
 
                 $nb_seats = $show->theater->nb_seats;
 
-                $total_seats +=$nb_seats;
-                $total_available_seats +=$nb_seats -$reserved_seats;
+                $total_seats += $nb_seats;
+                $total_available_seats += $nb_seats - $reserved_seats;
                 $total_reserved_seats += $reserved_seats;
 
                 return [
@@ -85,7 +82,7 @@ class MovieController extends Controller
                         'total' => $nb_seats,
                         'reserved' => $reserved_seats,
                         'available' => $nb_seats - $reserved_seats,
-                        'percentage' => round($reserved_seats / $nb_seats,2)
+                        'percentage' => round($reserved_seats / $nb_seats, 2)
                     ],
                     'duration' => $show->duration,
                     'price' => currency_format(10000)
@@ -101,11 +98,11 @@ class MovieController extends Controller
                     'total' => $total_seats,
                     'reserved' => $total_reserved_seats,
                     'available' => $total_available_seats,
-                    'percentage' => round($total_reserved_seats / $total_seats , 2)
+                    'percentage' => round($total_reserved_seats / $total_seats, 2)
                 ],
                 'movieShows' => $movieShows
             ];
         });
-        return $this->responseData($customMovies);
+        return $this->responseData($customMovies, notification()->success('Movies Fetched', 'Movies fetched successfully.'));
     }
 }
