@@ -1338,11 +1338,6 @@ return [
     ],
 
 
-
-
-
-
-
     'gender' => [
         'id' => uniqid(),
         'livewire' => [

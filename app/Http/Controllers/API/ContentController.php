@@ -71,7 +71,7 @@ class ContentController extends Controller
             ];
         });
 
-        return $this->responseData($slideshows);
+        return $this->responseData($slideshows,notification()->success('slideshows fetched', 'slideshows fetched'));
     }
 
 

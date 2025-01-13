@@ -514,6 +514,7 @@ class  OrderController extends Controller
         }
 
 
+    //    dd($user_id);
 
         $user_loyalty_balance = null;
         if ($user) {
@@ -584,7 +585,7 @@ class  OrderController extends Controller
             $pos_user = null;
         }
 
-        // dd($pos_user_id->name);
+        // dd( $user);
 
 
         $result = [
@@ -597,7 +598,7 @@ class  OrderController extends Controller
                 'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
                 'cashier' => $pos_user_id->name,
-                'customer' => $user->name,
+                // 'customer' => $user->name,
                 // 'customer'=>$user,
             ],
             'tickets' => $order_seats,
@@ -609,7 +610,7 @@ class  OrderController extends Controller
         ];
 
         if ($API) {
-            return $this->responseData($result);
+            return $this->responseData($result,notification()->success('Order fetched', 'Order fetched'));
         } else {
             return $result;
         }

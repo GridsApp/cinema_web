@@ -76,11 +76,16 @@ class CartController extends Controller
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
 
+        // return $this->responseData([
+        //     'cart_id' => $cart->id,
+        //     'timezone' => config('app.timezone'),
+        //     'expires_at' => $cart->expires_at
+        // ]);
         return $this->responseData([
             'cart_id' => $cart->id,
             'timezone' => config('app.timezone'),
             'expires_at' => $cart->expires_at
-        ]);
+        ], notification()->success('Cart created', 'Cart created'));
     }
     public function expireCart()
     {
@@ -650,13 +655,12 @@ class CartController extends Controller
         } else {
             $card_info = null;
         }
-       
+
         return $this->responseData(([
             'coupon_code' => $cartDetails["coupon_codes"],
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
             'lines' => $cartDetails["lines"],
         ]), notification()->success('Successfuly Fetched', 'Fetched successfully.'));
-
     }
 }
