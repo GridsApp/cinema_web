@@ -74,6 +74,7 @@ class MovieShow extends Component
         $movie_id = $movie->id;
         $date = $this->selectedDate;
 
+        // Fetch shows
         $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
 
         if (empty($shows)) {
@@ -84,36 +85,29 @@ class MovieShow extends Component
             return;
         }
 
-        // foreach ($shows as &$show) {
-        //     $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
-        //     $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
-        //     $show['available_seats'] = $theater ? ($theater->nb_seats - $reservedSeatsCount) : 0;
-        // }
-        // dd($show);
-        // dd($theaters_id);
+        foreach ($shows as &$show) {
+            $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
+            $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
+            // dd($reservedSeatsCount);
+            $show['theater'] = $theater; // Attach theater data
+            $show['available_seats'] = $theater->nb_seats - $reservedSeatsCount;
+            // dd(            $show['available_seats']);
+        }
 
-
-        // $theater = $shows->theater;
-        // dd($theater);
-        // $nb_seats = $show->theater->nb_seats;
+        // Group the modified $shows array
         $this->movieShows = collect($shows)
             ->groupBy('branch')
             ->map(function ($branchShows) {
                 return $branchShows->groupBy('price_group');
             })
             ->toArray();
-        foreach ($shows as &$show) {
-            $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
-            $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
-            $show['available_seats'] = $theater ? ($theater->nb_seats - $reservedSeatsCount) : 0;
-        }
 
         $this->firstBranch = $branch->label;
 
         if (isset($this->movieShows[$this->firstBranch]) && count($this->movieShows[$this->firstBranch]) > 0) {
             $this->otherBranches = collect($this->movieShows)->except($this->firstBranch)->toArray();
         } else {
-            $this->firstBranch =  $branch->label;
+            $this->firstBranch = $branch->label;
             $this->otherBranches = $this->movieShows;
         }
     }

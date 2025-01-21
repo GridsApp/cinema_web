@@ -39,24 +39,36 @@
                         @foreach ($movieShows[$firstBranch] as $priceGroup => $shows)
                             <div class="zone">{{ $priceGroup }}</div>
                             <div class="timing-list">
+                              
+
                                 @foreach ($shows as $show)
+                                {{-- @dd($shows); --}}
+                                    @php
+                                    // dd($show['theater']);
+                                        $nb_seats = $show['theater']->nb_seats;
+
+                                        // dd($show['theater'] );
+                                        $reserved_seats = $nb_seats - $show['available_seats'];
+                                       
+                                        $percentage = ($show['available_seats'] / $nb_seats) * 100;
+
+                                        // dd($percentage);
+                                    @endphp
                                     <div class="time-button">
                                         <div
                                             class="flex justify-center bg-gray-100 gap-3 items-center rounded-full py-1 pl-1 pr-5">
-                                            <div class="icon-seat flex justify-center bg-white items-center">
+                                            <div class="icon-seat border-2 border-red-600 flex justify-center bg-white items-center">
                                                 <i class="fa-solid fa-loveseat"></i>
                                             </div>
-                                            @dd($show);
+                                            {{-- @dd($show); --}}
                                             <span
                                                 class="text-[10px] tracking-[1.9px] font-bold">{{ $show['time'] }}</span>
-                                                <div class="circular-diagram absolute top-0 right-0 w-6 h-6 rounded-full border-2 border-gray-300">
-                                                    <div class="inner-circle w-full h-full rounded-full" style="
-                                                        background: conic-gradient(
-                                                            #4caf50 {{ $show['available_seats'] / $theater->nb_seats * 360 }}deg,
-                                                            #f44336 0deg
-                                                        );
-                                                    "></div>
-                                                </div>
+                                                {{-- <p>Available seats percentage for the show: {{ number_format($percentage, 2) }}%</p> --}}
+                                             
+
+                                            <div>
+                                                {{-- {{ $show['available_seats'] / $show['theater']->nb_seats * 360 }} --}}
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

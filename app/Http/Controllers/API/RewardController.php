@@ -61,6 +61,8 @@ class RewardController extends Controller
         $user_reward->save();
 
 
+        // dd($user->branch->label_en);
+
         $reward = Reward::whereNull('deleted_at')->where('id',$user_reward->reward_id)->first();
         // dd($reward);
         return $this->responseData([
@@ -69,9 +71,13 @@ class RewardController extends Controller
             'description' => $reward->description,
             'code' => $user_reward->code,
             'cashier' => $user->name,
+            'branch'=>[
+                'label_en'=>$user->branch->label_en,
+                'label_ar'=>$user->branch->label_ar,
+            ]
 
         ]);
-        return $this->response(notification()->success('Code Used Successfully', 'Code has been successfully Used.'));
+        // return $this->response(notification()->success('Code Used Successfully', 'Code has been successfully Used.'));
 
 
         // $user_reward =   $this->rewardRepository->getUsedReward($user->id, $reward->id);
