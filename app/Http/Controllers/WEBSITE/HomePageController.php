@@ -6,10 +6,11 @@ namespace App\Http\Controllers\WEBSITE;
 use App\Http\Controllers\Controller;
 use App\Interfaces\BranchRepositoryInterface;
 use App\Interfaces\MovieRepositoryInterface;
+use App\Models\Branch;
 use App\Models\CinemaStatistic;
 
 use App\Models\Slideshow;
-
+use Illuminate\Support\Facades\Request;
 
 class HomePageController extends Controller
 {
@@ -21,21 +22,38 @@ class HomePageController extends Controller
         $this->movieRepository = app(MovieRepositoryInterface::class);
         $this->branchRepository = app(BranchRepositoryInterface::class);
     }
-    public function home()
+    public function home(Request $request)
     {
         $slider = Slideshow::whereNull('deleted_at')->get();
         $branches = $this->branchRepository->getBranches();
-        $first_branch = $branches->first();
+      
+        $cinemaPrefix = request()->segment(1);
+
+        $branch = Branch::whereNull('deleted_at')->where('web_prefix', $cinemaPrefix)->first();
+
+        // dd($branch);
+        if (!$branch) {
+            abort(404, 'Branch not found');
+        }
+
+        // dd($branch);
+        $branch_id = Branch::whereNull('deleted_at')->where('web_prefix', $cinemaPrefix)->pluck('id');
+    
+    
         $movies = $this->movieRepository->getBranchActiveMovies(
-            $first_branch,
+            $branch_id,
             now()->format('Y-m-d')
         );
+    
+
+        // dd($movies);
+        // $movie_id = $movie->id;
 
         $statistics=CinemaStatistic::whereNull('deleted_at')->get();
-        $cinemaPrefix = request()->segment(1);
+      
         $languagePrefix = request()->segment(2);
         // dd($statistics);
-        return view('website.pages.home', compact('slider', 'branches', 'movies','statistics',  'cinemaPrefix',
+        return view('website.pages.home', compact('slider','branch', 'branches', 'movies','statistics',  'cinemaPrefix',
         'languagePrefix'));
     }
 }

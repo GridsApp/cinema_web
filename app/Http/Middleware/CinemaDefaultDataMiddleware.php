@@ -20,13 +20,13 @@ class CinemaDefaultDataMiddleware
     {
 
 
-        $cinema = Branch::whereNull('deleted_at')
+        $branch = Branch::whereNull('deleted_at')
             ->where('web_prefix',$request->segment(1))
             ->first();
-        if(!$cinema){
+        if(!$branch){
             abort(404);
         }
-        $request->merge(['cinema'=>$cinema]);
+        $request->merge(['branch'=>$branch]);
 
         return $next($request);
     }

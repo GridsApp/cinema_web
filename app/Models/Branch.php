@@ -16,4 +16,22 @@ class Branch extends Model
             get: fn(mixed $value, array $attributes) => $attributes['label_' . app()->getLocale()]
         );
     }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['description_' . app()->getLocale()]
+        );
+    }
+
+
+    protected function address(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['address_' . app()->getLocale()]
+        );
+    }
+    
+
+    
 }

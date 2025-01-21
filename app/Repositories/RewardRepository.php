@@ -48,12 +48,22 @@ class RewardRepository implements RewardRepositoryInterface
                 'user_balance' => (double) $user_balance
             ];
         });
+
+        
         return $reward_list;
     }
     public function getRewardById($reward_id)
     {
 
         return Reward::find($reward_id);
+    }
+
+    public function getRewardByCode($code)
+    {
+
+        return UserReward::whereNull('deleted_at')->whereNull('used_at')->where('code',$code)->first();
+
+        // dd($user_reward);
     }
 
 

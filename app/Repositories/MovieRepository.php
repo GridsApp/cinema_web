@@ -122,7 +122,7 @@ class MovieRepository implements MovieRepositoryInterface
     public function getMovies($ids)
     {
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')->whereNull('deleted_at')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id','slug')->whereNull('deleted_at')
             ->whereIn('id', $ids)
             ->get();
 
@@ -133,7 +133,8 @@ class MovieRepository implements MovieRepositoryInterface
         return $movies->map(function ($movie) use ($genres) {
             return [
                 'id' => $movie->id,
-                'image' => get_image($movie->main_image),
+                'slug' => $movie->slug,
+                'main_image' => get_image($movie->main_image),
                 'name' => $movie->name,
                 'duration' => minutes_to_human($movie->duration),
                 'genres' => $genres->whereIn('id', $movie->genre_id)->values()

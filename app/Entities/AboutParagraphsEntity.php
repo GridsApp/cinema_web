@@ -17,7 +17,7 @@ class AboutParagraphsEntity extends Entity
 
     public function fields(){
 
-        $this->addField("content" , ["container" => 'col-span-12']);
+        $this->addField("content" , ["container" => 'col-span-12','translatable'=>true]);
       
         return $this->fields;
     }

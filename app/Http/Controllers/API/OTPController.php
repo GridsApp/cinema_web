@@ -119,11 +119,10 @@ class OtpController extends Controller
 
         try {
             $user = $this->userRepository->getUserByToken($form_data["user_token"]);;
-            
         } catch (\Exception $th) {
             return $this->response(notification()->error("Invalid token!", "Invalid token"));
         }
-      
+
         // if (!$user) {
         //     return $this->response(notification()->error("Invalid token!", "Invalid token"));
         // }

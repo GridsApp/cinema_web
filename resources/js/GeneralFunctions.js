@@ -781,4 +781,152 @@ export default class GeneralFunctions {
             },
         ]);
     }
+
+    // initPhone() {
+    //     let input = document.querySelector(".phone-numb");
+    //     if (input) {
+    //         input.addEventListener("keypress", function (event) {
+    //             var charCode = event.charCode;
+
+    //             if (charCode !== 0 && (charCode < 48 || charCode > 57)) {
+    //                 event.preventDefault();
+    //             }
+    //         });
+
+    //         var intl = intlTelInput(input, {
+    //             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.7/build/js/utils.js",
+    //             initialCountry: "lb",
+    //             strictMode: true,
+    //             separateDialCode: false,
+    //             nationalMode: true,
+    //         });
+
+    //         let updating = false;  // Flag to prevent event loop
+
+    //         input.addEventListener("input", function () {
+    //             if (updating) return;  // Do nothing if we are updating the inputs
+
+    //             updating = true;  // Set the flag to true to prevent further triggers
+
+    //             var countryData = intl.getSelectedCountryData();
+    //             var phone_country_code = countryData.iso2;
+    //             console.log(phone_country_code);
+    //             var phone = intl.getNumber() + input.value;
+    //             if (!phone.startsWith("+")) {
+    //                 phone = "+" + countryData.dialCode + phone;
+    //             }
+
+    //             document.querySelector("input[name='phone_country_code']").value = phone_country_code;
+    //             document.querySelector("input[name='phone']").value = phone;
+
+    //             document.querySelector("input[name='phone_country_code']").dispatchEvent(new Event("input"));
+    //             document.querySelector("input[name='phone']").dispatchEvent(new Event("input"));
+
+    //             updating = false;
+    //         });
+    //     }
+    // }
+
+    initPhone() {
+        let input = document.querySelector("#phone");
+        if (input) {
+            input.addEventListener("keypress", function (event) {
+                var charCode = event.charCode;
+                if (charCode !== 0 && (charCode < 48 || charCode > 57)) {
+                    event.preventDefault();
+                }
+            });
+            var intl = intlTelInput(input, {
+                utilsScript:
+                    "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.7/build/js/utils.js",
+                initialCountry: "lb",
+                strictMode: false,
+                separateDialCode: false,
+                nationalMode: true,
+            });
+            input.addEventListener("input", function () {
+                var elem = this;
+                var countryData = intl.getSelectedCountryData();
+                var phone_country_code = countryData.iso2;
+                var phone_number = intl.getNumber() + input.value;
+                if (!phone_number.startsWith("+")) {
+                    phone_number = "+" + countryData.dialCode + phone_number;
+                }
+                document.querySelector(
+                    "input[name='phone_country_code']"
+                ).value = phone_country_code;
+                document.querySelector("input[name='phone_number']").value =
+                    phone_number;
+                document
+                    .querySelector("input[name='phone_country_code']")
+                    .dispatchEvent(new Event("input"));
+                document
+                    .querySelector("input[name='phone_number']")
+                    .dispatchEvent(new Event("input"));
+            });
+        }
+    }
+
+
+        initPinCode(wire) {
+            const inputs = document.querySelectorAll(".twa-auth-input");
+            const inputField = document.querySelector(".twa-auth-inputfield");
+    
+            let inputCount = 0;
+    
+            const updateInputConfig = (element, disabledStatus) => {
+                element.disabled = disabledStatus;
+                if (!disabledStatus) {
+                    element.focus();
+                } else {
+                    element.blur();
+                }
+            };
+    
+            inputs.forEach((input, index) => {
+                input.addEventListener("input", (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, ""); // Allow only digits
+                    const value = e.target.value;
+    
+                    if (value.length === 1) {
+                        // Update Livewire's `otp` array
+                        wire.set(`otp.${index}`, value);
+    
+                        // Move to the next input if it exists
+                        if (index < inputs.length - 1) {
+                            updateInputConfig(inputs[index], true);
+                            updateInputConfig(inputs[index + 1], false);
+                        }
+    
+                        inputCount++;
+                    }
+                });
+    
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Backspace") {
+                        if (index > 0 && input.value === "") {
+                            updateInputConfig(inputs[index], true);
+                            updateInputConfig(inputs[index - 1], false);
+                            inputs[index - 1].value = ""; // Clear previous input
+                            wire.set(`otp.${index - 1}`, ""); // Clear Livewire's state
+                            inputCount--;
+                        }
+                    }
+                });
+            });
+    
+            // Initialize the first input
+            const startInput = () => {
+                inputCount = 0;
+                inputs.forEach((input, idx) => {
+                    input.value = "";
+                    wire.set(`otp.${idx}`, ""); // Reset Livewire state
+                    updateInputConfig(input, idx !== 0); // Enable only the first input
+                });
+            };
+    
+            window.onload = startInput;
+        }
+
+    
 }

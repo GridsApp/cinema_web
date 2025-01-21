@@ -476,6 +476,10 @@ class  OrderController extends Controller
                 ];
             });
 
+            $seat_lines = collect($seat_lines);
+            // $item_lines = collect($item_lines);
+            // $topup_lines = collect($topup_lines);
+            
             $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
 
 
@@ -597,7 +601,7 @@ class  OrderController extends Controller
                 'id' => $order->id,
                 'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
-                'cashier' => $pos_user_id->name,
+                'cashier' => $pos_user_id->name ?? null,
                 // 'customer' => $user->name,
                 // 'customer'=>$user,
             ],
@@ -643,6 +647,8 @@ class  OrderController extends Controller
 
     public function getReservedTotal()
     {
+
+       
         $today = Carbon::today();
         $currentTime = Carbon::now();
 

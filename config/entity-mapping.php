@@ -53,6 +53,7 @@ return array (
   'times' => 'App\\Entities\\TimesEntity',
   'user-cards' => 'App\\Entities\\UserCardsEntity',
   'user-loyalty-transactions' => 'App\\Entities\\UserLoyaltyTransactionsEntity',
+  'user-pins' => 'App\\Entities\\UserPinsEntity',
   'user-rewards' => 'App\\Entities\\UserRewardsEntity',
   'user-sessions' => 'App\\Entities\\UserSessionsEntity',
   'user-verify-tokens' => 'App\\Entities\\UserVerifyTokensEntity',

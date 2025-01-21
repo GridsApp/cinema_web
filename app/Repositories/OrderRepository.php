@@ -235,6 +235,7 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             $user_order = Order::where('user_id', $user_id)
                 ->whereNull('deleted_at')->get();
+             
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -327,6 +328,8 @@ class OrderRepository implements OrderRepositoryInterface
     }
     public function getOrderItems($order_id, $grouped = false)
     {
+
+
         if ($grouped) {
             $select = [DB::raw("CONCAT(COALESCE(item_id, '0'), '') as concatenated_item_id"), 'order_id', 'item_id', 'price', 'label', DB::raw('count(*) as quantity')];
 
@@ -341,6 +344,8 @@ class OrderRepository implements OrderRepositoryInterface
                     $query->groupBy('item_id');
                 })
                 ->get();
+
+                // dd($user_order_item);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

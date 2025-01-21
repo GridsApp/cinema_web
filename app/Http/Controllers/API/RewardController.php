@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\RewardRepositoryInterface;
-
+use App\Models\Reward;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use twa\cmsv2\Traits\APITrait;
 
 class RewardController extends Controller
@@ -31,6 +32,75 @@ class RewardController extends Controller
 
         return $this->responseData($reward_list);
     }
+
+    public function posRedeemCode()
+    {
+
+
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+        // dd($user);
+        $form_data = clean_request([]);
+        $validator = Validator::make($form_data, [
+            'code' => 'required',
+        ]);
+
+
+
+        if ($validator->errors()->count() > 0) {
+            return  $this->responseValidation($validator);
+        }
+        // $user = request()->user;
+        $user_reward = $this->rewardRepository->getRewardByCode($form_data['code']);
+
+        if (!$user_reward) {
+            return $this->response(notification()->error('Code Not Found', 'Code Not Found'));
+        }
+        $user_reward->used_at = now();
+        $user_reward->save();
+
+
+        $reward = Reward::whereNull('deleted_at')->where('id',$user_reward->reward_id)->first();
+        // dd($reward);
+        return $this->responseData([
+            'reward_id' =>$user_reward->reward_id,
+            'label' => $reward->title,
+            'description' => $reward->description,
+            'code' => $user_reward->code,
+            'cashier' => $user->name,
+
+        ]);
+        return $this->response(notification()->success('Code Used Successfully', 'Code has been successfully Used.'));
+
+
+        // $user_reward =   $this->rewardRepository->getUsedReward($user->id, $reward->id);
+
+
+        // if ($user_reward && $reward->one_time_usage == 1) {
+        //     return $this->response(notification()->error('Already redeemed', "You have already redeemed this reward'"));
+        // } elseif ($user_reward && $user_reward->used_at == null) {
+        //     return $this->response(notification()->error('Already redeemed', "You have already redeemed this reward'"));
+        // }
+
+
+        // try {
+        //     DB::beginTransaction();
+
+        //     $user_reward = $this->rewardRepository->createUserReward($user->id, $reward->id);
+
+        //     $this->cardRepository->createLoyaltyTransaction('out', $reward->redeem_points, $user, "Redeem Reward", $user_reward->id);
+
+
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     DB::rollBack();
+        //     return $this->response(notification()->error('Error', $th->getMessage()));
+        // }
+
+
+    }
+
 
     public function redeem($reward_id)
     {
@@ -64,12 +134,11 @@ class RewardController extends Controller
             DB::beginTransaction();
 
             $user_reward = $this->rewardRepository->createUserReward($user->id, $reward->id);
-          
-            $this->cardRepository->createLoyaltyTransaction('out' , $reward->redeem_points , $user , "Redeem Reward" , $user_reward->id);
-          
+
+            $this->cardRepository->createLoyaltyTransaction('out', $reward->redeem_points, $user, "Redeem Reward", $user_reward->id);
+
 
             DB::commit();
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->response(notification()->error('Error', $th->getMessage()));

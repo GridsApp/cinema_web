@@ -19,6 +19,8 @@ class MovieShowRepository implements MovieShowRepositoryInterface
             ->select(
                 'movie_shows.id',
                 'times.label as time',
+                'theaters.label as theater',
+                'theaters.id as theater_id',
                 'price_groups.label as price_group',
                 'branches.label_'.app()->getLocale().' as branch',
                 

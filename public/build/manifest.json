@@ -1,4 +1,20 @@
 {
+  "node_modules/intl-tel-input/build/img/flags.webp": {
+    "file": "assets/flags-Cx4r8tdH.webp",
+    "src": "node_modules/intl-tel-input/build/img/flags.webp"
+  },
+  "node_modules/intl-tel-input/build/img/flags@2x.webp": {
+    "file": "assets/flags@2x-CiSx7kJd.webp",
+    "src": "node_modules/intl-tel-input/build/img/flags@2x.webp"
+  },
+  "node_modules/intl-tel-input/build/img/globe.webp": {
+    "file": "assets/globe-CKC-qWvL.webp",
+    "src": "node_modules/intl-tel-input/build/img/globe.webp"
+  },
+  "node_modules/intl-tel-input/build/img/globe@2x.webp": {
+    "file": "assets/globe@2x-CEs4Xftd.webp",
+    "src": "node_modules/intl-tel-input/build/img/globe@2x.webp"
+  },
   "public/images/arrow-drop-down.svg": {
     "file": "assets/arrow-drop-down-CprKbBwh.svg",
     "src": "public/images/arrow-drop-down.svg"
@@ -8,13 +24,16 @@
     "src": "public/images/cinema_bg.jpeg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-D1j4INhb.js",
+    "file": "assets/app-blKUWSyt.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/app-BLK3IXhO.css"
+    ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-B1l662c0.css",
+    "file": "assets/app-XkGDn2oe.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }

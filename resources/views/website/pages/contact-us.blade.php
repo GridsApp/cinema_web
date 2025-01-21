@@ -4,7 +4,8 @@
     <div class="main-container main-spacing  contact-us">
 
         <div class="mt-10 flex justify-center items-center">
-            @include('website.components.title', ['title' => 'Contact Us'])
+            @include('website.components.title', ['title' => __('messages.contact_us')])
+
         </div>
 
 
@@ -16,7 +17,7 @@
 
                 <div class="mt-5">
                     <div class="uppercase text-[12px] tracking-[1.9px] font-bold">
-                        Get in touch
+                        {{ __('footer.get_in_touch') }}
                     </div>
                     <div class="border border-b opacity-50 mb-2 mt-2"></div>
 
@@ -25,7 +26,7 @@
                         <div class="min-w-[40px] max-w-[40px] inline-flex">
                             <i class="fa-solid fa-phone"></i>
                         </div>
-                        <span>+964 XXXXXXXXXX</span> <!-- Replace this with dynamic phone if available -->
+                        <span>+964 XXXXXXXXXX</span> 
                     </div>
 
 
@@ -81,17 +82,7 @@
                     @endif
 
 
-                    {{-- @if ($telegram)
-                    <div class="border border-b opacity-50 mb-2 mt-2"></div>
-                    <div>
-                        <div class="min-w-[40px] max-w-[40px] inline-flex">
-                            <i class="fa-brands fa-telegram !text-[#0088CC]"></i>
-                        </div>
-                        <a href="{{ $telegram }}" target="_blank" class="hover:underline text-[12px]">
-                            Telegram
-                        </a>
-                    </div>
-                    @endif --}}
+                
                 </div>
 
             </div>
@@ -103,7 +94,7 @@
             @if ($financial_phone || $financial_email)
                 <div>
                     <div class="uppercase text-[12px] tracking-[1.9px] font-bold">
-                        Financial
+                        {{ __('messages.financial') }}
                     </div>
                     <div class="border border-b opacity-50 mb-2 mt-2"></div>
                     @if ($financial_phone)
@@ -128,7 +119,7 @@
             @if ($operator_phone || $operator_email)
                 <div>
                     <div class="uppercase text-[12px] tracking-[1.9px] font-bold">
-                        Operational
+                        {{ __('messages.operational') }}
                     </div>
                     <div class="border border-b opacity-50 mb-2 mt-2"></div>
                     @if ($operator_phone)
@@ -153,7 +144,7 @@
             @if ($management_phone || $management_email)
                 <div>
                     <div class="uppercase text-[12px] tracking-[1.9px] font-bold">
-                        Management
+                        {{ __('messages.management') }}
                     </div>
                     <div class="border border-b opacity-50 mb-2 mt-2"></div>
                     @if ($management_phone)

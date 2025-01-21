@@ -11,5 +11,10 @@ class AboutParagraph extends Model
     use HasFactory;
 
   
-    
+    protected function content(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['content_' . app()->getLocale()]
+        );
+    }
 }

@@ -13,6 +13,13 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable , HasApiTokens;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'password', 
+    ];
+
 
     public function gender(){
         return $this->belongsTo(Gender::class , 'gender_id' , 'id');

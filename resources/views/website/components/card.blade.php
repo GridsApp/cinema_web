@@ -1,4 +1,6 @@
-{{-- @dump($cinemaPrefix); --}}
+
+
+{{-- @dd( $movie); --}}
 <a
     href="{{ route('details', [
         'cinema_prefix' => $cinemaPrefix,
@@ -13,10 +15,10 @@
                 </div>
             </div>
             <div class="card-bottom">
-            <div class="flex flex-wrap gap-3">
+            <div class="genres ">
                     @foreach ($movie['genres'] as $genre)
                         @if (isset($genre))
-                            <div class="border border-gray-300 px-3 py-1 text-[12px] rounded-full">
+                            <div class="genres-text">
                                 {{ $genre['label'] }}
                             </div>
                         @endif

@@ -26,8 +26,10 @@ class BranchesEntity extends Entity
         $this->addField("longitude" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("address" , ["container" => 'col-span-6', 'required' => true,'translatable'=>true]);
         $this->addField("number" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("display" , ["container" => 'col-span-7']);
+        $this->addField("email" , ["container" => 'col-span-6']);
 
+        $this->addField("display" , ["container" => 'col-span-6']);
+     
 
 
         return $this->fields;

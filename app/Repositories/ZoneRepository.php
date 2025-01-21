@@ -10,9 +10,10 @@ class ZoneRepository implements ZoneRepositoryInterface
 
     public function getZones($zone_ids){
 
+
       $zones = PriceGroupZone::whereNull('deleted_at')->whereIn('id' , $zone_ids)->get();
 
-
+  // dd($zones);
       return $zones;
     }
    

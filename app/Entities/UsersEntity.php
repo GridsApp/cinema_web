@@ -23,24 +23,24 @@ class UsersEntity extends Entity
     {
 
         $this->addField("name", ["container" => 'col-span-7']);
-        $this->addField("email", ["container" => 'col-span-4', 'required' => true]);
+        $this->addField("email", ["container" => 'col-span-4']);
         $this->addField("email_verified", ["container" => 'col-span-3']);
 
-        $this->addField("phone", ["container" => 'col-span-4', 'required' => true]);
+        $this->addField("phone", ["container" => 'col-span-4']);
         $this->addField("phone_verified", ["container" => 'col-span-3']);
 
         $this->addField("profile_picture", ["container" => 'col-span-7']);
-        $this->addField("password", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("password", ["container" => 'col-span-7']);
         $this->addField("gender", ["container" => 'col-span-7']);
         $this->addField("date_birth", ["container" => 'col-span-7']);
         // $this->addField("marital_status", ["container" => 'col-span-7']);
         $this->addField("date_marriage", ["container" => 'col-span-7']);
 
 
-        $this->addField("token", ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("login_provider", ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("identifier", ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("signature", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("token", ["container" => 'col-span-7']);
+        $this->addField("login_provider", ["container" => 'col-span-7']);
+        $this->addField("identifier", ["container" => 'col-span-7']);
+        $this->addField("signature", ["container" => 'col-span-7']);
         
 
 

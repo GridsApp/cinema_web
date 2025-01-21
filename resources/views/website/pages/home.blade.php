@@ -31,14 +31,17 @@
 
         </div>
     @endif
-    @if (isset($movies))
+    @if (isset($movies) && count($movies)>0)
+
     <div class="sm:mb-20 mb-10 mt-20">
             @include('website.components.separator-title', ['title' => 'latest movies'])
 
         </div>
         <div class=" main-container">
             <div class="sm:grid-cols-4 grid-cols-1 sm:gap-5  gap-2 grid">
+               
                 @foreach ($movies as $movie)
+              
                 @include('website.components.card', [
                     'movie' => $movie,
                     'cinemaPrefix' => $cinemaPrefix,

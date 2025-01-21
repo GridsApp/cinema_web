@@ -41,8 +41,6 @@ class MovieController extends Controller
 
     public function details($cinema_prefix, $language_prefix, $slug)
     {
-
-
         $movie_id = Movie::where('slug', $slug)->whereNull('deleted_at')->pluck('id');
         if (!$movie_id) {
             abort(404, 'Movie not found');

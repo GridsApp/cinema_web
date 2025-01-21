@@ -182,7 +182,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return $this->responseValidation($validator);
         }
-      
+
 
         if ($form_data['signature'] !== md5($form_data['login_provider'] . $form_data['token'])) {
             return $this->response(notification()->error('Signature did not match', 'Signature did not match'));

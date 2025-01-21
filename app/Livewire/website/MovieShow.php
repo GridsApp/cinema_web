@@ -6,6 +6,8 @@ use App\Interfaces\BranchRepositoryInterface;
 use App\Interfaces\MovieShowRepositoryInterface;
 use App\Models\Branch;
 use App\Models\Movie;
+use App\Models\ReservedSeat;
+use App\Models\Theater;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\Request;
@@ -15,10 +17,10 @@ class MovieShow extends Component
     public $selectedDate;
     public $dates = [];
     public $movieShows = [];
-
     public $firstBranch;
     public $otherBranches;
-    public $slug; // Add this to hold the slug
+    public $slug;
+    public $branchPrefix;  // Store branchPrefix in component state
 
     private MovieShowRepositoryInterface $movieShowRepository;
     private BranchRepositoryInterface $branchRepository;
@@ -34,6 +36,7 @@ class MovieShow extends Component
         $this->slug = $slug;
         $this->selectedDate = Carbon::now()->format('Y-m-d');
         $this->generateDates();
+        $this->branchPrefix = Request::segment(1);  // Store branchPrefix in state
         $this->fetchMovieShows();
     }
 
@@ -58,44 +61,64 @@ class MovieShow extends Component
 
     public function fetchMovieShows()
     {
-
         $movie = Movie::where('slug', $this->slug)->whereNull('deleted_at')->first();
         if (!$movie) {
             abort(404, 'Movie not found');
         }
 
-        $branchPrefix = Request::segment(1);
-        $branch = Branch::whereNull("deleted_at")->where('web_prefix', $branchPrefix)->first();
-
+        $branch = Branch::whereNull('deleted_at')->where('web_prefix', $this->branchPrefix)->first();
+        if (!$branch) {
+            abort(404, 'Branch not found');
+        }
 
         $movie_id = $movie->id;
         $date = $this->selectedDate;
 
-        $branchShows = $this->movieShowRepository->getMovieShows($branch->id, $movie->id, $date)->toArray();
+        $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
 
-        // $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
-
-
-
-        $otherBranches = Branch::whereNull('deleted_at')
-            ->where('id', '!=', $branch->id)
-            ->get();
-
-      
-        $otherBranchShows = [];
-        foreach ($otherBranches as $otherBranch) {
-            $otherBranchShows[$otherBranch->id] = $this->movieShowRepository
-                ->getMovieShows($otherBranch->id, $movie->id, $date)
-                ->toArray();
+        if (empty($shows)) {
+            $this->movieShows = [];
+            $this->firstBranch = $branch->label;
+            $this->otherBranches = [];
+            $this->movieShows['message'] = 'No movie shows available';
+            return;
         }
 
-        $allShows = [
-            'currentBranchShows' => $branchShows,
-            'otherBranchShows' => $otherBranchShows,
-        ];
-    
-        return $allShows; 
+        // foreach ($shows as &$show) {
+        //     $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
+        //     $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
+        //     $show['available_seats'] = $theater ? ($theater->nb_seats - $reservedSeatsCount) : 0;
+        // }
+        // dd($show);
+        // dd($theaters_id);
+
+
+        // $theater = $shows->theater;
+        // dd($theater);
+        // $nb_seats = $show->theater->nb_seats;
+        $this->movieShows = collect($shows)
+            ->groupBy('branch')
+            ->map(function ($branchShows) {
+                return $branchShows->groupBy('price_group');
+            })
+            ->toArray();
+        foreach ($shows as &$show) {
+            $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
+            $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
+            $show['available_seats'] = $theater ? ($theater->nb_seats - $reservedSeatsCount) : 0;
+        }
+
+        $this->firstBranch = $branch->label;
+
+        if (isset($this->movieShows[$this->firstBranch]) && count($this->movieShows[$this->firstBranch]) > 0) {
+            $this->otherBranches = collect($this->movieShows)->except($this->firstBranch)->toArray();
+        } else {
+            $this->firstBranch =  $branch->label;
+            $this->otherBranches = $this->movieShows;
+        }
     }
+
+
 
     public function render()
     {
