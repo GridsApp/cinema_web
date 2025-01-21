@@ -10,7 +10,7 @@
     </div>
 
 
-    <div class="dates-list-cont" id="dates-list-cont">
+    <div class="dates-list-cont pt-3" id="dates-list-cont">
         @foreach ($dates as $date)
             <div class="date-item {{ $date['formatted'] === $selectedDate ? 'active' : '' }}"
                 wire:click="selectDate('{{ $date['formatted'] }}')">
@@ -39,36 +39,42 @@
                         @foreach ($movieShows[$firstBranch] as $priceGroup => $shows)
                             <div class="zone">{{ $priceGroup }}</div>
                             <div class="timing-list">
-                              
+
 
                                 @foreach ($shows as $show)
-                                {{-- @dd($shows); --}}
+                                    {{-- @dd($shows); --}}
                                     @php
-                                    // dd($show['theater']);
+                                        // dd($show['theater']);
                                         $nb_seats = $show['theater']->nb_seats;
 
                                         // dd($show['theater'] );
                                         $reserved_seats = $nb_seats - $show['available_seats'];
-                                       
+
                                         $percentage = ($show['available_seats'] / $nb_seats) * 100;
 
                                         // dd($percentage);
+
                                     @endphp
                                     <div class="time-button">
                                         <div
-                                            class="flex justify-center bg-gray-100 gap-3 items-center rounded-full py-1 pl-1 pr-5">
-                                            <div class="icon-seat border-2 border-red-600 flex justify-center bg-white items-center">
-                                                <i class="fa-solid fa-loveseat"></i>
+                                            class="flex justify-center bg-gray-100 gap-3 items-center rounded-full  pr-5">
+                                            <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative"
+                                                style="
+                                                width: 40px; 
+                                                height: 40px; 
+                                                background: conic-gradient(
+                                                    #c51a24 {{ 100 - $percentage }}%, 
+                                                    white {{ 100 - $percentage }}%
+                                                );
+                                            ">
+                                                <i class="fa-solid fa-loveseat z-10"></i>
+                                                <div class="absolute bg-white rounded-full"
+                                                    style="width: 30px; height: 30px;">
+                                                </div>
                                             </div>
-                                            {{-- @dd($show); --}}
-                                            <span
-                                                class="text-[10px] tracking-[1.9px] font-bold">{{ $show['time'] }}</span>
-                                                {{-- <p>Available seats percentage for the show: {{ number_format($percentage, 2) }}%</p> --}}
-                                             
-
-                                            <div>
-                                                {{-- {{ $show['available_seats'] / $show['theater']->nb_seats * 360 }} --}}
-                                            </div>
+                                            <span class="text-[10px] tracking-[1.9px] font-bold">
+                                                {{ $show['time'] }}
+                                            </span>
                                         </div>
                                     </div>
                                 @endforeach
@@ -105,19 +111,38 @@
                             <div class="zone">{{ $priceGroup }}</div>
                             <div class="timing-list">
                                 @foreach ($shows as $show)
-                                    {{-- @php
-                                        $theater = $show-?;
-                                        dd($theater);
-                                        $nb_seats = $show->theater->nb_seats;
-                                    @endphp --}}
+                                @php
+                                // dd($show['theater']);
+                                $nb_seats = $show['theater']->nb_seats;
+
+                              
+                                $reserved_seats = $nb_seats - $show['available_seats'];
+
+                                $percentage = ($show['available_seats'] / $nb_seats) * 100;
+
+                     
+
+                            @endphp
                                     <div class="time-button">
                                         <div
-                                            class="flex justify-center bg-gray-100 gap-3 items-center rounded-full py-1 pl-1 pr-5">
-                                            <div class="icon-seat flex justify-center bg-white items-center">
-                                                <i class="fa-solid fa-loveseat"></i>
+                                            class="flex justify-center bg-gray-100 gap-3 items-center rounded-full  pr-5">
+                                            <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative"
+                                                style="
+                                                    width: 40px; 
+                                                    height: 40px; 
+                                                    background: conic-gradient(
+                                                        #c51a24 {{ 100 - $percentage }}%, 
+                                                        white {{ 100 - $percentage }}%
+                                                    );
+                                                ">
+                                                <i class="fa-solid fa-loveseat z-10"></i>
+                                                <div class="absolute bg-white rounded-full"
+                                                    style="width: 30px; height: 30px;">
+                                                </div>
                                             </div>
-                                            <span
-                                                class="text-[10px] tracking-[1.9px] font-bold">{{ $show['time'] }}</span>
+                                            <span class="text-[10px] tracking-[1.9px] font-bold">
+                                                {{ $show['time'] }}
+                                            </span>
                                         </div>
                                     </div>
                                 @endforeach

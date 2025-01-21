@@ -507,7 +507,7 @@ nav {
     padding-left: unset !important;
 
     .card-cont {
-        width: 50%;
+       @apply sm:w-[50%] w-full;
     }
     .img-border {
         border-radius: 20px;

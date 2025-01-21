@@ -9,26 +9,26 @@ class ContactController extends Controller
 {
     public function contact()
     {
-        $locale = app()->getLocale();
+        // $locale = app()->getLocale();
     
-        $settings = collect(config('settings'))->map(function ($setting) use ($locale) {
-            $info = config('fields.' . $setting['field']);
+        // $settings = collect(config('settings'))->map(function ($setting) use ($locale) {
+        //     $info = config('fields.' . $setting['field']);
     
-            if (!$info) {
-                return null;
-            }
+        //     if (!$info) {
+        //         return null;
+        //     }
     
-            $info['name'] = $setting['translatable'] ?? false ? 'value_' . $locale : 'value';
-            $value = (new $info['type']($info))->display($setting);
+        //     $info['name'] = $setting['translatable'] ?? false ? 'value_' . $locale : 'value';
+        //     $value = (new $info['type']($info))->display($setting);
     
-            return [
-                'key' => $setting['field'] ?? null,
-                'value' => $value,
-            ];
-        })->filter()->values()->toArray();
+        //     return [
+        //         'key' => $setting['field'] ?? null,
+        //         'value' => $value,
+        //     ];
+        // })->filter()->values()->toArray();
     
-        $settings_collection = collect($settings);
-    // dd($settings_collection);
+        // $settings_collection = collect($settings);
+    
 
         $whatsapp_label = get_setting("whattsapp_label" , app()->getLocale());
         $whatsapp = get_setting("whattsapp" , app()->getLocale());

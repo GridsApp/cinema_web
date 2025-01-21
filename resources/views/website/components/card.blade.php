@@ -10,7 +10,7 @@
     <div class="movie-card">
         <div class="movie-card">
             <div class="no-overflow">
-                <div class="asp asp-2-3 img-div">
+                <div class="asp asp-3-4 img-div">
                     <img src="{{ $movie['main_image'] }}" alt="">
                 </div>
             </div>

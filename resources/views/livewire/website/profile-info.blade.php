@@ -1,10 +1,11 @@
 <div class="flex flex-col gap-10">
     <div class="flex sm:flex-row flex-col gap-10">
         <div class="w-[100px]">
-            {{-- @dd($user); --}}
+
             <div class="flex justify-center items-center w-full flex-col">
                 <div class="asp asp-2-2">
-                    <img src="{{ $user->profile_picture ? get_image($user->profile_picture) : '/images/profile.png' }}" alt="Profile Image" class="rounded-full w-full h-full object-cover">
+                    <img src="{{ $user->profile_picture ? get_image($user->profile_picture) : '/images/profile.png' }}"
+                        alt="Profile Image" class="rounded-full w-full h-full object-cover">
 
                 </div>
                 <div class="pt-3">
@@ -34,12 +35,12 @@
     </div>
 
     <div x-data="{
-                    activeLink: localStorage.getItem('activeLink') || '',
-                    setActive(link) {
-                        this.activeLink = link;
-                        localStorage.setItem('activeLink', link);
-                    }
-                }" class="account-menu">
+        activeLink: localStorage.getItem('activeLink') || '',
+        setActive(link) {
+            this.activeLink = link;
+            localStorage.setItem('activeLink', link);
+        }
+    }" class="account-menu">
         <a href="{{ route('update', [
             'cinema_prefix' => request()->route('cinema_prefix'),
             'language_prefix' => request()->route('language_prefix'),

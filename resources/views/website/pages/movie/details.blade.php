@@ -3,10 +3,10 @@
 @section('content')
     {{-- @dd($movie_details); --}}
     <div class=" main-spacing movie-details-page">
-        <div class="flex flex-row  ">
+        <div class="flex sm:flex-row flex-col  ">
 
 
-            <div class="w-[50%] relative">
+            <div class="sm:w-[50%] w-full relative">
                 <div class="asp asp-3-2">
                     <img src={{ $movie_details['cover_image'] }} alt="" class="bg-gray-200 ">
                     <div class="main-container absolute bottom-10 z-20"
@@ -32,7 +32,7 @@
             </div>
 
             <div
-                class="   z-10 w-[50%] h-full  !mt-[5%] right sm:!pl-0 px-3 main-container flex sm:flex-row flex-col gap-[60px]">
+                class="   z-10 sm:w-[50%] w-full h-full  !mt-[5%] right sm:!pl-0 px-3 main-container flex sm:flex-row flex-col gap-[60px]">
                 @if (isset($movie_details['main_image']))
                     <div class="card-cont ">
 

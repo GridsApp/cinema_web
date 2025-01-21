@@ -74,7 +74,7 @@ class MovieShow extends Component
         $movie_id = $movie->id;
         $date = $this->selectedDate;
 
-        // Fetch shows
+
         $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
 
         if (empty($shows)) {
@@ -94,7 +94,7 @@ class MovieShow extends Component
             // dd(            $show['available_seats']);
         }
 
-        // Group the modified $shows array
+     
         $this->movieShows = collect($shows)
             ->groupBy('branch')
             ->map(function ($branchShows) {

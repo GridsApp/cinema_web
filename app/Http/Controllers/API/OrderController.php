@@ -673,9 +673,13 @@ class  OrderController extends Controller
             ->whereIn('movie_show_id', $shows_ids)
             ->count();
 
-        return $this->responseData(
-            $reservedSeats
 
+
+         
+
+        return $this->responseData([
+                'count' =>$reservedSeats
+            ]
         );
     }
 

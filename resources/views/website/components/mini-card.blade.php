@@ -31,7 +31,7 @@
 
                     @if (isset($branch['latitude']) && isset($branch['longitude']))
                         <button @click="showModal = true; console.log('Modal Opened')"
-                            class="primary-color text-[12px] underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
+                            class="primary-color text-[9px] pt-2 font-bold  uppercase tracking-[1.5px]  underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
                             {{ app()->getLocale() === 'ar' ? 'عرض الموقع' : 'View Location' }}
                         </button>
                     @endif
