@@ -178,6 +178,7 @@ class CartRepository implements CartRepositoryInterface
         try {
             $cart_topup = new CartTopup();
             $cart_topup->amount = $amount;
+            $cart_topup->label = 'Topup Amount';
             $cart_topup->cart_id = $cart_id;
             $cart_topup->save();
         } catch (Exception $e) {
@@ -280,7 +281,7 @@ class CartRepository implements CartRepositoryInterface
     public function getCartTopups($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? ['cart_id', 'amount', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? ['cart_id', 'amount','label', DB::raw('count(*) as quantity')] : "*";
 
         try {
             $user_cart_topup = CartTopup::select($select)

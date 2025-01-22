@@ -38,7 +38,7 @@ class ConsessionsController extends Controller
             return $this->response(notification()->error('Error', $th->getMessage()));
         }
 
-        return $this->responseData($items, notification()->success('Items Fetched', 'Items Fetched'));
+        return $this->responseData($items);
         // return $this->responseData($items);
         
     }
