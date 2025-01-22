@@ -5,12 +5,35 @@
                 <div class="f-carousel__slide asp asp-3-1">
                     <div>
                         <div>
-                            <img src={{ get_image($slide['image']) }} alt="Slide 1" class="brightness-50 ">
+                            <img src={{ get_image($slide['web_image']) }} alt="Slide 1" class="brightness-50 bg-gray-100">
                         </div>
-                        <div class="main-container">
-                            <div class="absolute top-[80%] z-10 text-white font-bold text-[30px] capitalize" style="">
-                                {{ $slide['label_en'] }}
+                        <div class="main-container slide-box-container ">
+
+                            <div class="slideshow-text-position  ">
+                                <div class="position-align">
+                                    @if (isset($slide['label']))
+                                        <div class="capitalize text-white font-bold text-[30px]">
+                                            {{ $slide['label'] }}
+                                        </div>
+                                    @endif
+
+                                    @if (isset($slide['text']))
+                                        <div class="text-white font-semibold text-[12px] opacity-60">
+                                            {{ $slide['text'] }}
+                                        </div>
+                                    @endif
+
+                                    @if (isset($slide['cta_link']))
+                                        <div class="max-w-[230px]">
+                                            @include('website.components.link-button', [
+                                                'link' => $slide['cta_link'],
+                                                'text' => $slide['cta_label'],
+                                            ])
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -19,11 +42,32 @@
                 <div class="f-carousel__slide asp asp-9-16">
                     <div>
                         <div>
-                            <img src={{ get_image($slide['image']) }} alt="Slide 1" class="brightness-50 ">
+                            <img src={{ get_image($slide['web_image']) }} alt="Slide 1" class="brightness-50 bg-gray-200">
                         </div>
-                        <div class="main-container">
-                            <div class="absolute top-[80%] z-10 text-white font-bold text-[30px] capitalize" style="">
-                                {{ $slide['label_en'] }}
+                        <div class="main-container slide-box-container">
+                            <div class="slideshow-text-position ">
+                                <div class="position-align">
+                                    @if (isset($slide['label']))
+                                        <div class="capitalize text-white font-bold text-[30px]">
+                                            {{ $slide['label'] }}
+                                        </div>
+                                    @endif
+
+                                    @if (isset($slide['text']))
+                                        <div class="text-white font-semibold text-[12px] opacity-60">
+                                            {{ $slide['text'] }}
+                                        </div>
+                                    @endif
+
+                                    @if (isset($slide['cta_link']))
+                                        <div>
+                                            @include('website.components.link-button', [
+                                                'link' => $slide['cta_link'],
+                                                'text' => 'Learn more',
+                                            ])
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -31,7 +75,8 @@
                 </div>
             @enddesktop
         @endforeach
-        <div class="carousel__nav main-container absolute text-white top-[80%] z-10 flex justify-end w-full">
+        <div
+            class="carousel__nav main-container absolute text-white top-[75%] z-10 flex ltr:justify-end rtl:justify-start w-full">
             <button tabindex="0" title="Previous slide" class="f-button is-prev" data-carousel-prev="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" tabindex="-1">
                     <path d="M15 3l-9 9 9 9"></path>

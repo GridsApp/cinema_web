@@ -17,7 +17,7 @@ class AboutController extends Controller
    {
 
 
-      $banner = AboutBanner::whereNull('deleted_at')->orderBy('id', 'DESC')->first();
+      $banner = AboutBanner::whereNull('deleted_at')->where('position','about')->orderBy('id', 'DESC')->first();
       $paragraph = AboutParagraph::whereNull('deleted_at')->orderBy('id', 'DESC')->first();
       $company_purposes = CompanyPurpose::whereNull('deleted_at')->get();
       $cinema_founder = CinemaFounder::whereNull('deleted_at')->orderBy('id', 'DESC')->first();

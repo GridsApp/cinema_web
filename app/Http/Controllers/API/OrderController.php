@@ -479,7 +479,7 @@ class  OrderController extends Controller
             $seat_lines = collect($seat_lines);
             // $item_lines = collect($item_lines);
             // $topup_lines = collect($topup_lines);
-            
+
             $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
 
 
@@ -518,11 +518,23 @@ class  OrderController extends Controller
         }
 
 
-    //    dd($user_id);
+        //    dd($user_id);
 
         $user_loyalty_balance = null;
         if ($user) {
             $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($user);
+        }
+
+        $user_wallet_balance = null;
+        if ($user) {
+            $user_wallet_balance = $this->cardRepository->getWalletBalance($user);
+        }
+
+        if ($user) {
+            $user_card_number = $this->cardRepository->getCardByUserId($user->id);
+
+
+            // dd($user_card_number);
         }
         $order_seats = null;
         try {
@@ -589,7 +601,7 @@ class  OrderController extends Controller
             $pos_user = null;
         }
 
-        // dd( $user);
+        // dd( $pos_user_id->branch);
 
 
         $result = [
@@ -597,13 +609,20 @@ class  OrderController extends Controller
                 "value" => $user_loyalty_balance,
                 "display" => $user_loyalty_balance . ' points'
             ] : null,
+
+            'wallet_balance' => currency_format($user_wallet_balance),
             'order' => [
                 'id' => $order->id,
                 'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
                 'cashier' => $pos_user_id->name ?? null,
-                // 'customer' => $user->name,
-                // 'customer'=>$user,
+                'branch' => [
+                    'label_en' => $pos_user_id->branch->label_en ?? null,
+                    'label_ar' => $pos_user_id->branch->label_ar ?? null
+                ],
+                'customer' => $user->name ?? null,
+                'card_number' => $user_card_number->barcode ?? null,
+
             ],
             'tickets' => $order_seats,
             'items' =>  $order_items,
@@ -614,7 +633,7 @@ class  OrderController extends Controller
         ];
 
         if ($API) {
-            return $this->responseData($result,notification()->success('Order fetched', 'Order fetched'));
+            return $this->responseData($result, notification()->success('Order fetched', 'Order fetched'));
         } else {
             return $result;
         }
@@ -648,7 +667,7 @@ class  OrderController extends Controller
     public function getReservedTotal()
     {
 
-       
+
         $today = Carbon::today();
         $currentTime = Carbon::now();
 
@@ -675,10 +694,11 @@ class  OrderController extends Controller
 
 
 
-         
 
-        return $this->responseData([
-                'count' =>$reservedSeats
+
+        return $this->responseData(
+            [
+                'count' => $reservedSeats
             ]
         );
     }

@@ -49,4 +49,10 @@ return [
     'management' => 'Management',
 
     'contact_us' => 'Contact Us',
+
+
+
+    'learn_more' => 'Learn more',
+
+    'about_us' => 'About Us',
 ];

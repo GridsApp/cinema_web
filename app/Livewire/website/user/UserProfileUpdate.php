@@ -40,9 +40,9 @@ class UserProfileUpdate extends Component
         $this->user = User::find(session('user')->id);
 
 
-        $this->name = $this->user->name;
-        $this->email = $this->user->email;
-        $this->phone = $this->user->phone;
+        $this->name = $this->user->name ?? '';
+        $this->email = $this->user->email ?? '';
+        $this->phone = $this->user->phone ?? '';
 
 
 

@@ -3,17 +3,18 @@
 @section('content')
     <div class="main-container main-spacing  ">
         <div class="flex justify-center mt-10">
-            @include('website.components.title', ['title' => 'About us'])
+
+            @include('website.components.title', ['title' => __('messages.about_us')])
         </div>
 
     </div>
 
     <div class="mt-5">
-        @include('website.components.banner')
+        @include('website.components.banner',['aspect'=>'asp-3-1'])
     </div>
 
-    <div class=" main-container">
-        <div class="  flex justify-center w-full">
+    <div class="main-container">
+        <div class="flex justify-center w-full">
             <div class="max-w-[900px] mt-10 ">
                 <div>
                     @include('website.components.paragraph')
@@ -30,7 +31,7 @@
         </div>
 
     </div>
-    @if (isset($board_members))
+    @if (isset($board_members) && count($board_members) > 0)
         <div class="mt-20">
             @include('website.components.separator-title', ['title' => 'Board members'])
         </div>

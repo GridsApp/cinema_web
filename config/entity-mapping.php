@@ -20,6 +20,7 @@ return array (
   'distributors' => 'App\\Entities\\DistributorsEntity',
   'faqs' => 'App\\Entities\\FaqsEntity',
   'genders' => 'App\\Entities\\GendersEntity',
+  'home-paragraph-banners' => 'App\\Entities\\HomeParagraphBannersEntity',
   'informative-pages' => 'App\\Entities\\InformativePagesEntity',
   'items' => 'App\\Entities\\ItemsEntity',
   'kiosk-users' => 'App\\Entities\\KioskUsersEntity',

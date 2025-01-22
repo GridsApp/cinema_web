@@ -1,27 +1,35 @@
 <div class="banner">
-    @desktop
-        <div class="asp asp-3-1 ">
-            <img src={{ get_image($banner->image) }} alt="">
-        </div>
-    @elsedesktop
-        <div class="asp asp-16-9 ">
-            <img src={{ get_image($banner->image) }} alt="">
-        </div>
-    @enddesktop
+    @if (!empty($banner))
 
-    <div class="box-position main-container">
+        @desktop
+            <div class="asp  {{ $aspect }} ">
+                <img src={{ get_image($banner->image) }} alt="" class="bg-gray-100">
+            </div>
+        @elsedesktop
+            <div class="asp asp-16-9 ">
+                <img src={{ get_image($banner->image) }} alt="" class="bg-gray-100">
+            </div>
+        @enddesktop
 
-        <div class="banner-title">
-            Discover the history of iraqi cinemas
+        <div class="box-position main-container">
+            @if (isset($banner->title))
+                <div class="banner-title">
+                    {{ $banner->title }}
+                </div>
+            @endif
+            @if (isset($banner->description))
+                <div class="banner-description">
+                    {{ $banner->description }}
+                </div>
+            @endif
+            @if (isset($banner->cta_link))
+                <div>
+                    @include('website.components.link-button', [
+                        'text' => $banner->cta_label,
+                        'link' => $banner->cta_link,
+                    ])
+                </div>
+            @endif
         </div>
-
-        <div class="banner-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore.
-        </div>
-
-        <div>
-            @include('website.components.button', ['title' => 'Learn more'])
-        </div>
-    </div>
+    @endif
 </div>

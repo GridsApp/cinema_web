@@ -74,11 +74,11 @@
                     </div>
 
                     <div class="text-[12px] font-bold">
-                        {{ $card['loyalty_points_balance']['display'] }}
+                        {{ $card['loyalty_points_balance']['display'] ?? '0' }}
                     </div>
                 </div>
                 @php
-                    $points = $card['loyalty_points_balance']['value'];
+                    $points = $card['loyalty_points_balance']['value'] ?? '0';
                     $iqdPerPoint = 10;
                     $iqd = $points * $iqdPerPoint;
                 @endphp

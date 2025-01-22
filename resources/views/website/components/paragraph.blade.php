@@ -4,7 +4,7 @@
     {{-- @dd($paragraph['content']); --}}
     <div class="opacity-60 text-[12px] mt-5">
 
-        {!! $paragraph['content'] !!}
+        {!! $paragraph['content'] ?? '' !!}
     </div>
 
     {{-- @dd($company_purposes); --}}
@@ -15,7 +15,7 @@
             @isset($company_purpose['content'])
                 <div class=" inline-flex gap-5">
                     <div>
-                        <img src="/images/icon.svg" alt="">
+                        <img src="/images/icon.svg" alt="" class="bg-gray-200">
                     </div>
 
                     <div>

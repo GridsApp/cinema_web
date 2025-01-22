@@ -42,11 +42,11 @@
 }
 
 .primary-color {
-    @apply text-[#c51a24];
+    @apply text-[#C51A24];
 }
 
 .bg-primary-color {
-    @apply bg-[#c51a24];
+    @apply bg-[#C51A24];
 }
 .secondary-color {
     @apply text-black;
@@ -93,10 +93,10 @@
         border-radius: 20px;
     }
     .card-bottom {
-        padding: 10px;
+        padding: 10px 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 11px;
 
         .genres {
             @apply flex flex-wrap gap-3;
@@ -107,7 +107,7 @@
         }
     }
     .title {
-        @apply font-bold text-[15px] capitalize;
+        @apply font-bold leading-[30px] text-[15px] capitalize;
     }
 }
 .no-overflow {
@@ -224,6 +224,7 @@ nav {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap:20px;
     }
     .banner-title {
         @apply text-white capitalize tracking-[1px] font-bold sm:text-[19px] text-[14px] text-center;
@@ -1101,3 +1102,20 @@ input {
 .account-page {
     @apply grid sm:grid-cols-12 grid-cols-1 sm:gap-10 gap-3 pt-5;
 }
+.slide-box-container{
+
+    @apply flex ltr:justify-start rtl:justify-end;
+    .slideshow-text-position{
+
+
+        @apply absolute max-w-[380px] sm:bottom-[20%] bottom-[20%] z-10;
+    
+    
+        .position-align{
+            @apply flex flex-col sm:gap-8 gap-5;
+        }
+    
+      
+    }
+}
+

@@ -20,6 +20,7 @@ class SlideshowsEntity extends Entity
         $this->addField("label" , ["container" => 'col-span-12', 'required' => true,'translatable'=>true]);
         $this->addField("text" , ["container" => 'col-span-12','translatable'=>true]);
         $this->addField("image" , ["container" => 'col-span-12', 'required' => true]);
+        $this->addField("web_image" , ["container" => 'col-span-12']);
         $this->addField("cta_label" , ["container" => 'col-span-6','translatable'=>true]);
         $this->addField("cta_link" , ["container" => 'col-span-6','translatable'=>true]);
 

@@ -1,12 +1,15 @@
 
 
-{{-- @dd( $movie); --}}
 <a
-    href="{{ route('details', [
-        'cinema_prefix' => $cinemaPrefix,
-        'language_prefix' => $languagePrefix,
-        'slug' => $movie['slug'],
-    ]) }}">
+    @if(!empty($movie['slug']))
+        href="{{ route('details', [
+            'cinema_prefix' => $cinemaPrefix,
+            'language_prefix' => $languagePrefix,
+            'slug' => $movie['slug'],
+        ]) }}"
+    @else
+        href="#"
+    @endif>
     <div class="movie-card">
         <div class="movie-card">
             <div class="no-overflow">
@@ -28,7 +31,7 @@
                     <div class="title">
                         {{ $movie['name'] }}
                     </div>
-                    <div class="italic text-[12px]">
+                    <div class="opacity-65 font-normal text-[12px]">
                         {{ $movie['duration'] }}
                     </div>
                 </div>

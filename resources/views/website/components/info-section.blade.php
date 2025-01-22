@@ -5,12 +5,12 @@
             <span 
                 class="primary-color font-extrabold text-[19px] sm:text-5xl" 
                 x-data="GeneralFunctions.animation()" 
-                x-init="animate({{ $statistic['number'] }})" 
+                x-init="animate({{ $statistic['number'] ?? ''}})" 
                 x-text="'+' + counter">
                 +
             </span>
-            <p class="uppercase  font-semibold tracking-wider sm:text-[12px] text-[10px]  mt-3">
-                {{ $statistic['label'] }}
+            <p class="uppercase  font-semibold tracking-wider sm:text-[12px] sm:rtl:text-[14px] text-[10px]  mt-3">
+                {{ $statistic['label'] ?? '' }}
             </p>
         </div>
         @endforeach

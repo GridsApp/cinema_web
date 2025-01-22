@@ -110,6 +110,11 @@ return [
                 'link' => routeObject('entity', ['slug' => 'informative-pages'])
             ],
 
+            [
+                'label' => 'Home Banner Paragraph',
+                'link' => routeObject('entity', ['slug' => 'home-paragraph-banners'])
+            ],
+            
 
 
         ]

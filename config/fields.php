@@ -530,6 +530,21 @@ return [
         'aspect_ratio' => 1 / 1,
         'multiple' => false
     ],
+
+    'web_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Web Image',
+        'placeholder' => 'Web Image',
+        'name' => 'web_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+
+    
     'top_image' => [
         'id' => uniqid(),
         'livewire' => [
@@ -551,6 +566,60 @@ return [
         'label' => 'Bottom Image',
         'placeholder' => 'Bottom Image',
         'name' => 'bottom_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+
+
+    'first_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'First Image',
+        'placeholder' => 'First Image',
+        'name' => 'first_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+
+
+    'second_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Second Image',
+        'placeholder' => 'Second Image',
+        'name' => 'second_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+
+
+    'third_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Third Image',
+        'placeholder' => 'Third Image',
+        'name' => 'third_image',
+        'aspect_ratio' => 1 / 1,
+        'multiple' => false
+    ],
+    'fourth_image' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\FileUpload::class,
+        'label' => 'Third Image',
+        'placeholder' => 'Third Image',
+        'name' => 'fourth_image',
         'aspect_ratio' => 1 / 1,
         'multiple' => false
     ],
@@ -603,6 +672,8 @@ return [
         'name' => 'payment_method_id'
     ],
 
+
+    
     'release_date' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1360,6 +1431,32 @@ return [
 
         ]
     ],
+
+
+    'position' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
+        'label' => 'Position',
+        'placeholder' => 'Select position',
+        'name' => 'position',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+
+                    ['value' => 'about' , 'label' => 'About Page'],
+                    ['value' => 'home' , 'label' => 'Home Page'],
+                ]
+
+        ]
+    ],
+
+    
 
     'marital_status' => [
         'id' => uniqid(),

@@ -51,6 +51,11 @@ return [
     'management' => 'الإدارة',
 
     'contact_us' => 'اتصل بنا',
+
+
+    'learn_more' => 'اعرف المزيد',
+
+    'about_us' => 'من نحن',
    
 ];
 

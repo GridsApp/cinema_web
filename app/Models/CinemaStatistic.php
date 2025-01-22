@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class CinemaStatistic extends Model
 {
     use HasFactory;
-
+    protected function label(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['label_' . app()->getLocale()]
+        );
+    }
 
 }

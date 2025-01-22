@@ -18,6 +18,12 @@ class AboutBannersEntity extends Entity
     public function fields(){
 
         $this->addField("image" , ["container" => 'col-span-12']);
+        $this->addField("title" , ["container" => 'col-span-12']);
+        $this->addField("description" , ["container" => 'col-span-12']);
+        $this->addField("cta_link" , ["container" => 'col-span-12']);
+        $this->addField("cta_label" , ["container" => 'col-span-12']);
+        $this->addField("position" , ["container" => 'col-span-12']);
+
       
         return $this->fields;
     }

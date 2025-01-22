@@ -17,7 +17,7 @@ class CinemaStatisticsEntity extends Entity
 
     public function fields(){
 
-        $this->addField("label" , ["container" => 'col-span-12']);
+        $this->addField("label" , ["container" => 'col-span-12','translatable'=>true]);
         $this->addField("number" , ["container" => 'col-span-12']);
       
         return $this->fields;

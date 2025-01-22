@@ -6,9 +6,10 @@ namespace App\Http\Controllers\WEBSITE;
 use App\Http\Controllers\Controller;
 use App\Interfaces\BranchRepositoryInterface;
 use App\Interfaces\MovieRepositoryInterface;
+use App\Models\AboutBanner;
 use App\Models\Branch;
 use App\Models\CinemaStatistic;
-
+use App\Models\HomeParagraphBanner;
 use App\Models\Slideshow;
 use Illuminate\Support\Facades\Request;
 
@@ -24,19 +25,32 @@ class HomePageController extends Controller
     }
     public function home(Request $request)
     {
+
+
+     
         $slider = Slideshow::whereNull('deleted_at')->get();
+
+
+        $paragraph_banner=HomeParagraphBanner::whereNull('deleted_at')->first();
+        $banner=AboutBanner::whereNull('deleted_at')->where('position','home')->orderBy('id', 'DESC')->first();
+
+        // dd($banner);
+
+        // dd($paragraph_banner);
+
+        
         $branches = $this->branchRepository->getBranches();
       
         $cinemaPrefix = request()->segment(1);
 
         $branch = Branch::whereNull('deleted_at')->where('web_prefix', $cinemaPrefix)->first();
 
-        // dd($branch);
+   
         if (!$branch) {
             abort(404, 'Branch not found');
         }
 
-        // dd($branch);
+       
         $branch_id = Branch::whereNull('deleted_at')->where('web_prefix', $cinemaPrefix)->pluck('id');
     
     
@@ -53,7 +67,7 @@ class HomePageController extends Controller
       
         $languagePrefix = request()->segment(2);
         // dd($statistics);
-        return view('website.pages.home', compact('slider','branch', 'branches', 'movies','statistics',  'cinemaPrefix',
-        'languagePrefix'));
+        return view('website.pages.home', compact('slider','paragraph_banner','branch', 'branches', 'movies','statistics',  'cinemaPrefix',
+        'languagePrefix','banner'));
     }
 }
