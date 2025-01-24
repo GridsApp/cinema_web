@@ -10,7 +10,8 @@
 
         <div class="mt-10">
             <div class="flex justify-center  w-full items-center">
-                @include('website.components.title', ['title' => 'sign in'])
+                @include('website.components.title', ['title' => __('messages.forgot_password')])
+
             </div>
             <div class="w-full justify-center flex-col gap-6 flex items-center">
 

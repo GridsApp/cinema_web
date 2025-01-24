@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Traits\ToastTrait;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -26,6 +27,7 @@ class UserController extends Controller
     private OrderRepositoryInterface $orderRepository;
     private ZoneRepositoryInterface $zoneRepository;
     private ItemRepositoryInterface $itemRepository;
+    private UserRepositoryInterface $userRepository;
 
 
 
@@ -37,7 +39,10 @@ class UserController extends Controller
         $this->orderRepository = app(OrderRepositoryInterface::class);
         $this->zoneRepository = app(ZoneRepositoryInterface::class);
         $this->itemRepository = app(ItemRepositoryInterface::class);
+        $this->userRepository = app(UserRepositoryInterface::class);
     }
+
+
     public function update(Request $request)
     {
         $cinemaPrefix = $request->route('cinema_prefix');
@@ -51,6 +56,52 @@ class UserController extends Controller
         ));
     }
 
+    public function deleteAccount(Request $request)
+    {
+      
+        $user = session('user');
+        
+      
+        $user->deleted_at = now();
+        $user->save();
+        
+      
+        $request->session()->flush(); 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken(); 
+        
+        
+        $cinemaPrefix = $request->route('cinema_prefix');
+        $languagePrefix = $request->route('language_prefix');
+        
+      
+        return redirect()->route('home', [
+            'cinema_prefix' => $cinemaPrefix,
+            'language_prefix' => $languagePrefix,
+        ]);
+    }
+    
+    public function renderDelete(Request $request){
+
+        // $user = session('user');
+
+        // $user->deleted_at = now();
+        // $user->save();
+
+        
+        $cinemaPrefix = $request->route('cinema_prefix');
+        $languagePrefix = $request->route('language_prefix');
+
+
+        
+        return view('website.pages.account.delete-account', compact(
+
+            'cinemaPrefix',
+            'languagePrefix'
+        ));
+    }
+
+    
 
     public function favorites(Request $request)
     {
@@ -86,7 +137,6 @@ class UserController extends Controller
         ));
     }
 
-
     public function getLoyaltyCard(Request $request)
     {
 
@@ -106,17 +156,6 @@ class UserController extends Controller
         ));
     }
 
-
-    // public function purchaseHistory(Request $request){
-    //     $cinemaPrefix = $request->route('cinema_prefix');
-    //     $languagePrefix = $request->route('language_prefix');
-    //     return view('website.pages.account.purchase-history', compact(
-
-    //         'cinemaPrefix',
-    //         'languagePrefix'
-    //     ));
-
-    // }
     public function purchaseHistory(Request $request)
     {
         $user = session('user');
@@ -150,7 +189,7 @@ class UserController extends Controller
                 $unit_price = $order_seat['price'];
                 $total_discounts += $order_seat['total_discount'];
 
-                // dd($order_seat->seats);
+
                 return [
                     'id' => $order_seat['order_id'],
                     'movie_name' => $order_seat->movie->name,
@@ -169,7 +208,6 @@ class UserController extends Controller
             try {
                 $order_items = $this->orderRepository->getOrderItems($order->id, true);
             } catch (\Throwable $e) {
-                // Handle error if needed
             }
 
 
@@ -192,11 +230,14 @@ class UserController extends Controller
 
             try {
                 $order_topups = $this->orderRepository->getOrderTopups($order->id, true);
+
+                // dd($order_topups);
             } catch (\Throwable $e) {
             }
 
 
             $topup_lines = $order_topups->map(function ($order_topup) {
+
                 $unit_price = $order_topup->price;
 
                 return [
@@ -209,11 +250,14 @@ class UserController extends Controller
                 ];
             });
 
+            $lines = collect($seat_lines)
+                ->merge(collect($item_lines))
+                ->merge(collect($topup_lines));
 
-            $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
 
 
-            // dd($lines);
+            // $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
+
 
 
             $subtotal = $lines->sum(function ($line) {
@@ -223,7 +267,7 @@ class UserController extends Controller
             $total_discounts = $lines->sum(function ($line) {
                 return isset($line['discount']) ? $line['discount']['value'] : 0;
             });
-            
+
 
             $allOrders[] = [
                 'order_id' => $order->id,
@@ -247,8 +291,6 @@ class UserController extends Controller
         ));
     }
 
-
-
     public function logout(Request $request)
     {
         $cinemaPrefix = $request->route('cinema_prefix');
@@ -260,5 +302,63 @@ class UserController extends Controller
             'cinema_prefix' => $cinemaPrefix,
             'language_prefix' => $languagePrefix,
         ]);
+    }
+
+
+    public function render()
+    {
+
+
+        $user = session('user');
+
+
+        // dd($user);
+        return view('website.pages.account.profile-pictures', compact(
+            'user',
+            
+        ));
+        // return view('website.pages.account.profile-pictures'['usr']);
+    }
+
+    public function addImage(Request $request)
+    {
+
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,webp',
+        ]);
+
+
+        $user = session('user');
+
+
+        $folder = uniqid();
+
+
+        $image = $request->file('profile_picture');
+
+
+
+
+
+        $extension = $image->getClientOriginalExtension();
+
+        // $originalPath = $image->storeAs("public/data/{$folder}", 'original.' . $extension);
+        // $thumbPath = "public/data/{$folder}/thumb.webp";
+        $image->storeAs("public/data/{$folder}", 'thumb.webp');
+
+
+        $image->storeAs("public/data/{$folder}", 'image.webp');
+
+
+        $originalFilename = $folder . '.' . $extension;
+        // 
+
+
+        // dd($originalFilename);
+
+        $user->profile_picture = $originalFilename;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Image uploaded successfully!'); 
     }
 }

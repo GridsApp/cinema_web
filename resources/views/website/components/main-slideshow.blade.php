@@ -24,7 +24,7 @@
                                     @endif
 
                                     @if (isset($slide['cta_link']))
-                                        <div class="max-w-[230px]">
+                                        <div class="w-fit max-w-[230px]">
                                             @include('website.components.link-button', [
                                                 'link' => $slide['cta_link'],
                                                 'text' => $slide['cta_label'],
@@ -60,12 +60,12 @@
                                     @endif
 
                                     @if (isset($slide['cta_link']))
-                                        <div>
-                                            @include('website.components.link-button', [
-                                                'link' => $slide['cta_link'],
-                                                'text' => 'Learn more',
-                                            ])
-                                        </div>
+                                    <div class="w-fit max-w-[200px]">
+                                        @include('website.components.link-button', [
+                                            'link' => $slide['cta_link'],
+                                            'text' => $slide['cta_label'],
+                                        ])
+                                    </div>
                                     @endif
                                 </div>
                             </div>

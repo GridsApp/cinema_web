@@ -50,7 +50,7 @@ class ForgotPasswordForm extends Component
 
 
         $otp = random_int(1000, 9999);
-        $expireAt = Carbon::now()->addMinutes(5);
+        $expireAt = Carbon::now()->addMinutes(1);
 
 
         UserPin::create([

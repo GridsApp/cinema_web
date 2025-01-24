@@ -19,13 +19,13 @@
             </div>
             <div class="card-bottom">
             <div class="genres ">
-                    @foreach ($movie['genres'] as $genre)
+                    {{-- @foreach ($movie['genres'] as $genre)
                         @if (isset($genre))
                             <div class="genres-text">
                                 {{ $genre['label'] }}
                             </div>
                         @endif
-                    @endforeach
+                    @endforeach --}}
                 </div>
                 <div>
                     <div class="title">

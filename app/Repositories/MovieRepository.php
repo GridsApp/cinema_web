@@ -122,7 +122,7 @@ class MovieRepository implements MovieRepositoryInterface
     public function getMovies($ids)
     {
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id','slug')->whereNull('deleted_at')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug')->whereNull('deleted_at')
             ->whereIn('id', $ids)
             ->get();
 
@@ -152,12 +152,12 @@ class MovieRepository implements MovieRepositoryInterface
         $comingSoonOffset = now()->addMonths(8);
         $recentShowtimeCutoff = now()->subDays(1);
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id','slug')->whereNull('deleted_at')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids) {
                     $q->whereNull('deleted_at')
-                    ->whereDate('date', $date) // Now Showing
-                    ->whereIn('theater_id', $theaters_ids);
+                        ->whereDate('date', $date) // Now Showing
+                        ->whereIn('theater_id', $theaters_ids);
                 })
                     ->orWhereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
                     ->orWhereBetween('release_date', [$today, $comingSoonOffset]); // Coming Soon
@@ -172,7 +172,7 @@ class MovieRepository implements MovieRepositoryInterface
         $genres = MovieGenre::select("id", "label")->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
         return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset) {
-          
+
             $categories = [];
             $release_date = now()->parse($movie->release_date);
 
@@ -214,7 +214,10 @@ class MovieRepository implements MovieRepositoryInterface
                 $q->orWhere('name', 'LIKE', '% ' . $word);
                 $q->orWhere('name', 'LIKE', $word . ' %');
             }
+            dd($word);
         })
+
+
             ->limit(10)
             ->get()->map(function ($movie) {
                 return [
@@ -227,6 +230,10 @@ class MovieRepository implements MovieRepositoryInterface
             });
     }
 
+ 
+
+
+
     public function getMovieShows($branch_id, $movie_id, $date)
     {
 
@@ -235,14 +242,16 @@ class MovieRepository implements MovieRepositoryInterface
             ->with(['movieShows' => function ($query) use ($movie_id, $date) {
                 $query->where('movie_id', $movie_id)
                     ->whereDate('date', $date)
-                    ->with(['screenType', 'seats' => function ($seatQuery) {
-                        $seatQuery->where('is_reserved', false);
-                    }
-                ]);
+                    ->with([
+                        'screenType',
+                        'seats' => function ($seatQuery) {
+                            $seatQuery->where('is_reserved', false);
+                        }
+                    ]);
             }])
             ->get();
 
-            dd($theaters);
+        dd($theaters);
 
         // Map the data to the desired format
         $theaterData = $theaters->flatMap(function ($theater) {

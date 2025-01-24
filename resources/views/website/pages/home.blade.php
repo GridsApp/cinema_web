@@ -8,9 +8,8 @@
         </div>
     @endif
 
- {{-- @dd($statistics); --}}
+
     @if (isset($statistics) && count($statistics) > 0)
-  
         <div class="sm:mb-20 mb-10 mt-10">
             @include('website.components.separator-title', ['title' => __('messages.about_us')])
 
@@ -25,7 +24,87 @@
     @endif
     <div>
 
+        <div class="flex sm:gap-20 gap-5 sm:flex-row flex-col !mt-20  main-container images-bordered-four">
 
+
+            <div class="sm:h-[400px] h-full w-[50%[ images-bordered-four gap-x-4 gap-y-7 grid sm:grid-cols-2 grid-cols-1">
+                <div class="border-image-wrapper flex  w-full">
+                    <div class="relative ">
+
+                        <div class="border-image-top-left"> </div>
+                        <div class="border-image-bottom-right"> </div>
+
+                        <div class="sm:w-[250px] w-[250px]">
+                            <div class="asp asp-4-3">
+
+                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered1 ">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-image-wrapper flex  w-full">
+                    <div class="relative ">
+
+                        <div class="border-image-top-right"> </div>
+                        <div class="border-image-bottom-left"> </div>
+
+                        <div class="sm:w-[250px] w-[250px]">
+                            <div class="asp asp-4-3">
+
+                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered2 ">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-image-wrapper flex  w-full">
+                    <div class="relative ">
+
+                        <div class="border-image-top-right"> </div>
+                        <div class="border-image-bottom-left"> </div>
+
+                        <div class="sm:w-[250px] w-[250px]">
+                            <div class="asp asp-4-3">
+
+                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered2 ">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-image-wrapper flex  w-full">
+                    <div class="relative ">
+
+                        <div class="border-image-top-left"> </div>
+                        <div class="border-image-bottom-right"> </div>
+
+                        <div class="sm:w-[250px] w-[250px]">
+                            <div class="asp asp-4-3">
+
+                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered1 ">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sm:w-[50%] w-full">
+                @if (isset($paragraph_banner['content']))
+                    <div>
+
+                        {!! $paragraph_banner['content'] !!}
+                    </div>
+                @endif
+            </div>
+
+
+
+
+        </div>
 
 
 
@@ -45,8 +124,8 @@
     @endif
 
 
-    <div>
-        @include('website.components.banner',['aspect'=>'asp-4-1'])
+    <div class="mt-20">
+        @include('website.components.banner', ['aspect' => 'asp-4-1'])
     </div>
 
     @if (isset($movies) && count($movies) > 0)

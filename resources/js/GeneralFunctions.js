@@ -782,87 +782,87 @@ export default class GeneralFunctions {
         ]);
     }
 
-    // initPhone() {
-    //     let input = document.querySelector(".phone-numb");
-    //     if (input) {
-    //         input.addEventListener("keypress", function (event) {
-    //             var charCode = event.charCode;
+    initPhoneField(){
+        return {
 
-    //             if (charCode !== 0 && (charCode < 48 || charCode > 57)) {
-    //                 event.preventDefault();
-    //             }
-    //         });
+            phone : null,
 
-    //         var intl = intlTelInput(input, {
-    //             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.7/build/js/utils.js",
-    //             initialCountry: "lb",
-    //             strictMode: true,
-    //             separateDialCode: false,
-    //             nationalMode: true,
-    //         });
+            init(){
 
-    //         let updating = false;  // Flag to prevent event loop
+                let input = this.$refs.phone;
 
-    //         input.addEventListener("input", function () {
-    //             if (updating) return;  // Do nothing if we are updating the inputs
+                var intl = intlTelInput(input , {
+                    utilsScript : "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.2.1/build/js/intlTelInputWithUtils.min.js",
+                    strictMode: true,
+                });
 
-    //             updating = true;  // Set the flag to true to prevent further triggers
+                // this.phone = this.$wire.value;
+                // intl.setNumber(this.phone);
+  
+                // console.log(intl.isValidNumber());
+               
+                input.addEventListener("input",  () => {
 
-    //             var countryData = intl.getSelectedCountryData();
-    //             var phone_country_code = countryData.iso2;
-    //             console.log(phone_country_code);
-    //             var phone = intl.getNumber() + input.value;
-    //             if (!phone.startsWith("+")) {
-    //                 phone = "+" + countryData.dialCode + phone;
-    //             }
+                    console.log(intl.getNumber());
 
-    //             document.querySelector("input[name='phone_country_code']").value = phone_country_code;
-    //             document.querySelector("input[name='phone']").value = phone;
+                });
 
-    //             document.querySelector("input[name='phone_country_code']").dispatchEvent(new Event("input"));
-    //             document.querySelector("input[name='phone']").dispatchEvent(new Event("input"));
+            }
 
-    //             updating = false;
-    //         });
-    //     }
-    // }
+
+
+        }
+    }
+
+    
 
     initPhone() {
         let input = document.querySelector("#phone");
+
+
+        
+// intlTelInput(input, {
+//   loadUtils: () => import("intl-tel-input/utils"),
+// });
+
+
         if (input) {
-            input.addEventListener("keypress", function (event) {
-                var charCode = event.charCode;
-                if (charCode !== 0 && (charCode < 48 || charCode > 57)) {
-                    event.preventDefault();
-                }
-            });
+
+            // let fullPhone = input.value;
+
+            // console.log(fullPhone);
+
             var intl = intlTelInput(input, {
                 utilsScript:
-                    "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.7/build/js/utils.js",
-                initialCountry: "lb",
-                strictMode: false,
-                separateDialCode: false,
-                nationalMode: true,
+                    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.2.1/build/js/intlTelInputWithUtils.min.js",
+                initialCountry: "LB",
+                
+                // strictMode: false,
+                // separateDialCode: false,
+                // nationalMode: true,
             });
+
+            intl.setNumber("+96176406487");
+
             input.addEventListener("input", function () {
-                var elem = this;
-                var countryData = intl.getSelectedCountryData();
-                var phone_country_code = countryData.iso2;
-                var phone_number = intl.getNumber() + input.value;
-                if (!phone_number.startsWith("+")) {
-                    phone_number = "+" + countryData.dialCode + phone_number;
-                }
-                document.querySelector(
-                    "input[name='phone_country_code']"
-                ).value = phone_country_code;
-                document.querySelector("input[name='phone_number']").value =
-                    phone_number;
-                document
-                    .querySelector("input[name='phone_country_code']")
-                    .dispatchEvent(new Event("input"));
-                document
-                    .querySelector("input[name='phone_number']")
-                    .dispatchEvent(new Event("input"));
+                // var elem = this;
+                // var countryData = intl.getSelectedCountryData();
+                // var phone_country_code = countryData.iso2;
+                // var phone_number = intl.getNumber() + input.value;
+                // if (!phone_number.startsWith("+")) {
+                //     phone_number = "+" + countryData.dialCode + phone_number;
+                // }
+                // document.querySelector(
+                //     "input[name='phone_country_code']"
+                // ).value = phone_country_code;
+                // document.querySelector("input[name='phone_number']").value =
+                //     phone_number;
+                // document
+                //     .querySelector("input[name='phone_country_code']")
+                //     .dispatchEvent(new Event("input"));
+                // document
+                //     .querySelector("input[name='phone_number']")
+                //     .dispatchEvent(new Event("input"));
             });
         }
     }

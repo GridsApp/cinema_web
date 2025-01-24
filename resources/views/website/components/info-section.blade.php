@@ -9,7 +9,7 @@
                 x-text="'+' + counter">
                 +
             </span>
-            <p class="uppercase  font-semibold tracking-wider sm:text-[12px] sm:rtl:text-[14px] text-[10px]  mt-3">
+            <p class="uppercase  font-bold tracking-[1.5px] sm:text-[12px] sm:rtl:text-[14px] text-[10px]  mt-3">
                 {{ $statistic['label'] ?? '' }}
             </p>
         </div>

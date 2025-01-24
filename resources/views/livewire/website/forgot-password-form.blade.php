@@ -15,5 +15,5 @@
     @if ($otpSent)
         <div class="text-green-500 text-sm mt-2">OTP has been sent!</div>
     @endif
-    <button type="submit" class="form-button mt-10">Send OTP</button>
+    <button type="submit" class="form-button mt-4">Send OTP</button>
 </form>

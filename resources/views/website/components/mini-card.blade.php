@@ -3,8 +3,8 @@
     cinemaPrefix: '{{ $branch['web_prefix'] ?? 'dbaye' }}',
     languagePrefix: '{{ request()->route('language_prefix') ?? 'en' }}'
 }">
-    {{-- @dd($branch['web_prefix']); --}}
-    <div class="mini-card">
+
+    <a :href="`/${cinemaPrefix}/${languagePrefix}/movies/listing`" class="contain mini-card">
         @if (isset($branch['image']))
             <div class="asp asp-2-1">
                 <img src="{{ $branch['image'] }}" alt="">
@@ -30,21 +30,30 @@
                     @endif
 
                     @if (isset($branch['latitude']) && isset($branch['longitude']))
-                        <button @click="showModal = true; console.log('Modal Opened')"
-                            class="primary-color text-[9px] pt-2 font-bold  uppercase tracking-[1.5px]  underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
-                            {{ app()->getLocale() === 'ar' ? 'عرض الموقع' : 'View Location' }}
-                        </button>
+                    <button 
+                    @click.prevent="showModal = true; console.log('Modal Opened', showModal)"
+                    class="primary-color text-[9px] pt-2 font-bold uppercase tracking-[1.5px] underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
+                    {{ app()->getLocale() === 'ar' ? 'عرض الموقع' : 'View Location' }}
+                </button>
                     @endif
 
                 </div>
             </div>
         </div>
-    </div>
+    </a>
 
-    <div x-cloak x-show="showModal" @click.outside="showModal = false; console.log('Modal Closed')" x-transition
-        class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+
+    <div x-cloak x-show="showModal" @click.outside="showModal = false; console.log('Modal Closed', showModal)" 
+         x-init="showModal = false" 
+         x-transition:enter="transition ease-out duration-500 transform opacity-0 "
+         x-transition:enter-start="opacity-0 "
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-300 transform opacity-0 "
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 "
+         class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[990]">
         <div class="bg-white rounded-lg p-[44px] max-w-[500px]" @click.stop>
-            <button @click="showModal = false; console.log('Modal Closed')"
+            <button @click="showModal = false; console.log('Modal Closed', showModal)"
                     class="pb-5 text-center flex justify-end w-full text-black rounded">
                 <i class="fa-solid fa-x"></i>
             </button>
@@ -71,6 +80,5 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </div>

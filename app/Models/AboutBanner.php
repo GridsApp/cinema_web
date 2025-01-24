@@ -10,6 +10,26 @@ class AboutBanner extends Model
 {
     use HasFactory;
 
-  
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['title_' . app()->getLocale()]
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['description_' . app()->getLocale()]
+        );
+    }
+
+    protected function ctaLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes['cta_label_' . app()->getLocale()]
+        );
+    }
+    
     
 }

@@ -2,6 +2,7 @@
 {{-- @dd("here"); --}}
 <form wire:submit.prevent="resetPassword" class="auth-form">
     @csrf
+    <div class="flex flex-col gap-4">
     <div>
 
         @include('website.components.inputs.password', [
@@ -28,5 +29,6 @@
             <div class="form-error-message">{{ $message }}</div>
         @enderror
     </div>
-    <button type="submit" class="form-button mt-10">Reset Password</button>
+ </div>
+    <button type="submit" class="form-button mt-5">Reset Password</button>
 </form>

@@ -1,14 +1,14 @@
 <form wire:submit.prevent="submit" class="auth-form ">
     @csrf
 
+   <div class="flex flex-col gap-4">
     <div>
-        {{-- <input id="phone" wire:model="phone" required name="phone" class="w-full input-group phone-numb" id="phone_number"
-            type="tel" placeholder="X XXX XXX">
 
-        <input wire:model="phone_country_code"  type="hidden" name="phone_country_code" id="phone_country_code">
-        <input wire:model="phone_number"  type="hidden" name="phone_number" id="full" > --}}
 
-        @include('website.components.inputs.phone-number', [
+        <livewire:components.phone wire:model="phone" />
+
+
+        {{-- @include('website.components.inputs.phone-number', [
             'id' => 'phone',
             'wireModel' => 'phone',
             'name' => 'phone',
@@ -24,7 +24,7 @@
 
         @error('phone')
             <div class="form-error-message">{{ $message }}</div>
-        @enderror
+        @enderror --}}
     </div>
 
     <div>
@@ -35,18 +35,24 @@
             'placeholder' => 'Enter your password',
         ])
     </div>
+   </div>
 
-    <div class="link-button">
-        {{ __('messages.forgot_password') }} 
-        <a href="{{ route('forgot-password', [
-            'cinema_prefix' => $cinemaPrefix,
-            'language_prefix' => $langPrefix,
-        ]) }}">
-            <span class="primary-color underline">{{ __('messages.reset') }}</span>
-        </a>
+    <div>
+        <div class="link-button ">
+            {{ __('messages.forgot_password') }}
+            <a
+                href="{{ route('forgot-password', [
+                    'cinema_prefix' => $cinemaPrefix,
+                    'language_prefix' => $langPrefix,
+                ]) }}">
+                <span class="primary-color underline">{{ __('messages.reset') }}</span>
+            </a>
+        </div>
+        <div class="pt-4">
+            <button type="submit" class="form-button w-full ">{{ __('messages.sign_in') }}</button>
+        </div>
+
+
+
     </div>
-    
-    <button type="submit" class="form-button mt-10">{{ __('messages.sign_in') }}</button>
-
-
 </form>

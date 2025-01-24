@@ -15,7 +15,7 @@
             @isset($company_purpose['content'])
                 <div class=" inline-flex gap-5">
                     <div>
-                        <img src="/images/icon.svg" alt="" class="bg-gray-200">
+                        <img src="/images/icon.svg" alt="" class="">
                     </div>
 
                     <div>

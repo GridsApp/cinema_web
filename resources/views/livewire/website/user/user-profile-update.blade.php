@@ -17,9 +17,6 @@
 
 
         <div>
-            {{-- <input wire:model.defer="phone" name="phone" class="w-full input-group phone-numb" id="phone_number"
-                    type="text" placeholder="X XXX XXX" />
-                <input type="hidden" name="phone_country_code" id="phone_country_code" wire:model="phone_country_code"> --}}
 
             @include('website.components.inputs.phone-number', [
                 'id' => 'phone',
@@ -38,12 +35,12 @@
 
         <div>
             <button class="form-button" type="submit">{{ __('tables.save_changes') }}</button>
-           
-            
+
+
         </div>
     </form>
 
-    <!-- Change Password -->
+
     <form wire:submit.prevent="changePassword" class="pt-10">
         <div class="pb-5">
             @include('website.components.title', ['title' => __('messages.change_password')])

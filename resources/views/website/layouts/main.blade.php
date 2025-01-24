@@ -7,47 +7,67 @@
 
     <title>Iraqi Cinema</title>
 
-  <div>
-    @include('website.partials.header',["compact"=>true])
-  </div>
+
     @livewireStyles
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 
 <body>
-  @php
+    <div>
+        @include('website.partials.header', ['compact' => true])
+    </div>
+    @php
 
         $is_home = request()->route()->getName() == 'home';
-       
-
 
     @endphp
 
-  <main  class="@if (!$is_home ) height-spacing @endif">
-    @yield('content')
+    <main class="@if (!$is_home) height-spacing @endif">
+        @yield('content')
 
 
-  </main>
+    </main>
     @yield('scripts')
-    
+
     @include('CMSView::components.toast')
     @livewireScripts
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Livewire.on('initPhoneNumber', function() {
+                var timeout = false;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    window.GeneralFunctions.initPhone();
+                }, 200);
 
-      document.addEventListener('DOMContentLoaded', function() {
-          Livewire.on('initPhoneNumber',function(){
-              var timeout=false;
-              clearTimeout(timeout);
-              timeout = setTimeout(function(){
-                  window.GeneralFunctions.initPhone();
-              },200);
-  
-          })
-      });
-  
-  </script>
+            });
+            Livewire.on('changeUrl', (event) => {
+                console.log(event);
+
+                const webPrefix = event[0].webPrefix;
+                const currentUrl = window.location.href;
+
+                const url = new URL(currentUrl);
+                const pathnameSegments = url.pathname.split('/');
+
+                if (webPrefix && pathnameSegments.length > 1) {
+                    pathnameSegments[1] = webPrefix;
+
+                    url.pathname = pathnameSegments.join('/');
+
+                    window.history.pushState({
+                        path: url.pathname
+                    }, '', url.pathname);
+
+
+                }
+            });
+
+
+        });
+    </script>
     @include('website.partials.footer')
-   
+
 </body>
 
 </html>

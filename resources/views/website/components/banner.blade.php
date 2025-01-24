@@ -10,7 +10,7 @@
                 <img src={{ get_image($banner->image) }} alt="" class="bg-gray-100">
             </div>
         @enddesktop
-
+{{-- @dd($banner); --}}
         <div class="box-position main-container">
             @if (isset($banner->title))
                 <div class="banner-title">

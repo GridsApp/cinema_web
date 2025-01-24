@@ -21,7 +21,7 @@ class HomeParagraphBannersEntity extends Entity
         $this->addField("second_image" , ["container" => 'col-span-12']);
         $this->addField("third_image" , ["container" => 'col-span-12']);
         $this->addField("fourth_image" , ["container" => 'col-span-12']);
-        $this->addField("content" , ["container" => 'col-span-12']);
+        $this->addField("content" , ["container" => 'col-span-12','translatable'=>true ]);
       
         return $this->fields;
     }

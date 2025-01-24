@@ -55,4 +55,13 @@ return [
     'learn_more' => 'Learn more',
 
     'about_us' => 'About Us',
+
+    'forgot_password' => 'Forgot Password',
+
+    'delete_account'=> 'Delete Account',
+
+    'confirm_delete_account' => 'Confirm Account Deletion',
+    'are_you_sure' => 'Are you sure you want to delete your account? This action cannot be undone.',
+    'yes' => 'Yes',
+    'no' => 'No',
 ];

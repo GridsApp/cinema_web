@@ -30,7 +30,7 @@ return [
     'check_movies' => 'افحص الأفلام',
     'view_location' => 'عرض الموقع',
 
-
+    'forgot_password' => 'نسيت كلمة المرور',
 
 
     'about_us' => 'عنّا',
@@ -56,6 +56,12 @@ return [
     'learn_more' => 'اعرف المزيد',
 
     'about_us' => 'من نحن',
+    'delete_account'=> 'حذف الحساب' ,
+    'confirm_delete_account' => 'تأكيد حذف الحساب',
+'are_you_sure' => 'هل أنت متأكد أنك تريد حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.',
+'yes' => 'نعم',
+'no' => 'لا',
+
    
 ];
 

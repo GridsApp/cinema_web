@@ -18,7 +18,8 @@ class CinemaGrowthPlansEntity extends Entity
     public function fields(){
 
         $this->addField("image" , ["container" => 'col-span-12']);
-        $this->addField("" , ["container" => 'col-span-12']);
+        $this->addField("content" , ["container" => 'col-span-6','translatable'=>true]);
+
       
         return $this->fields;
     }

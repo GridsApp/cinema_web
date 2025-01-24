@@ -11,8 +11,8 @@
             setTimeout(() => this.copied = false, 700);
         });
     }
-}" class="flex pb-6 tabs flex-col gap-10">
-    <div class="flex pb-6 tabs flex-col gap-10">
+}" class="flex pb-6 tabs flex-col gap-4">
+    <div class="flex pb-6 tabs flex-col gap-5">
         <div class="flex flex-row gap-5">
             <div class="tabs-text cursor-pointer"
                 :class="{ 'text-bold': activeTab === 'loyalty', 'active': activeTab === 'loyalty' }"
@@ -29,7 +29,7 @@
     </div>
 
 
-    <div class="flex gap-20 sm:flex-row flex-col loyalty-card" x-show="activeTab === 'loyalty'">
+    <div class="flex sm:gap-20 gap-10 sm:flex-row flex-col loyalty-card" x-show="activeTab === 'loyalty'">
         <div class="relative w-fit">
             <div class="w-[300px]">
                 <img src="/images/card.jpg" alt="">
@@ -69,11 +69,11 @@
             <div class="w-full max-w-[330px]">
                 <div
                     class="bg-[#F0F0F0] justify-between rounded-xl inline-flex w-full px-5 border border-black-200 py-3 gap-5">
-                    <div class="uppercase text-[12px] flex items-center font-bold opacity-80 tracking-[1.5px]">
+                    <div class="uppercase text-[12px] flex items-center font-bold opacity-70 tracking-[1.5px]">
                         {{ __('tables.loyalty_points') }}
                     </div>
 
-                    <div class="text-[12px] font-bold">
+                    <div class="text-[12px] opacity-70 font-semibold">
                         {{ $card['loyalty_points_balance']['display'] ?? '0' }}
                     </div>
                 </div>

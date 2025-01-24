@@ -30,7 +30,7 @@ class SignInForm extends Component
     
     public $phone_country_code;
     public $phone_number;
-    public $phone;
+    public $phone = "+96170406487";
 
     protected $rules = [
         'phone' => ['required', 'regex:/^\+?[0-9]+$/'],
@@ -50,7 +50,7 @@ class SignInForm extends Component
     {
         $this->cinemaPrefix = $cinemaPrefix;
         $this->langPrefix = $langPrefix;
-        $this->dispatch('initPhoneNumber');
+        // $this->dispatch('initPhoneNumber');
     }
 
     public function hydrate()
@@ -70,6 +70,7 @@ class SignInForm extends Component
 
 
         } catch (\Exception $e) {
+            
             $this->sendError("You have entered an invalid phone number", "Invalid phone");
             return;
         }

@@ -17,4 +17,5 @@ class AboutParagraph extends Model
             get: fn(mixed $value, array $attributes) => $attributes['content_' . app()->getLocale()]
         );
     }
+  
 }

@@ -73,7 +73,13 @@ Route::group([
       session()->flush();
       return "Session has been flushed.";
     });
+    Route::post('/profile/add-image', [\App\Http\Controllers\WEBSITE\UserController::class, 'addImage'])->name('addImage');
+    Route::get('/profile/add-image', [\App\Http\Controllers\WEBSITE\UserController::class, 'render'])->name('render');
+
+    
     Route::get('/profile/update', [\App\Http\Controllers\WEBSITE\UserController::class, 'update'])->name('update');
+    Route::get('/profile/delete', [\App\Http\Controllers\WEBSITE\UserController::class, 'renderDelete'])->name('renderDelete');
+    Route::post('/profile/delete', [\App\Http\Controllers\WEBSITE\UserController::class, 'deleteAccount'])->name('deleteAccount');
     Route::get('/profile/favorites', [\App\Http\Controllers\WEBSITE\UserController::class, 'favorites'])->name('favorites');
     Route::get('/profile/wallet-transactions', [\App\Http\Controllers\WEBSITE\UserController::class, 'getWalletTransactions'])->name('getWalletTransactions');
     Route::get('/loyality-card', [\App\Http\Controllers\WEBSITE\UserController::class, "getLoyaltyCard"])->name('getLoyaltyCard');

@@ -14,62 +14,70 @@
 @endphp
 
 <footer class="mt-10">
-    <div class="grid sm:grid-cols-12 grid-cols-1">
+    <div class="grid sm:grid-cols-12 grid-cols-1 pb-20">
         <div class="sm:col-span-3 col-span-12">
             <div class="footer-title">
                 {{ __('footer.get_in_touch') }}
             </div>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
                 @if (isset($branch['email']))
-                    <div>
+                    <div class="inline-flex items-center gap-4">
                         <i class="fa-solid fa-envelope"></i>
                         <span> {{ $branch['email'] }}</span>
                     </div>
                 @endif
-                <div>
+                <div class="inline-flex items-center gap-4">
                     <i class="fa-solid fa-phone"></i>
                     <span> {{ $branch['number'] }}</span>
                 </div>
-                <div>
+                <div class="inline-flex items-center gap-4">
                     <i class="fa-solid fa-location-dot"></i>
                     <span> {{ $branch['address'] }}</span>
                 </div>
             </div>
         </div>
-        <div class="sm:col-span-2 col-span-12 sm:pt-0 pt-10">
+        <div class="sm:col-span-3 col-span-12 sm:pt-0 pt-10">
             <div class="footer-title">
                 {{ __('footer.useful_links') }}
             </div>
             <div class="flex flex-col gap-2">
                 @if (!session('user'))
+                  <span>
                     <a class="a-text"
-                        href="{{ route('login-web', [
-                            'cinema_prefix' => request()->route('cinema_prefix'),
-                            'language_prefix' => request()->route('language_prefix'),
-                        ]) }}">{{ __('footer.wallet_transactions') }}</a>
+                    href="{{ route('login-web', [
+                        'cinema_prefix' => request()->route('cinema_prefix'),
+                        'language_prefix' => request()->route('language_prefix'),
+                    ]) }}">{{ __('footer.wallet_transactions') }}</a>
+                  </span>
                 @else
-                    <div>
+                   <span>
+             
                         <a class="a-text"
                             href="{{ route('getWalletTransactions', [
                                 'cinema_prefix' => request()->route('cinema_prefix'),
                                 'language_prefix' => request()->route('language_prefix'),
                             ]) }}">{{ __('footer.wallet_transactions') }}</a>
-                    </div>
+             
+                   </span>
                 @endif
 
                 @if (!session('user'))
+                  <span>
                     <a class="a-text"
-                        href="{{ route('login-web', [
+                    href="{{ route('login-web', [
+                        'cinema_prefix' => request()->route('cinema_prefix'),
+                        'language_prefix' => request()->route('language_prefix'),
+                    ]) }}">{{ __('footer.recharge_wallet') }}</a>
+                  </span>
+                @else
+                    <div>
+                       <span>
+                        <a class="a-text"
+                        href="{{ route('getWalletTransactions', [
                             'cinema_prefix' => request()->route('cinema_prefix'),
                             'language_prefix' => request()->route('language_prefix'),
                         ]) }}">{{ __('footer.recharge_wallet') }}</a>
-                @else
-                    <div>
-                        <a class="a-text"
-                            href="{{ route('getWalletTransactions', [
-                                'cinema_prefix' => request()->route('cinema_prefix'),
-                                'language_prefix' => request()->route('language_prefix'),
-                            ]) }}">{{ __('footer.recharge_wallet') }}</a>
+                       </span>
                     </div>
                 @endif
                 {{-- <div>
@@ -77,38 +85,46 @@
                 </div> --}}
 
                 @if (!session('user'))
+                  <span>
                     <a class="a-text"
-                        href="{{ route('login-web', [
+                    href="{{ route('login-web', [
+                        'cinema_prefix' => request()->route('cinema_prefix'),
+                        'language_prefix' => request()->route('language_prefix'),
+                    ]) }}">{{ __('footer.loyalty') }}</a>
+                  </span>
+                @else
+                  
+                     <span>
+                        <a class="a-text"
+                        href="{{ route('getLoyaltyCard', [
                             'cinema_prefix' => request()->route('cinema_prefix'),
                             'language_prefix' => request()->route('language_prefix'),
                         ]) }}">{{ __('footer.loyalty') }}</a>
-                @else
-                    <div>
-                        <a class="a-text"
-                            href="{{ route('getLoyaltyCard', [
-                                'cinema_prefix' => request()->route('cinema_prefix'),
-                                'language_prefix' => request()->route('language_prefix'),
-                            ]) }}">{{ __('footer.loyalty') }}</a>
-                    </div>
+                     </span>
+                
                 @endif
                 {{-- <div>
                     <a class="a-text" href="">{{ __('footer.loyalty') }}</a>
                 </div> --}}
 
                 @if (!session('user'))
-                    <a class="a-text"
-                        href="{{ route('login-web', [
+               <span>
+                <a class="a-text"
+                href="{{ route('login-web', [
+                    'cinema_prefix' => request()->route('cinema_prefix'),
+                    'language_prefix' => request()->route('language_prefix'),
+                ]) }}">{{ __('footer.purchase_history') }}</a>
+               </span>
+                @else
+                    
+                       <span>
+                        <a class="a-text"
+                        href="{{ route('purchaseHistory', [
                             'cinema_prefix' => request()->route('cinema_prefix'),
                             'language_prefix' => request()->route('language_prefix'),
                         ]) }}">{{ __('footer.purchase_history') }}</a>
-                @else
-                    <div>
-                        <a class="a-text"
-                            href="{{ route('purchaseHistory', [
-                                'cinema_prefix' => request()->route('cinema_prefix'),
-                                'language_prefix' => request()->route('language_prefix'),
-                            ]) }}">{{ __('footer.purchase_history') }}</a>
-                    </div>
+                       </span>
+           
                 @endif
                 {{-- <div>
                     <a class="a-text" href="">{{ __('footer.purchase_history') }}</a>
@@ -124,23 +140,29 @@
 
                 @if ($facebook)
                     <div class="flex items-center gap-3">
-                        <div class="gap-5 max-w-[40px] inline-flex">
+                      <span>
+                        <div class="gap-3 inline-flex">
                             <i class="fa-brands fa-facebook text-[17px] "></i>
+                            <a href="{{ $facebook }}" target="_blank" class="a-text">
+                                {{ $facebook_label ?? 'Facebook' }}
+                            </a>
                         </div>
-                        <a href="{{ $facebook }}" target="_blank" class="a-text">
-                            {{ $facebook_label ?? 'Facebook' }}
-                        </a>
+                     
+                      </span>
                     </div>
                 @endif
 
                 @if ($instagram)
                     <div class="flex items-center gap-3">
-                        <div class="gap-5 max-w-[40px] inline-flex">
+                     <span>
+                        <div class="gap-3 inline-flex">
                             <i class="fa-brands fa-instagram text-[17px] "></i>
+                            <a href="{{ $instagram }}" target="_blank" class="a-text">
+                                {{ $instagram_label ?? 'Instagram' }}
+                            </a>
                         </div>
-                        <a href="{{ $instagram }}" target="_blank" class="a-text">
-                            {{ $instagram_label ?? 'Instagram' }}
-                        </a>
+                     </span>
+                      
                     </div>
                 @endif
 
@@ -149,7 +171,7 @@
             </div>
         </div>
 
-        <div class="col-span-5">
+        <div class="col-span-4">
             <div class="footer-title">
                 {{ __('footer.download_our_app') }}
             </div>
@@ -165,6 +187,15 @@
                             src="/images/applestore.svg" alt=""></a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="flex sm:flex-row flex-col justify-between w-full pb-10">
+        <div  class="text-[#F5F5F5] opacity-40 text-[11px] font-medium">
+            ©2022. All rights reserved. Copyrights Iraqi cinemas
+        </div>
+        <div  class="text-[#F5F5F5] opacity-40 text-[11px] font-medium">
+            Web design & development by <a href="https://thewebaddicts.com" class="underline">the web addicts</a>
         </div>
     </div>
 </footer>

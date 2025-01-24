@@ -3,7 +3,19 @@
         <div class="w-[100px]">
 
             <div class="flex justify-center items-center w-full flex-col">
-                <div class="asp asp-2-2">
+
+
+                <iframe
+                    src="{{ route('render', [
+                        'cinema_prefix' => request()->route('cinema_prefix'),
+                        'language_prefix' => request()->route('language_prefix'),
+                    ]) }}"
+                    frameborder="0"></iframe>
+                {{-- <div class="asp asp-2-2"> --}}
+                    {{-- <img src="{{ $user->profile_picture ? get_image($user->profile_picture) : '/images/profile.png' }}"
+                        alt="Profile Image" class="rounded-full w-full h-full object-cover"> --}}
+                {{-- </div> --}}
+                {{-- <div class="asp asp-2-2">
                     <img src="{{ $user->profile_picture ? get_image($user->profile_picture) : '/images/profile.png' }}"
                         alt="Profile Image" class="rounded-full w-full h-full object-cover">
 
@@ -13,7 +25,17 @@
                         href="#">
                         {{ __('messages.add_image') }}
                     </a>
-                </div>
+                </div> --}}
+
+                {{-- <form id="profile-image-form" enctype="multipart/form-data" method="POST" action="{{ route('addImage', [
+                    'cinema_prefix' => request()->route('cinema_prefix'),
+                    'language_prefix' => request()->route('language_prefix'),
+                ]) }}">
+                    @csrf  
+                    <input type="file" name="profile_picture" id="profile_picture" required>
+                    <button type="submit">Upload Image</button>
+                </form> --}}
+
             </div>
         </div>
         <div class="profile-details">
@@ -34,94 +56,123 @@
         </div>
     </div>
 
-    <div x-data="{
-        activeLink: localStorage.getItem('activeLink') || '',
-        setActive(link) {
-            this.activeLink = link;
-            localStorage.setItem('activeLink', link);
-        }
-    }" class="account-menu">
-        <a href="{{ route('update', [
-            'cinema_prefix' => request()->route('cinema_prefix'),
-            'language_prefix' => request()->route('language_prefix'),
-        ]) }}"
-            class="account-menu-text" :class="{ active: activeLink === 'personal_information' }"
-            x-on:click="setActive('personal_information')">
+    <div class="account-menu">
+        <a wire:nagivate
+            href="{{ route('update', [
+                'cinema_prefix' => request()->route('cinema_prefix'),
+                'language_prefix' => request()->route('language_prefix'),
+            ]) }}"
+            class="account-menu-text {{ Route::currentRouteName() === 'update' ? 'active' : '' }}">
             <div>
                 <div>{{ __('messages.personal_information') }}</div>
             </div>
             <div>
-                <i class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @if (Route::currentRouteName() === 'update')
+                    <i
+                        class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @endif
             </div>
         </a>
 
-        <a href="{{ route('favorites', [
-            'cinema_prefix' => request()->route('cinema_prefix'),
-            'language_prefix' => request()->route('language_prefix'),
-        ]) }}"
-            class="account-menu-text" :class="{ active: activeLink === 'my_favorites' }"
-            x-on:click="setActive('my_favorites')">
+        <a wire:nagivate
+            href="{{ route('favorites', [
+                'cinema_prefix' => request()->route('cinema_prefix'),
+                'language_prefix' => request()->route('language_prefix'),
+            ]) }}"
+            class="account-menu-text {{ Route::currentRouteName() === 'favorites' ? 'active' : '' }}">
             <div>
                 <div>{{ __('messages.my_favorites') }}</div>
             </div>
             <div>
-                <i class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @if (Route::currentRouteName() === 'favorites')
+                    <i
+                        class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @endif
             </div>
         </a>
 
-        <a href="{{ route('getWalletTransactions', [
-            'cinema_prefix' => request()->route('cinema_prefix'),
-            'language_prefix' => request()->route('language_prefix'),
-        ]) }}"
-            class="account-menu-text" :class="{ active: activeLink === 'wallet_transactions' }"
-            x-on:click="setActive('wallet_transactions')">
+        <a wire:nagivate
+            href="{{ route('getWalletTransactions', [
+                'cinema_prefix' => request()->route('cinema_prefix'),
+                'language_prefix' => request()->route('language_prefix'),
+            ]) }}"
+            class="account-menu-text {{ Route::currentRouteName() === 'getWalletTransactions' ? 'active' : '' }}">
             <div>
                 <div>{{ __('messages.wallet_transactions') }}</div>
             </div>
             <div>
-                <i class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @if (Route::currentRouteName() === 'getWalletTransactions')
+                    <i
+                        class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @endif
             </div>
         </a>
 
-        <a href="{{ route('getLoyaltyCard', [
-            'cinema_prefix' => request()->route('cinema_prefix'),
-            'language_prefix' => request()->route('language_prefix'),
-        ]) }}"
-            class="account-menu-text" :class="{ active: activeLink === 'loyalty' }" x-on:click="setActive('loyalty')">
+        <a wire:nagivate
+            href="{{ route('getLoyaltyCard', [
+                'cinema_prefix' => request()->route('cinema_prefix'),
+                'language_prefix' => request()->route('language_prefix'),
+            ]) }}"
+            class="account-menu-text {{ Route::currentRouteName() === 'getLoyaltyCard' ? 'active' : '' }}">
             <div>
                 <div>{{ __('messages.loyalty') }}</div>
             </div>
             <div>
-                <i class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @if (Route::currentRouteName() === 'getLoyaltyCard')
+                    <i
+                        class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @endif
             </div>
         </a>
 
-        <a href="{{ route('purchaseHistory', [
-            'cinema_prefix' => request()->route('cinema_prefix'),
-            'language_prefix' => request()->route('language_prefix'),
-        ]) }}"
-            class="account-menu-text" :class="{ active: activeLink === 'purchase_history' }"
-            x-on:click="setActive('purchase_history')">
+        <a wire:nagivate
+            href="{{ route('purchaseHistory', [
+                'cinema_prefix' => request()->route('cinema_prefix'),
+                'language_prefix' => request()->route('language_prefix'),
+            ]) }}"
+            class="account-menu-text {{ Route::currentRouteName() === 'purchaseHistory' ? 'active' : '' }}">
             <div>
                 <div>{{ __('messages.purchase_history') }}</div>
             </div>
             <div>
-                <i class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @if (Route::currentRouteName() === 'purchaseHistory')
+                    <i
+                        class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                @endif
             </div>
         </a>
 
+        <a wire:nagivate
+        href="{{ route('renderDelete', [
+            'cinema_prefix' => request()->route('cinema_prefix'),
+            'language_prefix' => request()->route('language_prefix'),
+        ]) }}"
+        class="account-menu-text {{ Route::currentRouteName() === 'purchaseHistory' ? 'active' : '' }}">
+        <div>
+            <div>{{ __('messages.delete_account') }}</div>
+        </div>
+        <div>
+            @if (Route::currentRouteName() === 'renderDelete')
+                <i
+                    class="fa-solid arrow {{ app()->getLocale() === 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+            @endif
+        </div>
+    </a>
+
         <div class="pt-7">
-            <a class="account-menu-text !uppercase !border-b-transparent"
+            <a class="account-menu-text  !uppercase !border-b-transparent"
                 href="{{ route('logout-web', [
                     'cinema_prefix' => request()->route('cinema_prefix'),
                     'language_prefix' => request()->route('language_prefix'),
                 ]) }}">
                 <div>
-                    <i class="fa-solid  fa-left-from-bracket ltr:pr-3 rtl:pl-3"></i>
+                    <i class="fa-solid primary-color fa-left-from-bracket ltr:pr-3 rtl:pl-3"></i>
                     {{ __('messages.logout') }}
                 </div>
             </a>
         </div>
     </div>
+
+
 
 </div>

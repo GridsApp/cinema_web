@@ -1,6 +1,7 @@
 <form wire:submit.prevent="submit" class="auth-form" x-data>
     @csrf
 
+    <div class="flex flex-col gap-4">
     <div>
         @include('website.components.inputs.phone-number', [
             'id' => 'phone',
@@ -49,11 +50,12 @@
      @enderror
     </div>
 
+   </div>
     <div class="unordered-list">
-        <div class="text-[12px] text-gray-700">
+        <div class="text-[13px] text-black font-normal">
             {{ __('messages.we_collect') }}
         </div>
-        <ul class="list-disc pl-5 text-gray-700">
+        <ul class="list-disc pl-5 text-black font-normal">
             <li>{{ __('messages.benefits.wallet') }}</li>
             <li>{{ __('messages.benefits.rewards') }}</li>
             <li>{{ __('messages.benefits.support') }}</li>

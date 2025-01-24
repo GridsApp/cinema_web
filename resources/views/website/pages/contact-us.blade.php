@@ -12,7 +12,7 @@
         <div class="sm:px-32 px-0">
             <div class="grid sm:grid-cols-2 grid-cols-1 mt-10 sm:gap-20 gap-10">
                 <div class="asp asp-2-1">
-                    <img src="/images/about-banner.jpg" alt="" class="rounded-xl brightness-50 ">
+                    <img src="/images/about.jpg" alt="" class="rounded-xl brightness-50 ">
                 </div>
 
                 <div class="mt-5">
@@ -23,7 +23,7 @@
 
 
                     <div>
-                        <div class="min-w-[40px] max-w-[40px] inline-flex">
+                        <div class="min-w-[40px] pt-4 max-w-[40px] inline-flex">
                             <i class="fa-solid fa-phone"></i>
                         </div>
                         <span>+964 XXXXXXXXXX</span> 
@@ -36,7 +36,7 @@
                             <div class="min-w-[40px] max-w-[40px] inline-flex">
                                 <i class="fa-brands fa-facebook !text-[#4267B2]"></i>
                             </div>
-                            <a href="{{ $facebook }}" target="_blank" class="hover:underline text-[12px]">
+                            <a href="{{ $facebook }}" target="_blank" class="hover:underline text-[12px] font-semibold">
                                 {{ $facebook_label ?? 'Facebook' }}
                             </a>
                         </div>
@@ -49,7 +49,7 @@
                             <div class="min-w-[40px] max-w-[40px] inline-flex">
                                 <i class="fa-brands fa-instagram !text-black"></i>
                             </div>
-                            <a href="{{ $instagram }}" target="_blank" class="hover:underline text-[12px]">
+                            <a href="{{ $instagram }}" target="_blank" class="hover:underline text-[12px] font-semibold">
                                 {{ $instagram_label ?? 'Instagram' }}
                             </a>
                         </div>
@@ -62,7 +62,7 @@
                             <div class="min-w-[40px] max-w-[40px] inline-flex">
                                 <i class="fa-brands fa-whatsapp !text-[#25D366]"></i>
                             </div>
-                            <a href="https://wa.me/{{ $whatsapp }}" target="_blank" class="hover:underline text-[12px]">
+                            <a href="https://wa.me/{{ $whatsapp }}" target="_blank" class="hover:underline text-[12px] font-semibold">
                                 {{ $whatsapp_label ?? 'WhatsApp' }}
                             </a>
                         </div>
@@ -75,7 +75,7 @@
                             <div class="min-w-[40px] max-w-[40px] inline-flex">
                                 <i class="fa-brands fa-x-twitter !text-[#1DA1F2]"></i>
                             </div>
-                            <a href="{{ $x }}" target="_blank" class="hover:underline text-[12px]">
+                            <a href="{{ $x }}" target="_blank" class="hover:underline text-[12px] font-semibold">
                                 {{ $x_label ?? 'Twitter' }}
                             </a>
                         </div>

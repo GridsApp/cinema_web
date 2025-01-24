@@ -19,7 +19,7 @@ class CinemaFoundersEntity extends Entity
 
         $this->addField("top_image" , ["container" => 'col-span-6']);
         $this->addField("bottom_image" , ["container" => 'col-span-6']);
-        $this->addField("content" , ["container" => 'col-span-6']);
+        $this->addField("content" , ["container" => 'col-span-6','translatable'=>true]);
       
         return $this->fields;
     }
