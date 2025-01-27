@@ -21,8 +21,6 @@ class LoyaltyRewardsComponent extends Component
     public $redeemedRewards = [];
 
 
-
-
     private CardRepositoryInterface $cardRepository;
     private RewardRepositoryInterface $rewardRepository;
 
@@ -52,8 +50,6 @@ class LoyaltyRewardsComponent extends Component
 
 
         $this->rewardId = $rewardId;
-
-
 
         $reward = $this->rewardRepository->getRewardById($rewardId);
 
