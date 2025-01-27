@@ -24,27 +24,26 @@ class SignInForm extends Component
 
     public $cinemaPrefix;
     public $langPrefix;
-   
-   
+
+
     public $password;
-    
+
     public $phone_country_code;
     public $phone_number;
-    public $phone = "+96170406487";
-
+    public $phone = '';
     protected $rules = [
         'phone' => ['required', 'regex:/^\+?[0-9]+$/'],
-        
+
         'password' => 'required',
     ];
 
     protected $messages = [
-    'phone.required' => 'The phone number is required.',
-    'phone.regex' => 'The phone format must start with a "+" followed by numbers.',
-    'password.required' => 'The password is required.',
-    'password.min' => 'The password must be at least 8 characters long.',
-    'password.regex' => 'The password must contain at least one letter.',
-];
+        'phone.required' => 'The phone number is required.',
+        'phone.regex' => 'The phone format must start with a "+" followed by numbers.',
+        'password.required' => 'The password is required.',
+        'password.min' => 'The password must be at least 8 characters long.',
+        'password.regex' => 'The password must contain at least one letter.',
+    ];
 
     public function mount($cinemaPrefix, $langPrefix)
     {
@@ -61,16 +60,17 @@ class SignInForm extends Component
     public function submit()
     {
 
-        // dd($this->phone_number);
+
+
+        dd($this->phone);
+
         $this->validate();
 
         try {
             // dd($this->phone_number);
-            $user = $this->userRepository->getUserByPhone($this->phone_number);
-
-
+            $user = $this->userRepository->getUserByPhone($this->phone);
         } catch (\Exception $e) {
-            
+
             $this->sendError("You have entered an invalid phone number", "Invalid phone");
             return;
         }
@@ -97,5 +97,3 @@ class SignInForm extends Component
         return view('livewire.website.sign-in-form');
     }
 }
-
-

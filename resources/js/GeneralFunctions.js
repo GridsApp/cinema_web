@@ -782,52 +782,97 @@ export default class GeneralFunctions {
         ]);
     }
 
-    initPhoneField(){
+    // initPhoneField() {
+    //     return {
+    //         phone: null,
+
+    //         init() {
+    //             let input = this.$refs.phone;
+
+    //             var intl = intlTelInput(input, {
+    //                 utilsScript:
+    //                     "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.2.1/build/js/intlTelInputWithUtils.min.js",
+    //                 strictMode: true,
+    //             });
+
+    //             // this.phone = this.$wire.value;
+    //             // intl.setNumber(this.phone);
+
+    //             // console.log(intl.isValidNumber());
+
+    //             input.addEventListener("input", () => {
+    //                 console.log(intl.getNumber());
+    //             });
+    //         },
+    //     };
+    // }
+
+    initPhoneField() {
         return {
-
-            phone : null,
-
-            init(){
-
-                let input = this.$refs.phone;
-
-                var intl = intlTelInput(input , {
-                    utilsScript : "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.2.1/build/js/intlTelInputWithUtils.min.js",
-                    strictMode: true,
-                });
-
-                // this.phone = this.$wire.value;
-                // intl.setNumber(this.phone);
-  
-                // console.log(intl.isValidNumber());
-               
-                input.addEventListener("input",  () => {
-
-                    console.log(intl.getNumber());
-
-                });
-
-            }
-
-
-
-        }
-    }
-
+            phone: '',
+            iti: null,
     
+            init() {
+                const input = this.$refs.phone;
+    
+                this.iti = intlTelInput(input, {
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
+                    separateDialCode: false, 
+                    // initialCountry: "auto", 
+                    
+                    geoIpLookup: function(callback) {
+                        fetch('https://ipinfo.io/json', { cache: 'reload' })
+                            .then(response => response.json())
+                            .then(data => callback(data.country))
+                            .catch(() => callback('us'));
+                    },
+                    customPlaceholder: function(selectedCountryPlaceholder) {
+                        return selectedCountryPlaceholder;
+                    }
+                });
+    
+                // setTimeout(() => {
+                //     const dialCode = document.querySelector('.iti__selected-dial-code');
+                //     if (dialCode) {
+                //         dialCode.style.display = 'none';
+                //     }
+                // }, 100);
+    
+                // // Event listener for input changes
+                input.addEventListener("input", () => {
+                    if (this.iti.isValidNumber()) {
+                      
+                       
+                        this.phone = this.iti.getNumber(); 
+                        console.log(this.phone);
+                    
+                        // input.value = this.iti.getNumber(intlTelInputUtils.numberFormat.NATIONAL); // Set the value to national number
+                    } else {
 
+                        this.phone = input.value;
+                    }
+    
+                  
+                    this.$dispatch('input', this.phone);
+                });
+    
+           
+            },
+        };
+    }
+    
+    
+    
+    
+    
     initPhone() {
         let input = document.querySelector("#phone");
 
-
-        
-// intlTelInput(input, {
-//   loadUtils: () => import("intl-tel-input/utils"),
-// });
-
+        // intlTelInput(input, {
+        //   loadUtils: () => import("intl-tel-input/utils"),
+        // });
 
         if (input) {
-
             // let fullPhone = input.value;
 
             // console.log(fullPhone);
@@ -836,7 +881,7 @@ export default class GeneralFunctions {
                 utilsScript:
                     "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.2.1/build/js/intlTelInputWithUtils.min.js",
                 initialCountry: "LB",
-                
+
                 // strictMode: false,
                 // separateDialCode: false,
                 // nationalMode: true,
@@ -867,66 +912,63 @@ export default class GeneralFunctions {
         }
     }
 
+    initPinCode(wire) {
+        const inputs = document.querySelectorAll(".twa-auth-input");
+        const inputField = document.querySelector(".twa-auth-inputfield");
 
-        initPinCode(wire) {
-            const inputs = document.querySelectorAll(".twa-auth-input");
-            const inputField = document.querySelector(".twa-auth-inputfield");
-    
-            let inputCount = 0;
-    
-            const updateInputConfig = (element, disabledStatus) => {
-                element.disabled = disabledStatus;
-                if (!disabledStatus) {
-                    element.focus();
-                } else {
-                    element.blur();
+        let inputCount = 0;
+
+        const updateInputConfig = (element, disabledStatus) => {
+            element.disabled = disabledStatus;
+            if (!disabledStatus) {
+                element.focus();
+            } else {
+                element.blur();
+            }
+        };
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, ""); // Allow only digits
+                const value = e.target.value;
+
+                if (value.length === 1) {
+                    // Update Livewire's `otp` array
+                    wire.set(`otp.${index}`, value);
+
+                    // Move to the next input if it exists
+                    if (index < inputs.length - 1) {
+                        updateInputConfig(inputs[index], true);
+                        updateInputConfig(inputs[index + 1], false);
+                    }
+
+                    inputCount++;
                 }
-            };
-    
-            inputs.forEach((input, index) => {
-                input.addEventListener("input", (e) => {
-                    e.target.value = e.target.value.replace(/[^0-9]/g, ""); // Allow only digits
-                    const value = e.target.value;
-    
-                    if (value.length === 1) {
-                        // Update Livewire's `otp` array
-                        wire.set(`otp.${index}`, value);
-    
-                        // Move to the next input if it exists
-                        if (index < inputs.length - 1) {
-                            updateInputConfig(inputs[index], true);
-                            updateInputConfig(inputs[index + 1], false);
-                        }
-    
-                        inputCount++;
-                    }
-                });
-    
-                input.addEventListener("keydown", (e) => {
-                    if (e.key === "Backspace") {
-                        if (index > 0 && input.value === "") {
-                            updateInputConfig(inputs[index], true);
-                            updateInputConfig(inputs[index - 1], false);
-                            inputs[index - 1].value = ""; // Clear previous input
-                            wire.set(`otp.${index - 1}`, ""); // Clear Livewire's state
-                            inputCount--;
-                        }
-                    }
-                });
             });
-    
-            // Initialize the first input
-            const startInput = () => {
-                inputCount = 0;
-                inputs.forEach((input, idx) => {
-                    input.value = "";
-                    wire.set(`otp.${idx}`, ""); // Reset Livewire state
-                    updateInputConfig(input, idx !== 0); // Enable only the first input
-                });
-            };
-    
-            window.onload = startInput;
-        }
 
-    
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace") {
+                    if (index > 0 && input.value === "") {
+                        updateInputConfig(inputs[index], true);
+                        updateInputConfig(inputs[index - 1], false);
+                        inputs[index - 1].value = ""; // Clear previous input
+                        wire.set(`otp.${index - 1}`, ""); // Clear Livewire's state
+                        inputCount--;
+                    }
+                }
+            });
+        });
+
+        // Initialize the first input
+        const startInput = () => {
+            inputCount = 0;
+            inputs.forEach((input, idx) => {
+                input.value = "";
+                wire.set(`otp.${idx}`, ""); // Reset Livewire state
+                updateInputConfig(input, idx !== 0); // Enable only the first input
+            });
+        };
+
+        window.onload = startInput;
+    }
 }
