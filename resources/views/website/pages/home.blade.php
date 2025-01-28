@@ -28,6 +28,8 @@
 
 
             <div class="sm:h-[400px] h-full w-[50%[ images-bordered-four gap-x-4 gap-y-7 grid sm:grid-cols-2 grid-cols-1">
+               
+                @if (isset($paragraph_banner['first_image']))
                 <div class="border-image-wrapper flex  w-full">
                     <div class="relative ">
 
@@ -37,13 +39,14 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered1 ">
+                                <img src={{get_image($paragraph_banner['first_image'])}} alt="Godfather Image" class="image-bordered1 ">
 
                             </div>
                         </div>
                     </div>
                 </div>
-
+                @endif
+                @if (isset($paragraph_banner['second_image']))
                 <div class="border-image-wrapper flex  w-full">
                     <div class="relative ">
 
@@ -53,13 +56,14 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered2 ">
+                                <img src={{get_image($paragraph_banner['second_image'])}} alt="Godfather Image" class="image-bordered2 ">
 
                             </div>
                         </div>
                     </div>
                 </div>
-
+                @endif
+                @if (isset($paragraph_banner['third_image']))
                 <div class="border-image-wrapper flex  w-full">
                     <div class="relative ">
 
@@ -69,13 +73,14 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered2 ">
+                                <img src={{get_image($paragraph_banner['third_image'])}} alt="Godfather Image" class="image-bordered2 ">
 
                             </div>
                         </div>
                     </div>
                 </div>
-
+                @endif
+                @if (isset($paragraph_banner['fourth_image']))
                 <div class="border-image-wrapper flex  w-full">
                     <div class="relative ">
 
@@ -85,12 +90,13 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src="/images/111.png" alt="Godfather Image" class="image-bordered1 ">
+                                <img src={{get_image($paragraph_banner['fourth_image'])}} alt="Godfather Image" class="image-bordered1 ">
 
                             </div>
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="sm:w-[50%] w-full">
                 @if (isset($paragraph_banner['content']))

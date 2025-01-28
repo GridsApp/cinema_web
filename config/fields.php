@@ -73,7 +73,7 @@ return [
     ],
 
 
-    "position" => [
+    "member_position" => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',

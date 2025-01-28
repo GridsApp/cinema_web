@@ -18,9 +18,9 @@ class BoardMembersEntity extends Entity
     public function fields(){
 
         $this->addField("image" , ["container" => 'col-span-12']);
-        $this->addField("name" , ["container" => 'col-span-12']);
-        $this->addField("position" , ["container" => 'col-span-12']);
-        $this->addField("description" , ["container" => 'col-span-12']);
+        $this->addField("name" , ["container" => 'col-span-12','translatable'=>true]);
+        $this->addField("member_position" , ["container" => 'col-span-12','translatable'=>true]);
+        $this->addField("description" , ["container" => 'col-span-12','translatable'=>true]);
       
         return $this->fields;
     }

@@ -25,7 +25,7 @@
     <div id="available-times" class="available-times mt-05 mb-5">
         @if (isset($movieShows['message']))
 
-            <div class="alert alert-warning">
+            <div class="bg-primary-color rounded-full text-white font-bold text-[12px] tracking-[1.9px] w-fit px-10 py-2">
                 {{ $movieShows['message'] }}
             </div>
         @else

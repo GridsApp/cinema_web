@@ -8,11 +8,11 @@ return [
         'direction'=>'ltr'
     ],
 
-    [
-        'language'=>'French',
-        'prefix'=>'fr',
-        'direction'=>'ltr'
-    ],
+    // [
+    //     'language'=>'French',
+    //     'prefix'=>'fr',
+    //     'direction'=>'ltr'
+    // ],
 
     [
         'language'=>'Arabic',

@@ -10,12 +10,14 @@
         <input type="hidden" wire:model="value" />
     
 </div> --}}
-<div x-data="GeneralFunctions.initPhoneField()" x-init="init()">
+<div x-data="GeneralFunctions.initPhoneField()" x-init="init()" wire:ignore>
     <input
         type="tel"
         x-ref="phone"
-        x-model="value"
-        wire:model="value"
-        class="input-group "
+        x-model="phone"
+        wire:model="value" 
+        class="input-group"
+
     />
+
 </div>

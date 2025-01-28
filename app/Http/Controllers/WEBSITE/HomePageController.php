@@ -33,12 +33,6 @@ class HomePageController extends Controller
 
         $paragraph_banner=HomeParagraphBanner::whereNull('deleted_at')->first();
         $banner=AboutBanner::whereNull('deleted_at')->where('position','home')->orderBy('id', 'DESC')->first();
-
-        // dd($banner);
-
-        // dd($paragraph_banner);
-
-        
         $branches = $this->branchRepository->getBranches();
       
         $cinemaPrefix = request()->segment(1);

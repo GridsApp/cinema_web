@@ -807,57 +807,129 @@ export default class GeneralFunctions {
     //     };
     // }
 
+    // initPhoneField() {
+    //     return {
+    //         phone: '',
+    //         iti: null,
+    
+    //         init() {
+    //             const input = this.$refs.phone;
+    
+    //             this.iti = intlTelInput(input, {
+    //                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
+    //                 separateDialCode: false, 
+    //                 // initialCountry: "auto", 
+                    
+    //                 geoIpLookup: function(callback) {
+    //                     fetch('https://ipinfo.io/json', { cache: 'reload' })
+    //                         .then(response => response.json())
+    //                         .then(data => callback(data.country))
+    //                         .catch(() => callback('us'));
+    //                 },
+    //                 customPlaceholder: function(selectedCountryPlaceholder) {
+    //                     return selectedCountryPlaceholder;
+    //                 }
+    //             });
+    
+    //             // setTimeout(() => {
+    //             //     const dialCode = document.querySelector('.iti__selected-dial-code');
+    //             //     if (dialCode) {
+    //             //         dialCode.style.display = 'none';
+    //             //     }
+    //             // }, 100);
+    
+    //             // // Event listener for input changes
+    //             input.addEventListener("input", () => {
+    //                 if (this.iti.isValidNumber()) {
+                      
+                       
+    //                     this.phone = this.iti.getNumber(); 
+    //                     console.log(this.phone);
+                    
+    //                     // input.value = this.iti.getNumber(intlTelInputUtils.numberFormat.NATIONAL); // Set the value to national number
+    //                 } else {
+
+    //                     this.phone = input.value;
+    //                 }
+    
+                  
+    //                 this.$dispatch('input', this.phone);
+    //             });
+    
+           
+    //         },
+    //     };
+    // }
+
     initPhoneField() {
         return {
             phone: '',
             iti: null,
-    
+        
             init() {
                 const input = this.$refs.phone;
-    
+        
+                // Initialize the intl-tel-input instance
                 this.iti = intlTelInput(input, {
                     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
                     separateDialCode: false, 
-                    // initialCountry: "auto", 
-                    
                     geoIpLookup: function(callback) {
                         fetch('https://ipinfo.io/json', { cache: 'reload' })
                             .then(response => response.json())
                             .then(data => callback(data.country))
                             .catch(() => callback('us'));
                     },
-                    customPlaceholder: function(selectedCountryPlaceholder) {
-                        return selectedCountryPlaceholder;
-                    }
+                 
                 });
     
-                // setTimeout(() => {
-                //     const dialCode = document.querySelector('.iti__selected-dial-code');
-                //     if (dialCode) {
-                //         dialCode.style.display = 'none';
-                //     }
-                // }, 100);
-    
-                // // Event listener for input changes
+                // Event listener for input changes
                 input.addEventListener("input", () => {
                     if (this.iti.isValidNumber()) {
-                      
-                       
-                        this.phone = this.iti.getNumber(); 
-                        console.log(this.phone);
-                    
-                        // input.value = this.iti.getNumber(intlTelInputUtils.numberFormat.NATIONAL); // Set the value to national number
-                    } else {
+                        const countryCode = this.getCountryCode();
 
+                        console.log(countryCode);
+                        if (countryCode) {
+                         
+                            this.phone = `+${countryCode}${this.iti.getNumber().replace('+' + countryCode, '')}`;
+                            console.log("Phone with country code:", this.phone);
+                        } else {
+                            console.error("Country code is undefined!");
+                        }
+                    } else {
                         this.phone = input.value;
                     }
-    
-                  
                     this.$dispatch('input', this.phone);
                 });
     
-           
+               
+                input.addEventListener("countrychange", () => {
+                    const countryCode = this.getCountryCode();
+                    if (countryCode) {
+                        const currentPhone = this.iti.getNumber();
+                       
+                        this.phone = `+${countryCode}${currentPhone.replace('+' + countryCode, '')}`;
+                        input.value = this.phone; 
+                        console.log("Updated phone value:", this.phone);
+                    } else {
+                        console.error("Country code is undefined!");
+                    }
+                });
             },
+    
+            getCountryCode() {
+                if (this.iti) {
+                    const selectedCountryData = this.iti.getSelectedCountryData();
+                    if (selectedCountryData && selectedCountryData.dialCode) {
+                        return selectedCountryData.dialCode;
+                    } else {
+                        console.error("Unable to fetch dialCode, selectedCountryData is missing.");
+                        return '';
+                    }
+                } else {
+                    console.error("intlTelInput (iti) is not initialized.");
+                    return '';
+                }
+            }
         };
     }
     

@@ -61,8 +61,8 @@ class SignInForm extends Component
     {
 
 
+// dd($this->phone);
 
-        dd($this->phone);
 
         $this->validate();
 
@@ -71,7 +71,7 @@ class SignInForm extends Component
             $user = $this->userRepository->getUserByPhone($this->phone);
         } catch (\Exception $e) {
 
-            $this->sendError("You have entered an invalid phone number", "Invalid phone");
+            $this->sendError("Phone number not found", "Not Found");
             return;
         }
 
