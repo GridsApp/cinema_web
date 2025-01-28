@@ -7,7 +7,7 @@
     <a :href="`/${cinemaPrefix}/${languagePrefix}/movies/listing`" class="contain mini-card">
         @if (isset($branch['image']))
             <div class="asp asp-2-1">
-                <img src="{{ $branch['image'] }}" alt="">
+                <img src="{{ $branch['image'] }}" alt="" class="bg-gray-100">
             </div>
         @endif
         <div class="mini-card-bottom">
@@ -30,11 +30,10 @@
                     @endif
 
                     @if (isset($branch['latitude']) && isset($branch['longitude']))
-                    <button 
-                    @click.prevent="showModal = true; console.log('Modal Opened', showModal)"
-                    class="primary-color text-[9px] pt-2 font-bold uppercase tracking-[1.5px] underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
-                    {{ app()->getLocale() === 'ar' ? 'عرض الموقع' : 'View Location' }}
-                </button>
+                        <button @click.prevent="showModal = true; console.log('Modal Opened', showModal)"
+                            class="primary-color text-[9px] pt-2 font-bold uppercase tracking-[1.5px] underline {{ app()->getLocale() === 'ar' ? 'rtl:text-right' : 'ltr:text-left' }}">
+                            {{ app()->getLocale() === 'ar' ? 'عرض الموقع' : 'View Location' }}
+                        </button>
                     @endif
 
                 </div>
@@ -43,37 +42,34 @@
     </a>
 
 
-    <div x-cloak x-show="showModal" @click.outside="showModal = false; console.log('Modal Closed', showModal)" 
-         x-init="showModal = false" 
-         x-transition:enter="transition ease-out duration-500 transform opacity-0 "
-         x-transition:enter-start="opacity-0 "
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-300 transform opacity-0 "
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 "
-         class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[990]">
+    <div x-cloak x-show="showModal" @click.outside="showModal = false; console.log('Modal Closed', showModal)"
+        x-init="showModal = false" x-transition:enter="transition ease-out duration-500 transform opacity-0 "
+        x-transition:enter-start="opacity-0 " x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300 transform opacity-0 "
+        x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 "
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[990]">
         <div class="bg-white rounded-lg p-[44px] max-w-[500px]" @click.stop>
             <button @click="showModal = false; console.log('Modal Closed', showModal)"
-                    class="pb-5 text-center flex justify-end w-full text-black rounded">
+                class="pb-5 text-center flex justify-end w-full text-black rounded">
                 <i class="fa-solid fa-x"></i>
             </button>
-            
+
             <h2 class="text-[12px] mb-4 {{ app()->getLocale() === 'ar' ? 'text-right' : 'text-left' }}">
                 @lang('messages.continue_to_see_movies')
             </h2>
-            
+
             <div class="w-full flex justify-center">
                 <div class="flex flex-col gap-4 w-[80%] justify-center">
                     <div>
                         <a :href="`/${cinemaPrefix}/${languagePrefix}/movies/listing`"
-                           class="block w-full font-bold bg-primary-color text-white text-[14px] hover:bg-black tracking-[2.4px] text-center rounded-full uppercase px-10 py-2">
+                            class="block w-full font-bold bg-primary-color text-white text-[14px] hover:bg-black tracking-[2.4px] text-center rounded-full uppercase px-10 py-2">
                             @lang('messages.check_movies')
                         </a>
                     </div>
                     <div>
                         <a :href="`https://www.google.com/maps?q={{ $branch['latitude'] }},{{ $branch['longitude'] }}`"
-                           target="_blank"
-                           class="primary-color flex justify-center flex-col items-center text-[14px] underline {{ app()->getLocale() === 'ar' ? 'text-right' : 'text-left' }}">
+                            target="_blank"
+                            class="primary-color flex justify-center flex-col items-center text-[14px] underline {{ app()->getLocale() === 'ar' ? 'text-right' : 'text-left' }}">
                             @lang('messages.view_location')
                         </a>
                     </div>
