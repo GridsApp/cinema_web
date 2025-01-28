@@ -39,7 +39,7 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src={{get_image($paragraph_banner['first_image'])}} alt="Godfather Image" class="image-bordered1 ">
+                                <img src={{get_image($paragraph_banner['first_image'])}} alt="Godfather Image" class="image-bordered1 bg-gray-100 ">
 
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src={{get_image($paragraph_banner['second_image'])}} alt="Godfather Image" class="image-bordered2 ">
+                                <img src={{get_image($paragraph_banner['second_image'])}} alt="Godfather Image" class="image-bordered2 bg-gray-100">
 
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src={{get_image($paragraph_banner['third_image'])}} alt="Godfather Image" class="image-bordered2 ">
+                                <img src={{get_image($paragraph_banner['third_image'])}} alt="Godfather Image" class="image-bordered2 bg-gray-100">
 
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         <div class="sm:w-[250px] w-[250px]">
                             <div class="asp asp-4-3">
 
-                                <img src={{get_image($paragraph_banner['fourth_image'])}} alt="Godfather Image" class="image-bordered1 ">
+                                <img src={{get_image($paragraph_banner['fourth_image'])}} alt="Godfather Image" class="image-bordered1 bg-gray-100">
 
                             </div>
                         </div>
