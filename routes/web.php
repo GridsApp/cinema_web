@@ -76,7 +76,6 @@ Route::group([
     Route::post('/profile/add-image', [\App\Http\Controllers\WEBSITE\UserController::class, 'addImage'])->name('addImage');
     Route::get('/profile/add-image', [\App\Http\Controllers\WEBSITE\UserController::class, 'render'])->name('render');
 
-    
     Route::get('/profile/update', [\App\Http\Controllers\WEBSITE\UserController::class, 'update'])->name('update');
     Route::get('/profile/delete', [\App\Http\Controllers\WEBSITE\UserController::class, 'renderDelete'])->name('renderDelete');
     Route::post('/profile/delete', [\App\Http\Controllers\WEBSITE\UserController::class, 'deleteAccount'])->name('deleteAccount');
@@ -85,23 +84,20 @@ Route::group([
     Route::get('/loyality-card', [\App\Http\Controllers\WEBSITE\UserController::class, "getLoyaltyCard"])->name('getLoyaltyCard');
     Route::get('/purchase-history', [\App\Http\Controllers\WEBSITE\UserController::class, "purchaseHistory"])->name('purchaseHistory');
     Route::get('/profile/logout', [\App\Http\Controllers\WEBSITE\UserController::class, "logout"])->name('logout-web');
-    // Route::get('/profile', function () {
-    //   $profile = (new \App\Http\Controllers\API\UserController())->getProfile(request()->get('user'));
-    //   return view('website.profile.profile', compact('profile'));
-    // });
-    // Route::get('/logout', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, 'logout'])->name('logout');
-    // Route::post('/password/post', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, 'updatePassword'])->name('update-pass-post');
-    // Route::get('/my-favorites', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "getFavorites"]);
-    // Route::get('/loyality-card', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "getLoyaltyCard"]);
-    // Route::get('/recharge-wallet', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "rechargeWalletGet"]);
-    // Route::post('/recharge-wallet/post', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "rechargeWalletPost"]);
-    // Route::post('/movie/fav/submit', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "addToFav"]);
-    // Route::post('/picture/update', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "updateProfileImage"]);
-    // Route::get('/loyality-card/rewards', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, 'getLoyaltyRewards']);
-    // Route::post('/loyality-card/rewards/redeem', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, 'redeemReward']);
-    // Route::get('/wallet-transactions', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "getWalletTransactionHistory"]);
-    // Route::get('/purchase-history', [\App\Http\Controllers\WebsiteGeneralFunctionsController::class, "getPurchaseHistory"]);
   });
+
+
+
+
+
+  Route::group([
+    'prefix' => '/checkout',
+   
+  ], function () {
+   
+    Route::post('/seat/selection', [\App\Http\Controllers\WEBSITE\OrderController::class, 'getTheaterSeats'])->name('getTheaterSeats');
+  
+   });
 });
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {

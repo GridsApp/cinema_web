@@ -1251,3 +1251,14 @@ select:focus {
     --tw-ring-offset-color: transparent !important;
     --tw-ring-color: transparent !important;
 }
+
+
+.theater-info{
+    .title{
+        @apply capitalize font-light text-[12px]
+    }
+
+    .subtitle{
+        @apply capitalize font-bold text-[12px]
+    }
+}

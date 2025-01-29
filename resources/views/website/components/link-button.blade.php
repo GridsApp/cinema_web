@@ -3,7 +3,8 @@
     <a href="{{ $link }}" class="flex justify-center items-center gap-2">
 
         {{ $text ?? '' }}
-        <span class="sm:pl-0 pl-0 text-[14px]"><i class="fa-solid fa-plus"></i></span>
+        <span class="sm:pl-0 pl-0 text-[14px] {{$icon_visibitilty ?? ''}}"><i class="fa-solid fa-plus {{ $icon_class ?? '' }}"></i>
+        </span>
     </a>
 
 </div>

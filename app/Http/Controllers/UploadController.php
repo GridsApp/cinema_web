@@ -29,7 +29,10 @@ class UploadController extends Controller
 
 
     public function uploadFromSource($file , $content, $extension){
+
+
         $folder = uniqid();
+        
         $new_file = "/data/" . $folder . '/original.' . $extension[1];
         Storage::disk('public')->put($new_file,$content);
 
