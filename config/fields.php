@@ -1456,7 +1456,6 @@ return [
         ]
     ],
 
-    
 
     'marital_status' => [
         'id' => uniqid(),

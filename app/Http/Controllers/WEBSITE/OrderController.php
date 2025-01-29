@@ -23,13 +23,15 @@ class OrderController extends Controller
 
     public function getTheaterSeats(Request $request)
     {
-        // Example logic: Retrieve the theater seats based on request data
-        $movie_show_id = $request->input('movieshow_id');
+        $movie_show_id = $request->input('movie_show_id'); // Ensure this matches the form input name
+
+        // dd($movie_show_id);
+
         $theater_id = $request->input('theater_id');
 
 
+        // dd()
 
-        // dd($movie_show_id);
         try {
             $movie_show = MovieShow::where('id' , $movie_show_id)->orderBy('id', 'DESC')->firstOrFail();
 
@@ -40,10 +42,8 @@ class OrderController extends Controller
             // return $this->response(notification()->error('Movie show not found', $e->getMessage()));
         }
         
-
-
      
-        $theater = Theater::whereNull('deleted_at')->where('id', $theater_id)->first();
+        $theater = Theater::whereNull('deleted_at')->where('id', $movie_show->theater_id)->first();
 
         $theater_map =$theater->theater_map;
 

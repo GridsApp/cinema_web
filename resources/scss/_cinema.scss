@@ -59,9 +59,8 @@
     display: block;
     &.contain {
         &:hover {
-           
             border-radius: 21px 21px 21px 21px;
-            border: 1px solid #C51A24;
+            border: 1px solid #c51a24;
         }
     }
     // border: 1px solid #c51a24;
@@ -533,7 +532,7 @@ nav {
         transform: translate(-15px, 15px);
         border-bottom-left-radius: 50px;
         border-bottom-color: #c51a24;
-        
+
         border-bottom-width: 4px;
         border-left-color: #c51a24;
         border-left-width: 2px;
@@ -735,6 +734,20 @@ nav {
             align-items: center;
             justify-content: center;
             margin-top: 20px;
+
+            .active-text {
+                @apply font-extrabold #{!important};
+            }
+            &.active {
+                .active-color {
+                    opacity: 1;
+                    background: rgba(163, 1, 1, 0.1019607843);
+                }
+
+                .active-text {
+                    color: #c51a24;
+                }
+            }
             input {
                 max-width: max-content;
                 opacity: 0 !important;
@@ -1246,19 +1259,18 @@ input::placeholder {
 textarea:focus,
 select:focus {
     outline-offset: 0px !important;
-    outline: 0.5px solid  black !important;
+    outline: 0.5px solid black !important;
     --tw-ring-offset-width: 0px !important;
     --tw-ring-offset-color: transparent !important;
     --tw-ring-color: transparent !important;
 }
 
-
-.theater-info{
-    .title{
-        @apply capitalize font-light text-[12px]
+.theater-info {
+    .title {
+        @apply capitalize font-light text-[12px];
     }
 
-    .subtitle{
-        @apply capitalize font-bold text-[12px]
+    .subtitle {
+        @apply capitalize font-bold text-[12px];
     }
 }

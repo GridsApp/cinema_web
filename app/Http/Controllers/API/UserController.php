@@ -30,12 +30,12 @@ class UserController extends Controller
 
     public function getAccount()
     {
-       
+
         $user = request()->user;
 
         $active_card = $this->cardRepository->getActiveCard($user);
-      
-         $account= 
+
+        $account =
             [
 
                 'id' => $user->id,
@@ -46,12 +46,16 @@ class UserController extends Controller
                 'dob' => $user->dob,
                 'dom' => $user->dom,
                 'login_provider' => $user->login_provider,
-                'gender' => $user->gender ,
+                'gender' => $user->gender,
                 'card' => $active_card,
             ];
+        return $this->responseData([
+            'user' => $account,
+            // 'access_token' => $this->tokenRepository->createAccessToken($user)
+        ]);
 
-            return $this->responseData($account);
-    
+        // return $this->responseData($account);
+
     }
 
 
