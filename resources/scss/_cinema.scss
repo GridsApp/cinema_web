@@ -1274,3 +1274,35 @@ select:focus {
         @apply capitalize font-bold text-[12px];
     }
 }
+
+.cart-info{
+    @apply flex  sm:flex-row flex-col  pt-5  gap-6;
+
+
+    .name{
+        @apply font-bold text-[16px] capitalize pb-8;
+    }
+
+    .details-container{
+        @apply flex flex-row gap-4 pb-5; 
+    }
+
+    i{
+        @apply primary-color  font-bold ;
+    }
+
+    .title{
+        @apply text-[#4C4C4C] font-bold uppercase tracking-[1.5px] text-[12px];
+    }
+
+    .subtitle{
+        @apply font-light text-[12px];
+    }
+
+   
+}
+.separator-line{
+    // @apply border-gray-100 ;
+    border: 0.9px solid #E5E5E5 ;
+
+}

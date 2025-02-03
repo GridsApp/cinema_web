@@ -92,13 +92,17 @@ Route::group([
 
   Route::group([
     'prefix' => '/checkout',
+    'middleware' => [\App\Http\Middleware\CheckCartExpiration::class]
    
   ], function () {
-   
+    // Route::post('/seat/selection', [\App\Http\Controllers\WEBSITE\CartController::class, 'createCart'])->name('checkout');
+
     Route::post('/seat/selection', [\App\Http\Controllers\WEBSITE\OrderController::class, 'getTheaterSeats'])->name('getTheaterSeats');
+    Route::get('/item/selection', [\App\Http\Controllers\WEBSITE\OrderController::class, 'getItems'])->name('getItems');
   
    });
 });
+Route::post('/cart/add-seats', [\App\Http\Controllers\WEBSITE\CartController::class, 'addSeatsToCart']);
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');

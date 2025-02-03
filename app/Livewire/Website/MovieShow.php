@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Request;
 class MovieShow extends Component
 {
     public $selectedDate;
+    public $selectedTime;
     public $dates = [];
     public $movieShows = [];
     public $firstBranch;
@@ -36,7 +37,7 @@ class MovieShow extends Component
         $this->slug = $slug;
         $this->selectedDate = Carbon::now()->format('Y-m-d');
         $this->generateDates();
-        $this->branchPrefix = Request::segment(1);  // Store branchPrefix in state
+        $this->branchPrefix = Request::segment(1);  
         $this->fetchMovieShows();
     }
 
@@ -88,10 +89,9 @@ class MovieShow extends Component
         foreach ($shows as &$show) {
             $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
             $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
-            // dd($reservedSeatsCount);
-            $show['theater'] = $theater; // Attach theater data
+            $show['theater'] = $theater; 
             $show['available_seats'] = $theater->nb_seats - $reservedSeatsCount;
-            // dd(            $show['available_seats']);
+          
         }
 
      
@@ -110,6 +110,9 @@ class MovieShow extends Component
             $this->firstBranch = $branch->label;
             $this->otherBranches = $this->movieShows;
         }
+        if (!empty($shows)) {
+        $this->selectedTime = $shows[0]['time']; 
+    }
     }
 
 

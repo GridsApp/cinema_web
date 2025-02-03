@@ -63,7 +63,7 @@
                                 </div>
                                 <div>
 
-                                    <div class="pt-3 opacity-65 font-normal text-[12px]">
+                                    <div class="pt-1 opacity-65 font-normal text-[12px]">
                                         {{ $movie_details['duration'] }}
                                     </div>
                                 </div>

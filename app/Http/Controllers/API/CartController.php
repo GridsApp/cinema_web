@@ -165,8 +165,6 @@ class CartController extends Controller
 
             foreach ($seats as $seat) {
 
-
-
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
 

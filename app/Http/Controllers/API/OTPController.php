@@ -66,7 +66,7 @@ class OtpController extends Controller
         }
 
         if ($otp != "1995" && $check_token->otp != $otp) {
-            return $this->responseData(notification()->error("Incorrect OTP", "The OTP you entered does not match."));
+            return $this->response(notification()->error("Incorrect OTP", "The OTP you entered does not match."));
         }
 
 

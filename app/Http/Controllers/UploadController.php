@@ -38,9 +38,13 @@ class UploadController extends Controller
 
         $file_content = Storage::disk('public')->get($new_file);
 
-        $thumbPath = "./storage/data/" . $folder . '/thumb.webp';
-        $imagePath = "./storage/data/" . $folder . '/image.webp';
+        // $thumbPath = "./storage/data/" . $folder . '/thumb.webp';
+        // $imagePath = "./storage/data/" . $folder . '/image.webp';
 
+        $storagePath = storage_path("app/public/data/{$folder}");
+
+        $thumbPath = "{$storagePath}/thumb.webp";
+        $imagePath = "{$storagePath}/image.webp";
         $manager = new ImageManager(new Driver);
         $image = $manager->read($file_content);
 

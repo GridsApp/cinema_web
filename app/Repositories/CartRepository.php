@@ -77,13 +77,14 @@ class CartRepository implements CartRepositoryInterface
     {
         try {
 
+
             $field = get_user_field_from_type($user_type);
 
 
             $cart = new Cart();
             $cart->{$field} = $user_id;
             $cart->system_id = $system_id;
-            $cart->expires_at = now()->addMinutes(3600);
+            $cart->expires_at = now()->addMinutes(100);
             $cart->save();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -133,13 +134,15 @@ class CartRepository implements CartRepositoryInterface
     }
     public function removeSeatFromCart($cart_id, $seat, $movie_show_id)
     {
-
+        // dd($cart_id,$seat,$movie_show_id);
 
         try {
             $cart_seat = CartSeat::where('cart_id', $cart_id)
                 ->where('seat', $seat)
                 ->where('movie_show_id', $movie_show_id)->firstOrFail();
             $cart_seat->delete();
+
+            // dd($cart_seat);
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         } catch (Exception $e) {
@@ -149,10 +152,14 @@ class CartRepository implements CartRepositoryInterface
     }
     public function addItemToCart($cart_id, $item_id)
     {
+
+        // $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date);
+        $item = $this->itemRepository->getItemById($item_id);
         try {
             $cart_item = new CartItem();
             $cart_item->item_id = $item_id;
             $cart_item->cart_id = $cart_id;
+            $cart_item->price = $item->price;
             $cart_item->save();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -162,8 +169,11 @@ class CartRepository implements CartRepositoryInterface
     }
     public function removeItemFromCart($cart_id, $item_id)
     {
+
         try {
-            $cart_item = CartItem::where('cart_id', $cart_id)->where('item_id', $item_id)->firstOrFail();
+            $cart_item = CartItem::where('cart_id', $cart_id)->where('item_id', $item_id)->orderBy('id', 'desc')->firstOrFail();
+
+
             $cart_item->delete();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
@@ -279,7 +289,7 @@ class CartRepository implements CartRepositoryInterface
     public function getCartTopups($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? ['cart_id', 'amount','label', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? ['cart_id', 'amount', 'label', DB::raw('count(*) as quantity')] : "*";
 
         try {
             $user_cart_topup = CartTopup::select($select)
@@ -417,12 +427,9 @@ class CartRepository implements CartRepositoryInterface
             $coupon_codes = $this->couponRepository->getCouponsByIds($coupon_ids)->pluck('code');
             // $totalDiscounts = $validCoupons->sum('flat_discount');
 
-
-
-
             $cart_seats = $this->getCartSeats($cart_id);
             $zone_ids = $cart_seats->pluck('zone_id');
-            
+
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
 
             $total_discount = 0;
@@ -441,9 +448,11 @@ class CartRepository implements CartRepositoryInterface
                 if (!($cart_seat['quantity'] ?? null)) {
                     $cart_seat['quantity'] = 1;
                 }
-
+                // NOTE Hovig add the movie show id hereee
                 return [
                     'id' => $cart_seat['id'],
+                    'movie_show_id' => $cart_seat['movie_show_id'],
+                    'seat' => $cart_seat['seat'],
                     'type' => "Seat",
                     'label' => $zone->priceGroup->label . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label),
                     'unit_price' => currency_format($unit_price),
