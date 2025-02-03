@@ -71,7 +71,7 @@ class OtpController extends Controller
 
 
         if ($check_token->expires_at < now()) {
-            return $this->responseData(notification()->error("Expired OTP", "The OTP has expired. Please request a new one."));
+            return $this->response(notification()->error("Expired OTP", "The OTP has expired. Please request a new one."));
         }
 
 
