@@ -1280,11 +1280,11 @@ select:focus {
 
 
     .name{
-        @apply font-bold text-[16px] capitalize pb-8;
+        @apply font-bold text-[16px] capitalize pb-4;
     }
 
     .details-container{
-        @apply flex flex-row gap-4 pb-5; 
+        @apply flex flex-row gap-4 pb-3; 
     }
 
     i{
@@ -1292,11 +1292,11 @@ select:focus {
     }
 
     .title{
-        @apply text-[#4C4C4C] font-bold uppercase tracking-[1.5px] text-[12px];
+        @apply text-[#4C4C4C] font-bold uppercase tracking-[1.5px] text-[10px];
     }
 
     .subtitle{
-        @apply font-light text-[12px];
+        @apply font-light text-[11px];
     }
 
    

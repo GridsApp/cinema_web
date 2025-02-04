@@ -5,9 +5,12 @@ namespace App\Livewire\Website;
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
 use Livewire\Component;
+use twa\cmsv2\Traits\ToastTrait;
 
 class ItemSelector extends Component
 {
+    use ToastTrait;
+
     public $item;
     public $quantity = 0;
 
@@ -46,9 +49,9 @@ class ItemSelector extends Component
         try {
 
             $this->cartRepository->addItemToCart($cart_id, $item_id);
+            $this->sendSuccess("Item Added Successfully", "Item added to cart Successfully");
 
             session()->put('cart', $cart);
-
 
             $this->quantity = session()->get("cart_quantities.{$item_id}", 0) + 1;
             session()->put("cart_quantities.{$item_id}", $this->quantity);
@@ -79,6 +82,8 @@ class ItemSelector extends Component
         try {
 
             $this->cartRepository->removeItemFromCart($cart_id, $item_id);
+            $this->sendSuccess("Item Removed Successfully", "Item removed from cart Successfully");
+
             $this->quantity = max(0, session()->get("cart_quantities.{$item_id}", 0) - 1);
             session()->put("cart_quantities.{$item_id}", $this->quantity);
              // return $this->response(notification()->success('Item removed successfully', 'Item removed successfully'));

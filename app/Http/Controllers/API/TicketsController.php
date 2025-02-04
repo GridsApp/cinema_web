@@ -5,16 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\TicketRepositoryInterface;
-
 use App\Models\OrderSeat;
 use twa\cmsv2\Traits\APITrait;
 
 
 class TicketsController extends Controller
 {
-    use APITrait;
 
-
+    
+use APITrait;
     private TicketRepositoryInterface $ticketRepository;
     private OrderRepositoryInterface $orderRepository;
 
@@ -26,6 +25,8 @@ class TicketsController extends Controller
     }
     public function history()
     {
+
+     
         $user = request()->user;
 
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
@@ -68,6 +69,8 @@ class TicketsController extends Controller
 
     public function upcoming()
     {
+
+      
         $user = request()->user;
 
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')

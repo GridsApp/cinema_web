@@ -32,15 +32,24 @@ class MovieShow extends Component
         $this->branchRepository = app(BranchRepositoryInterface::class);
     }
 
+
+
+
     public function mount($slug)
     {
         $this->slug = $slug;
-        $this->selectedDate = Carbon::now()->format('Y-m-d');
+    
+        // Get date from URL, fallback to current date
+        $this->selectedDate = request()->query('date', Carbon::now()->format('Y-m-d'));
+        $this->selectedTime = request()->query('time', null);
+    
+
+   
         $this->generateDates();
-        $this->branchPrefix = Request::segment(1);  
+        $this->branchPrefix = Request::segment(1);
         $this->fetchMovieShows();
     }
-
+    
     public function generateDates()
     {
         $this->dates = [];
@@ -77,18 +86,23 @@ class MovieShow extends Component
 
 
         $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
-
+        // $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)
+        // ->load('theater', 'reservedSeats');
+    
         if (empty($shows)) {
             $this->movieShows = [];
             $this->firstBranch = $branch->label;
             $this->otherBranches = [];
-            $this->movieShows['message'] = 'No movie shows available';
             return;
         }
+        
 
         foreach ($shows as &$show) {
             $theater = Theater::where('id', $show['theater_id'])->whereNull('deleted_at')->first();
+            // $reservedSeatsCount = $show->reservedSeats->count();
             $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
+            // $reservedSeatsCount = ReservedSeat::where('movie_show_id', $show['id'])->count();
+
             $show['theater'] = $theater; 
             $show['available_seats'] = $theater->nb_seats - $reservedSeatsCount;
           

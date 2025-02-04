@@ -30,7 +30,6 @@ class OrderController extends Controller
     {
         $user = session('user');
     
-        // Check if there's a cart, and if not, create a new one
         $cart = session('cart');
         if (!$cart) {
             $cart = $this->cartRepository->createCart($user->id, 'USER', 3);
@@ -44,7 +43,7 @@ class OrderController extends Controller
             $cart = $this->cartRepository->createCart($user->id, 'USER', 3);
             session()->put('cart', $cart);
         }
-    
+        // dd($request->input('movie_show_id'));
         $movie_show_id = $request->input('movie_show_id');
         $theater_id = $request->input('theater_id');
     

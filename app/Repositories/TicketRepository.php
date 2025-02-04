@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Traits\APITrait;
 
 class TicketRepository implements TicketRepositoryInterface
-{ use APITrait;
+{ 
 
     private OrderRepositoryInterface $orderRepository;
 

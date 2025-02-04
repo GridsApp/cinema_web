@@ -42,7 +42,7 @@
                     <div>
                         <i class="fa-regular fa-calendar !font-normal"></i>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col gap-1">
                         <div class="title">
                             Date:
                         </div>
@@ -56,7 +56,7 @@
                     <div>
                         <i class="fa-solid fa-clock"></i>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col gap-1">
                         <div class="title">
                             Time:
                         </div>
@@ -70,7 +70,7 @@
                     <div>
                         <i class="fa-solid fa-location-dot"></i>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col gap-1">
                         <div class="title">
                             Theatre:
                         </div>
@@ -84,7 +84,7 @@
                     <div>
                         <i class="fa-solid fa-couch"></i>
                     </div>
-                    <div class="flex flex-col">
+                    <div class="flex flex-col gap-1">
                         <div class="title">
                             Seats:
                         </div>

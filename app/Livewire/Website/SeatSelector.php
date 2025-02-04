@@ -15,9 +15,11 @@ use App\Models\ReservedSeat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use twa\cmsv2\Traits\ToastTrait;
 
 class SeatSelector extends Component
 {
+    use ToastTrait;
     public $movie_show_id;
     public $theater_id;
     public $result;
@@ -36,11 +38,13 @@ class SeatSelector extends Component
 
     public function mount($movie_show_id, $theater_id)
     {
+
+
         $this->movie_show_id = $movie_show_id;
         $this->theater_id = $theater_id;
 
- 
-        $cart = session()->get('cart');  
+
+        $cart = session()->get('cart');
 
         $this->loadSeats();
     }
@@ -124,13 +128,11 @@ class SeatSelector extends Component
         try {
             $movie_show = $this->movieShowRepository->getMovieShowById($this->movie_show_id);
         } catch (\Exception $th) {
-            // Handle exception
         }
 
         try {
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
         } catch (\Exception $th) {
-            // Handle exception
         }
 
         if (!is_array($seatCode) || empty($seatCode)) {
@@ -152,23 +154,19 @@ class SeatSelector extends Component
 
         $isSelected = in_array($seat['code'], $selected_seats);
 
-       
+
         if ($isSelected) {
 
-           
+
             $this->cartRepository->removeSeatFromCart($cart_id, $seat['code'], $movie_show->id);
-     
-            $this->loadSeats();
-        }
+            $this->sendSuccess("Removed Successfully", "Seat removed from cart Successfully");
 
-        else{
+            $this->loadSeats();
+        } else {
             $this->cartRepository->addSeatToCart($cart_id, $seat['code'], $movie_show, $seat['zone']);
+            $this->sendSuccess("Added Successfully", "Seat added to cart Successfully");
             $this->loadSeats();
         }
-
-
-     
-       
     }
 
     public function render()
