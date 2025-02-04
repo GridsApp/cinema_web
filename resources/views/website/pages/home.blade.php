@@ -7,7 +7,8 @@
 
         </div>
     @endif
-
+    {{-- <i class="fa-sharp-duotone fa-solid fa-chair"></i>
+    <i class="fa-solid fa-chair"></i> --}}
 
     @if (isset($statistics) && count($statistics) > 0)
         <div class="sm:mb-20 mb-10 mt-10">

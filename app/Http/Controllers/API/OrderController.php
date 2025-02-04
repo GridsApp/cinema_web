@@ -494,6 +494,7 @@ class  OrderController extends Controller
                 'subtotal' => currency_format($subtotal),
                 'total_discount' => currency_format($total_discounts),
                 'total' => currency_format($subtotal - $total_discounts),
+                'payment_method' => $order->paymentMethod->label,
                 'lines' => $lines
 
             ];
@@ -613,6 +614,7 @@ class  OrderController extends Controller
             'wallet_balance' => currency_format($user_wallet_balance),
             'order' => [
                 'id' => $order->id,
+               
                 'long_id' => $this->orderRepository->generateLongId($order->id),
                 'barcode' =>  $order->barcode,
                 'cashier' => $pos_user_id->name ?? null,

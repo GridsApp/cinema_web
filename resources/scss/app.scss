@@ -5,10 +5,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./cinema.scss";
-@import "./asp.scss";
-@import "/node_modules/intl-tel-input/build/css/intlTelInput.css";
-
 @import "/resources/css/fontAwesome/all.css";
 @import "/resources/css/fontAwesome/duotone-light.css";
 @import "/resources/css/fontAwesome/duotone-regular.css";
@@ -21,7 +17,9 @@
 @import "/resources/css/fontAwesome/sharp-regular.css";
 @import "/resources/css/fontAwesome/sharp-solid.css";
 @import "/resources/css/fontAwesome/sharp-thin.css";
-
+@import "./cinema.scss";
+@import "./asp.scss";
+@import "/node_modules/intl-tel-input/build/css/intlTelInput.css";
 
 // body {
 //     font-family: "'Source Sans Pro', sans-serif", "Segoe UI", "Helvetica Neue",

@@ -72,13 +72,8 @@ class TicketsController extends Controller
             ];
         })->filter()->values();
 
-
-
-
         return $this->responseData(
-
             $order_seats,
-
         );
     }
 
@@ -107,12 +102,9 @@ class TicketsController extends Controller
             $movie_duration = $movieShow->movie->duration ?? 0;
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
-
             if (!$show_datetime->isFuture() && !$end_datetime->isFuture()) {
                 return null;
             }
-
-
             return [
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
