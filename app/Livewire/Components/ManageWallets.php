@@ -51,8 +51,6 @@ class ManageWallets extends Component
 
         // dd("sd");
         
-
-
         try {
             $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
         } catch (\Throwable $th) {

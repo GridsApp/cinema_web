@@ -12,8 +12,12 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::prefix('auth')->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::get('wallet-transactions', [App\Http\Controllers\API\CardController::class, 'getWalletTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::get('loyalty-transactions', [App\Http\Controllers\API\CardController::class, 'getLoyaltyTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            
 
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);

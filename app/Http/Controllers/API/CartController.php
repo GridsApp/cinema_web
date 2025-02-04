@@ -659,6 +659,6 @@ class CartController extends Controller
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
             'lines' => $cartDetails["lines"],
-        ]), notification()->success('Successfuly Fetched', 'Fetched successfully.'));
+        ]));
     }
 }

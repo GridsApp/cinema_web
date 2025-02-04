@@ -60,8 +60,6 @@ class CardController extends Controller
             return $this->response(notification()->error("'No active card found for this user", "No active card found for this user"));
         }
 
-        
-
 
         // dd($card);
         $activeCard["loyalty_transactions"] = $this->cardRepository->getLoyaltyTransactions($user);
@@ -71,6 +69,40 @@ class CardController extends Controller
             $activeCard
         ]);
     }
+
+
+    public function getLoyaltyTransactions()
+    {
+
+        $user = request()->user;
+     
+        $activeCard = $this->cardRepository->getActiveCard($user);
+
+        if (!$activeCard) {
+            return $this->response(notification()->error("'No active card found for this user", "No active card found for this user"));
+        }
+
+        $loyalty_transactions = $this->cardRepository->getLoyaltyTransactions($user);
+        
+        return $this->responseData($loyalty_transactions);
+    }
+
+    public function getWalletTransactions()
+    {
+
+        $user = request()->user;
+     
+        $activeCard = $this->cardRepository->getActiveCard($user);
+
+        if (!$activeCard) {
+            return $this->response(notification()->error("'No active card found for this user", "No active card found for this user"));
+        }
+
+        $wallet_transactions = $this->cardRepository->getWalletTransactions($user);
+   
+        return $this->responseData($wallet_transactions);
+    }
+
 
     public function updateUserCard()
     {

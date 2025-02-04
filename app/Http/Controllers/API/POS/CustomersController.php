@@ -115,6 +115,7 @@ class CustomersController extends Controller
 
     public function editUser()
     {
+        
         $form_data = clean_request();
         $validator = Validator::make($form_data, [
             'user_id' => ['required'],

@@ -30,12 +30,12 @@ class UserController extends Controller
 
     public function getAccount()
     {
-       
+
         $user = request()->user;
 
         $active_card = $this->cardRepository->getActiveCard($user);
-      
-         $account= 
+
+        $account =
             [
 
                 'id' => $user->id,
@@ -46,15 +46,64 @@ class UserController extends Controller
                 'dob' => $user->dob,
                 'dom' => $user->dom,
                 'login_provider' => $user->login_provider,
-                'gender' => $user->gender ,
+                'gender' => $user->gender,
                 'card' => $active_card,
             ];
-            
 
-            return $this->responseData($account);
-    
+
+        return $this->responseData($account);
     }
 
+    public function completeProfile()
+    {
+        $form_data = clean_request();
+        $validator = Validator::make($form_data, [
+            'user_id' => ['required'],
+
+        ]);
+        if ($validator->errors()->count() > 0) {
+            return  $this->responseValidation($validator);
+        }
+
+        try {
+            $user = $this->userRepository->getUserById($form_data['user_id']);
+        } catch (\Throwable $th) {
+            return $this->response(notification()->error("User not found", "User not found"));
+        }
+
+
+        $updateData = [];
+
+
+        if (isset($form_data['name'])) {
+            $updateData['name'] = $form_data['name'];
+        }
+        if (isset($form_data['email'])) {
+            $updateData['email'] = $form_data['email'];
+        }
+        if (isset($form_data['phone'])) {
+            $updateData['phone'] = $form_data['phone'];
+        }
+        if (isset($form_data['password'])) {
+            $updateData['password'] = $form_data['password'];
+        }
+        if (isset($form_data['gender'])) {
+            $updateData['gender'] = $form_data['gender'];
+        }
+
+        if (isset($form_data['dom'])) {
+            $updateData['dom'] = $form_data['dom'];
+        }
+
+        if (isset($form_data['dob'])) {
+            $updateData['dob'] = $form_data['dob'];
+        }
+
+        User::whereNull('deleted_at')->where('id', $form_data['user_id'])
+            ->update($updateData);
+
+        return $this->response(notification()->success("User updated successfully!", "User updated successfully"));
+    }
 
     public function changePassword()
     {
@@ -62,7 +111,7 @@ class UserController extends Controller
         $validator = Validator::make($form_data, [
             'current_password' => 'required',
             'password' => [
-                'required', 
+                'required',
                 'min:8',
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',

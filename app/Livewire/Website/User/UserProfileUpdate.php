@@ -65,6 +65,9 @@ class UserProfileUpdate extends Component
             'phone' => 'nullable|unique:users,phone,' . $this->user->id,
         ]);
     
+
+        //
+
     
         $this->user->name = $this->name;
         $this->user->email = $this->email;
@@ -80,7 +83,6 @@ class UserProfileUpdate extends Component
      
         session()->put('user', $this->user);
     
-   
         $this->sendSuccess("Updated Successfully", "Your profile has been updated.");
     }
     
