@@ -126,7 +126,7 @@ class BranchController extends Controller
                         return [
                             'id' => $show->id,
                             'time' => $show->time,
-                      'disabled' => true,
+                      'disabled' => false,
                             // 'disabled' => $disabled, // Work on it tomorrow
                             'percentage' => 0
                         ];
