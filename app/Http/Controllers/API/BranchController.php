@@ -101,7 +101,7 @@ class BranchController extends Controller
 
         $result = [];
 
-        dd($movie_shows);
+        // dd($movie_shows);
         foreach ($movie_shows->groupBy('branch') as $branch => $branch_shows) {
 
             if (count($branch_shows) == 0) {

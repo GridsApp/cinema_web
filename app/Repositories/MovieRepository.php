@@ -91,8 +91,6 @@ class MovieRepository implements MovieRepositoryInterface
             }
         }
 
-
-
         $movie = [
             'id' => $movie->id,
             'name' => $movie->name,
@@ -214,7 +212,7 @@ class MovieRepository implements MovieRepositoryInterface
                 $q->orWhere('name', 'LIKE', '% ' . $word);
                 $q->orWhere('name', 'LIKE', $word . ' %');
             }
-            dd($word);
+       
         })
 
 

@@ -82,7 +82,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     });
 
     Route::prefix('movies')->group(function () {
-        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class, UserMiddleware::class]);
+        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class, UserMiddleware::class]);//movie details
         Route::get('/', [App\Http\Controllers\API\MovieController::class, 'search']);
         Route::get('/favorites/list', [App\Http\Controllers\API\FavoriteController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
         Route::post('movie/review', [App\Http\Controllers\API\ReviewController::class, 'review'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::prefix('branches')->group(function () {
         Route::get('/', [App\Http\Controllers\API\BranchController::class, 'list']);
         Route::get('/{branch_id}/active-movies', [App\Http\Controllers\API\BranchController::class, 'activeMovies']);
-        Route::get('/{branch_id}/movies/{movie_id}/shows', [App\Http\Controllers\API\BranchController::class, 'moviesShows']);
+        Route::get('/{branch_id}/movies/{movie_id}/shows', [App\Http\Controllers\API\BranchController::class, 'moviesShows']);//shows of the movie
         Route::get('/{branch_id}/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
     });
 

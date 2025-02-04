@@ -61,7 +61,14 @@ class UserController extends Controller
         $form_data = request()->all();
         $validator = Validator::make($form_data, [
             'current_password' => 'required',
-            'password' => 'required|min:8',
+            'password' => [
+                'required', 
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*?&]/',
+            ],
             'confirm_password' => 'required|same:password'
         ]);
 

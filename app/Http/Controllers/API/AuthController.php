@@ -45,7 +45,14 @@ class AuthController extends Controller
 
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
-            'password' => 'required',
+            'password' => [
+                'required', 
+                'min:8',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*?&]/',
+            ],
             'confirm_password' => 'required|same:password'
         ]);
 
