@@ -31,6 +31,11 @@ class OrderSeat extends Model
     {
         return $this->belongsTo(Time::class, 'time_id')->whereNull('deleted_at');
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id')->whereNull('deleted_at');
+    }
     
   
     

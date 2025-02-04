@@ -98,9 +98,10 @@ class BranchController extends Controller
         }
 
         $movie_shows = $this->movieShowRepository->getMovieShows($branch_id, $movie_id, $date);
-       
+
         $result = [];
 
+        dd($movie_shows);
         foreach ($movie_shows->groupBy('branch') as $branch => $branch_shows) {
 
             if (count($branch_shows) == 0) {
@@ -121,12 +122,15 @@ class BranchController extends Controller
                     "movie_shows" => $price_group_shows->map(function ($show) use ($system) {
 
                         // dd($show->system_id);
+
+                        // $disabled = $show->visibility !=
+
                         $disabled = !(is_array($show->system_id) && in_array($system, $show->system_id));
 
                         return [
                             'id' => $show->id,
                             'time' => $show->time,
-                      'disabled' => false,
+                            'disabled' => false,
                             // 'disabled' => $disabled, // Work on it tomorrow
                             'percentage' => 0
                         ];

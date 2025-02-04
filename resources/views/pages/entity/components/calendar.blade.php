@@ -128,7 +128,7 @@
 
                                         @foreach ($events->where('dayIndex', $i) as $event)
                                             {{-- @dd($event); --}}
-                                            <div class="event-box twa-event-backdiv"
+                                            <div class="event-box twa-event-backdiv @if($event['active']) event-box-active @endif"
                                                 style="
                                             height: {{ $event['height'] }}px;
                                             top: {{ $event['top'] }}px

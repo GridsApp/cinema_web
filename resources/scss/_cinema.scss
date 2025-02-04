@@ -1306,3 +1306,8 @@ select:focus {
     border: 0.9px solid #E5E5E5 ;
 
 }
+
+
+.event-box-active{
+    @apply border border-dashed border-red-500 rounded-lg #{!important};
+}

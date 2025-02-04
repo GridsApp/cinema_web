@@ -12,8 +12,8 @@ use twa\cmsv2\Traits\APITrait;
 class TicketsController extends Controller
 {
 
-    
-use APITrait;
+
+    use APITrait;
     private TicketRepositoryInterface $ticketRepository;
     private OrderRepositoryInterface $orderRepository;
 
@@ -25,8 +25,6 @@ use APITrait;
     }
     public function history()
     {
-
-     
         $user = request()->user;
 
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
@@ -40,6 +38,8 @@ use APITrait;
             return $this->response(notification()->error('No Order Found', 'No Order Found'));
         }
         $order_seats = $order_seats->map(function ($seats, $movie_show_id) {
+
+            $order = $seats->pluck('order')->first();
             $movieShow = $seats->pluck('movieShow')->first();
             $movie_image = get_image($movieShow->movie->main_image);
 
@@ -47,10 +47,13 @@ use APITrait;
             $movie_duration = $movieShow->movie->duration ?? 0; // Movie duration in minutes
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
-           
+
             if (!$end_datetime->isBefore(now())) {
                 return null;
             }
+
+
+
             return [
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
@@ -59,18 +62,29 @@ use APITrait;
                 'duration' => $movieShow->movie->duration,
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
+                'screen_type' => $movieShow->screenType->label ?? '',
                 'seats' => $seats->pluck('seat')->implode(","),
+                'order' => [
+                    'id' => $order->id ?? null,
+                    'long_id' => isset($order->id) ? $this->orderRepository->generateLongId($order->id) : null,
+                    'barcode' => $order->barcode ?? '',
+                ],
             ];
         })->filter()->values();
 
 
-        return $this->responseData($order_seats);
+
+
+        return $this->responseData([
+
+            $order_seats,
+
+        ]);
     }
 
     public function upcoming()
     {
 
-      
         $user = request()->user;
 
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
@@ -85,19 +99,19 @@ use APITrait;
             return $this->response(notification()->error('No upcomming orders found', 'No upcomming orders found'));
         }
         $order_seats = $order_seats->map(function ($seats, $movie_show_id) {
-
+            $order = $seats->pluck('order')->first();
             $movieShow = $seats->pluck('movieShow')->first();
             $movie_image = get_image($movieShow->movie->main_image);
 
             $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->label);
-            $movie_duration = $movieShow->movie->duration ?? 0; 
+            $movie_duration = $movieShow->movie->duration ?? 0;
             $end_datetime = $show_datetime->addMinutes($movie_duration);
-    
-          
+
+
             if (!$show_datetime->isFuture() && !$end_datetime->isFuture()) {
                 return null;
             }
-    
+
 
             return [
                 'movie_name' => $movieShow->movie->name ?? '',
@@ -108,6 +122,11 @@ use APITrait;
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
                 'seats' => $seats->pluck('seat')->implode(","),
+                'order' => [
+                    'id' => $order->id ?? null,
+                    'long_id' => isset($order->id) ? $this->orderRepository->generateLongId($order->id) : null,
+                    'barcode' => $order->barcode ?? '',
+                ],
             ];
         })->filter()->values();
 

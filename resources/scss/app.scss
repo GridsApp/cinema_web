@@ -8,6 +8,21 @@
 @import "./cinema.scss";
 @import "./asp.scss";
 @import "/node_modules/intl-tel-input/build/css/intlTelInput.css";
+
+@import "/resources/css/fontAwesome/all.css";
+@import "/resources/css/fontAwesome/duotone-light.css";
+@import "/resources/css/fontAwesome/duotone-regular.css";
+@import "/resources/css/fontAwesome/duotone-thin.css";
+@import "/resources/css/fontAwesome/sharp-duotone-light.css";
+@import "/resources/css/fontAwesome/sharp-duotone-regular.css";
+@import "/resources/css/fontAwesome/sharp-duotone-solid.css";
+@import "/resources/css/fontAwesome/sharp-duotone-thin.css";
+@import "/resources/css/fontAwesome/sharp-light.css";
+@import "/resources/css/fontAwesome/sharp-regular.css";
+@import "/resources/css/fontAwesome/sharp-solid.css";
+@import "/resources/css/fontAwesome/sharp-thin.css";
+
+
 // body {
 //     font-family: "'Source Sans Pro', sans-serif", "Segoe UI", "Helvetica Neue",
 //         Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -56,7 +71,6 @@ html[dir="rtl"] {
         .movie-details-page {
             text-align: left;
             direction: ltr;
-         
         }
     }
 }

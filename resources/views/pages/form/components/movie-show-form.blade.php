@@ -17,6 +17,7 @@
                 {!! field('time', 'col-span-12' , null , false , false) !!}
                 {!! field('screen_type', 'col-span-12' , null , false , false) !!}
                 {!! field('movie_show_color', 'col-span-12') !!}
+                {!! field('system', 'col-span-12') !!}
             </div>
         </div>
         <div class="my-4">

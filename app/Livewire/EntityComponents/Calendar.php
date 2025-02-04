@@ -27,6 +27,10 @@ class Calendar extends Component
     public $events = [];
 
     #[Url]
+    public $movie_show_id = null;
+
+
+    #[Url]
     public $date_from = null;
     #[Url]
     public $date_to = null;
@@ -49,6 +53,7 @@ class Calendar extends Component
     public function mount(){
 
 
+     
         if(!$this->date_from && !$this->date_to){
 
         $today = Carbon::now();
@@ -189,6 +194,8 @@ class Calendar extends Component
             ->get()->map(function ($event) use($dayIndex){
                 $minutes = $this->getMinutesDifference($this->times[0] , $event->time);
                 return [
+
+                        'active' => $event->id == $this->movie_show_id,
                         'details' => $event,
                         'reserved' => $event->reserved->count(),
                         'id' => $event->id,
