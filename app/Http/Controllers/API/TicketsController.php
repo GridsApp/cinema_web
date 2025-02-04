@@ -75,11 +75,11 @@ class TicketsController extends Controller
 
 
 
-        return $this->responseData([
+        return $this->responseData(
 
             $order_seats,
 
-        ]);
+        );
     }
 
     public function upcoming()
