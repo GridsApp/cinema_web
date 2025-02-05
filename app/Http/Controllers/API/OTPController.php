@@ -98,7 +98,7 @@ class OtpController extends Controller
         $this->cardRepository->createCard($user);
 
         return $this->responseData([
-            'user' => $user,
+            'user' => $user->format(),
             'access_token' => $this->tokenRepository->createAccessToken($user)
         ]);
     }

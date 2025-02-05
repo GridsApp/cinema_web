@@ -88,12 +88,23 @@ if (!function_exists('clean_request')) {
     {
         $formData = request()->all();
 
+      
+       
+
         foreach($rules as $key => $value){
+    
+            if(!isset($formData[$key])){
+                continue;
+            }
+
             switch($value){
                 case "phone" : 
                     $formData[$key] = str($formData['phone'])->replace(' ' , '')->toString();
                 break;
                 case "email" : 
+         
+                   
+
                     $formData[$key] = str($formData['email'])->replace(' ' , '')->lower()->toString();
                 break;
             }

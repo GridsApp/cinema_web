@@ -1894,6 +1894,17 @@ return [
         'name' => 'email_verified'
     ],
 
+    'email_verified_at' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
+        'label' => 'Email Verified At',
+        'placeholder' => 'Email Verified At',
+        'name' => 'email_verified_at'
+    ],
+
     'phone_verified' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1903,6 +1914,18 @@ return [
         'label' => 'Phone Verified',
         'placeholder' => 'Phone Verified',
         'name' => 'phone_verified'
+    ],
+
+
+    'phone_verified_at' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => \twa\cmsv2\Entities\FieldTypes\Datetime::class,
+        'label' => 'Phone Verified at',
+        'placeholder' => 'Phone Verified at',
+        'name' => 'phone_verified_at'
     ],
 
 

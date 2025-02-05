@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\CardRepositoryInterface;
+use App\Rules\UniqueEmail;
+use App\Rules\UniquePhone;
 use twa\cmsv2\Traits\APITrait;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -54,55 +56,97 @@ class UserController extends Controller
         return $this->responseData($account);
     }
 
+    public function updateProfile()
+    {
+
+       
+        $form_data = clean_request(['email' => 'email']);
+       
+        $user = request()->user;
+
+        $updateData = [];
+
+        $validation = [];
+
+
+        if (isset($form_data['name'])) {
+            $updateData['name'] = $form_data['name'];
+            $validation['name'] = 'required|min:6'; 
+        }
+        if (isset($form_data['email'])) {
+            $updateData['email'] = $form_data['email'];
+            $validation['email'] = ['required','email', new UniqueEmail($user->id) ];
+        }
+        if (isset($form_data['phone'])) {
+            $updateData['phone'] = $form_data['phone'];
+            $validation['phone'] = ['required','phone', new UniquePhone($user->id) ];
+             
+        }
+      
+        if (isset($form_data['gender'])) {
+            $updateData['gender'] = $form_data['gender'];
+            $validation['gender'] = 'required';
+
+        }
+
+        if (isset($form_data['dom'])) {
+            $updateData['dom'] = $form_data['dom'];
+            $validation['dom'] = 'required';
+        }
+
+        if (isset($form_data['dob'])) {
+            $updateData['dob'] = $form_data['dob'];
+            $validation['dob'] = 'required';
+        }
+
+
+        if(count($validation) > 0){
+            
+            $validator = Validator::make($form_data, $validation);
+
+            if ($validator->errors()->count() > 0) {
+                return  $this->responseValidation($validator);
+            }
+
+        }
+
+        if(count($updateData) > 0){
+            User::whereNull('deleted_at')->where('id', $user->id)
+            ->update($updateData);
+
+            return $this->response(notification()->success("User updated successfully!", "User updated successfully"));
+        }
+
+
+        return $this->response(notification()->success("User not updated!", "No data to update"));
+
+
+
+    }
+
+
     public function completeProfile()
     {
-        $form_data = clean_request();
-        $validator = Validator::make($form_data, [
-            'user_id' => ['required'],
+        $form_data = clean_request(['email' => 'email']);
 
+        $validator = Validator::make($form_data, [
+            'name' => ['required','min:6'],
+            'email' => [
+                'required',
+                'email',
+                new UniqueEmail
+            ],
         ]);
         if ($validator->errors()->count() > 0) {
             return  $this->responseValidation($validator);
         }
 
-        try {
-            $user = $this->userRepository->getUserById($form_data['user_id']);
-        } catch (\Throwable $th) {
-            return $this->response(notification()->error("User not found", "User not found"));
-        }
+        $user = request()->user;
+        $user->email = $form_data['email'];
+        $user->name = $form_data['name'];
+        $user->save();
 
-
-        $updateData = [];
-
-
-        if (isset($form_data['name'])) {
-            $updateData['name'] = $form_data['name'];
-        }
-        if (isset($form_data['email'])) {
-            $updateData['email'] = $form_data['email'];
-        }
-        if (isset($form_data['phone'])) {
-            $updateData['phone'] = $form_data['phone'];
-        }
-        if (isset($form_data['password'])) {
-            $updateData['password'] = $form_data['password'];
-        }
-        if (isset($form_data['gender'])) {
-            $updateData['gender'] = $form_data['gender'];
-        }
-
-        if (isset($form_data['dom'])) {
-            $updateData['dom'] = $form_data['dom'];
-        }
-
-        if (isset($form_data['dob'])) {
-            $updateData['dob'] = $form_data['dob'];
-        }
-
-        User::whereNull('deleted_at')->where('id', $form_data['user_id'])
-            ->update($updateData);
-
-        return $this->response(notification()->success("User updated successfully!", "User updated successfully"));
+        return $this->response(notification()->success('Profile succesfully completed', 'Profile succesfully completed'));
     }
 
     public function changePassword()

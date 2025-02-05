@@ -24,10 +24,10 @@ class UsersEntity extends Entity
 
         $this->addField("name", ["container" => 'col-span-7']);
         $this->addField("email", ["container" => 'col-span-4']);
-        $this->addField("email_verified", ["container" => 'col-span-3']);
+        $this->addField("email_verified_at", ["container" => 'col-span-3']);
 
         $this->addField("phone", ["container" => 'col-span-4']);
-        $this->addField("phone_verified", ["container" => 'col-span-3']);
+        $this->addField("phone_verified_at", ["container" => 'col-span-3']);
 
         $this->addField("profile_picture", ["container" => 'col-span-7']);
         $this->addField("password", ["container" => 'col-span-7']);

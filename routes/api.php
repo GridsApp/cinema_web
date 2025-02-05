@@ -12,12 +12,16 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::prefix('auth')->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+
             Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+          
+
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::get('wallet-transactions', [App\Http\Controllers\API\CardController::class, 'getWalletTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::get('loyalty-transactions', [App\Http\Controllers\API\CardController::class, 'getLoyaltyTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-            
+
 
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -86,7 +90,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     });
 
     Route::prefix('movies')->group(function () {
-        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class, UserMiddleware::class]);//movie details
+        Route::get('/{id}', [App\Http\Controllers\API\MovieController::class, 'show'])->middleware([AuthOptionalMiddleware::class, UserMiddleware::class]); //movie details
         Route::get('/', [App\Http\Controllers\API\MovieController::class, 'search']);
         Route::get('/favorites/list', [App\Http\Controllers\API\FavoriteController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
         Route::post('movie/review', [App\Http\Controllers\API\ReviewController::class, 'review'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -98,7 +102,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
     Route::prefix('branches')->group(function () {
         Route::get('/', [App\Http\Controllers\API\BranchController::class, 'list']);
         Route::get('/{branch_id}/active-movies', [App\Http\Controllers\API\BranchController::class, 'activeMovies']);
-        Route::get('/{branch_id}/movies/{movie_id}/shows', [App\Http\Controllers\API\BranchController::class, 'moviesShows']);//shows of the movie
+        Route::get('/{branch_id}/movies/{movie_id}/shows', [App\Http\Controllers\API\BranchController::class, 'moviesShows']); //shows of the movie
         Route::get('/{branch_id}/items', [App\Http\Controllers\API\POS\ConsessionsController::class, 'getItems']);
     });
 
@@ -125,8 +129,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('edit', [App\Http\Controllers\API\POS\CustomersController::class, 'editUser']);
             Route::post('card/info', [App\Http\Controllers\API\CardController::class, 'getCardInfo']);
             Route::get('card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
-            Route::post('/redeem-code', [App\Http\Controllers\API\RewardController::class , "posRedeemCode"])->middleware((AuthMandatoryMiddleware::class));;
-
+            Route::post('/redeem-code', [App\Http\Controllers\API\RewardController::class, "posRedeemCode"])->middleware((AuthMandatoryMiddleware::class));;
         });
 
 

@@ -28,8 +28,8 @@ class UserRepository implements UserRepositoryInterface
         $user = new User;
         $user->phone = $phone_number;
         $user->token = $this->tokenRepository->createUserToken();
-        
-       
+
+
         if ($password) {
             $user->password = Hash::make($password);
         }
@@ -37,7 +37,7 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
-    public function createCustomer($phone_number, $password, $full_name, $email , $gender = null , $dom = null , $dob = null)
+    public function createCustomer($phone_number, $password, $full_name, $email, $gender = null, $dom = null, $dob = null)
     {
         $user = new User;
         $user->phone = $phone_number;
@@ -61,36 +61,55 @@ class UserRepository implements UserRepositoryInterface
     {
         // dd($phone_number);
 
-            try {
-                $user = User::where('phone', $phone_number)
-                   ->whereNull('deleted_at')->firstOrFail();
-            } catch (ModelNotFoundException $e) {
-                throw new Exception($e->getMessage());
-            }
-            return $user;
+        try {
+            $user = User::where('phone', $phone_number)
+                ->whereNull('deleted_at')
+
+
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $user;
     }
 
 
-    public function getUserByCardNumber($card_number){
+    public function getVerifiedUserByPhone($phone_number)
+    {
+        // dd($phone_number);
+
+        try {
+            $user = User::where('phone', $phone_number)
+                ->whereNull('deleted_at')
+                ->whereNotNull('phone_verified_at')
+
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $user;
+    }
+
+
+    public function getUserByCardNumber($card_number)
+    {
 
 
         try {
             $user_card = UserCard::where('barcode', $card_number)
-               ->whereNull('deleted_at')->firstOrFail();
+                ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
 
         try {
             $user = User::where('id', $user_card->user_id)
-               ->whereNull('deleted_at')->firstOrFail();
+                ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
 
         return $user;
-
-
     }
 
 
@@ -99,6 +118,19 @@ class UserRepository implements UserRepositoryInterface
         try {
             return User::whereNull('deleted_at')
                 ->where('email', $email)
+
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
+        }
+    }
+
+    public function getVerifiedUserByEmail($email)
+    {
+        try {
+            return User::whereNull('deleted_at')
+                ->where('email', $email)
+                ->whereNotNull('email_verified_at')
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
@@ -108,13 +140,12 @@ class UserRepository implements UserRepositoryInterface
     public function getUserByToken($token)
     {
         try {
-        return User::whereNull('deleted_at')
-            ->where('token', $token)
-            ->firstOrFail();
+            return User::whereNull('deleted_at')
+                ->where('token', $token)
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e->getMessage());
         }
-            catch (ModelNotFoundException $e) {
-                throw new ModelNotFoundException($e->getMessage());
-            }
     }
 
     public function getUserById($user_id)
@@ -122,8 +153,7 @@ class UserRepository implements UserRepositoryInterface
 
         try {
             $user = User::where('id', $user_id)
-               ->whereNull('deleted_at')->firstOrFail();
-
+                ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("User with ID {$user_id} not found.");
         }

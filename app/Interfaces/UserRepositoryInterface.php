@@ -14,6 +14,9 @@ interface UserRepositoryInterface
     public function getUserByToken($token);
     public function getUserById($user_id);
     public function deleteAccount($user);
+
+    public function getVerifiedUserByPhone($phone_number);
+    public function getVerifiedUserByEmail($email);
    
   
 }

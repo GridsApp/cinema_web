@@ -22,6 +22,28 @@ class User extends Authenticatable
     ];
 
 
+    public function format(){
+        
+        $array = [];
+        foreach($this->original as $key => $value){
+            $array[$key] = $value;
+        }
+
+        if(
+            empty($this->email) || 
+            is_null($this->email) || 
+            empty($this->name) || 
+            is_null($this->name)
+            ){
+                $array['profile_completed']  = false;
+            }else{
+                $array['profile_completed']  = true;
+            }
+        
+        return $array;
+    }
+
+
     public function gender(){
         return $this->belongsTo(Gender::class , 'gender_id' , 'id');
     }

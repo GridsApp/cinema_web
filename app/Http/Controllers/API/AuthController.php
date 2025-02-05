@@ -63,23 +63,12 @@ class AuthController extends Controller
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
 
-
-
         try {
             $user = $this->userRepository->getUserByPhone($phone_number);
         } catch (\Exception $e) {
-
             $user = $this->userRepository->createUser($phone_number, $form_data["password"]);
-
-            // return $this->response(notification()->error('Card number not found', $e->getMessage()));
         }
-
-
-        if ($user && $user->phone_verified) {
-            return $this->response(notification()->error('You are already registered user', 'You are already registered user'));
-        }
-
-
+        
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -107,19 +96,17 @@ class AuthController extends Controller
         $phone_number = $phone->formatE164();
 
         try {
-            $user = $this->userRepository->getUserByPhone($phone_number);
+            $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
         } catch (\Exception $e) {
-            return $this->response(notification()->error('You have entered invalid phone/password', $e->getMessage()));
+            return $this->response(notification()->error('You have entered invalid phone/password or not verified', $e->getMessage()));
         }
 
-
-
         if (!Hash::check($form_data['password'], $user->password)) {
-            return $this->response(notification()->error("You have entered invalid phone/password", 'You have entered invalid phone/password'));
+            return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
 
         return $this->responseData([
-            'user' => $user,
+            'user' => $user->format(),
             'access_token' => $this->tokenRepository->createAccessToken($user)
         ]);
     }
@@ -144,7 +131,7 @@ class AuthController extends Controller
         $phone_number = $phone->formatE164();
 
 
-        $user = $this->userRepository->getUserByPhone($phone_number);
+        $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
 
 
         if ($user) {
