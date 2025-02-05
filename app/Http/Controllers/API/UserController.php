@@ -300,6 +300,18 @@ class UserController extends Controller
 
        
 
+
+        $minimum_recharge_amount = get_setting("minimum_topup_amount");
+        $maximum_recharge_amount =  get_setting("maximum_topup_amount");
+
+
+        if ($form_data['amount'] < $minimum_recharge_amount) {
+            return $this->response(notification()->error('Invalid Amount', "Please enter amount greater than " . $minimum_recharge_amount));
+        }
+        if ($form_data['amount'] > $maximum_recharge_amount) {
+            return $this->response(notification()->error('Invalid Amount', "Please enter amount less than " . $maximum_recharge_amount));
+        }
+
    
         try {
             $this->cartRepository->addTopupToCart($cart->id, $form_data['amount']);
@@ -315,14 +327,14 @@ class UserController extends Controller
         }
 
        
-        if(!in_array($payment_method->key , ['OP' , 'CASH'])){
+        if(!in_array($payment_method->key , ['OP'])){
             return $this->response(notification()->error('Payment Method Not Supported', 'Payment Method Not Supported'));
         }
 
 
         try {
             $order = app(\App\Http\Controllers\API\OrderController::class);
-            return $order->createOrder($user, $cart->id, $payment_method);
+            return $order->createOrder( $cart->id, $payment_method);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order Attempt Failed', $e->getMessage()));
         }

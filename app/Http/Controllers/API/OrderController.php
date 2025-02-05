@@ -59,7 +59,7 @@ class  OrderController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function createOrder($user, $cart_id, $payment_method){
+    public function createOrder($cart_id, $payment_method){
 
        
 

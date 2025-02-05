@@ -263,6 +263,7 @@ class CartController extends Controller
         //GET FROM SETTINGS
         $minimum_recharge_amount = get_setting("minimum_topup_amount");
         $maximum_recharge_amount =  get_setting("maximum_topup_amount");
+
         // dd($maximum_recharge_amount);
 
         if ($form_data['amount'] < $minimum_recharge_amount) {
