@@ -9,6 +9,8 @@ use App\Interfaces\OTPRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\ResetPasswordTokenRepositoryInterface;
+use Illuminate\Validation\Rule;
 use twa\cmsv2\Traits\APITrait;
 
 
@@ -20,14 +22,16 @@ class OtpController extends Controller
     private UserRepositoryInterface $userRepository;
     private OTPRepositoryInterface $otpRepository;
     private CardRepositoryInterface $cardRepository;
+    private ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository;
 
 
-    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, OTPRepositoryInterface $otpRepository, CardRepositoryInterface $cardRepository)
+    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, OTPRepositoryInterface $otpRepository, CardRepositoryInterface $cardRepository, ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository)
     {
         $this->tokenRepository = $tokenRepository;
         $this->userRepository = $userRepository;
         $this->otpRepository = $otpRepository;
         $this->cardRepository = $cardRepository;
+        $this->resetPasswordTokenRepository = $resetPasswordTokenRepository;
     }
 
     public function verify()
@@ -82,25 +86,48 @@ class OtpController extends Controller
             return $this->responseData(notification()->error("User not found", "User not found"));
         }
 
-        try {
-            $user->{$driver['field']} = now();
-            $user->token = $this->tokenRepository->createUserToken();
-            $user->save();
 
 
-            $check_token->expires_at = now();
-            $check_token->save();
-        } catch (\Throwable $th) {
-            return $this->responseData(notification()->error("User not verified", "User not verified"));
+        switch ($check_token->action) {
+            case 'VERIFY_ACCOUNT':
+
+                try {
+                    $user->{$driver['field']} = now();
+                    $user->token = $this->tokenRepository->createUserToken();
+                    $user->save();
+
+
+                    $check_token->expires_at = now();
+                    $check_token->save();
+                } catch (\Throwable $th) {
+                    return $this->responseData(notification()->error("User not verified", "User not verified"));
+                }
+
+
+                $this->cardRepository->createCard($user);
+
+                return $this->responseData([
+                    'user' => $user->format(),
+                    'access_token' => $this->tokenRepository->createAccessToken($user)
+                ]);
+
+
+                break;
+
+            case 'RESET_PASSWORD':
+
+                $reset_token = $this->resetPasswordTokenRepository->create($user->id);
+
+                return $this->responseData([
+                    'reset_token' => $reset_token->token,
+                ]);
+
+                break;
+
+            default:
+                return $this->responseData(notification()->error("Something went wrong", "Something went wrong"));
+                break;
         }
-
-
-        $this->cardRepository->createCard($user);
-
-        return $this->responseData([
-            'user' => $user->format(),
-            'access_token' => $this->tokenRepository->createAccessToken($user)
-        ]);
     }
 
     public function send()
@@ -110,8 +137,13 @@ class OtpController extends Controller
 
         $validator = Validator::make($form_data, [
             'user_token' => ['required'],
-            'driver' => ['required']
+            'driver' => ['required'],
+            'action' =>  ['required', Rule::in(['VERIFY_ACCOUNT', 'RESET_PASSWORD'])],
+
         ]);
+
+
+
 
         if ($validator->errors()->count() > 0) {
             return  $this->responseValidation($validator);
@@ -140,7 +172,7 @@ class OtpController extends Controller
             return $this->response(notification()->error("Limit Exceeded", "Limit Exceeded"));
         }
 
-        $checkVerifyToken = $this->tokenRepository->createVerifyToken($user, $driver);
+        $checkVerifyToken = $this->tokenRepository->createVerifyToken($user, $driver, $form_data['action']);
 
         $this->otpRepository->sendOTPByDriver($user, $driver, $checkVerifyToken->otp);
 

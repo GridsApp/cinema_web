@@ -702,6 +702,13 @@ if (!function_exists('minutes_to_human')) {
         $minutes = $minutes % 60;
         return $minutes == 0 ? $hours == 0 ? "0m" : "{$hours}h" : ($hours == 0 ? "{$minutes}m" : "{$hours}h {$minutes}m");
     }
+
+    if (!function_exists('generate_unique_token')) {
+        function generate_unique_token()
+        {
+            return md5(uniqid() . env('APP_KEY')) . md5(uniqid() . env('APP_KEY').now()->timestamp);
+       }
+    }
 }
 
 

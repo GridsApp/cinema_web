@@ -3,12 +3,12 @@
 namespace App\Entities;
 
 use twa\cmsv2\Entities\Entity;
-class UserVerifyTokensEntity extends Entity
+class ResetPasswordTokensEntity extends Entity
 {
 
-    public $entity = "User Verify Tokens Entity";
-    public $tableName = "user_verify_tokens";
-    public $slug = "user-verify-tokens";
+    public $entity = "Reset Password Tokens Entity";
+    public $tableName = "reset_password_tokens";
+    public $slug = "reset-password-tokens";
 
 
     public $params = [
@@ -19,15 +19,9 @@ class UserVerifyTokensEntity extends Entity
     {  
 
         $this->addField("token", ["container" => 'col-span-7']);
-        $this->addField("otp", ["container" => 'col-span-7']);
-        $this->addField("driver", ["container" => 'col-span-7']);
         $this->addField("user_id", ["container" => 'col-span-7']);
         $this->addField("expires_at", ["container" => 'col-span-7']);
-        $this->addField("sent", ["container" => 'col-span-7']);
-        $this->addField("ip", ["container" => 'col-span-7']);
-        $this->addField("action", ["container" => 'col-span-7']);
-
-
+     
         return $this->fields;
     }
 

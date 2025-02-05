@@ -45,6 +45,7 @@ return array (
   'price-group-zones' => 'App\\Entities\\PriceGroupZonesEntity',
   'price-groups' => 'App\\Entities\\PriceGroupsEntity',
   'reserved_seats' => 'App\\Entities\\ReservedSeatsEntity',
+  'reset-password-tokens' => 'App\\Entities\\ResetPasswordTokensEntity',
   'rewards' => 'App\\Entities\\RewardsEntity',
   'screen-types' => 'App\\Entities\\ScreenTypesEntity',
   'settings' => 'App\\Entities\\SettingsEntity',

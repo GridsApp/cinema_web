@@ -12,7 +12,7 @@ class TokenRepository implements TokenRepositoryInterface
 
     public $expiry_duration = 3;
 
-    public function createVerifyToken($user, $driver)
+    public function createVerifyToken($user, $driver , $action)
     {
 
         UserVerifyToken::where('user_id', $user->id)
@@ -29,6 +29,9 @@ class TokenRepository implements TokenRepositoryInterface
         $verify_token->ip = request()->ip();
         $verify_token->expires_at = now()->addMinutes($this->expiry_duration);
         $verify_token->driver = $driver;
+
+        $verify_token->action = $action;
+
         $verify_token->save();
 
 

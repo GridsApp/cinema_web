@@ -15,7 +15,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-          
+            Route::post('forget-password', [App\Http\Controllers\API\UserController::class, 'forgetPassword'])->middleware([UserMiddleware::class]);
+
 
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -35,6 +36,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
+            Route::post('/reset-password', [App\Http\Controllers\API\UserController::class, 'resetPassword']);
             Route::post('/login/social', [App\Http\Controllers\API\AuthController::class, 'loginUsingProvider']);
             Route::post('/check', [App\Http\Controllers\API\AuthController::class, 'check']);
         });

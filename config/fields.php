@@ -1883,6 +1883,8 @@ return [
         'name' => 'token_expires_at'
     ],
 
+  
+
     'email_verified' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1941,6 +1943,22 @@ return [
         'label' => 'IP',
         'placeholder' => 'Enter ip',
         'name' => 'ip',
+        'container' => 'col-span-6',
+    ],
+
+
+
+    'action' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => \twa\cmsv2\Entities\FieldTypes\Textfield::class,
+
+        'label' => 'Action',
+        'placeholder' => 'Enter Action',
+        'name' => 'action',
         'container' => 'col-span-6',
     ],
 
