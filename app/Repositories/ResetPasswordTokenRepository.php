@@ -12,8 +12,6 @@ class ResetPasswordTokenRepository implements ResetPasswordTokenRepositoryInterf
 
     public function create($user_id)
     {
-
-
         $reset_password = new ResetPasswordToken();
         $reset_password->user_id = $user_id;
         $reset_password->token = generate_unique_token();
@@ -24,9 +22,12 @@ class ResetPasswordTokenRepository implements ResetPasswordTokenRepositoryInterf
     }
     public function check($reset_token)
     {
-        ResetPasswordToken::whereNull('deleted_at')
+       
+      $reset_token=  ResetPasswordToken::whereNull('deleted_at')
             ->where('token', $reset_token)
             ->where('expires_at', '>', now())
             ->first();
+
+            return $reset_token;
     }
 }

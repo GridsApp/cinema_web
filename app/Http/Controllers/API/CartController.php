@@ -260,8 +260,6 @@ class CartController extends Controller
         if ($check) {
             return $this->response($check);
         }
-
-
         //GET FROM SETTINGS
         $minimum_recharge_amount = get_setting("minimum_topup_amount");
         $maximum_recharge_amount =  get_setting("maximum_topup_amount");

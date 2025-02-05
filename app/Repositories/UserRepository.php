@@ -82,7 +82,6 @@ class UserRepository implements UserRepositoryInterface
             $user = User::where('phone', $phone_number)
                 ->whereNull('deleted_at')
                 ->whereNotNull('phone_verified_at')
-
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());

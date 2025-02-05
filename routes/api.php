@@ -15,14 +15,15 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-            Route::post('forget-password', [App\Http\Controllers\API\UserController::class, 'forgetPassword'])->middleware([UserMiddleware::class]);
 
 
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::get('wallet-transactions', [App\Http\Controllers\API\CardController::class, 'getWalletTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::get('loyalty-transactions', [App\Http\Controllers\API\CardController::class, 'getLoyaltyTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('recharge-wallet', [App\Http\Controllers\API\UserController::class, 'rechargeWallet'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
+            
 
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -36,7 +37,10 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
             Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
+
+            Route::post('forget-password', [App\Http\Controllers\API\UserController::class, 'forgetPassword'])->middleware([UserMiddleware::class]);
             Route::post('/reset-password', [App\Http\Controllers\API\UserController::class, 'resetPassword']);
+
             Route::post('/login/social', [App\Http\Controllers\API\AuthController::class, 'loginUsingProvider']);
             Route::post('/check', [App\Http\Controllers\API\AuthController::class, 'check']);
         });
@@ -136,7 +140,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
 
 
-        Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware((AuthMandatoryMiddleware::class));
+        Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware(([AuthMandatoryMiddleware::class , POSUserMiddleware::class ]));
 
         Route::post('/user', [App\Http\Controllers\API\POS\PosUserController::class, 'getUserFromAccessToken'])->middleware([AuthMandatoryMiddleware::class, POSUserMiddleware::class]);
 

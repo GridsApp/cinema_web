@@ -7,9 +7,11 @@ use App\Models\User;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\OTPRepositoryInterface;
 use App\Interfaces\ResetPasswordTokenRepositoryInterface;
 use App\Models\ResetPasswordToken;
+use App\Repositories\OrderRepository;
 use App\Rules\UniqueEmail;
 use App\Rules\UniquePhone;
 use twa\cmsv2\Traits\APITrait;
@@ -27,14 +29,19 @@ class UserController extends Controller
     private CardRepositoryInterface $cardRepository;
     private OTPRepositoryInterface $otpRepository;
     private ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository;
+    private CartRepositoryInterface $cartRepository;
+    private OrderRepository $orderRepository;
+    
 
-    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, CardRepositoryInterface $cardRepository, OTPRepositoryInterface $otpRepository, ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository)
+    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, CardRepositoryInterface $cardRepository, OTPRepositoryInterface $otpRepository, ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository,CartRepositoryInterface $cartRepository,OrderRepository $orderRepository)
     {
         $this->tokenRepository = $tokenRepository;
         $this->userRepository = $userRepository;
         $this->cardRepository = $cardRepository;
         $this->otpRepository = $otpRepository;
         $this->resetPasswordTokenRepository = $resetPasswordTokenRepository;
+        $this->cartRepository = $cartRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function getAccount()
@@ -191,7 +198,6 @@ class UserController extends Controller
 
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
-
         ]);
 
         if ($validator->fails()) {
@@ -204,6 +210,7 @@ class UserController extends Controller
             return $this->response(notification()->error('You have entered invalid phone/password or not verified', $e->getMessage()));
         }
 
+   
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -233,16 +240,22 @@ class UserController extends Controller
         }
 
         $reset_token = $this->resetPasswordTokenRepository->check($form_data['reset_token']);
-        
+
+
+
         if (!$reset_token) {
             return $this->response(notification()->error('Invalid or expired token', 'Invalid or expired token'));
         }
+
+        // dd($reset_token);
 
         try {
             $user = $this->userRepository->getUserById($reset_token->user_id);
         } catch (\Exception $e) {
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
+
+        // dd($user);
 
         if (Hash::check($form_data['password'], $user->password)) {
             return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
@@ -252,8 +265,6 @@ class UserController extends Controller
         $this->userRepository->changePassword($user, $form_data['password']);
 
         return $this->response(notification()->success('Password succesfully changed', 'Password succesfully changed'));
-
-
     }
 
     public function deleteAccount()
@@ -264,5 +275,57 @@ class UserController extends Controller
         $this->userRepository->deleteAccount($user);
 
         return $this->response(notification()->success('Account deleted', 'Account has been successfully deleted'));
+    }
+
+    public function rechargeWallet()
+    {
+
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['amount', 'payment_method_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+        $system_id = get_system_from_type($user_type);
+
+
+        try {
+            $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id);
+        } catch (\Exception $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
+        }
+
+       
+
+   
+        try {
+            $this->cartRepository->addTopupToCart($cart->id, $form_data['amount']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Error adding amount to cart', $th->getMessage()));
+        }
+    
+
+        try {
+            $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
+        }
+
+       
+        if(!in_array($payment_method->key , ['OP' , 'CASH'])){
+            return $this->response(notification()->error('Payment Method Not Supported', 'Payment Method Not Supported'));
+        }
+
+
+        try {
+            $order = app(\App\Http\Controllers\API\OrderController::class);
+            return $order->createOrder($user, $cart->id, $payment_method);
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Order Attempt Failed', $e->getMessage()));
+        }
+
     }
 }

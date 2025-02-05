@@ -30,6 +30,9 @@ class WalletController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
+
+
+        // dd($user_type);
         $form_data = clean_request([]);
         $system_id = get_system_from_type($user_type);
 
@@ -46,6 +49,8 @@ class WalletController extends Controller
         if ($check) {
             return $this->response($check);
         }
+
+       
 
         try {
             $this->cardRepository->getCardByBarcode($form_data['card_number']);
@@ -75,4 +80,7 @@ class WalletController extends Controller
 
         
     }
+
+
+   
 }

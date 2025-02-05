@@ -59,46 +59,32 @@ class  OrderController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function attempt()
-    {
+    public function createOrder($user, $cart_id, $payment_method){
 
-        $form_data = clean_request([]);
+       
 
-        $validator = Validator::make($form_data, [
-            'payment_method_id' => 'required',
-            'cart_id' => 'required'
-        ]);
-
-        if ($validator->errors()->count() > 0) {
-            return  $this->responseValidation($validator);
-        }
 
         try {
-            $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
-        } catch (\Exception $th) {
-            return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
-        }
-
-        try {
-            $cart = $this->cartRepository->getCartById($form_data['cart_id']);
+            $cart = $this->cartRepository->getCartById($cart_id);
             $cart_details = $this->cartRepository->getCartDetails($cart);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Cart Error', $e->getMessage()));
         }
 
-
-        $subtotal = $cart_details['subtotal']['value'];
-
         $user_id = request()->user->id;
         $user_type = request()->user_type;
         $field = get_user_field_from_type($user_type);
 
+        $subtotal = $cart_details['subtotal']['value'];
+
+      
+
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->{$field} = $user_id;
         $payment_attempt->amount = $subtotal;
-        $payment_attempt->payment_method_id = $form_data['payment_method_id'];
+        $payment_attempt->payment_method_id = $payment_method->id;
         $payment_attempt->action = "COMPLETE_ORDER";
-        $payment_attempt->reference = $form_data['cart_id'];
+        $payment_attempt->reference = $cart_id;
         $payment_attempt->save();
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 
@@ -214,6 +200,29 @@ class  OrderController extends Controller
 
                 break;
         }
+
+    }
+
+
+    public function attempt()
+    {
+
+        $form_data = clean_request([]);
+
+        $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+
+        try {
+            $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
+        }
+    
+        return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
+
     }
     public function refund()
     {

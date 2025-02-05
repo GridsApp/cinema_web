@@ -82,6 +82,8 @@ class OtpController extends Controller
         $user = $this->userRepository->getUserById($check_token->user_id);
 
 
+ 
+
         if (!$user) {
             return $this->responseData(notification()->error("User not found", "User not found"));
         }
@@ -143,8 +145,6 @@ class OtpController extends Controller
         ]);
 
 
-
-
         if ($validator->errors()->count() > 0) {
             return  $this->responseValidation($validator);
         }
@@ -155,6 +155,8 @@ class OtpController extends Controller
             return $this->response(notification()->error("Invalid token!", "Invalid token"));
         }
 
+
+        // dd($user);
         // if (!$user) {
         //     return $this->response(notification()->error("Invalid token!", "Invalid token"));
         // }
@@ -168,7 +170,7 @@ class OtpController extends Controller
             return $this->response(notification()->error("Please wait until your active token is expired", "Please wait until your active token is expired"));
         }
 
-        if ($this->tokenRepository->countPreviousVerifyTokens($user->id) > 3) {
+        if ($this->tokenRepository->countPreviousVerifyTokens($user->id) > 5) {
             return $this->response(notification()->error("Limit Exceeded", "Limit Exceeded"));
         }
 
