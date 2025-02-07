@@ -298,16 +298,10 @@ if (!function_exists('field_init')) {
 if (!function_exists('field')) {
     function field($field, $container = null)
     {
-
-      
-
-
         if (is_string($field)) {
             $field = config('fields.' . $field);
 
         }
-
-       
 
 
         if (!$field) {
@@ -348,8 +342,6 @@ if (!function_exists('field')) {
             }
         }
 
-
-
         $path = (new $field['type']($field))->component();
 
         $render = Livewire::mount($path, $params, "component_" . uniqid());
@@ -361,6 +353,17 @@ if (!function_exists('field')) {
         }
 
         return $render;
+    }
+}
+
+if (!function_exists('generateField')) {
+  
+    function generateField($filter)
+    {
+        // dd($filter)
+        // return field([
+    
+        // ]);
     }
 }
 

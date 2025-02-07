@@ -15,7 +15,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-
+            
+            Route::post('upload-image', [App\Http\Controllers\API\UserController::class, 'uploadProfileImage'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('delete-account', [App\Http\Controllers\API\UserController::class, 'deleteAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);

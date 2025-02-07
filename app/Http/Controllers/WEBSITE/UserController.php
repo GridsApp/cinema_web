@@ -58,42 +58,43 @@ class UserController extends Controller
 
     public function deleteAccount(Request $request)
     {
-      
+
         $user = session('user');
-        
-      
+
+
         $user->deleted_at = now();
         $user->save();
-        
-      
-        $request->session()->flush(); 
+
+
+        $request->session()->flush();
         $request->session()->invalidate();
-        $request->session()->regenerateToken(); 
-        
-        
+        $request->session()->regenerateToken();
+
+
         $cinemaPrefix = $request->route('cinema_prefix');
         $languagePrefix = $request->route('language_prefix');
-        
-      
+
+
         return redirect()->route('home', [
             'cinema_prefix' => $cinemaPrefix,
             'language_prefix' => $languagePrefix,
         ]);
     }
-    
-    public function renderDelete(Request $request){
+
+    public function renderDelete(Request $request)
+    {
 
         // $user = session('user');
 
         // $user->deleted_at = now();
         // $user->save();
 
-        
+
         $cinemaPrefix = $request->route('cinema_prefix');
         $languagePrefix = $request->route('language_prefix');
 
 
-        
+
         return view('website.pages.account.delete-account', compact(
 
             'cinemaPrefix',
@@ -101,7 +102,7 @@ class UserController extends Controller
         ));
     }
 
-    
+
 
     public function favorites(Request $request)
     {
@@ -315,7 +316,7 @@ class UserController extends Controller
         // dd($user);
         return view('website.pages.account.profile-pictures', compact(
             'user',
-            
+
         ));
         // return view('website.pages.account.profile-pictures'['usr']);
     }
@@ -324,7 +325,8 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,webp',
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp',
+
         ]);
 
 
@@ -337,28 +339,19 @@ class UserController extends Controller
         $image = $request->file('profile_picture');
 
 
-
-
-
         $extension = $image->getClientOriginalExtension();
 
         // $originalPath = $image->storeAs("public/data/{$folder}", 'original.' . $extension);
         // $thumbPath = "public/data/{$folder}/thumb.webp";
         $image->storeAs("public/data/{$folder}", 'thumb.webp');
-
-
         $image->storeAs("public/data/{$folder}", 'image.webp');
 
 
         $originalFilename = $folder . '.' . $extension;
-        // 
-
-
-        // dd($originalFilename);
-
+     
         $user->profile_picture = $originalFilename;
         $user->save();
 
-        return redirect()->back()->with('success', 'Image uploaded successfully!'); 
+        return redirect()->back()->with('success', 'Image uploaded successfully!');
     }
 }

@@ -2469,6 +2469,33 @@ return [
     
 
 
+    // 'textfield_options' => [
+    //     'id' => uniqid(),
+    //     'livewire' => [
+    //         'wire:model' => 'form.{name}',
+    //     ],
+    //     'type' => \twa\cmsv2\Entities\FieldTypes\Select::class,
+    //     'label' => '',
+    //     'placeholder' => 'Select option',
+    //     'name' => 'textfield_options',
+    //     'multiple' => false,
+    //     'visible_selections' => 3,
+    //     'query_limit' => 50,
+    //     'options' => [
+    //         'type' => 'static',
+    //         'list' => [
+
+    //                 ['value' => 'topup' , 'label' => 'Top-Up'],
+    //                 ['value' => 'deduct' , 'label' => 'Deduct'],
+    //             ]
+
+    //         ],
+    //         'container' => 'col-span-12',
+    // ],
+
+   
+
+
     
 ];
 

@@ -73,5 +73,34 @@ class MoviesEntity extends Entity
 
     }
 
+    public function filters(){
+        $this->addFilter("movie_key");
+        $this->addFilter("movie_name");
+        $this->addFilter("label", ); 
+        $this->addFilter("slug");
+        $this->addFilter("condensed_name" );
+        // $this->addFilter("description");
+        $this->addFilter("duration");
+        $this->addFilter("cast");
+        $this->addFilter("director");
+        $this->addFilter("genre");
+        $this->addFilter("age_rating");
+
+        $this->addFilter("language");
+        // $this->addFilter("main_image");
+        // $this->addFilter("cover_image" );
+        // $this->addFilter("youtube_video" );
+        $this->addFilter("release_date" );
+        $this->addFilter("imdb_rating" );
+        $this->addFilter("imdb_vote" );
+
+
+        // $this->addFilter('distributor' );
+        // $this->addFilter('distributor_commission_settings');
+
+        return $this->filters;
+    }
+
+
 
 }

@@ -70,6 +70,38 @@ class UserController extends Controller
         return $this->responseData($account);
     }
 
+
+    public function uploadProfileImage(){
+
+
+        $form_data = clean_request();
+
+        $validator = Validator::make($form_data, [
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp',
+        ]);
+        if ($validator->errors()->count() > 0) {
+            return  $this->responseValidation($validator);
+        }
+
+        $user = request()->user;
+
+        $image = $form_data['profile_picture']; 
+        $folder = uniqid();
+        $extension = $image->getClientOriginalExtension();
+        $originalFilename = $folder . '.' . $extension;
+
+      
+        $image->storeAs("public/data/{$folder}", 'thumb.webp');
+        $image->storeAs("public/data/{$folder}", 'image.webp');
+
+
+        $user->profile_picture = $originalFilename;
+        $user->save();
+
+        return $this->response(notification()->success('Profile Picture succesfully added', 'Profile Picture succesfully added'));
+
+    }
+
     public function updateProfile()
     {
 
@@ -190,8 +222,6 @@ class UserController extends Controller
 
         return $this->response(notification()->success('Password succesfully changed', 'Password succesfully changed'));
     }
-
-
     public function forgetPassword()
     {
         $form_data = clean_request(['phone' => 'phone']);
@@ -238,16 +268,11 @@ class UserController extends Controller
         if ($validator->fails()) {
             return $this->responseValidation($validator);
         }
-
         $reset_token = $this->resetPasswordTokenRepository->check($form_data['reset_token']);
-
-
 
         if (!$reset_token) {
             return $this->response(notification()->error('Invalid or expired token', 'Invalid or expired token'));
         }
-
-        // dd($reset_token);
 
         try {
             $user = $this->userRepository->getUserById($reset_token->user_id);
@@ -255,12 +280,9 @@ class UserController extends Controller
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
 
-        // dd($user);
-
         if (Hash::check($form_data['password'], $user->password)) {
             return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
         }
-
 
         $this->userRepository->changePassword($user, $form_data['password']);
 
@@ -297,9 +319,6 @@ class UserController extends Controller
         } catch (\Exception $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
-
-       
-
 
         $minimum_recharge_amount = get_setting("minimum_topup_amount");
         $maximum_recharge_amount =  get_setting("maximum_topup_amount");
