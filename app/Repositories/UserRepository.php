@@ -176,7 +176,7 @@ class UserRepository implements UserRepositoryInterface
 
         $access_token = $this->tokenRepository->getActiveAccessToken($token);
         if ($access_token) {
-            $access_token->expired = now();
+            $access_token->expires_at = now();
             $access_token->save();
         }
 

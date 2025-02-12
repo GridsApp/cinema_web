@@ -74,6 +74,7 @@ class AuthMandatoryMiddleware
     
             }
         } catch (\Throwable $th) {
+           
             return $this->response(notification()->error("Not found", "Not found"));
         }
       

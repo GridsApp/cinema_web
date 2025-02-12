@@ -148,8 +148,10 @@ if (!function_exists('get_entity')) {
     function get_entity($slug)
     {
 
-  
-   
+        if(!$slug){
+            return null;
+        }
+
         $className = config('entity-mapping.' . $slug);
 
         return new $className;

@@ -292,6 +292,7 @@ class UserController extends Controller
     public function deleteAccount()
     {
 
+    
         $user = request()->user;
 
         $this->userRepository->deleteAccount($user);
