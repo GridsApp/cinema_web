@@ -47,4 +47,13 @@ class BranchesEntity extends Entity
     }
 
 
+    public function filters(){
+     
+        $this->addFilter("display");
+
+        return $this->filters;
+    }
+
+
+
 }

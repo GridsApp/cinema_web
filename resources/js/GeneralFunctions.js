@@ -109,16 +109,25 @@ export default class GeneralFunctions {
             async handleValueChanged(event) {
                 let response = await this.$wire.getData(event.detail.selected);
 
-                this.defaultPercentage = response.original.defaultPercentage;
-                this.conditions = response.original.conditions;
-
-                // console.log("value changed" , event);
+                if (response && response.original) {
+                    this.defaultPercentage =
+                        response.original.defaultPercentage || "";
+                    this.conditions = response.original.conditions || [""];
+                } else {
+                    console.error("Unexpected response:", response);
+                }
             },
 
             async handleValueSelected(event) {
                 let response = await this.$wire.getData(event.detail.selected);
-                this.defaultPercentage = response.original.defaultPercentage;
-                this.conditions = response.original.conditions;
+
+                if (response && response.original) {
+                    this.defaultPercentage =
+                        response.original.defaultPercentage || "";
+                    this.conditions = response.original.conditions || [""];
+                } else {
+                    console.error("Unexpected response:", response);
+                }
             },
 
             updateValueState() {
@@ -130,19 +139,32 @@ export default class GeneralFunctions {
                 };
             },
 
+            // init() {
+            //     let initalValue = this.$wire.value;
+
+            //     this.defaultPercentage = initalValue.defaultPercentage;
+            //     this.conditions = initalValue.conditions;
+
+            //     this.$watch("conditions", (value) => {
+            //         this.updateValueState();
+            //     });
+
+            //     this.$watch("defaultPercentage", (value) => {
+            //         this.updateValueState();
+            //     });
+            // },
+
             init() {
-                let initalValue = this.$wire.value;
+                let initialValue = this.$wire.value || {
+                    defaultPercentage: "",
+                    conditions: [""],
+                };
 
-                this.defaultPercentage = initalValue.defaultPercentage;
-                this.conditions = initalValue.conditions;
+                this.defaultPercentage = initialValue.defaultPercentage || "";
+                this.conditions = initialValue.conditions || [""];
 
-                this.$watch("conditions", (value) => {
-                    this.updateValueState();
-                });
-
-                this.$watch("defaultPercentage", (value) => {
-                    this.updateValueState();
-                });
+                this.$watch("conditions", () => this.updateValueState());
+                this.$watch("defaultPercentage", () => this.updateValueState());
             },
 
             addCondition() {
@@ -811,15 +833,15 @@ export default class GeneralFunctions {
     //     return {
     //         phone: '',
     //         iti: null,
-    
+
     //         init() {
     //             const input = this.$refs.phone;
-    
+
     //             this.iti = intlTelInput(input, {
     //                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
-    //                 separateDialCode: false, 
-    //                 // initialCountry: "auto", 
-                    
+    //                 separateDialCode: false,
+    //                 // initialCountry: "auto",
+
     //                 geoIpLookup: function(callback) {
     //                     fetch('https://ipinfo.io/json', { cache: 'reload' })
     //                         .then(response => response.json())
@@ -830,58 +852,55 @@ export default class GeneralFunctions {
     //                     return selectedCountryPlaceholder;
     //                 }
     //             });
-    
+
     //             // setTimeout(() => {
     //             //     const dialCode = document.querySelector('.iti__selected-dial-code');
     //             //     if (dialCode) {
     //             //         dialCode.style.display = 'none';
     //             //     }
     //             // }, 100);
-    
+
     //             // // Event listener for input changes
     //             input.addEventListener("input", () => {
     //                 if (this.iti.isValidNumber()) {
-                      
-                       
-    //                     this.phone = this.iti.getNumber(); 
+
+    //                     this.phone = this.iti.getNumber();
     //                     console.log(this.phone);
-                    
+
     //                     // input.value = this.iti.getNumber(intlTelInputUtils.numberFormat.NATIONAL); // Set the value to national number
     //                 } else {
 
     //                     this.phone = input.value;
     //                 }
-    
-                  
+
     //                 this.$dispatch('input', this.phone);
     //             });
-    
-           
+
     //         },
     //     };
     // }
 
     initPhoneField() {
         return {
-            phone: '',
+            phone: "",
             iti: null,
-        
+
             init() {
                 const input = this.$refs.phone;
-        
+
                 // Initialize the intl-tel-input instance
                 this.iti = intlTelInput(input, {
-                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
-                    separateDialCode: false, 
-                    geoIpLookup: function(callback) {
-                        fetch('https://ipinfo.io/json', { cache: 'reload' })
-                            .then(response => response.json())
-                            .then(data => callback(data.country))
-                            .catch(() => callback('us'));
+                    utilsScript:
+                        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.1.1/js/utils.js", // Required for number formatting and validation
+                    separateDialCode: false,
+                    geoIpLookup: function (callback) {
+                        fetch("https://ipinfo.io/json", { cache: "reload" })
+                            .then((response) => response.json())
+                            .then((data) => callback(data.country))
+                            .catch(() => callback("us"));
                     },
-                 
                 });
-    
+
                 // Event listener for input changes
                 input.addEventListener("input", () => {
                     if (this.iti.isValidNumber()) {
@@ -889,8 +908,9 @@ export default class GeneralFunctions {
 
                         console.log(countryCode);
                         if (countryCode) {
-                         
-                            this.phone = `+${countryCode}${this.iti.getNumber().replace('+' + countryCode, '')}`;
+                            this.phone = `+${countryCode}${this.iti
+                                .getNumber()
+                                .replace("+" + countryCode, "")}`;
                             console.log("Phone with country code:", this.phone);
                         } else {
                             console.error("Country code is undefined!");
@@ -898,45 +918,46 @@ export default class GeneralFunctions {
                     } else {
                         this.phone = input.value;
                     }
-                    this.$dispatch('input', this.phone);
+                    this.$dispatch("input", this.phone);
                 });
-    
-               
+
                 input.addEventListener("countrychange", () => {
                     const countryCode = this.getCountryCode();
                     if (countryCode) {
                         const currentPhone = this.iti.getNumber();
-                       
-                        this.phone = `+${countryCode}${currentPhone.replace('+' + countryCode, '')}`;
-                        input.value = this.phone; 
+
+                        this.phone = `+${countryCode}${currentPhone.replace(
+                            "+" + countryCode,
+                            ""
+                        )}`;
+                        input.value = this.phone;
                         console.log("Updated phone value:", this.phone);
                     } else {
                         console.error("Country code is undefined!");
                     }
                 });
             },
-    
+
             getCountryCode() {
                 if (this.iti) {
-                    const selectedCountryData = this.iti.getSelectedCountryData();
+                    const selectedCountryData =
+                        this.iti.getSelectedCountryData();
                     if (selectedCountryData && selectedCountryData.dialCode) {
                         return selectedCountryData.dialCode;
                     } else {
-                        console.error("Unable to fetch dialCode, selectedCountryData is missing.");
-                        return '';
+                        console.error(
+                            "Unable to fetch dialCode, selectedCountryData is missing."
+                        );
+                        return "";
                     }
                 } else {
                     console.error("intlTelInput (iti) is not initialized.");
-                    return '';
+                    return "";
                 }
-            }
+            },
         };
     }
-    
-    
-    
-    
-    
+
     initPhone() {
         let input = document.querySelector("#phone");
 

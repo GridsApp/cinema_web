@@ -168,7 +168,7 @@ class AuthController extends Controller
 
 
         $validator = Validator::make($form_data, [
-            'email' => 'required|email',
+            'email' => 'email',
             'identifier' => 'required',
             'login_provider' => 'required',
             'signature' => 'required',

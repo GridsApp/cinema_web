@@ -22,7 +22,6 @@
         <div class="underline text-xs cursor-pointer py-3" x-on:click="addCondition" >
             <i class="fa-regular fa-plus"></i> Add Condition
 
-
         </div>
         <div>
 
