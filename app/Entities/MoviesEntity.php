@@ -16,7 +16,7 @@ class MoviesEntity extends Entity
 
 
     public $params = [
-        'pagination' => 20,
+        'pagination' => 2,
         'form' => 'admin.forms.movie-form',
 
     ];
@@ -89,16 +89,16 @@ class MoviesEntity extends Entity
         $this->addFilter("genre");
         $this->addFilter("age_rating");
 
-        // $this->addFilter("language");
-        // $this->addFilter("main_image");
-        // $this->addFilter("cover_image" );
-        // $this->addFilter("youtube_video" );
-        // $this->addFilter("imdb_rating" );
-        // $this->addFilter("imdb_vote" );
+        $this->addFilter("language");
+        $this->addFilter("main_image");
+        $this->addFilter("cover_image" );
+        $this->addFilter("youtube_video" );
+        $this->addFilter("imdb_rating" );
+        $this->addFilter("imdb_vote" );
 
 
-        // $this->addFilter('distributor' );
-        // $this->addFilter('distributor_commission_settings');
+        $this->addFilter('distributor' );
+        $this->addFilter('distributor_commission_settings');
 
         return $this->filters;
     }

@@ -170,7 +170,7 @@ class OtpController extends Controller
             return $this->response(notification()->error("Please wait until your active token is expired", "Please wait until your active token is expired"));
         }
 
-        if ($this->tokenRepository->countPreviousVerifyTokens($user->id) > 5) {
+        if ($this->tokenRepository->countPreviousVerifyTokens($user->id) > 20) {
             return $this->response(notification()->error("Limit Exceeded", "Limit Exceeded"));
         }
 

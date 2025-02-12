@@ -154,7 +154,7 @@ footer {
         @apply text-gray-300 text-[12px];
     }
 }
-nav {
+.nav-bar {
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.0705882353);
     .nav-text {
         @apply uppercase ltr:text-[10px] rtl:text-[12px] tracking-[1.95px] font-bold hover:!text-[#c51a24];

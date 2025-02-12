@@ -1,5 +1,5 @@
 
-<nav class="main" x-data="{ scrolled: false, isHome: {{ Route::currentRouteName() === 'home' ? 'true' : 'false' }}, menu_mobile: false }" 
+<nav class="main nav-bar" x-data="{ scrolled: false, isHome: {{ Route::currentRouteName() === 'home' ? 'true' : 'false' }}, menu_mobile: false }" 
     x-init="if (isHome) { window.addEventListener('scroll', () => { scrolled = window.scrollY > 0; }); }" 
     :class="{
         'scrolled': isHome && scrolled,
