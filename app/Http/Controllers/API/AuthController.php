@@ -200,7 +200,6 @@ class AuthController extends Controller
             $user = User::where('identifier', $identifier)->whereNull('deleted_at')->first();
         }
 
-
         if (!$user) {
             $user = new User();
             $user->name = $form_data['name'];
@@ -209,15 +208,11 @@ class AuthController extends Controller
             $user->token = $this->tokenRepository->createUserToken();
         }
 
-
         $user->identifier = $identifier;
         $user->login_provider = $login_provider;
         $user->save();
 
-
         $access_token = $this->tokenRepository->createAccessToken($user);
-
-
         $this->cardRepository->createCard($user);
 
 
