@@ -61,11 +61,9 @@ class  OrderController extends Controller
 
     public function createOrder($cart_id, $payment_method){
 
-       
-
-
         try {
             $cart = $this->cartRepository->getCartById($cart_id);
+            // dd($cart);
             $cart_details = $this->cartRepository->getCartDetails($cart);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Cart Error', $e->getMessage()));
@@ -77,7 +75,6 @@ class  OrderController extends Controller
 
         $subtotal = $cart_details['subtotal']['value'];
 
-      
 
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->{$field} = $user_id;
@@ -90,8 +87,6 @@ class  OrderController extends Controller
 
 
         switch ($payment_method->key) {
-
-
             case 'CASH':
             case 'CC-DC':
 
@@ -207,10 +202,13 @@ class  OrderController extends Controller
     public function attempt()
     {
 
-        $form_data = clean_request([]);
+        $form_data = clean_request(['cart_id']);
 
+
+
+   
         $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id']);
-
+       
         if ($check) {
             return $this->response($check);
         }
@@ -221,7 +219,10 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
         }
     
-        return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
+
+        // dd(request()->user);
+        // return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
+        return $this->createOrder( $form_data['cart_id'] , $payment_method);
 
     }
     public function refund()

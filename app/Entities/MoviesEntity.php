@@ -16,7 +16,7 @@ class MoviesEntity extends Entity
 
 
     public $params = [
-        'pagination' => 2,
+        'pagination' => 50,
         'form' => 'admin.forms.movie-form',
 
     ];

@@ -64,13 +64,18 @@ class CartRepository implements CartRepositoryInterface
     }
     public function getCartById($cart_id)
     {
+
+    // dd($cart_id);
+
         try {
             $user_cart = Cart::where('id', $cart_id)
                 ->where('expires_at', '>', now())->whereNull('deleted_at')->firstOrFail();
+
+                // dd($user_cart);
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Cart with ID {$cart_id} not found or expired.");
         }
-
+        // dd($user_cart);
         return $user_cart;
     }
     public function createCart($user_id, $user_type, $system_id)
@@ -418,6 +423,9 @@ class CartRepository implements CartRepositoryInterface
 
     public function getCartDetails($cart)
     {
+
+
+        // dd($cart);
         try {
             $cart_id = $cart->id;
 
