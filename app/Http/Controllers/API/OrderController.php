@@ -127,6 +127,8 @@ class  OrderController extends Controller
             case 'WP-POS':
             case 'WP':
 
+
+                // dd("here");
                 $card_number = $cart->card_number ?? null;
 
 
@@ -136,22 +138,13 @@ class  OrderController extends Controller
                     } catch (\Exception $e) {
                         return $this->response(notification()->error('The card number is not linked to any valid barcode', $e->getMessage()));
                     }
-
-                    // $user_card = UserCard::where('barcode', $card_number)->first();
-                    // if (!$user_card) {
-                    //     return $this->response(notification()->error('Card Error', 'The card number is not linked to any valid barcode.'));
-                    // }
                 } elseif ($cart) {
-                    // $this->cardRepository->getca
                     try {
                         $user_card = $this->cardRepository->getCardByUserId($cart->user_id);
                     } catch (\Exception $e) {
                         return $this->response(notification()->error('No valid card found for this user', $e->getMessage()));
                     }
-                    // $user_card = UserCard::where('user_id', $cart->user_id)->first();
-                    // if (!$user_card) {
-                    //     return $this->response(notification()->error('Card Error', 'No valid card found for this user.'));
-                    // }
+                 
                 } else {
                     return $this->response(notification()->error('No user card found', 'No user card found'));
                 }
@@ -189,7 +182,14 @@ class  OrderController extends Controller
 
                     $this->cardRepository->createWalletTransaction("out", $subtotal, $wallet_user, "Wallet deducted for order", $order["order_id"], null, $operator_id, $operator_type);
                 }
-                return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
+
+                return $this->responseData([
+                    'order_id' => $order["order_id"],
+                    ...$this->details($order["order_id"], false),
+                ], notification()->success('Order completed', 'Your order has been successfully completed'));
+
+                break;
+                // return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
             default:
 
