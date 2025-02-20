@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Interfaces\KioskUserRepositoryInterface;
 use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
@@ -23,17 +24,20 @@ class AuthMandatoryMiddleware
      private TokenRepositoryInterface $tokenRepository;
      private UserRepositoryInterface $userRepository;
      private PosUserRepositoryInterface $posUserRepository;
+     private KioskUserRepositoryInterface $kioskUserRepository;
  
  
      public function __construct(
          TokenRepositoryInterface $tokenRepository, 
          UserRepositoryInterface $userRepository,
-         PosUserRepositoryInterface $posUserRepository
+         PosUserRepositoryInterface $posUserRepository,
+         KioskUserRepositoryInterface $kioskUserRepository
          )
      {
          $this->tokenRepository = $tokenRepository;
          $this->userRepository = $userRepository;
          $this->posUserRepository = $posUserRepository;
+         $this->kioskUserRepository = $kioskUserRepository;
      }
 
     public function handle(Request $request, Closure $next): Response
@@ -71,6 +75,16 @@ class AuthMandatoryMiddleware
                         'system_id' => 2
                     ]);
                     break;
+
+                case "KIOSK" :
+                        $user = $this->kioskUserRepository->getUserById($access_token->user_id);
+                        request()->merge([
+                            'user_type' => 'KIOSK',
+                            'user' => $user,
+                            'system_id' => 3
+                        ]);
+                        break;
+
     
             }
         } catch (\Throwable $th) {
