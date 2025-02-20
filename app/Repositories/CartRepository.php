@@ -113,6 +113,8 @@ class CartRepository implements CartRepositoryInterface
     }
     public function addSeatToCart($cart_id, $seat, $movie_show, $zone_id)
     {
+
+
         try {
 
             $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date);
@@ -132,9 +134,12 @@ class CartRepository implements CartRepositoryInterface
             // $cart_seat->final_price = $price;
             // $cart_seat->discount = 0;
             $cart_seat->save();
+
+     
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    
         return $cart_seat;
     }
     public function removeSeatFromCart($cart_id, $seat, $movie_show_id)

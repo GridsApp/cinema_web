@@ -160,17 +160,19 @@ class CartController extends Controller
         }
 
 
+
         try {
             DB::beginTransaction();
 
             foreach ($seats as $seat) {
-
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
 
+         
+
             DB::commit();
         } catch (\Exception $th) {
-
+            // dd("here");
             DB::rollBack();
             return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }

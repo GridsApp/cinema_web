@@ -69,6 +69,11 @@ class KioskUserController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'pincode' => $user->pincode,
+                'branch' => [
+                  'id'=>$user->branch_id,
+                  'label'=>$user->branch->label ?? '',
+                ]
             ],
             'access_token' => $access_token
         ]);
