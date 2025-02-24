@@ -32,7 +32,7 @@ class MoviesEntity extends Entity
         $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("label", ["container" => 'col-span-7', ]); 
         $this->addField("slug", ["container" => 'col-span-7']); // sma3e ma3loumet menel label
-          $this->addField("condensed_name" , ["container" => 'col-span-7']);
+        $this->addField("condensed_name" , ["container" => 'col-span-7']);
         $this->addField("description" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("duration" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("cast" , ["container" => 'col-span-7', 'required' => true]);
@@ -76,30 +76,23 @@ class MoviesEntity extends Entity
     public function filters(){
         $this->addFilter("cast");
         $this->addFilter("release_date");
-        
         $this->addFilter("movie_key");
         $this->addFilter("movie_name");
         $this->addFilter("label", ); 
         $this->addFilter("slug");
         $this->addFilter("condensed_name" );
-        // $this->addFilter("description");
         $this->addFilter("duration");
-      
         $this->addFilter("director");
         $this->addFilter("genre");
         $this->addFilter("age_rating");
-
         $this->addFilter("language");
-        $this->addFilter("main_image");
-        $this->addFilter("cover_image" );
+        // $this->addFilter("main_image");
+        // $this->addFilter("cover_image" );
         $this->addFilter("youtube_video" );
         $this->addFilter("imdb_rating" );
         $this->addFilter("imdb_vote" );
-
-
         $this->addFilter('distributor' );
         $this->addFilter('distributor_commission_settings');
-
         return $this->filters;
     }
 
