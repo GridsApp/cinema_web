@@ -3,7 +3,7 @@
 
     <div class="flex flex-col gap-4">
     <div>
-        @include('website.components.inputs.phone-number', [
+        {{-- @include('website.components.inputs.phone-number', [
             'id' => 'phone',
             'wireModel' => 'phone',
             'name' => 'phone',
@@ -19,7 +19,11 @@
      
         @error('phone')
             <div class="form-error-message">{{ $message }}</div>
-        @enderror
+        @enderror --}}
+        <livewire:components.phone wire:model="phone" />
+
+    {!! field('phone_number') !!}
+
     </div>
 
     <div>

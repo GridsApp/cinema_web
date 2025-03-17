@@ -63,7 +63,6 @@ class  OrderController extends Controller
 
         try {
             $cart = $this->cartRepository->getCartById($cart_id);
-            // dd($cart);
             $cart_details = $this->cartRepository->getCartDetails($cart);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Cart Error', $e->getMessage()));
@@ -188,6 +187,7 @@ class  OrderController extends Controller
                     ...$this->details($order["order_id"], false),
                 ], notification()->success('Order completed', 'Your order has been successfully completed'));
 
+                
                 break;
                 // return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
@@ -335,6 +335,9 @@ class  OrderController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
+
+
+        // $total_discount = 20000;
 
 
         try {

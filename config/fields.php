@@ -44,9 +44,9 @@ return [
         'placeholder' => 'Enter label',
         'name' => 'label',
         'container' => 'col-span-6',
-        'channel_type' => 'sender',   // Channel type for 'label'
-        'channel' => $channel,        // Same channel for both fields
-        'channel_language' => $firstLanguage  // This will work as well
+        'channel_type' => 'sender',   
+        'channel' => $channel,       
+        'channel_language' => $firstLanguage  
     ],
 
     'long_id' => [

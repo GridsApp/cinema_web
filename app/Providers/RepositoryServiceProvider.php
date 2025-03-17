@@ -11,6 +11,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+
         $this->app->bind(\App\Interfaces\MovieRepositoryInterface::class, \App\Repositories\MovieRepository::class);
         $this->app->bind(\App\Interfaces\MovieShowRepositoryInterface::class, \App\Repositories\MovieShowRepository::class);
         $this->app->bind(\App\Interfaces\BranchRepositoryInterface::class, \App\Repositories\BranchRepository::class);

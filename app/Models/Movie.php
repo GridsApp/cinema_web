@@ -18,10 +18,10 @@ class Movie extends Model
     ];
 
 // In the Movie model
-public function movieGenres()
-{
-    return $this->hasMany(MovieGenre::class, 'id', 'genre_id');
-}
+// public function movieGenres()
+// {
+//     return $this->hasMany(MovieGenre::class, 'id', 'genre_id');
+// }
 
 public function movieShows()
 {
