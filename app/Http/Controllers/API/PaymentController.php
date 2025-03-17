@@ -30,8 +30,14 @@ class PaymentController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
-        $system_id = get_system_from_type($user_type);
+      
 
+        try {
+            $system_id = get_system_from_type($user_type);
+        } catch (\Throwable $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
+        }
+       
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)->get()->map(function ($payment_method) {
             return [
                 'id' => $payment_method->id,

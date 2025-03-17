@@ -40,7 +40,14 @@ class WalletController extends Controller
 
         $user = request()->user;
         $user_type = request()->user_type;
-        $system_id = get_system_from_type($user_type);
+
+
+        try {
+            $system_id = get_system_from_type($user_type);
+        } catch (\Throwable $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
+        }
+       
 
         try {
             $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id);
