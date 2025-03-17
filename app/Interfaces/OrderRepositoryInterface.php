@@ -11,9 +11,12 @@ interface OrderRepositoryInterface
     public function getOrderSeats($order_id, $grouped = false);
     public function getOrderSeatsByIds($order_id, $order_seat_id);
     public function getOrderItems($order_id, $grouped = false);
+
     public function getOrderTopups($order_id, $grouped = false);
     public function getPaymentMethodById($payment_method_id);
     public function getPosuserLastOrder($pos_user_id);
     public function generateLongId($id);
 
+
+    public function getOrderCoupons($order_id);
 }

@@ -26,7 +26,7 @@ class OrderSeat extends Model
     {
         return $this->belongsTo(Theater::class, 'theater_id')->whereNull('deleted_at');
     }
-
+   
     public function time()
     {
         return $this->belongsTo(Time::class, 'time_id')->whereNull('deleted_at');

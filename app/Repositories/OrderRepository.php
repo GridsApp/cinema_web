@@ -326,6 +326,24 @@ class OrderRepository implements OrderRepositoryInterface
         }
         return $order_seats;
     }
+
+
+    public function getOrderCoupons($order_id) {
+        try {
+            $order_coupons = OrderCoupon::whereNull('deleted_at')
+                ->where('order_id', $order_id)
+               
+                ->get();
+    
+               
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $order_coupons;
+
+    }
+ 
+  
     public function getOrderItems($order_id, $grouped = false)
     {
 

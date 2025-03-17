@@ -59,7 +59,8 @@ class  OrderController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function createOrder($cart_id, $payment_method){
+    public function createOrder($cart_id, $payment_method)
+    {
 
         try {
             $cart = $this->cartRepository->getCartById($cart_id);
@@ -143,7 +144,6 @@ class  OrderController extends Controller
                     } catch (\Exception $e) {
                         return $this->response(notification()->error('No valid card found for this user', $e->getMessage()));
                     }
-                 
                 } else {
                     return $this->response(notification()->error('No user card found', 'No user card found'));
                 }
@@ -187,15 +187,14 @@ class  OrderController extends Controller
                     ...$this->details($order["order_id"], false),
                 ], notification()->success('Order completed', 'Your order has been successfully completed'));
 
-                
+
                 break;
-                // return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
+            // return $this->response(notification()->success('Order completed', 'Your order has been successfully completed'));
 
             default:
 
                 break;
         }
-
     }
 
 
@@ -206,9 +205,9 @@ class  OrderController extends Controller
 
 
 
-   
+
         $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id']);
-       
+
         if ($check) {
             return $this->response($check);
         }
@@ -218,12 +217,11 @@ class  OrderController extends Controller
         } catch (\Exception $th) {
             return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
         }
-    
+
 
         // dd(request()->user);
         // return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
-        return $this->createOrder( $form_data['cart_id'] , $payment_method);
-
+        return $this->createOrder($form_data['cart_id'], $payment_method);
     }
     public function refund()
     {
@@ -575,22 +573,32 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
 
+        try {
+
+            $order_discounts = $this->orderRepository->getOrderCoupons($order->id);
+        } catch (\Throwable $e) {
+            return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
+        }
+
         $order_seats = $order_seats->map(function ($seats) use ($order) {
 
             $movie = $seats->movie;
             return [
-                // 'order_id' => $order->id,
                 'movie_name' => $movie->name ?? '',
                 'movie_image' => get_image($movie->main_image) ?? '',
                 'duration' => minutes_to_human($movie->duration),
-                // 'order_barcode' => $order->barcode,
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
-                // 'order_barcode' => $order->barcode,
                 'branch' => $seats->theater->branch->label ?? '',
-                'date' => $seats->date ? now()->parse($seats->date)->format('Y-m-d') : '', // Format as YYYY-MM-DD
+                'date' => now()->parse($seats->date)->format('d M, Y'),
                 'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
                 'theater' => $seats->theater->label ?? '',
                 'seats' => $seats->seat,
+                'price' => currency_format($seats->price),
+                'gained_points' => $seats->gained_points,
+                'type' => $seats->theater->PriceGroup->label ?? '',
+                'is_imtiyaz' => !empty($seats->imtiyaz_phone),
+
+
             ];
         });
 
@@ -618,6 +626,29 @@ class  OrderController extends Controller
         // dd( $pos_user_id->branch);
 
 
+
+
+        $order_discounts = $order_discounts->map(function ($item) {
+            return [
+                'label' => $item->label ?? '',
+                'price' => currency_format($item->amount),
+
+            ];
+        });
+
+
+        $subtotal = collect($order_seats)->where('is_imtiyaz' , false)->sum('price.value') +
+            collect($order_items)->sum('price.value') +
+            collect($order_topups)->sum('price.value');
+
+
+        $discount =  collect($order_discounts)->sum('price.value');
+
+        $total = $subtotal - $discount;
+        if ($total < 0) {
+            $total = 0;
+        }
+
         $result = [
             'loyalty_points_balance' => $user_loyalty_balance ? [
                 "value" => $user_loyalty_balance,
@@ -627,21 +658,34 @@ class  OrderController extends Controller
             'wallet_balance' => currency_format($user_wallet_balance),
             'order' => [
                 'id' => $order->id,
-               
+                'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
+
                 'long_id' => $this->orderRepository->generateLongId($order->id),
+                'reference' =>  $order->reference,
                 'barcode' =>  $order->barcode,
+                'system' => $order->system->label ?? '',
+                'payment_method' => $order->paymentMethod->label ?? '',
+                'customer' => $order->user?->only(['id', 'full_name', 'phone', 'email']),
                 'cashier' => $pos_user_id->name ?? null,
                 'branch' => [
                     'label_en' => $pos_user_id->branch->label_en ?? null,
                     'label_ar' => $pos_user_id->branch->label_ar ?? null
                 ],
-                'customer' => $user->name ?? null,
                 'card_number' => $user_card_number->barcode ?? null,
+                'printed_at' => $order->printed,
+
+                'subtotal' => currency_format($subtotal),
+                'discount' =>  currency_format($discount),
+                'total' =>  currency_format($total),
+
+
+
 
             ],
             'tickets' => $order_seats,
             'items' =>  $order_items,
             'topups' => $order_topups,
+            'discounts' => $order_discounts,
 
 
 
