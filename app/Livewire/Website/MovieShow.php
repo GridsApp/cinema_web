@@ -21,7 +21,9 @@ class MovieShow extends Component
     public $firstBranch;
     public $otherBranches;
     public $slug;
-    public $branchPrefix;  // Store branchPrefix in component state
+    public $branchPrefix; 
+    public  $cinema_prefix ;
+    public   $language_prefix;
 
     private MovieShowRepositoryInterface $movieShowRepository;
     private BranchRepositoryInterface $branchRepository;
@@ -37,12 +39,16 @@ class MovieShow extends Component
 
     public function mount($slug)
     {
+
+        $this->cinema_prefix = request()->route('cinema_prefix');
+        $this->language_prefix = request()->route('language_prefix');
         $this->slug = $slug;
     
-        // Get date from URL, fallback to current date
+
         $this->selectedDate = request()->query('date', Carbon::now()->format('Y-m-d'));
         $this->selectedTime = request()->query('time', null);
     
+        // dd($this->selectedTime);
 
    
         $this->generateDates();
@@ -65,7 +71,9 @@ class MovieShow extends Component
 
     public function selectDate($date)
     {
+      
         $this->selectedDate = $date;
+
         $this->fetchMovieShows();
     }
 
@@ -86,9 +94,7 @@ class MovieShow extends Component
 
 
         $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)->toArray();
-        // $shows = $this->movieShowRepository->getMovieShows($branch->id, $movie_id, $date)
-        // ->load('theater', 'reservedSeats');
-    
+
         if (empty($shows)) {
             $this->movieShows = [];
             $this->firstBranch = $branch->label;

@@ -22,9 +22,6 @@ class CommissionSettings extends FieldType
     {
 
 
-
-
-
         if(!isset($data->{$this->field['name']}) || (isset($data->{$this->field['name']}) && !$data->{$this->field['name']})){
             return [
                 "defaultPercentage" => "",
@@ -32,6 +29,14 @@ class CommissionSettings extends FieldType
             ];
         }
 
+
+        $json = $data->{$this->field['name']};
+
+   
+        if (is_array($json)) {
+            return $json;
+        }
+    
         return json_decode($data->{$this->field['name']} ?? '
                     {
                       defaultPercentage : "",
