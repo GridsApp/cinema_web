@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\POS;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CartRepositoryInterface;
 use App\Models\Movie;
 use App\Models\System;
 use App\Models\Theater;
@@ -12,6 +13,20 @@ use twa\cmsv2\Traits\APITrait;
 class MovieController extends Controller
 {
     use APITrait;
+
+
+    //cartRepository
+
+    private CartRepositoryInterface $cartRepository;
+
+
+
+    public function __construct(
+        CartRepositoryInterface $cartRepository
+
+    ) {
+        $this->cartRepository = $cartRepository;
+    }
 
     public function getBranchPosActiveMovieShows($branch_id)
     {
@@ -48,6 +63,11 @@ class MovieController extends Controller
             ->get();
 
 
+
+
+        
+
+
         $customMovies = $movies->map(function ($movie) {
 
             $total_seats = 0;
@@ -60,7 +80,10 @@ class MovieController extends Controller
                 &$total_reserved_seats
             ) {
 
-                $reserved_seats = 10;
+
+                // TO BE OPTIMIZED
+
+                $reserved_seats = count($this->cartRepository->getReservedSeats($show->id));
 
                 $theater = $show->theater;
 

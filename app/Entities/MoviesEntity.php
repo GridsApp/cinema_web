@@ -23,6 +23,7 @@ class MoviesEntity extends Entity
     
 
     public function fields(){
+        dd("here");
         $channel = "channel".uniqid();
         $languages =config('languages');
         $firstLanguage = $languages[0]['prefix'] ?? '';
@@ -67,6 +68,7 @@ class MoviesEntity extends Entity
         $this->addColumn("cast" );
         $this->addColumn("director" );
 
+  
 
         return $this->columns;
 

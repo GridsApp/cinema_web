@@ -42,7 +42,7 @@ class TheaterSeatsController extends Controller
 
         $reserved_seats= $this->cartRepository->getReservedSeats($movie_show_id);
 
-        
+        // dd($reserved_seats);
         $rows =  collect($theater_map)->map(function ($item) {
             $item = collect($item)->where('isSeat', true)->first();
 
