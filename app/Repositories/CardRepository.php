@@ -153,7 +153,10 @@ class CardRepository implements CardRepositoryInterface
             ->where('user_id', $user->id)
             ->latest()->first();
 
-        return $transaction->balance ?? 0;
+
+        $result =  $transaction->balance ?? 0;
+
+        return (double) $result;
     }
 
     public function getLoyaltyTransactions($user)
@@ -243,6 +246,8 @@ class CardRepository implements CardRepositoryInterface
 
         $wallet_balance = $this->getWalletBalance($user);
         $loyalty_balance = $this->getLoyaltyBalance($user);
+
+
 
         $card = [
 
