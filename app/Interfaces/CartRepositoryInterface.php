@@ -23,7 +23,7 @@ interface CartRepositoryInterface
     public function getCartCoupons($cart_id);
     public function getCartCouponsIds($cart_id);
     public function addCouponToCart($cart_id,$coupon);
-    public function removeCouponFromCart($cart_id , $coupon_id);
+    public function removeCouponFromCart($cart_id , $coupon_code);
     public function checkCouponInCart($cart_id , $coupon_id);
 
 

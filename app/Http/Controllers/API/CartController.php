@@ -503,7 +503,7 @@ class CartController extends Controller
     {
 
         $form_data = clean_request([]);
-        $check = $this->validateRequiredFields($form_data, ['cart_id', 'coupon_id']);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'coupon_code']);
 
         if ($check) {
             return $this->response($check);
@@ -519,7 +519,7 @@ class CartController extends Controller
         }
 
         try {
-            $this->cartRepository->removeCouponFromCart($form_data["cart_id"], $form_data["coupon_id"]);
+            $this->cartRepository->removeCouponFromCart($form_data["cart_id"], $form_data["coupon_code"]);
             return $this->response(notification()->success('Coupon removed successfully', 'Coupon removed successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error removing Coupon', $e->getMessage()));
@@ -663,6 +663,7 @@ class CartController extends Controller
 
         return $this->responseData(([
             'coupon_code' => $cartDetails["coupon_codes"],
+            'coupons' => $cartDetails["coupons"],
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
             'lines' => $cartDetails["lines"],

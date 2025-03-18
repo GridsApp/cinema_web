@@ -414,11 +414,16 @@ class CartRepository implements CartRepositoryInterface
         return $cart_coupon;
     }
 
-    public function removeCouponFromCart($cart_id, $coupon_id)
+    public function removeCouponFromCart($cart_id, $coupon_code)
     {
         try {
-            $cart_coupon = CartCoupon::where('cart_id', $cart_id)->where('coupon_id', $coupon_id)->firstOrFail();
-            $cart_coupon->delete();
+            $cart_coupon = CartCoupon::select('cart_coupons.id')->where('cart_coupons.cart_id', $cart_id)
+            ->join('coupons' , 'cart_coupons.coupon_id' , 'coupons.id')
+            ->where('coupons.code' , $coupon_code)
+            ->firstOrFail();
+        
+            CartCoupon::where('id' , $cart_coupon->id)->delete();
+    
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         } catch (Exception $e) {
@@ -554,6 +559,7 @@ class CartRepository implements CartRepositoryInterface
             return [
                 'cart_id' => $cart->id,
                 'coupon_codes' => $coupon_codes->implode(", "),
+                'coupons' => $coupon_codes->values(),
                 'user_id' => $cart->user_id,
                 'card_number' => $cart->card_number,
                 'subtotal' => currency_format($total),
