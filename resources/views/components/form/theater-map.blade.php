@@ -166,6 +166,8 @@
                                                     class="fa-solid fa-chair-office text-[20px] cursor-pointer"
                                                     :style="'color:' + cell.color"> </i> --}}
 
+                                                    
+
                                                     <i  x-on:click="() => handleSeatClick(cell)" class="fa-solid fa-chair text-[20px] cursor-pointer"  :style="'color:' + cell.color"></i>
                                                 <div
                                                     class="absolute bottom-2 flex flex-col items-center hidden mb-5 group-hover:flex">

@@ -52,6 +52,47 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         });
     });
 
+    Route::get('/force-update/{platform}/{version}' , function($platform , $version){
+ 
+        switch($platform){
+            case 'android' :
+                $value =  env('ANDROID_VERSION' , "1.0.0") > $version;
+                $link = env('ANDROID_LINK');
+ 
+                break;
+            case 'ios' :
+                $value =  env('IOS_VERSION', "1.0.0") > $version;
+                $link = env('IOS_LINK');
+                break;
+            case 'pos' :
+                $value  = env('POS_VERSION' , "1.0.0") > $version;
+//                $link = env('APP_URL').'/app/pos/v'.env('POS_VERSION').'/iraqi_cinema_pos_setup.exe';
+            $link = env("POS_LINK");
+                break;
+            case 'kiosk' :
+                $value =  env('KIOSK_VERSION' , "1.0.0") > $version;
+//                $link = env('APP_URL').'/app/kiosk/v'.env('KIOSK_VERSION').'/iraqi_cinema_kiosk_setup.exe';
+                $link = env("KIOSK_LINK");
+                break;
+        }
+ 
+        return [
+            'status' => $value,
+            'link' => $link
+        ];
+ 
+        //return false;
+ 
+    })->whereIn('platform' , ['android' , 'ios' , 'pos' , 'kiosk']);
+ 
+    Route::get("/splash" , function(){
+       return response()->json([
+           'maintenance' => env('MAINTENANCE_MODE' , "0"),
+ 
+       ], 200);
+    });
+
+
     Route::group(['prefix' => 'cart', 'middleware' => AuthMandatoryMiddleware::class], function () {
 
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);

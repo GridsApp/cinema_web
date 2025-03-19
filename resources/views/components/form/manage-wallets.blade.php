@@ -18,6 +18,9 @@
     @endcomponent
 
 
+
+    @if($this->form['card_number'])
+
     @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel', 'title' => 'Transactions'])
         <table class="twa-table table-auto">
             <thead>
@@ -72,7 +75,7 @@
             </tbody>
         </table>
     @endcomponent
-
+        @endif
 
     @if($form["card_number"])
     @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Topup/Deduct'])
@@ -89,4 +92,5 @@
         </form>
     @endcomponent
     @endif
+    
 </div>

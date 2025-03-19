@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
+use App\Http\Controllers\PriceGroupZonesController;
 use App\Livewire\Website\ForgotPasswordForm;
 use App\Livewire\Website\OtpVerificationForm;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+
+
+Route::view('/app/update/google' , 'pages.update-google');
 
 Route::prefix('payment')->group(function () {
   Route::get('/initialize/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'initialize'])->name('payment.initialize');
@@ -106,6 +110,13 @@ Route::post('/cart/add-seats', [\App\Http\Controllers\WEBSITE\CartController::cl
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
+
+
+  Route::get("/price-groups/{id}/zones", [PriceGroupZonesController::class, 'render'])->name('price-group-zones');
+  Route::get("/price-groups/{id}/zones/create", [PriceGroupZonesController::class, 'createZone'])->name('price-group-zones.create');
+  Route::get("/price-groups/{id}/zones/{zone_id}/update", [PriceGroupZonesController::class, 'editZone'])->name('price-group-zones.update');
+
+
 });
 Route::get('reports/reports/reports', function () {
 

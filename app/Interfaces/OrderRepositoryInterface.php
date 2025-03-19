@@ -13,6 +13,7 @@ interface OrderRepositoryInterface
     public function getOrderRefundedSeats($order_id , $grouped= false);
 
     public function getOrderSeatsByIds($order_id, $order_seat_id);
+    public function getOrderSeatsByCodes($order_id, $order_seat_code);
     public function getOrderItems($order_id, $grouped = false);
 
     public function getOrderTopups($order_id, $grouped = false);

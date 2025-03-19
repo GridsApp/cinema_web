@@ -83,10 +83,10 @@ return [
                 'label' => 'Price Groups',
                 'link' => routeObject('entity', ['slug' => 'price-groups'])
             ],
-            [
-                'label' => 'Price Group Zones',
-                'link' => routeObject('entity', ['slug' => 'price-group-zones'])
-            ]
+            // [
+            //     'label' => 'Price Group Zones',
+            //     'link' => routeObject('entity', ['slug' => 'price-group-zones'])
+            // ]
         ],
     ],
 
@@ -177,7 +177,7 @@ return [
     ],
     [
         'display' => true,
-        'label' => 'Website Section',
+        'label' => 'Website',
         'icon' => '<i class="fa-regular fa-grid-2"></i>',
         'children' => [
 

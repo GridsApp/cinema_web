@@ -963,7 +963,7 @@ return [
         'multiple' => false,
         'visible_selections' => 3,
         'query_limit' => 50,
-        'quick_add' => "times",
+        // 'quick_add' => "times",
         'options' => [
             'type' => 'query',
             'table' => 'times',
@@ -982,7 +982,7 @@ return [
         'multiple' => false,
         'visible_selections' => 2,
         'query_limit' => 50,
-        'quick_add' => 'screen-types',
+        // 'quick_add' => 'screen-types',
         'options' => [
             'type' => 'query',
             'table' => 'screen_types',

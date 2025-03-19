@@ -229,7 +229,7 @@ class  OrderController extends Controller
 
         $validator = Validator::make($form_data, [
             'order_id' => 'required',
-            'order_seat_ids' => 'required|array',
+            'order_seat_codes' => 'required|array',
             'manager_pin' => 'required',
             'manager_id' => 'required'
         ]);
@@ -239,11 +239,13 @@ class  OrderController extends Controller
             return $this->responseValidation($validator);
         }
 
-
+     
         $user_id = request()->user->id;
         $user_type = request()->user_type;
-        $field = get_user_field_from_type($user_type);
+;        $field = get_user_field_from_type($user_type);
         $user_branch = request()->user->branch_id;
+
+      
 
         $order_id = $form_data['order_id'];
 
@@ -266,8 +268,14 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Wrong Pin', $th->getMessage()));
         }
 
+        // try {
+        //     $order_seats = $this->orderRepository->getOrderSeatsByIds($form_data['order_id'], $form_data['order_seat_ids']);
+        // } catch (\Exception $th) {
+        //     return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
+        // }
+
         try {
-            $order_seats = $this->orderRepository->getOrderSeatsByIds($form_data['order_id'], $form_data['order_seat_ids']);
+            $order_seats = $this->orderRepository->getOrderSeatsByCodes($form_data['order_id'], $form_data['order_seat_codes']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
         }
@@ -276,10 +284,6 @@ class  OrderController extends Controller
             ->get();
 
 
-        // if ($order_seats->where('discount', '>', 0)) {
-        //     // dd($order_seats->where('discount', '>', 0));
-        //     return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
-        // }
         if ($order_coupons->count() > 0) {
             return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
         }
@@ -309,12 +313,17 @@ class  OrderController extends Controller
 
 
 
-        if ($payment_method->key == 'CASH') {
-            return $this->response(notification()->success('cash', 'Cash.'));
+        if ($payment_method->key != 'CASH') {
+            $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet");
         }
 
-        $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet");
-        return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
+
+
+        return $this->responseData($this->details($order_id, false)
+        
+        , notification()->success('Refund Successful', 'Your order has been successfully refunded'));
+
+        // return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
     }
     //To be checked By hovig
     public function get()
@@ -519,6 +528,7 @@ class  OrderController extends Controller
     public function details($order_id, $API = true)
     {
 
+   
         if(!is_numeric($order_id)){
             $order = $order_id;
         }else{
@@ -529,7 +539,12 @@ class  OrderController extends Controller
             }
         }
 
+
+       
+
+
         $user_id = $order->user_id;
+     
         try {
             $user = $this->userRepository->getUserById($user_id);
         } catch (\Throwable $th) {

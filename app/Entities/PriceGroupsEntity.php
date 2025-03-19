@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Facades\Route;
 use twa\cmsv2\Entities\Entity;
 
 class PriceGroupsEntity extends Entity
@@ -23,6 +24,16 @@ class PriceGroupsEntity extends Entity
             ]
          ]
     ];
+
+    public function setRowOperations()
+    {
+
+
+        $route = "/".Route::getRoutes()->getByName('price-group-zones')->uri();
+
+
+        $this->setRowOperation("View Zones" , $route , '<i class="fa-solid fa-eye"></i>');
+    }
 
     public function fields(){
 

@@ -29,7 +29,7 @@ class ManageWallets extends Component
 
     public function mount()
     {
-        $this->form['card_number'] = "1080108010801080";
+        $this->form['card_number'] = null;
 
         $this->form['transaction_type'] = null;
         $this->form['amount'] = null;
@@ -54,7 +54,7 @@ class ManageWallets extends Component
         try {
             $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
         } catch (\Throwable $th) {
-
+            $this->form['card_number'] = null;
             $this->sendError("Error", "User Card Not Found");
             return;
         }

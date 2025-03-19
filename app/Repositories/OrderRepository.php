@@ -374,6 +374,25 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
+    public function getOrderSeatsByCodes($order_id, $order_seat_codes)
+    {
+        try {
+            $order_seats = OrderSeat::where('order_id', $order_id)
+                ->whereIn('seat', $order_seat_codes)
+                ->whereNull('refunded_at')
+                ->get();
+
+
+            if ($order_seats->isEmpty()) {
+                throw new ModelNotFoundException("No matching order seats found for the given order and seat IDs.");
+            }
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException("Order Seats with IDs " . implode(', ', $order_seat_codes) . " and order id {$order_id} not found.");
+        }
+        return $order_seats;
+    }
+
+
     public function getOrderCoupons($order_id) {
         try {
             $order_coupons = OrderCoupon::whereNull('deleted_at')
