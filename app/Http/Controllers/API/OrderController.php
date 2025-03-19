@@ -685,10 +685,7 @@ class  OrderController extends Controller
                 'subtotal' => currency_format($subtotal),
                 'discount' =>  currency_format($discount),
                 'total' =>  currency_format($total),
-
-
-
-
+                'can_refund'=>true
             ],
             'tickets' => $order_seats,
             'items' =>  $order_items,
