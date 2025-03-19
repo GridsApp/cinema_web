@@ -8,7 +8,7 @@ use App\Models\MovieShow;
 use App\Models\Movie;
 use App\Models\Theater;
 use App\Rules\TimeConflictRule;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 
 class MovieShowForm extends Component

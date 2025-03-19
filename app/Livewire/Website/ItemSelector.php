@@ -5,7 +5,7 @@ namespace App\Livewire\Website;
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 class ItemSelector extends Component
 {

@@ -7,7 +7,7 @@ use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use App\Repositories\CardRepository;
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Illuminate\Support\Facades\Hash;
 
 class UserProfileUpdate extends Component

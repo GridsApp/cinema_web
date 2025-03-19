@@ -5,7 +5,7 @@ namespace App\Livewire\EntityForms;
 use App\Models\Movie;
 use App\Repositories\IMDBRepository;
 use twa\cmsv2\Traits\FormTrait;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Livewire\Component;
 
 class MovieForm extends Component

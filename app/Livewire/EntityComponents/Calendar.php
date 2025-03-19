@@ -4,7 +4,7 @@ namespace App\Livewire\EntityComponents;
 
 use App\Models\MovieShow;
 use App\Models\Time;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;

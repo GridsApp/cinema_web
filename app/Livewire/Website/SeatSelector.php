@@ -15,7 +15,7 @@ use App\Models\ReservedSeat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 class SeatSelector extends Component
 {

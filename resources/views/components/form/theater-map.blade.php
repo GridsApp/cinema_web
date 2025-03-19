@@ -1,7 +1,7 @@
 <div x-data="GeneralFunctions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
     
-    <div x-show="!managingSeats">
+    <div x-show="!managingSeats" x-cloak>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <div>
@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-        <div x-show="!loading && gridGenerated" class="table-container">
+        <div x-show="!loading && gridGenerated" x-cloak class="table-container">
             <div class="flex justify-between items-center mt-5 mb-5">
                 <div class="text-[14px] max-w-[65%]">
                     Click on circles to select seats, all unselected represent empty spaces
@@ -69,7 +69,7 @@
             </table>
         </div>
     </div>
-    <div x-show="managingSeats" class="seat-management-section">
+    <div x-show="managingSeats" x-cloak class="seat-management-section">
         <div class="flex justify-between items-center">
             <div class="flex gap-10 flex-wrap">
 

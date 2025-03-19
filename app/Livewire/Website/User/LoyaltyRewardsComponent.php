@@ -6,7 +6,7 @@ use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\RewardRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 class LoyaltyRewardsComponent extends Component
 {

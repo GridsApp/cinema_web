@@ -3,7 +3,7 @@
 namespace App\Livewire\EntityForms;
 
 use App\Models\MovieShow;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Livewire\Component;
 use App\Rules\TimeConflictRule;
 

@@ -5,7 +5,7 @@ namespace App\Livewire\Website;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 class RegisterForm extends Component
 {

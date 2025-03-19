@@ -680,7 +680,7 @@ class  OrderController extends Controller
                     'label_ar' => $pos_user_id->branch->label_ar ?? null
                 ],
                 'card_number' => $user_card_number->barcode ?? null,
-                'printed_at' => $order->printed,
+                'printed_at' => $order->printed_at,
 
                 'subtotal' => currency_format($subtotal),
                 'discount' =>  currency_format($discount),

@@ -7,7 +7,7 @@ use App\Models\Movie;
 use App\Models\MovieShow;
 use Carbon\CarbonPeriod;
 use Livewire\Attributes\Url;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 
 class ManageBookings extends Component
 {

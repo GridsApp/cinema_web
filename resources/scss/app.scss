@@ -80,3 +80,73 @@ html[dir="ltr"] {
         direction: ltr;
     }
 }
+
+//calendar
+.twa-table-card {
+    position: relative;
+    .twa-table-card-disabled-message {
+        display: none;
+    }
+
+    &.twa-table-card-disabled {
+        &:after {
+            content: "";
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(#ffffff, 0.9);
+            position: absolute;
+            z-index: 10;
+        }
+
+        .twa-table-card-disabled-message {
+            display: block;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 40px;
+            font-size: 14px;
+
+            text-align: center;
+            color: rgb(75 86 117);
+            z-index: 11;
+        }
+    }
+}
+
+//movie form
+.twa-loading-panel-message {
+    display: none;
+}
+
+.twa-loading-panel {
+    position: relative;
+
+    &:after {
+        content: "";
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: rgba(#ffffff, 0.8);
+        position: absolute;
+        z-index: 10;
+    }
+
+    .twa-loading-panel-message {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 40px;
+        font-size: 14px;
+        text-align: center;
+        color: rgb(75 86 117);
+        z-index: 11;
+    }
+}

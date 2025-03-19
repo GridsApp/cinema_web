@@ -6,7 +6,7 @@ use App\Interfaces\TokenRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Illuminate\Support\Facades\Hash;
 
 class SignInForm extends Component

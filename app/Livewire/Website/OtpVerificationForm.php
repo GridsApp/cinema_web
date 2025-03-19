@@ -4,7 +4,7 @@ namespace App\Livewire\Website;
 
 use App\Models\UserPin;
 use Livewire\Component;
-use twa\cmsv2\Traits\ToastTrait;
+use twa\uikit\Traits\ToastTrait;
 use Carbon\Carbon;
 
 class OtpVerificationForm extends Component
