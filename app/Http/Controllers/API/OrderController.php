@@ -335,6 +335,8 @@ class  OrderController extends Controller
         }
 
 
+        return $this->details($order);
+
         // $total_discount = 20000;
 
 
