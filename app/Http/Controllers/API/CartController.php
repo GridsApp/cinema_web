@@ -333,7 +333,7 @@ class CartController extends Controller
     public function removeImtiyazFromCart()
     {
         $form_data = clean_request([]);
-        $check = $this->validateRequiredFields($form_data, ['cart_id']);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'phone']);
 
         if ($check) {
             return $this->response($check);
@@ -351,7 +351,7 @@ class CartController extends Controller
 
 
         try {
-            $this->cartRepository->removeImtiyazFromCart($form_data['cart_id']);
+            $this->cartRepository->removeImtiyazFromCart($form_data['cart_id'] , $form_data['phone']);
             return $this->response(notification()->success('Imtiyaz removed successfully', 'Imtiyaz removed successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error removing Imtiyaz', $e->getMessage()));
@@ -695,6 +695,8 @@ class CartController extends Controller
         }
         $cartDetails = $this->cartRepository->getCartDetails($cart);
 
+
+     
         if ($cartDetails['user_id']) {
 
             // get card info by user id
@@ -707,7 +709,6 @@ class CartController extends Controller
 
             $card = $this->cardRepository->getActiveCard($user);
 
-            // dd("here");
             $card_info = [
                 'fullname' => $user->name,
                 'phone' => $user->phone,
@@ -753,6 +754,7 @@ class CartController extends Controller
         return $this->responseData(([
             'coupon_code' => $cartDetails["coupon_codes"],
             'coupons' => $cartDetails["coupons"],
+            'imtiyaz' => $cartDetails["imtiyaz"],
             'card_info' => $card_info ?? null,
             'subtotal' => $cartDetails["subtotal"],
             'lines' => $cartDetails["lines"],

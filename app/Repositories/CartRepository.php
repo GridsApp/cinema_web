@@ -326,6 +326,19 @@ class CartRepository implements CartRepositoryInterface
             throw new Exception($e->getMessage());
         }
     }
+
+
+    public function getCartImtiyaz($cart_id){
+        try {
+            return CartImtiyaz::whereNull('deleted_at')->where('cart_id', $cart_id)->get();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+    }
+
+
+
     public function getCartCouponsIds($cart_id)
     {
         try {
@@ -349,22 +362,52 @@ class CartRepository implements CartRepositoryInterface
 
         return $cart_imtiyaz;
     }
-    public function removeImtiyazFromCart($cart_id)
+    public function removeImtiyazFromCart($cart_id , $phone)
     {
         try {
             $cart_imtiyaz =  CartImtiyaz::query()
                 ->where('cart_id', $cart_id)
+                ->where('phone' , $phone)
                 ->whereNull('deleted_at');
 
             if ($cart_imtiyaz->count() > 0) {
                 $cart_imtiyaz->delete();
 
-                CartSeat::query()
-                    ->where('cart_id', $cart_id)
-                    ->whereNull('deleted_at')
-                    ->update([
-                        'imtiyaz_phone' => null
-                    ]);
+                // CartSeat::query()
+                //     ->where('cart_id', $cart_id)
+                //     ->whereNull('deleted_at')
+                //     ->update([
+                //         'imtiyaz_phone' => null
+                //     ]);
+
+                $cart_imtiyaz = CartImtiyaz::query()
+                ->where('cart_id', $cart_id)
+                ->whereNull('deleted_at')->pluck('phone')->toArray();
+
+                //2
+
+                $cart_seats =  CartSeat::query()
+                ->where('cart_id', $cart_id)
+                ->whereNull('deleted_at')
+                ->orderBy('price' , 'desc')
+                ->get();
+
+                foreach($cart_seats as $index => $cart_seat){
+
+                    if($index % 2 == 1){
+                        $cart_seat->imtiyaz_phone = $cart_imtiyaz[0] ?? null;
+                        unset($cart_imtiyaz[0]);
+                        $cart_imtiyaz = $cart_imtiyaz->values();
+
+                    }else{
+                        $cart_seat->imtiyaz_phone = null; 
+                    }
+                    
+
+                }
+
+
+
             } else {
                 throw new Exception("No records found");
             }
@@ -445,7 +488,10 @@ class CartRepository implements CartRepositoryInterface
             $cart_coupons = $this->getCartCoupons($cart_id);
             $coupon_ids = $cart_coupons->pluck('coupon_id');
             $coupon_codes = $this->couponRepository->getCouponsByIds($coupon_ids)->pluck('code');
-            // $totalDiscounts = $validCoupons->sum('flat_discount');
+
+            $imtiyaz_phones = $this->getCartImtiyaz($cart_id)->pluck('phone');
+
+          // $totalDiscounts = $validCoupons->sum('flat_discount');
 
             $cart_seats = $this->getCartSeats($cart_id);
             $zone_ids = $cart_seats->pluck('zone_id');
@@ -534,34 +580,55 @@ class CartRepository implements CartRepositoryInterface
 
             $total += $cart_topups->sum('price.value');
 
-            $cart_coupons = $this->getCartCoupons($cart_id);
-            $cart_coupons = $cart_coupons->map(function ($cart_coupon) {
-                $unit_price = $cart_coupon->amount;
+            // $cart_coupons = $this->getCartCoupons($cart_id);
+            // $cart_coupons = $cart_coupons->map(function ($cart_coupon) {
+            //     $unit_price = $cart_coupon->amount;
 
 
-                if (!($cart_coupon['quantity'] ?? null)) {
-                    $cart_coupon['quantity'] = 1;
-                }
+            //     if (!($cart_coupon['quantity'] ?? null)) {
+            //         $cart_coupon['quantity'] = 1;
+            //     }
 
-                return [
-                    'id' => $cart_coupon['id'],
-                    'type' => "Coupon",
-                    'label' => "Applied Coupon ",
-                    'unit_price' => currency_format($unit_price, "-"),
-                    'quantity' => 1,
-                    'price' => currency_format($unit_price, "-"),
-                ];
-            });
+            //     return [
+            //         'id' => $cart_coupon['id'],
+            //         'type' => "Coupon",
+            //         'label' => "Applied Coupon ",
+            //         'unit_price' => currency_format($unit_price, "-"),
+            //         'quantity' => 1,
+            //         'price' => currency_format($unit_price, "-"),
+            //     ];
+            // });
 
             $discount = $cart_coupons->sum('price.value');
             $discount = $discount >= $total_seats ? $total_seats : $discount;
 
             $total -= $discount;
 
+
+
+            $cart_imtiyaz=$this->getCartImtiyaz($cart_id);
+            $cart_imtiyaz = $cart_imtiyaz->map(function ($cart_imtiyaz) {
+              
+              
+
+                return [
+                    'id' => $cart_imtiyaz['id'],
+                    'type' => "Imtiyaz",
+                    'label' => "Applied Imtiyaz ",
+                 
+                    'phone' => $cart_imtiyaz['phone'],
+                ];
+            });
+
+
+
+
+
             return [
                 'cart_id' => $cart->id,
                 'coupon_codes' => $coupon_codes->implode(", "),
                 'coupons' => $coupon_codes->values(),
+                'imtiyaz' => $imtiyaz_phones->values(),
                 'user_id' => $cart->user_id,
                 'card_number' => $cart->card_number,
                 'subtotal' => currency_format($total),

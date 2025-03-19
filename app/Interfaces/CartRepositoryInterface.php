@@ -28,7 +28,7 @@ interface CartRepositoryInterface
 
 
     public function addImtiyazToCart($cart_id, $phone);
-    public function removeImtiyazFromCart($cart_id);
+    public function removeImtiyazFromCart($cart_id , $phone);
 
     public function getCartDetails($cart);    
 

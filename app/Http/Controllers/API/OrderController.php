@@ -516,10 +516,15 @@ class  OrderController extends Controller
 
     public function details($order_id, $API = true)
     {
-        try {
-            $order = $this->orderRepository->getOrderById($order_id);
-        } catch (\Throwable $e) {
-            return $this->response(notification()->error('Order not found', $e->getMessage()));
+
+        if(!is_numeric($order_id)){
+            $order = $order_id;
+        }else{
+            try {
+                $order = $this->orderRepository->getOrderById($order_id);
+            } catch (\Throwable $e) {
+                return $this->response(notification()->error('Order not found', $e->getMessage()));
+            }
         }
 
         $user_id = $order->user_id;
@@ -769,10 +774,7 @@ class  OrderController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
-        // $order = Order::whereNull('deleted_at')
-        //     ->where('pos_user_id', $user->id)
-        //     ->orderBy('id', 'desc')
-        //     ->first();
+    
 
         try {
             $order = $this->orderRepository->getPosuserLastOrder($user->id);
@@ -781,9 +783,10 @@ class  OrderController extends Controller
         }
 
 
-        // $order_seats = OrderSeat::whereNull('deleted_at')
-        //     ->where('order_id', $order->id)
-        //     ->get();
+        return $this->details($order);
+
+
+       
         try {
             $order_seats = $this->orderRepository->getOrderSeats($order->id);
         } catch (\Exception $e) {
@@ -808,6 +811,11 @@ class  OrderController extends Controller
             ];
         });
 
+
+        // return $this->responseData([
+        //     'order_id' => $order["order_id"],
+        //     ...$this->details($order["order_id"], false),
+        // ], notification()->success('Order completed', 'Your order has been successfully completed'));
 
         return $this->responseData([
             'order_id' => $order->id,
