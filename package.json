@@ -20,6 +20,7 @@
         "@fancyapps/fancybox": "^3.5.7",
         "@fancyapps/ui": "^5.0.36",
         "@rajesh896/broprint.js": "^2.1.1",
+        "@tailwindcss/forms": "^0.5.10",
         "collect.js": "^4.36.1",
         "cropperjs": "^1.6.2",
         "intl-tel-input": "^25.2.1",

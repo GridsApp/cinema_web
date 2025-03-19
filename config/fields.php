@@ -13,7 +13,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'type' => twa\uikit\FieldTypes\Id::class,
         'label' => 'ID',
         'placeholder' => 'ID',
         'name' => 'id'
@@ -187,7 +187,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\TheaterMap::class,
+        'type' => App\Entities\FieldTypes\TheaterMap::class,
         'label' => 'Theater Map',
         'placeholder' => 'Theater Map',
         'name' => 'theater_map',
@@ -630,6 +630,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
+        
         'type' => twa\uikit\FieldTypes\FileUpload::class,
         'label' => 'Main Image',
         'placeholder' => 'Upload Image',

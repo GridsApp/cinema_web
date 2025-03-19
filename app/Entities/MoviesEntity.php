@@ -23,7 +23,7 @@ class MoviesEntity extends Entity
     
 
     public function fields(){
-        dd("here");
+    
         $channel = "channel".uniqid();
         $languages =config('languages');
         $firstLanguage = $languages[0]['prefix'] ?? '';
@@ -76,26 +76,25 @@ class MoviesEntity extends Entity
     }
 
     public function filters(){
-        $this->addFilter("cast");
-        $this->addFilter("release_date");
-        $this->addFilter("movie_key");
-        $this->addFilter("movie_name");
-        $this->addFilter("label", ); 
-        $this->addFilter("slug");
-        $this->addFilter("condensed_name" );
-        $this->addFilter("duration");
-        $this->addFilter("director");
-        $this->addFilter("genre");
-        $this->addFilter("age_rating");
-        $this->addFilter("language");
-        // $this->addFilter("main_image");
-        // $this->addFilter("cover_image" );
-        $this->addFilter("youtube_video" );
-        $this->addFilter("imdb_rating" );
-        $this->addFilter("imdb_vote" );
-        $this->addFilter('distributor' );
-        $this->addFilter('distributor_commission_settings');
-        return $this->filters;
+        // $this->addFilter("cast");
+        // $this->addFilter("release_date");
+        // $this->addFilter("movie_key");
+        // $this->addFilter("movie_name");
+        // $this->addFilter("label", ); 
+        // $this->addFilter("slug");
+        // $this->addFilter("condensed_name" );
+        // $this->addFilter("duration");
+        // $this->addFilter("director");
+        // $this->addFilter("genre");
+        // $this->addFilter("age_rating");
+        // $this->addFilter("language");
+
+        // $this->addFilter("youtube_video" );
+        // $this->addFilter("imdb_rating" );
+        // $this->addFilter("imdb_vote" );
+        // $this->addFilter('distributor' );
+        // $this->addFilter('distributor_commission_settings');
+        // return $this->filters;
     }
 
 

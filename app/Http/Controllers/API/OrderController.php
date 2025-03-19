@@ -592,6 +592,7 @@ class  OrderController extends Controller
                 'date' => now()->parse($seats->date)->format('d M, Y'),
                 'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
                 'theater' => $seats->theater->label ?? '',
+                'theater_number' => (integer) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
                 'gained_points' => $seats->gained_points,

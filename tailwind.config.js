@@ -3,7 +3,11 @@
 import colors from 'tailwindcss/colors';
 import forms from '@tailwindcss/forms';
 
+
 export default {
+  presets: [
+    require('./vendor/twa/uikit/tailwind.config.js') 
+  ],
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
@@ -12,6 +16,9 @@ export default {
     "./vendor/twa/cmsv2/src/Resources/**/*.js",
 
 
+    "./vendor/twa/uikit/src/**/*.php",
+    "./vendor/twa/uikit/src/Resources/**/*.blade.php",
+    "./vendor/twa/uikit/src/Resources/**/*.js",
   ],
 
   theme: {
@@ -60,8 +67,7 @@ export default {
       },
     },
   },
-  plugins: [
-    // require('tailwindcss-rtl'),
-  ],
+  plugins: [forms],
+
 }
 
