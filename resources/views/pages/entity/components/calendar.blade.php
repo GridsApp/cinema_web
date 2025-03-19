@@ -166,7 +166,9 @@
                                                                     <i class="fa-solid fa-circle-check"></i>
                                                                 </span>
                                                                 <span class="checkbox__inner__not_checked">
-                                                                    <i class="fa-light fa-circle" x-transition></i>
+                                                                    {{-- <i class="fa-solid fa-circle-notch"></i> --}}
+                                                                    <i class="fa-regular fa-circle"></i>
+                                                                    {{-- <i class="fa-light fa-circle" x-transition></i> --}}
                                                                 </span>
                                                             </div>
                                                         </div>

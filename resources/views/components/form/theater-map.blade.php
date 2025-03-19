@@ -162,11 +162,11 @@
                                         class="flex justify-center items-center min-w-[20px] min-h-[20px] my-[4px] mx-[5px]">
                                         <template x-if="cell.isSeat">
                                             <div class="relative group">
-                                                <i x-on:click="() => handleSeatClick(cell)"
+                                                {{-- <i x-on:click="() => handleSeatClick(cell)"
                                                     class="fa-solid fa-chair-office text-[20px] cursor-pointer"
-                                                    :style="'color:' + cell.color"> </i>
+                                                    :style="'color:' + cell.color"> </i> --}}
 
-
+                                                    <i  x-on:click="() => handleSeatClick(cell)" class="fa-solid fa-chair text-[20px] cursor-pointer"  :style="'color:' + cell.color"></i>
                                                 <div
                                                     class="absolute bottom-2 flex flex-col items-center hidden mb-5 group-hover:flex">
                                                     <span

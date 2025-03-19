@@ -33,19 +33,19 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-sk0VS-F_.css",
+    "file": "assets/app-cQEfVD_E.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-DJ0QDxg9.css": {
-    "file": "assets/app-DJ0QDxg9-CUN96F18.css",
-    "src": "vendor/twa/uikit/dist/app-DJ0QDxg9.css",
+  "vendor/twa/uikit/dist/app-BWi0WNwC.js": {
+    "file": "assets/app-BWi0WNwC-C5JfJlRC.js",
+    "name": "app-BWi0WNwC",
+    "src": "vendor/twa/uikit/dist/app-BWi0WNwC.js",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-lynQysIv.js": {
-    "file": "assets/app-lynQysIv-hjEVwiLN.js",
-    "name": "app-lynQysIv",
-    "src": "vendor/twa/uikit/dist/app-lynQysIv.js",
+  "vendor/twa/uikit/dist/app-wmDFU_4K.css": {
+    "file": "assets/app-wmDFU_4K-B75xBRXh.css",
+    "src": "vendor/twa/uikit/dist/app-wmDFU_4K.css",
     "isEntry": true
   }
 }

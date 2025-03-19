@@ -92,33 +92,6 @@ return [
 
  
 
-    [
-        'display' => true,
-        'label' => 'Content',
-        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
-        'children' => [
-            [
-                'label' => 'Slideshows',
-                'link' => routeObject('entity', ['slug' => 'slideshows'])
-            ],
-            [
-                'label' => 'Faqs',
-                'link' => routeObject('entity', ['slug' => 'faqs'])
-            ],
-            [
-                'label' => 'Informative Pages',
-                'link' => routeObject('entity', ['slug' => 'informative-pages'])
-            ],
-
-            [
-                'label' => 'Home Banner Paragraph',
-                'link' => routeObject('entity', ['slug' => 'home-paragraph-banners'])
-            ],
-            
-
-
-        ]
-    ],
    
     [
         'display' => true,
@@ -175,10 +148,36 @@ return [
         ]
     ],
 
-
     [
         'display' => true,
-        'label' => 'About Section',
+        'label' => 'Content',
+        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
+        'children' => [
+            [
+                'label' => 'Slideshows',
+                'link' => routeObject('entity', ['slug' => 'slideshows'])
+            ],
+            [
+                'label' => 'Faqs',
+                'link' => routeObject('entity', ['slug' => 'faqs'])
+            ],
+            [
+                'label' => 'Informative Pages',
+                'link' => routeObject('entity', ['slug' => 'informative-pages'])
+            ],
+
+            // [
+            //     'label' => 'Home Banner Paragraph',
+            //     'link' => routeObject('entity', ['slug' => 'home-paragraph-banners'])
+            // ],
+            
+
+
+        ]
+    ],
+    [
+        'display' => true,
+        'label' => 'Website Section',
         'icon' => '<i class="fa-regular fa-grid-2"></i>',
         'children' => [
 
