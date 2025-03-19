@@ -9,6 +9,9 @@ interface OrderRepositoryInterface
     public function getOrderByBarcode($barcode);
     public function getOrderById($order_id);
     public function getOrderSeats($order_id, $grouped = false);
+
+    public function getOrderRefundedSeats($order_id , $grouped= false);
+
     public function getOrderSeatsByIds($order_id, $order_seat_id);
     public function getOrderItems($order_id, $grouped = false);
 

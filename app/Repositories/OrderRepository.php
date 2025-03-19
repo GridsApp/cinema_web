@@ -309,6 +309,52 @@ class OrderRepository implements OrderRepositoryInterface
         // dd($user_cart_seat);
         return $user_order_seat;
     }
+
+
+    public function getOrderRefundedSeats($order_id , $grouped= false){
+        try {
+
+            if ($grouped) {
+                $select = [
+                    DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"),
+                    'order_id',
+                    'seat',
+                    'zone_id',
+                    'movie_show_id',
+                    'movie_id',
+                    'screen_type_id',
+                    'theater_id',
+                    'date',
+                    'time_id',
+                    'week',
+                    'created_at',
+                    'price',
+                    // 'final_price',
+                    // 'discount',
+                    DB::raw('count(*) as quantity'),
+                    // DB::raw('sum(discount) as total_discount'),
+
+
+                    DB::raw("GROUP_CONCAT(seat ORDER BY seat) AS seats")
+                ];
+            } else {
+                $select = "*";
+            }
+
+            $user_order_seat = OrderSeat::select($select)->whereNull('deleted_at')
+                ->where('order_id', $order_id)
+                ->whereNotNull('refunded_at')
+                ->when($grouped, function ($query) {
+                    $query->groupBy('identifier');
+                })
+                ->get();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        // dd($user_cart_seat);
+        return $user_order_seat;
+    }
+
     public function getOrderSeatsByIds($order_id, $order_seat_ids)
     {
         try {

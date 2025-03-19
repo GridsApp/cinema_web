@@ -564,6 +564,16 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
 
+
+        $refunded_seats = [];
+        try {
+
+            $refunded_seats = $this->orderRepository->getOrderRefundedSeats($order->id, $grouped = false);
+        } catch (\Throwable $e) {
+
+            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
+        }
+
         $order_items = null;
         try {
 
@@ -572,6 +582,12 @@ class  OrderController extends Controller
 
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
+
+     
+
+        
+
+
         $order_topups = null;
         try {
 
@@ -586,6 +602,34 @@ class  OrderController extends Controller
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
         }
+
+
+
+
+        $refunded_seats =  $refunded_seats->map(function ($seats) use ($order) {
+
+            $movie = $seats->movie;
+            return [
+                'movie_name' => $movie->name ?? '',
+                'movie_image' => get_image($movie->main_image) ?? '',
+                'duration' => minutes_to_human($movie->duration),
+                'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
+                'branch' => $seats->theater->branch->label ?? '',
+                'date' => now()->parse($seats->date)->format('d M, Y'),
+                'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
+                'theater' => $seats->theater->label ?? '',
+                'theater_number' => (integer) ($seats->theater->hall_number ?? 0),
+                'seats' => $seats->seat,
+                'price' => currency_format($seats->price),
+                'gained_points' => $seats->gained_points,
+                'type' => $seats->theater->PriceGroup->label ?? '',
+                'is_imtiyaz' => !empty($seats->imtiyaz_phone),
+
+
+            ];
+        });
+
+
 
         $order_seats = $order_seats->map(function ($seats) use ($order) {
 
@@ -688,6 +732,7 @@ class  OrderController extends Controller
                 'can_refund'=>true
             ],
             'tickets' => $order_seats,
+            'refunded_tickets' => $refunded_seats,
             'items' =>  $order_items,
             'topups' => $order_topups,
             'discounts' => $order_discounts,
