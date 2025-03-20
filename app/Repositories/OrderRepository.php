@@ -95,6 +95,7 @@ class OrderRepository implements OrderRepositoryInterface
         $order->user_id =  $user_id;
         $order->pos_user_id =  $cart->pos_user_id;
         $order->payment_method_id = $payment_method_id;
+        $order->payment_reference = $payment_attempt->payment_reference;
         $order->save();
 
         $total_points = 0;

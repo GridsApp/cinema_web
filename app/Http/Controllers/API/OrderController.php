@@ -82,6 +82,7 @@ class  OrderController extends Controller
         $payment_attempt->payment_method_id = $payment_method->id;
         $payment_attempt->action = "COMPLETE_ORDER";
         $payment_attempt->reference = $cart_id;
+        $payment_attempt->payment_reference = request()->input('payment_reference');
         $payment_attempt->save();
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 
@@ -89,6 +90,8 @@ class  OrderController extends Controller
         switch ($payment_method->key) {
             case 'CASH':
             case 'CC-DC':
+            case 'CC-DC-SWITCH':
+            case 'CC-DC-QI-CARD':
 
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt);
@@ -239,13 +242,13 @@ class  OrderController extends Controller
             return $this->responseValidation($validator);
         }
 
-     
+
         $user_id = request()->user->id;
-        $user_type = request()->user_type;
-;        $field = get_user_field_from_type($user_type);
+        $user_type = request()->user_type;;
+        $field = get_user_field_from_type($user_type);
         $user_branch = request()->user->branch_id;
 
-      
+
 
         $order_id = $form_data['order_id'];
 
@@ -319,9 +322,10 @@ class  OrderController extends Controller
 
 
 
-        return $this->responseData($this->details($order_id, false)
-        
-        , notification()->success('Refund Successful', 'Your order has been successfully refunded'));
+        return $this->responseData(
+            $this->details($order_id, false),
+            notification()->success('Refund Successful', 'Your order has been successfully refunded')
+        );
 
         // return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
     }
@@ -528,10 +532,10 @@ class  OrderController extends Controller
     public function details($order_id, $API = true)
     {
 
-   
-        if(!is_numeric($order_id)){
+
+        if (!is_numeric($order_id)) {
             $order = $order_id;
-        }else{
+        } else {
             try {
                 $order = $this->orderRepository->getOrderById($order_id);
             } catch (\Throwable $e) {
@@ -540,11 +544,11 @@ class  OrderController extends Controller
         }
 
 
-       
+
 
 
         $user_id = $order->user_id;
-     
+
         try {
             $user = $this->userRepository->getUserById($user_id);
         } catch (\Throwable $th) {
@@ -598,9 +602,9 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
 
-     
 
-        
+
+
 
 
         $order_topups = null;
@@ -633,7 +637,7 @@ class  OrderController extends Controller
                 'date' => now()->parse($seats->date)->format('d M, Y'),
                 'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
                 'theater' => $seats->theater->label ?? '',
-                'theater_number' => (integer) ($seats->theater->hall_number ?? 0),
+                'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
                 'gained_points' => $seats->gained_points,
@@ -658,7 +662,7 @@ class  OrderController extends Controller
                 'date' => now()->parse($seats->date)->format('d M, Y'),
                 'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
                 'theater' => $seats->theater->label ?? '',
-                'theater_number' => (integer) ($seats->theater->hall_number ?? 0),
+                'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
                 'gained_points' => $seats->gained_points,
@@ -704,7 +708,7 @@ class  OrderController extends Controller
         });
 
 
-        $subtotal = collect($order_seats)->where('is_imtiyaz' , false)->sum('price.value') +
+        $subtotal = collect($order_seats)->where('is_imtiyaz', false)->sum('price.value') +
             collect($order_items)->sum('price.value') +
             collect($order_topups)->sum('price.value');
 
@@ -744,7 +748,7 @@ class  OrderController extends Controller
                 'subtotal' => currency_format($subtotal),
                 'discount' =>  currency_format($discount),
                 'total' =>  currency_format($total),
-                'can_refund'=>true
+                'can_refund' => true
             ],
             'tickets' => $order_seats,
             'refunded_tickets' => $refunded_seats,
@@ -833,7 +837,7 @@ class  OrderController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
-    
+
 
         try {
             $order = $this->orderRepository->getPosuserLastOrder($user->id);
@@ -845,7 +849,7 @@ class  OrderController extends Controller
         return $this->details($order);
 
 
-       
+
         try {
             $order_seats = $this->orderRepository->getOrderSeats($order->id);
         } catch (\Exception $e) {

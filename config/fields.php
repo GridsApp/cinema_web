@@ -31,7 +31,7 @@ return [
         'name' => 'slug',
         'channel_type' => 'receiver',  
         'channel' => $channel,          
-        'channel_language' => $firstLanguage  // Now this will work
+        'channel_language' => $firstLanguage  
     ],
 
     'label' => [
@@ -48,6 +48,23 @@ return [
         'channel' => $channel,       
         'channel_language' => $firstLanguage  
     ],
+
+
+    'attributes' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textarea::class,
+        'label' => 'Attributes',
+        'placeholder' => 'Attributes',
+        'name' => 'attributes',
+        'container' => 'col-span-6',
+      
+    ],
+
+    
+
 
     'long_id' => [
         'id' => uniqid(),
@@ -708,6 +725,17 @@ return [
         'name' => 'imdb_vote'
     ],
 
+    'payment_reference' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Payment Reference',
+        'placeholder' => 'Enter payment reference',
+        'name' => 'payment_reference'
+    ],
+
 
 
     'profile_image' => [
@@ -763,7 +791,16 @@ return [
                 'table' => 'branches',
                 'key' => 'branch_id',
                 'field' => 'label_en',
+            ],
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => '{branch_id}',
+                ],
             ]
+           
         ],
 
         'events' => [
@@ -805,7 +842,15 @@ return [
         'options' => [
             'type' => 'query',
             'table' => 'branches',
-            'field' => 'label_en'
+            'field' => 'label_en',
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => 3,
+                ],
+            ]
         ]
     ],
 

@@ -26,6 +26,7 @@ class OrdersEntity extends Entity
         // $this->addField("total_price" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("long_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("printed_at" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("payment_reference" , ["container" => 'col-span-6', 'required' => true]);
   
         return $this->fields;
     }

@@ -1,8 +1,6 @@
 <?php
 
 return array (
-
-  'cms-users' => 'twa\\cmsv2\\Entities\\CmsUsers',
   'about-banners' => 'App\\Entities\\AboutBannersEntity',
   'about-paragraphs' => 'App\\Entities\\AboutParagraphsEntity',
   'access-tokens' => 'App\\Entities\\AccessTokensEntity',
