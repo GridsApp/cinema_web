@@ -64,7 +64,8 @@ class AuthMandatoryMiddleware
                     request()->merge([
                         'user_type' => 'USER',
                         'user' => $user,
-                        'system_id' => 1
+                        'system_id' => 1,
+                        'branch_id' => null,
                     ]);
                     break;
                 case "POS" :
@@ -72,7 +73,8 @@ class AuthMandatoryMiddleware
                     request()->merge([
                         'user_type' => 'POS',
                         'user' => $user,
-                        'system_id' => 2
+                        'system_id' => 2,
+                        'branch_id' => $user->branch_id,
                     ]);
                     break;
 
@@ -81,7 +83,8 @@ class AuthMandatoryMiddleware
                         request()->merge([
                             'user_type' => 'KIOSK',
                             'user' => $user,
-                            'system_id' => 3
+                            'system_id' => 3,
+                            'branch_id' => $user->branch_id,
                         ]);
                         break;
 

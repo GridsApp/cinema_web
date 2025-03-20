@@ -148,6 +148,12 @@ return [
                 'link' => routeObject('entity', ['slug' => 'payment-methods'])
             ],
            
+
+            [
+                'label' => 'Orders ',
+                'link' => routeObject('entity', ['slug' => 'orders'])
+            ],
+           
         ]
     ],
 

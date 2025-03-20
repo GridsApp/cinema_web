@@ -27,14 +27,16 @@ class OrdersEntity extends Entity
         $this->addField("long_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("printed_at" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("payment_reference" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("branch" , ["container" => 'col-span-6', 'required' => true]);
   
         return $this->fields;
     }
 
     public function columns(){
-        $this->addColumn("user_id");
-        $this->addColumn("system");
+    
+        $this->addColumn("barcode");
         $this->addColumn("reference");
+        $this->addColumn("payment_reference");
        
         return $this->columns;
     }

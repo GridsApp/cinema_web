@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface OrderRepositoryInterface 
 {
-    public function createOrderFromCart($payment_attempt);
+    public function createOrderFromCart($payment_attempt , $branch_id = null);
     public function getUserOrders($user_id);
     public function getOrderByBarcode($barcode);
     public function getOrderById($order_id);

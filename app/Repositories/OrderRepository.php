@@ -23,7 +23,7 @@ use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentMethod;
 use App\Models\ReservedSeat;
-
+use App\Models\Theater;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +59,7 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public function createOrderFromCart($payment_attempt)
+    public function createOrderFromCart($payment_attempt , $branch_id = null)
     {
 
         $cart_id = $payment_attempt->reference;
@@ -96,6 +96,13 @@ class OrderRepository implements OrderRepositoryInterface
         $order->pos_user_id =  $cart->pos_user_id;
         $order->payment_method_id = $payment_method_id;
         $order->payment_reference = $payment_attempt->payment_reference;
+
+        if(!$branch_id && ($cart_seats[0]['theater_id'] ?? null)){
+            $theater = Theater::find($cart_seats[0]['theater_id']);
+            $branch_id = $theater->branch_id ?? null;
+        }
+
+        $order->branch_id = $branch_id;
         $order->save();
 
         $total_points = 0;
@@ -119,6 +126,7 @@ class OrderRepository implements OrderRepositoryInterface
             $coupon->save();
         }
 
+        
 
         foreach ($cart_seats as $cart_seat) {
             // $movieShow = $cart_seat->movieShow;

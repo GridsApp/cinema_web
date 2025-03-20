@@ -15,6 +15,15 @@ class KioskUsersEntity extends Entity
         'pagination' => 20,
     ];
 
+
+    public $conditions = [
+        [
+            'type' => 'where',
+            'column' => 'branches.id',
+            'operand' => null,
+            'value' => '{branch_id}'
+        ]
+    ];
     public function fields()
     {
 
@@ -36,7 +45,7 @@ class KioskUsersEntity extends Entity
         $this->addColumn("name");
         $this->addColumn("username");
         $this->addColumn("branch");
-        $this->addColumn("role");
+        // $this->addColumn("role");
 
         return $this->columns;
     }

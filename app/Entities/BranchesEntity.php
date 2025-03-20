@@ -12,6 +12,17 @@ class BranchesEntity extends Entity
     public $slug = "branches";
 
 
+
+    public $conditions = [
+        [
+                'type' => 'where',
+                'column' => 'branches.id',
+                'operand' => null,
+                'value' => '{branch_id}'
+        ]
+    ];
+
+
     public $params = [
         'pagination' => 20,
     ];
@@ -49,7 +60,7 @@ class BranchesEntity extends Entity
 
     public function filters(){
      
-        $this->addFilter("display");
+        // $this->addFilter("display");
 
         return $this->filters;
     }

@@ -27,7 +27,8 @@ class PaymentAttemptsEntity extends Entity
         $this->addField("completed_at", ["container" => 'col-span-7']);
         $this->addField("converted_at", ["container" => 'col-span-7']);
         $this->addField("action", ["container" => 'col-span-7']);
-        $this->addField("payment_reference", ["container" => 'col-span-7']);
+        $this->addField("payment_reference" , ["container" => 'col-span-6', 'required' => true]);
+
 
 
         return $this->fields;

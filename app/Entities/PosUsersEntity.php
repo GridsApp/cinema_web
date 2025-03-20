@@ -15,6 +15,16 @@ class PosUsersEntity extends Entity
         'pagination' => 20,
     ];
 
+
+
+    public $conditions = [
+        [
+            'type' => 'where',
+            'column' => 'branches.id',
+            'operand' => null,
+            'value' => '{branch_id}'
+        ]
+    ];
     public function fields()
     {
 
