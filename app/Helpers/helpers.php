@@ -71,7 +71,7 @@ if (!function_exists('currency_format')) {
     {
        return [
             "value" => (double) $value,
-            "display" => $prefix.number_format($value,0,"." ,",")  . ' USD'
+            "display" => $prefix.number_format($value,0,"." ,",")  . ' IQD'
        ];
     }
 }
