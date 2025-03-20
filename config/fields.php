@@ -2467,6 +2467,19 @@ return [
     ],
     
     
+    'currency' => [
+
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Currency ISO',
+        'placeholder' => 'Currency ISO',
+        'name' => 'currency',
+        'container' => 'col-span-12',
+        'translatable' => false,
+    ]
     
 
 

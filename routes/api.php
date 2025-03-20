@@ -15,7 +15,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('update-profile', [App\Http\Controllers\API\UserController::class, 'updateProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-            
+
             Route::post('upload-image', [App\Http\Controllers\API\UserController::class, 'uploadProfileImage'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('change-password', [App\Http\Controllers\API\UserController::class, 'changePassword'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('loyalty-transactions', [App\Http\Controllers\API\CardController::class, 'getLoyaltyTransactions'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('recharge-wallet', [App\Http\Controllers\API\UserController::class, 'rechargeWallet'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
-            
+
 
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
@@ -52,44 +52,45 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         });
     });
 
-    Route::get('/force-update/{platform}/{version}' , function($platform , $version){
- 
-        switch($platform){
-            case 'android' :
-                $value =  env('ANDROID_VERSION' , "1.0.0") > $version;
+    Route::get('/force-update/{platform}/{version}', function ($platform, $version) {
+
+        switch ($platform) {
+            case 'android':
+                $value =  env('ANDROID_VERSION', "1.0.0") > $version;
                 $link = env('ANDROID_LINK');
- 
+
                 break;
-            case 'ios' :
+            case 'ios':
                 $value =  env('IOS_VERSION', "1.0.0") > $version;
                 $link = env('IOS_LINK');
                 break;
-            case 'pos' :
-                $value  = env('POS_VERSION' , "1.0.0") > $version;
-//                $link = env('APP_URL').'/app/pos/v'.env('POS_VERSION').'/iraqi_cinema_pos_setup.exe';
-            $link = env("POS_LINK");
+            case 'pos':
+                $value  = env('POS_VERSION', "1.0.0") > $version;
+                //                $link = env('APP_URL').'/app/pos/v'.env('POS_VERSION').'/iraqi_cinema_pos_setup.exe';
+                $link = env("POS_LINK");
                 break;
-            case 'kiosk' :
-                $value =  env('KIOSK_VERSION' , "1.0.0") > $version;
-//                $link = env('APP_URL').'/app/kiosk/v'.env('KIOSK_VERSION').'/iraqi_cinema_kiosk_setup.exe';
+            case 'kiosk':
+                $value =  env('KIOSK_VERSION', "1.0.0") > $version;
+                //                $link = env('APP_URL').'/app/kiosk/v'.env('KIOSK_VERSION').'/iraqi_cinema_kiosk_setup.exe';
                 $link = env("KIOSK_LINK");
                 break;
         }
- 
+
         return [
             'status' => $value,
             'link' => $link
         ];
- 
+
         //return false;
- 
-    })->whereIn('platform' , ['android' , 'ios' , 'pos' , 'kiosk']);
- 
-    Route::get("/splash" , function(){
-       return response()->json([
-           'maintenance' => env('MAINTENANCE_MODE' , "0"),
- 
-       ], 200);
+
+    })->whereIn('platform', ['android', 'ios', 'pos', 'kiosk']);
+
+    Route::get("/splash", function () {
+        return response()->json([
+            'maintenance' => env('MAINTENANCE_MODE', "0"),
+            'currency'=>'IQD'
+
+        ], 200);
     });
 
 
@@ -182,7 +183,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
 
 
-        Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware(([AuthMandatoryMiddleware::class , POSUserMiddleware::class ]));
+        Route::post('/wallet-topup', [App\Http\Controllers\API\POS\WalletController::class, 'walletTopup'])->middleware(([AuthMandatoryMiddleware::class, POSUserMiddleware::class]));
 
         Route::post('/user', [App\Http\Controllers\API\POS\PosUserController::class, 'getUserFromAccessToken'])->middleware([AuthMandatoryMiddleware::class, POSUserMiddleware::class]);
 
