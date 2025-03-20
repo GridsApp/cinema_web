@@ -66,7 +66,7 @@ class MoviesEntity extends Entity
         $this->addColumn("condensed_name" ,[], true);
         $this->addColumn("release_date" ,[], true);
         $this->addColumn("duration" , ["label" => "Duration (min)"] , true);
-        $this->addColumn("cast" ,[], true);
+  
         $this->addColumn("director" ,[], true);
 
   
