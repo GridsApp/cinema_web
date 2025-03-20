@@ -15,10 +15,6 @@ class PriceGroupZonesController extends Controller
 
         $price_group= PriceGroup::whereNull('deleted_at')->where('id',$price_group_id)->firstOrFail();
 
-
-
-        //
-
         $route = "/".Route::getRoutes()->getByName('price-group-zones.update')->uri();
 
         $route = str($route)->replace([ "{id}" , "{zone_id}" ] , [$price_group_id , "{id}"])->toString();
@@ -41,6 +37,7 @@ class PriceGroupZonesController extends Controller
 
         $table = $table->get();
 
+        
 
         return view('pages.price-group-zones', ['table' => $table,'price_group'=>$price_group]);
     }

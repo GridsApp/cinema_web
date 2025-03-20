@@ -365,12 +365,18 @@ class CartRepository implements CartRepositoryInterface
     public function removeImtiyazFromCart($cart_id , $phone)
     {
         try {
+
+          
+
             $cart_imtiyaz =  CartImtiyaz::query()
                 ->where('cart_id', $cart_id)
                 ->where('phone' , $phone)
                 ->whereNull('deleted_at');
 
             if ($cart_imtiyaz->count() > 0) {
+
+                DB::beginTransaction();
+
                 $cart_imtiyaz->delete();
 
                 // CartSeat::query()
@@ -386,32 +392,41 @@ class CartRepository implements CartRepositoryInterface
 
                 //2
 
+                // dd($cart_imtiyaz);
+
                 $cart_seats =  CartSeat::query()
                 ->where('cart_id', $cart_id)
                 ->whereNull('deleted_at')
                 ->orderBy('price' , 'desc')
                 ->get();
 
+
                 foreach($cart_seats as $index => $cart_seat){
 
                     if($index % 2 == 1){
                         $cart_seat->imtiyaz_phone = $cart_imtiyaz[0] ?? null;
                         unset($cart_imtiyaz[0]);
-                        $cart_imtiyaz = $cart_imtiyaz->values();
+                        $cart_imtiyaz = array_values($cart_imtiyaz);
+                        // $cart_imtiyaz = $cart_imtiyaz->values();
 
                     }else{
                         $cart_seat->imtiyaz_phone = null; 
                     }
                     
+                    $cart_seat->save();
 
                 }
 
 
 
+                DB::commit();
+
             } else {
+               
                 throw new Exception("No records found");
             }
         } catch (Exception $e) {
+            DB::rollBack();
             throw new Exception($e->getMessage());
         }
 

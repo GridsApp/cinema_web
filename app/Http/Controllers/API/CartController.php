@@ -342,6 +342,8 @@ class CartController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
+
+
         try {
             $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
         } catch (\Exception $th) {
@@ -514,7 +516,7 @@ class CartController extends Controller
             $i = ($count_imtiyaz * 2) + 1;
 
         
-            // foreach ($form_data['phones'] as $phone) {
+
                 $this->cartRepository->addImtiyazToCart($form_data['cart_id'], $form_data['phone']);
 
 
@@ -526,7 +528,7 @@ class CartController extends Controller
                 }
 
         
-            // }
+   
             DB::commit();
         } catch (\Exception $th) {
             DB::rollBack();

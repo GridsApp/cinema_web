@@ -35,6 +35,7 @@ class PriceGroupsEntity extends Entity
         $this->setRowOperation("View Zones" , $route , '<i class="fa-solid fa-eye"></i>');
     }
 
+
     public function fields(){
 
         $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
