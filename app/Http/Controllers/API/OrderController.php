@@ -91,7 +91,7 @@ class  OrderController extends Controller
             case 'CASH':
             case 'CC-DC':
             case 'CC-DC-SWITCH':
-            case 'CC-DC-QI-CARD':
+            case 'CC-DC-QICARD':
 
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt);
