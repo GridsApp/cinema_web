@@ -36,7 +36,7 @@ class PosUsersEntity extends Entity
         $this->addColumn("name");
         $this->addColumn("username");
         $this->addColumn("branch");
-        $this->addColumn("role");
+        // $this->addColumn("role");
 
         return $this->columns;
     }

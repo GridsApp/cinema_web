@@ -106,10 +106,7 @@ return [
                 'label' => 'Manage Wallets',
                 'link' => "/cms/manage/wallets", 
             ],
-            [
-                'label' => 'CMS Users',
-                'link' => routeObject('entity', ['slug' => 'cms-users'])
-            ],
+       
         ]
     ],
 
@@ -129,6 +126,8 @@ return [
             [
                 'label' => 'POS users',
                 'link' => routeObject('entity', ['slug' => 'pos-users'])
+
+                // 'link' => routeObject('entity', ['slug' => 'pos-users'])
             ],
          
             [
