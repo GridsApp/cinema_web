@@ -190,6 +190,88 @@ class PosUserController extends Controller
 
     public function shiftSummary()
     {
+
+
+        return json_decode('{
+            "cashier": {
+              "name": "Hajer",
+              "date": "2025-03-19",
+              "time": ""
+            },
+            "tables": [
+              {
+                "label": "Net Tickets : Cash (+)",
+                "header": [
+                  "Ticket",
+                  "Admits",
+                  "Amount"
+                ],
+                "body": [
+                  [
+                    "BF Gold Class",
+                    "6",
+                    "75,000 IQD"
+                  ],
+                  [
+                    "BF REG",
+                    "2",
+                    "10,000 IQD"
+                  ],
+                  [
+                    "REG",
+                    "20",
+                    "200,000 IQD"
+                  ]
+                ],
+                "footer": [
+                  "Total",
+                  "28",
+                  "285,000 IQD"
+                ],
+                "order": 1
+              },
+              {
+                "label": "Tickets Total : ",
+                "header": [
+                  "Ticket",
+                  "Quantity",
+                  "Amount"
+                ],
+                "body": [],
+                "footer": [
+                  "Total",
+                  "28",
+                  "285,000 IQD"
+                ],
+                "order": 2
+              },
+              {
+                "label": "Imtiyaz Tickets : Cash (-) ",
+                "header": [
+                  "Ticket",
+                  "Admits",
+                  "Amount"
+                ],
+                "body": [
+                  [
+                    "BF REG",
+                    "1",
+                    "5,000 IQD"
+                  ]
+                ],
+                "footer": [
+                  "Total",
+                  "1",
+                  "5,000 IQD"
+                ],
+                "order": 13
+              }
+            ],
+            "total": "280,000 IQD",
+            "printed_at": "2025-03-20 13:08:16"
+          }');
+
+
         $date = request()->input('date');
 
         if (!$date) {
