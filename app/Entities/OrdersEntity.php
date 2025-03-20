@@ -16,6 +16,9 @@ class OrdersEntity extends Entity
         'pagination' => 20,
     ];
 
+
+
+
     public function fields(){
         $this->addField("user_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("pos_user_id" , ["container" => 'col-span-6', 'required' => false]);

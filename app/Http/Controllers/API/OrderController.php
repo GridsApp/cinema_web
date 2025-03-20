@@ -59,7 +59,7 @@ class  OrderController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function createOrder($cart_id, $payment_method , $payment_reference = null)
+    public function createOrder($cart_id, $payment_method, $payment_reference = null)
     {
 
         try {
@@ -74,7 +74,7 @@ class  OrderController extends Controller
         $field = get_user_field_from_type($user_type);
         $branch_id = request()->branch_id;
 
-    
+
         $subtotal = $cart_details['subtotal']['value'];
 
 
@@ -96,7 +96,7 @@ class  OrderController extends Controller
             case 'CC-DC-QICARD':
 
                 try {
-                    $order = $this->orderRepository->createOrderFromCart($payment_attempt , $branch_id);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', $th->getMessage()));
                 }
@@ -163,7 +163,7 @@ class  OrderController extends Controller
 
 
                 try {
-                    $order = $this->orderRepository->createOrderFromCart($payment_attempt , $branch_id);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
@@ -211,14 +211,13 @@ class  OrderController extends Controller
 
 
 
-        $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id' , 'payment_reference']);
+        $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id']);
 
         if ($check) {
             return $this->response($check);
         }
 
-        $payment_reference = $form_data['payment_reference'];
-
+    
         try {
             $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
         } catch (\Exception $th) {
@@ -228,7 +227,7 @@ class  OrderController extends Controller
 
         // dd(request()->user);
         // return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
-        return $this->createOrder($form_data['cart_id'], $payment_method , $payment_reference);
+        return $this->createOrder($form_data['cart_id'], $payment_method, $payment_reference);
     }
     public function refund()
     {

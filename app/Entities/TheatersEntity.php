@@ -27,9 +27,6 @@ class TheatersEntity extends Entity
 
         ],
     ];
-
-
-
     public $conditions = [
         [
             'type' => 'where',
