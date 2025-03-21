@@ -94,6 +94,33 @@ class CartController extends Controller
             'expires_at' => $cart->expires_at
         ], notification()->success('Cart created', 'Cart created'));
     }
+
+    public function emptyCart(){
+
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id']);
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+
+        CartSeat::where('cart_id', $form_data['cart_id'])->delete();
+
+
+        return $this->response(notification()->success('Cart successfully is empty', 'Cart successfully empty'));
+
+
+    }
+
     public function expireCart()
     {
 

@@ -74,7 +74,7 @@ class  OrderController extends Controller
         $field = get_user_field_from_type($user_type);
         $branch_id = request()->branch_id;
 
-    
+
         $subtotal = $cart_details['subtotal']['value'];
 
 
@@ -217,9 +217,9 @@ class  OrderController extends Controller
             return $this->response($check);
         }
 
-      
+
         $payment_reference = $form_data['payment_reference'] ?? null;
-     
+
         try {
             $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
         } catch (\Exception $th) {
@@ -613,8 +613,18 @@ class  OrderController extends Controller
         }
 
         $refunded_seats =  $refunded_seats->map(function ($seats) use ($order) {
-
             $movie = $seats->movie;
+
+
+            $type =  $seats->theater->PriceGroup->label ?? '';
+
+            $zone = $seats->zone;
+
+            if($zone){
+                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label;
+            }
+
+
             return [
                 'movie_name' => $movie->name ?? '',
                 'movie_image' => get_image($movie->main_image) ?? '',
@@ -628,7 +638,7 @@ class  OrderController extends Controller
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
                 'gained_points' => $seats->gained_points,
-                'type' => $seats->theater->PriceGroup->label ?? '',
+                'type' => $type,
                 'is_imtiyaz' => !empty($seats->imtiyaz_phone),
             ];
         });
@@ -644,7 +654,7 @@ class  OrderController extends Controller
             $zone = $seats->zone;
 
             if($zone){
-                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label; 
+                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label;
             }
 
 

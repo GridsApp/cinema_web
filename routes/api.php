@@ -98,6 +98,9 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
         Route::post('/create', [App\Http\Controllers\API\CartController::class, 'createCart']);
         Route::post('/expire', [App\Http\Controllers\API\CartController::class, 'expireCart']);
+
+        Route::post('/empty', [App\Http\Controllers\API\CartController::class, 'emptyCart']);
+
         Route::get('/details', [App\Http\Controllers\API\CartController::class, 'details']);
 
 

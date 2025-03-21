@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.342.7",
+            "version": "3.342.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4d42e384dac1e71107226ed72ed5e8e4d4ee3358"
+                "reference": "93dc5f0852d9e67f237060814b8abc748c0e4be5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4d42e384dac1e71107226ed72ed5e8e4d4ee3358",
-                "reference": "4d42e384dac1e71107226ed72ed5e8e4d4ee3358",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/93dc5f0852d9e67f237060814b8abc748c0e4be5",
+                "reference": "93dc5f0852d9e67f237060814b8abc748c0e4be5",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.342.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.342.10"
             },
-            "time": "2025-03-17T18:18:04+00:00"
+            "time": "2025-03-20T18:27:12+00:00"
         },
         {
             "name": "brick/math",
@@ -596,16 +596,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "4.0.3",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "b115554301161fa21467629f1e1391c1936de517"
+                "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/b115554301161fa21467629f1e1391c1936de517",
-                "reference": "b115554301161fa21467629f1e1391c1936de517",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+                "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
                 "shasum": ""
             },
             "require": {
@@ -651,7 +651,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/4.0.3"
+                "source": "https://github.com/egulias/EmailValidator/tree/4.0.4"
             },
             "funding": [
                 {
@@ -659,7 +659,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-27T00:36:43+00:00"
+            "time": "2025-03-06T22:45:56+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -734,16 +734,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php-lite",
-            "version": "8.13.55",
+            "version": "9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
-                "reference": "e077137a4aa0333bee139b3a1d2f2919492f3827"
+                "reference": "2eef09464e6d162f928bc5b7869148e932a83104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/e077137a4aa0333bee139b3a1d2f2919492f3827",
-                "reference": "e077137a4aa0333bee139b3a1d2f2919492f3827",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/2eef09464e6d162f928bc5b7869148e932a83104",
+                "reference": "2eef09464e6d162f928bc5b7869148e932a83104",
                 "shasum": ""
             },
             "require": {
@@ -755,18 +755,19 @@
             },
             "require-dev": {
                 "ext-dom": "*",
-                "friendsofphp/php-cs-fixer": "^3.12",
-                "infection/infection": "^0.28",
-                "pear/pear-core-minimal": "^1.10.11",
-                "pear/pear_exception": "^1.0.2",
-                "pear/versioncontrol_git": "^0.7",
-                "phing/phing": "^2.17.4",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.8",
-                "phpstan/phpstan-phpunit": "^1.2",
-                "phpunit/phpunit": "^10.5",
-                "symfony/console": "^6.0",
-                "symfony/var-exporter": "^6.0"
+                "friendsofphp/php-cs-fixer": "^3.71",
+                "infection/infection": "^0.28.0",
+                "nette/php-generator": "^4.1",
+                "php-coveralls/php-coveralls": "^2.7",
+                "phpstan/extension-installer": "^1.4.3",
+                "phpstan/phpstan": "^2.1.7",
+                "phpstan/phpstan-deprecation-rules": "^2.0.1",
+                "phpstan/phpstan-phpunit": "^2.0.4",
+                "phpstan/phpstan-strict-rules": "^2.0.3",
+                "phpunit/phpunit": "^10.5.45",
+                "symfony/console": "^6.4",
+                "symfony/filesystem": "^6.4",
+                "symfony/process": "^6.4"
             },
             "suggest": {
                 "giggsey/libphonenumber-for-php": "Use libphonenumber-for-php for geocoding, carriers, timezones and matching"
@@ -774,7 +775,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.x-dev"
+                    "dev-master": "9.x-dev"
                 }
             },
             "autoload": {
@@ -813,7 +814,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
             },
-            "time": "2025-02-14T08:11:44+00:00"
+            "time": "2025-03-20T14:00:29+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1772,16 +1773,16 @@
         },
         {
             "name": "laravel/scout",
-            "version": "v10.13.1",
+            "version": "v10.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "577535cd93474e4c915e7469cbfa597c41aef8e2"
+                "reference": "840d18e3d68b17c59663fc687497c49c0ff0d295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/577535cd93474e4c915e7469cbfa597c41aef8e2",
-                "reference": "577535cd93474e4c915e7469cbfa597c41aef8e2",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/840d18e3d68b17c59663fc687497c49c0ff0d295",
+                "reference": "840d18e3d68b17c59663fc687497c49c0ff0d295",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1850,7 @@
                 "issues": "https://github.com/laravel/scout/issues",
                 "source": "https://github.com/laravel/scout"
             },
-            "time": "2025-02-18T18:39:33+00:00"
+            "time": "2025-03-18T14:00:31+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -3367,20 +3368,20 @@
         },
         {
             "name": "propaganistas/laravel-phone",
-            "version": "5.3.4",
+            "version": "5.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Propaganistas/Laravel-Phone.git",
-                "reference": "a76eae715b927f8f30add4bb2228926091d3e152"
+                "reference": "89f26e8336cf8f8041609148b4fef752f0bd720e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/a76eae715b927f8f30add4bb2228926091d3e152",
-                "reference": "a76eae715b927f8f30add4bb2228926091d3e152",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/89f26e8336cf8f8041609148b4fef752f0bd720e",
+                "reference": "89f26e8336cf8f8041609148b4fef752f0bd720e",
                 "shasum": ""
             },
             "require": {
-                "giggsey/libphonenumber-for-php-lite": "^8.13.35",
+                "giggsey/libphonenumber-for-php-lite": "^8.13.35|^9.0.0",
                 "illuminate/contracts": "^10.0|^11.0|^12.0",
                 "illuminate/support": "^10.0|^11.0|^12.0",
                 "illuminate/validation": "^10.0|^11.0|^12.0",
@@ -3426,7 +3427,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Propaganistas/Laravel-Phone/issues",
-                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/5.3.4"
+                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/5.3.6"
             },
             "funding": [
                 {
@@ -3434,7 +3435,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-24T15:09:06+00:00"
+            "time": "2025-03-21T09:07:26+00:00"
         },
         {
             "name": "psr/clock",
@@ -6561,12 +6562,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewebaddicts/twacmsv2.git",
-                "reference": "e403478271f2993b8d495c2888e8b19cf4bdfe03"
+                "reference": "73592a65d899d2f94a7ddf94b21709fc59de0cbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/e403478271f2993b8d495c2888e8b19cf4bdfe03",
-                "reference": "e403478271f2993b8d495c2888e8b19cf4bdfe03",
+                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/73592a65d899d2f94a7ddf94b21709fc59de0cbd",
+                "reference": "73592a65d899d2f94a7ddf94b21709fc59de0cbd",
                 "shasum": ""
             },
             "default-branch": true,
@@ -6598,7 +6599,7 @@
                 "issues": "https://github.com/thewebaddicts/twacmsv2/issues",
                 "source": "https://github.com/thewebaddicts/twacmsv2/tree/main"
             },
-            "time": "2025-01-21T16:38:31+00:00"
+            "time": "2025-03-21T08:11:32+00:00"
         },
         {
             "name": "twa/uikit",
@@ -6606,12 +6607,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewebaddicts/uikit.git",
-                "reference": "a6622bad0f6c1f247857b017f2b9c246629c1644"
+                "reference": "d54b813dd1b079f4234a359c0c9c2cb1986f52f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewebaddicts/uikit/zipball/a6622bad0f6c1f247857b017f2b9c246629c1644",
-                "reference": "a6622bad0f6c1f247857b017f2b9c246629c1644",
+                "url": "https://api.github.com/repos/thewebaddicts/uikit/zipball/d54b813dd1b079f4234a359c0c9c2cb1986f52f6",
+                "reference": "d54b813dd1b079f4234a359c0c9c2cb1986f52f6",
                 "shasum": ""
             },
             "require": {
@@ -6646,7 +6647,7 @@
                 "issues": "https://github.com/thewebaddicts/uikit/issues",
                 "source": "https://github.com/thewebaddicts/uikit/tree/main"
             },
-            "time": "2025-03-18T08:18:38+00:00"
+            "time": "2025-03-21T08:10:29+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -7864,16 +7865,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.12",
+            "version": "11.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d42785840519401ed2113292263795eb4c0f95da"
+                "reference": "9d6046153c2893b521784069e6b5249ce7d2acae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d42785840519401ed2113292263795eb4c0f95da",
-                "reference": "d42785840519401ed2113292263795eb4c0f95da",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9d6046153c2893b521784069e6b5249ce7d2acae",
+                "reference": "9d6046153c2893b521784069e6b5249ce7d2acae",
                 "shasum": ""
             },
             "require": {
@@ -7893,14 +7894,14 @@
                 "phpunit/php-text-template": "^4.0.1",
                 "phpunit/php-timer": "^7.0.1",
                 "sebastian/cli-parser": "^3.0.2",
-                "sebastian/code-unit": "^3.0.2",
+                "sebastian/code-unit": "^3.0.3",
                 "sebastian/comparator": "^6.3.1",
                 "sebastian/diff": "^6.0.2",
                 "sebastian/environment": "^7.2.0",
                 "sebastian/exporter": "^6.3.0",
                 "sebastian/global-state": "^7.0.2",
                 "sebastian/object-enumerator": "^6.0.1",
-                "sebastian/type": "^5.1.0",
+                "sebastian/type": "^5.1.2",
                 "sebastian/version": "^5.0.2",
                 "staabm/side-effects-detector": "^1.0.5"
             },
@@ -7945,7 +7946,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.12"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.14"
             },
             "funding": [
                 {
@@ -7961,7 +7962,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-07T07:31:03+00:00"
+            "time": "2025-03-19T13:45:48+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -8022,16 +8023,16 @@
         },
         {
             "name": "sebastian/code-unit",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit.git",
-                "reference": "ee88b0cdbe74cf8dd3b54940ff17643c0d6543ca"
+                "reference": "54391c61e4af8078e5b276ab082b6d3c54c9ad64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/ee88b0cdbe74cf8dd3b54940ff17643c0d6543ca",
-                "reference": "ee88b0cdbe74cf8dd3b54940ff17643c0d6543ca",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/54391c61e4af8078e5b276ab082b6d3c54c9ad64",
+                "reference": "54391c61e4af8078e5b276ab082b6d3c54c9ad64",
                 "shasum": ""
             },
             "require": {
@@ -8067,7 +8068,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/code-unit/issues",
                 "security": "https://github.com/sebastianbergmann/code-unit/security/policy",
-                "source": "https://github.com/sebastianbergmann/code-unit/tree/3.0.2"
+                "source": "https://github.com/sebastianbergmann/code-unit/tree/3.0.3"
             },
             "funding": [
                 {
@@ -8075,7 +8076,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-12T09:59:06+00:00"
+            "time": "2025-03-19T07:56:08+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -8780,16 +8781,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "5.1.0",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "461b9c5da241511a2a0e8f240814fb23ce5c0aac"
+                "reference": "a8a7e30534b0eb0c77cd9d07e82de1a114389f5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/461b9c5da241511a2a0e8f240814fb23ce5c0aac",
-                "reference": "461b9c5da241511a2a0e8f240814fb23ce5c0aac",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/a8a7e30534b0eb0c77cd9d07e82de1a114389f5e",
+                "reference": "a8a7e30534b0eb0c77cd9d07e82de1a114389f5e",
                 "shasum": ""
             },
             "require": {
@@ -8825,7 +8826,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
                 "security": "https://github.com/sebastianbergmann/type/security/policy",
-                "source": "https://github.com/sebastianbergmann/type/tree/5.1.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/5.1.2"
             },
             "funding": [
                 {
@@ -8833,7 +8834,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-17T13:12:04+00:00"
+            "time": "2025-03-18T13:35:50+00:00"
         },
         {
             "name": "sebastian/version",
@@ -9075,6 +9076,6 @@
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
