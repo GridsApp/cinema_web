@@ -17,7 +17,7 @@
                         <div class="w-full flex items-center justify-between">
                             <div class="flex items-center">
                                 <button type="button" wire:click="handlePrevWeek" class="text-[12px]  py-2"><i
-                                        class="fa-regular fa-chevron-left text-[#78829d]"></i></button>
+                                        class="fa-solid fa-chevron-left text-[#78829d]"></i></button>
 
                                 <div class="min-w-[110px] font-semibold text-[12px] text-center">
                                     {{ now()->parse($date_from)->format('D d M') }}
@@ -27,7 +27,7 @@
                                     {{ now()->parse($date_to)->format('D d M') }}
                                 </div>
                                 <button type="button" wire:click="handleNextWeek" class="text-[12px]  py-2"><i
-                                        class="fa-regular fa-chevron-right text-[#78829d]"></i></button>
+                                        class="fa-solid fa-chevron-right text-[#78829d]"></i></button>
                             </div>
 
 

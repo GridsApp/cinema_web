@@ -33,7 +33,7 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-DwL6npom.css",
+    "file": "assets/app-Dj75B9B1.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
@@ -43,9 +43,9 @@
     "src": "vendor/twa/uikit/dist/app-BWi0WNwC.js",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-D-qQ4Quj.css": {
-    "file": "assets/app-D-qQ4Quj-CeiQyxDz.css",
-    "src": "vendor/twa/uikit/dist/app-D-qQ4Quj.css",
+  "vendor/twa/uikit/dist/app-Cn2n5Ab7.css": {
+    "file": "assets/app-Cn2n5Ab7-B3N2_WEu.css",
+    "src": "vendor/twa/uikit/dist/app-Cn2n5Ab7.css",
     "isEntry": true
   }
 }

@@ -827,8 +827,7 @@ return [
         'name' => 'visibility'
     ],
 
-    '
-    ' => [
+    'branch' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',

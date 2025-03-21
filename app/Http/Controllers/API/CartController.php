@@ -16,6 +16,7 @@ use App\Interfaces\ZoneRepositoryInterface;
 use App\Models\CartImtiyaz;
 use App\Models\CartSeat;
 use App\Models\Coupon;
+use App\Models\OrderSeat;
 use App\Repositories\PriceGroupZoneRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -74,7 +75,7 @@ class CartController extends Controller
         } catch (\Throwable $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
-       
+
 
         try {
             $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id);
@@ -174,7 +175,7 @@ class CartController extends Controller
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
 
-         
+
 
             DB::commit();
         } catch (\Exception $th) {
@@ -353,7 +354,7 @@ class CartController extends Controller
 
 
         try {
-            $this->cartRepository->removeImtiyazFromCart($form_data['cart_id'] , $form_data['phone']);
+            $this->cartRepository->removeImtiyazFromCart($form_data['cart_id'], $form_data['phone']);
             return $this->response(notification()->success('Imtiyaz removed successfully', 'Imtiyaz removed successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error removing Imtiyaz', $e->getMessage()));
@@ -458,13 +459,44 @@ class CartController extends Controller
         }
 
 
+        // try {
+        //     $phone_exists_in_same_cart = CartImtiyaz::where('cart_id', $form_data['cart_id'])
+        //         ->where('phone', $form_data['phone'])
+        //         ->whereNull('deleted_at')
+        //         ->get();
+                
+        //         dd($phone_exists_in_same_cart);
+
+        // } catch (\Exception $th) {
+        //     dd("here");
+        //     return $this->response(notification()->error('Phone number already used in this cart', $th->getMessage()));
+        // }
+
+        // try {
+
+        //     $phone_exists_in_other_cart = CartImtiyaz::where('phone', $form_data['phone'])
+        //         ->where('cart_id', '!=', $form_data['cart_id'])
+        //         ->whereNull('deleted_at')
+        //         ->exists();
+        // } catch (\Exception $th) {
+        //     return $this->response(notification()->error('Phone number already used in another cart', $th->getMessage()));
+        // }
+
+
+        // try {
+        //     $phone_reserved_today = OrderSeat::where('imtiyaz_phone', $form_data['phone'])
+        //         ->whereDate('created_at', now()->toDateString())
+        //         ->exists();
+        // } catch (\Exception $th) {
+        //     return $this->response(notification()->error('Phone number already reserved today', $th->getMessage()));
+        // }
+
+
+
+
 
         //phone already taken in other same cart and other cart and reserved in same day
 
-
-    
-
-      
         $user = request()->user;
         $user_type = request()->user_type;
 
@@ -515,20 +547,20 @@ class CartController extends Controller
 
             $i = ($count_imtiyaz * 2) + 1;
 
-        
-
-                $this->cartRepository->addImtiyazToCart($form_data['cart_id'], $form_data['phone']);
 
 
-                $cart_seat = $cart_seats[$i] ?? null;
+            $this->cartRepository->addImtiyazToCart($form_data['cart_id'], $form_data['phone']);
 
-                if ($cart_seat) {
-                    $cart_seat->imtiyaz_phone = $form_data['phone'];
-                    $cart_seat->save();
-                }
 
-        
-   
+            $cart_seat = $cart_seats[$i] ?? null;
+
+            if ($cart_seat) {
+                $cart_seat->imtiyaz_phone = $form_data['phone'];
+                $cart_seat->save();
+            }
+
+
+
             DB::commit();
         } catch (\Exception $th) {
             DB::rollBack();
@@ -698,7 +730,7 @@ class CartController extends Controller
         $cartDetails = $this->cartRepository->getCartDetails($cart);
 
 
-     
+
         if ($cartDetails['user_id']) {
 
             // get card info by user id

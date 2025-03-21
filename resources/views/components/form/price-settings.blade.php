@@ -26,7 +26,7 @@
                     {{--                    <input x-model="conditions[index].day" /> --}}
                     <div class="twa-form-label min-w-[50px]">
 
-                        <select class="twa-form-input-container twa-form-input-ring border-0"
+                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px]"
                             x-model="conditions[index].day" :key="'select' + index">
 
                             <option value=""> Choose day</option>
