@@ -61,4 +61,6 @@ return array (
   'user-verify-tokens' => 'App\\Entities\\UserVerifyTokensEntity',
   'user-wallet-transactions' => 'App\\Entities\\UserWalletTransactionsEntity',
   'users' => 'App\\Entities\\UsersEntity',
+
+  'cms-users' => 'twa\\cmsv2\\Entities\\CmsUsers',
 );
