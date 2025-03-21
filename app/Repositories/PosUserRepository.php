@@ -23,11 +23,12 @@ class PosUserRepository implements PosUserRepositoryInterface
         }
     }
 
-    public function getUserByUsername($username)
+    public function getUserByUsername($username , $branch_id)
     {
 
         try {
             $user = PosUser::where('username', $username)
+                ->where('branch_id' , $branch_id)
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("User with Username {$username} not found .");

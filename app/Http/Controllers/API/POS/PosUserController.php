@@ -57,8 +57,9 @@ class PosUserController extends Controller
 
 
         try {
-            $pos_user = $this->posUserRepository->getUserByUsername($form_data['username']);
+            $pos_user = $this->posUserRepository->getUserByUsername($form_data['username'] , $form_data['branch_id']);
         } catch (\Exception $th) {
+        
             return $this->response(notification()->error("You have entered invalid username, password or branch", $th->getMessage()));
         }
 
@@ -67,13 +68,17 @@ class PosUserController extends Controller
         //     return $this->response(notification()->error("You have entered invalid username/password or branch", 'You have entered invalid username/password or branch'));
         // }
 
+
+       
+
         if ($form_data['passcode'] != $pos_user->passcode) {
             return $this->response(notification()->error("You have entered invalid pos_username/password or branch", 'You have entered invalid username/password or branch'));
         }
 
-        if ($form_data['branch_id'] != $pos_user->branch_id) {
-            return $this->response(notification()->error("You have entered invalid username/password or branch", 'You have entered invalid username/password or branch'));
-        }
+        // dd($form_data['branch_id'] , $pos_user->branch_id);
+        // if ($form_data['branch_id'] != $pos_user->branch_id) {
+        //     return $this->response(notification()->error("You have entered invalid username/password or branch", 'You have entered invalid username/password or branch'));
+        // }
 
 
         $access_token = $this->tokenRepository->createAccessToken($pos_user, "POS");
