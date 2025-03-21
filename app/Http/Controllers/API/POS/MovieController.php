@@ -45,6 +45,19 @@ class MovieController extends Controller
         }
 
 
+        // $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
+        //     ->whereNull('deleted_at')
+        //     ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
+        //         $q->whereDate('date', $date)
+        //             ->whereIn('theater_id', $theaters_ids);
+        //     })
+        //     ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
+        //         $query->whereIn('theater_id', $theaters_ids)
+        //             ->whereDate('date', $date);
+        //     }])
+
+        //     ->get();
+
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
             ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
@@ -53,19 +66,12 @@ class MovieController extends Controller
             })
             ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
                 $query->whereIn('theater_id', $theaters_ids)
-                    // ->where(function ($query) use ($system_ids) {
-                    //     foreach ($system_ids as $id) {
-                    //         $query->orWhere('system_id', 'like', '%"' . $id . '"%');
-                    //     }
-                    // })
-                    ->whereDate('date', $date);
+                    ->whereDate('date', $date)
+                    ->orderBy('time_id', 'asc'); 
             }])
             ->get();
 
 
-
-
-        
 
 
         $customMovies = $movies->map(function ($movie) {
