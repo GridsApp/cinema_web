@@ -30,8 +30,12 @@ class UserRepository implements UserRepositoryInterface
         $user->token = $this->tokenRepository->createUserToken();
 
 
+        // if ($password) {
+        //     $user->password = Hash::make($password);
+        // }
+
         if ($password) {
-            $user->password = Hash::make($password);
+            $user->password = md5($password);
         }
         $user->save();
 
@@ -49,7 +53,7 @@ class UserRepository implements UserRepositoryInterface
         $user->token = $this->tokenRepository->createUserToken();
 
         if ($password) {
-            $user->password = Hash::make($password);
+            $user->password = md5($password);
         }
 
         $user->save();
@@ -162,7 +166,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function changePassword($user, $password)
     {
-        $user->password = Hash::make($password);
+        $user->password = md5($password);
         $user->save();
         return true;
     }

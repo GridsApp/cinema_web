@@ -103,7 +103,9 @@ class AuthController extends Controller
 
 
         // dd($user->password);
-        if (!Hash::check($form_data['password'], $user->password)) {
+        // if (!Hash::check($form_data['password'], $user->password)) {
+
+        if (md5($form_data['password']) != $user->password) {
             return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
 

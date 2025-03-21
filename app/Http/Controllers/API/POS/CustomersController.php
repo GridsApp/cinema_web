@@ -145,7 +145,7 @@ class CustomersController extends Controller
             $updateData['phone'] = $form_data['phone'];
         }
         if (isset($form_data['password'])) {
-            $updateData['password'] = $form_data['password'];
+            $updateData['password'] = md5($form_data['password']);
         }
         if (isset($form_data['gender'])) {
             $updateData['gender'] = $form_data['gender'];

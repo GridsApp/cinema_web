@@ -459,41 +459,34 @@ class CartController extends Controller
         }
 
 
-        // try {
-        //     $phone_exists_in_same_cart = CartImtiyaz::where('cart_id', $form_data['cart_id'])
-        //         ->where('phone', $form_data['phone'])
-        //         ->whereNull('deleted_at')
-        //         ->get();
-                
-        //         dd($phone_exists_in_same_cart);
 
-        // } catch (\Exception $th) {
-        //     dd("here");
-        //     return $this->response(notification()->error('Phone number already used in this cart', $th->getMessage()));
+        // $phone_exists_in_same_cart = CartImtiyaz::where('cart_id', $form_data['cart_id'])
+        //     ->where('phone', $form_data['phone'])
+        //     ->whereNull('deleted_at')
+        //     ->exists();
+
+
+        // if ($phone_exists_in_same_cart) {
+        //     return $this->response(notification()->error('Phone number already used in this cart', 'Phone number already used in this cart'));
         // }
 
-        // try {
+        // $phone_exists_in_other_cart = CartImtiyaz::where('phone', $form_data['phone'])
+        //     ->where('cart_id', '!=', $form_data['cart_id'])
+        //     ->whereNull('deleted_at')
+        //     ->exists();
 
-        //     $phone_exists_in_other_cart = CartImtiyaz::where('phone', $form_data['phone'])
-        //         ->where('cart_id', '!=', $form_data['cart_id'])
-        //         ->whereNull('deleted_at')
-        //         ->exists();
-        // } catch (\Exception $th) {
-        //     return $this->response(notification()->error('Phone number already used in another cart', $th->getMessage()));
-        // }
-
-
-        // try {
-        //     $phone_reserved_today = OrderSeat::where('imtiyaz_phone', $form_data['phone'])
-        //         ->whereDate('created_at', now()->toDateString())
-        //         ->exists();
-        // } catch (\Exception $th) {
-        //     return $this->response(notification()->error('Phone number already reserved today', $th->getMessage()));
+        // if ($phone_exists_in_other_cart) {
+        //     return $this->response(notification()->error('Phone number already used in another cart', 'Phone number already used in another cart'));
         // }
 
 
 
-
+        // $phone_reserved_today = OrderSeat::where('imtiyaz_phone', $form_data['phone'])
+        //     ->whereDate('created_at', now()->toDateString())
+        //     ->exists();
+        // if ($phone_reserved_today) {
+        //     return $this->response(notification()->error('Phone number already reserved today', 'Phone number already reserved today'));
+        // }
 
         //phone already taken in other same cart and other cart and reserved in same day
 
