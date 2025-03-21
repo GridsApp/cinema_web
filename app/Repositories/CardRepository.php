@@ -185,8 +185,6 @@ class CardRepository implements CardRepositoryInterface
 
     public function getWalletBalance($user)
     {
-
-    
         $transaction = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
             ->latest()->first();

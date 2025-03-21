@@ -79,7 +79,7 @@ class CustomersController extends Controller
         if (isset($form_data['barcode']) && ($form_data['barcode'])) {
             $this->cardRepository->createCard($user, $form_data['barcode'], 'physical');
         } else {
-            $this->cardRepository->createCard($user, $generated_barcode, 'physical');
+            $this->cardRepository->createCard($user, $generated_barcode, 'digital');
         }
         return $this->response(notification()->success("User added", "User was successfully added"));
     }

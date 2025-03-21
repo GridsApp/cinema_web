@@ -548,10 +548,6 @@ class  OrderController extends Controller
             }
         }
 
-
-
-
-
         $user_id = $order->user_id;
 
         try {
@@ -559,9 +555,6 @@ class  OrderController extends Controller
         } catch (\Throwable $th) {
             $user = null;
         }
-
-
-        //    dd($user_id);
 
         $user_loyalty_balance = null;
         if ($user) {
@@ -575,9 +568,6 @@ class  OrderController extends Controller
 
         if ($user) {
             $user_card_number = $this->cardRepository->getCardByUserId($user->id);
-
-
-            // dd($user_card_number);
         }
         $order_seats = null;
         try {
@@ -607,11 +597,6 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
         }
 
-
-
-
-
-
         $order_topups = null;
         try {
 
@@ -626,9 +611,6 @@ class  OrderController extends Controller
         } catch (\Throwable $e) {
             return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
         }
-
-
-
 
         $refunded_seats =  $refunded_seats->map(function ($seats) use ($order) {
 
@@ -648,14 +630,24 @@ class  OrderController extends Controller
                 'gained_points' => $seats->gained_points,
                 'type' => $seats->theater->PriceGroup->label ?? '',
                 'is_imtiyaz' => !empty($seats->imtiyaz_phone),
-
-
             ];
         });
 
 
 
         $order_seats = $order_seats->map(function ($seats) use ($order) {
+
+
+
+            $type =  $seats->theater->PriceGroup->label ?? '';
+
+            $zone = $seats->zone;
+
+            if($zone){
+                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label; 
+            }
+
+
 
             $movie = $seats->movie;
             return [
@@ -671,7 +663,7 @@ class  OrderController extends Controller
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
                 'gained_points' => $seats->gained_points,
-                'type' => $seats->theater->PriceGroup->label ?? '',
+                'type' => $type,
                 'is_imtiyaz' => !empty($seats->imtiyaz_phone),
 
 
@@ -802,7 +794,7 @@ class  OrderController extends Controller
 
 
         $today = Carbon::today();
-        $currentTime = Carbon::now();
+        $currentTime = Carbon::now(env('CINEMA_TIMEZONE' ));
 
 
         $times = Time::whereNull('deleted_at')
