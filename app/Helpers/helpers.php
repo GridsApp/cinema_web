@@ -714,6 +714,31 @@ if (!function_exists('minutes_to_human')) {
             return md5(uniqid() . env('APP_KEY')) . md5(uniqid() . env('APP_KEY').now()->timestamp);
        }
     }
+
+
+    
+
+    if (!function_exists('round_time')) {
+        function round_time($time)
+        {
+            
+            $arr = explode(":",$time);
+
+            $minutes = (int) $arr[1];
+
+            if($minutes < 15){
+                return $arr[0].":00";
+            }elseif($minutes < 30){
+                return $arr[0].":15";
+            }elseif($minutes < 45){
+                return $arr[0].":30";
+            }else{
+                return $arr[0].":45";
+            }
+           
+       }
+    }
+
 }
 
 

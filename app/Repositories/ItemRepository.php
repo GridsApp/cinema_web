@@ -35,8 +35,11 @@ class ItemRepository implements ItemRepositoryInterface
 
         return $item;
     }
-    public function getItems($branch_id)
+    public function getItems($branch_id , $cart_id = null)
     {
+
+       
+
         try {
             $items = Item::whereNull('deleted_at')->where('branch_id',$branch_id)->get()->map(function ($item) {
                 return [

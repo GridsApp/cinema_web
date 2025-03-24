@@ -75,7 +75,7 @@ class CardController extends Controller
     {
 
         $user = request()->user;
-     
+
         $activeCard = $this->cardRepository->getActiveCard($user);
 
         if (!$activeCard) {
@@ -83,7 +83,7 @@ class CardController extends Controller
         }
 
         $loyalty_transactions = $this->cardRepository->getLoyaltyTransactions($user);
-        
+
         return $this->responseData($loyalty_transactions);
     }
 
@@ -91,7 +91,7 @@ class CardController extends Controller
     {
 
         $user = request()->user;
-     
+
         $activeCard = $this->cardRepository->getActiveCard($user);
 
         if (!$activeCard) {
@@ -99,7 +99,7 @@ class CardController extends Controller
         }
 
         $wallet_transactions = $this->cardRepository->getWalletTransactions($user);
-   
+
         return $this->responseData($wallet_transactions);
     }
 
@@ -110,6 +110,7 @@ class CardController extends Controller
         $form_data = clean_request();
         $validator = Validator::make($form_data, [
             'user_id' => ['required'],
+            'barcode' => ['required'],
 
         ]);
         if ($validator->errors()->count() > 0) {
@@ -121,25 +122,20 @@ class CardController extends Controller
         } catch (\Exception $e) {
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
-        $updateData = [];
 
+        $existingBarcode = $this->cardRepository->checkIfBarcodeExists($form_data['barcode']);
 
-        if (isset($form_data['barcode'])) {
-            $updateData['barcode'] = $form_data['barcode'];
+        if ($existingBarcode) {
+            return $this->responseData(notification()->error("Barcode already exists", "The barcode is already in use by another user."));
         }
+
 
         try {
-            $existingBarcode = $this->cardRepository->checkIfBarcodeExists($form_data['barcode']);
-
-            if ($existingBarcode) {
-                return $this->responseData(notification()->error("Barcode already exists", "The barcode is already in use by another user."));
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
+            $this->cardRepository->updateUserCard($form_data['user_id'], $form_data['barcode']);
+        } catch (\Exception $th) {
+            return $this->responseData(notification()->error("Something went wrong", $th->getMessage()));
         }
 
-
-        $this->cardRepository->updateUserCard($form_data['user_id'], $updateData);
 
 
         return $this->response(notification()->success("User Card updated successfully!", "User Card updated successfully"));

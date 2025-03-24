@@ -59,12 +59,23 @@ class  OrderController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function createOrder($cart_id, $payment_method , $payment_reference = null)
+    public function createOrder($cart_id, $payment_method, $payment_reference = null)
     {
 
         try {
             $cart = $this->cartRepository->getCartById($cart_id);
             $cart_details = $this->cartRepository->getCartDetails($cart);
+
+            $has_topup = collect($cart_details['lines'])->contains(function($item) {
+                return $item['type'] === 'Topup';
+            });
+
+              
+        if ($has_topup && ($payment_method->key === 'WP' || $payment_method->key === 'WP-POS')) {
+            return $this->response(notification()->error('Cannot proceed with wallet payment', 'There is a top-up amount in the cart, and wallet payment is not allowed.'));
+        }
+
+            // dd($has_topup);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Cart Error', $e->getMessage()));
         }
@@ -96,7 +107,7 @@ class  OrderController extends Controller
             case 'CC-DC-QICARD':
 
                 try {
-                    $order = $this->orderRepository->createOrderFromCart($payment_attempt , $branch_id);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', $th->getMessage()));
                 }
@@ -163,7 +174,7 @@ class  OrderController extends Controller
 
 
                 try {
-                    $order = $this->orderRepository->createOrderFromCart($payment_attempt , $branch_id);
+                    $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
@@ -211,7 +222,7 @@ class  OrderController extends Controller
 
 
 
-        $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id' ]);
+        $check = $this->validateRequiredFields($form_data, ['payment_method_id', 'cart_id']);
 
         if ($check) {
             return $this->response($check);
@@ -229,10 +240,11 @@ class  OrderController extends Controller
 
         // dd(request()->user);
         // return $this->createOrder(request()->user , $form_data['cart_id'] , $payment_method);
-        return $this->createOrder($form_data['cart_id'], $payment_method , $payment_reference);
+        return $this->createOrder($form_data['cart_id'], $payment_method, $payment_reference);
     }
     public function refund()
     {
+
         $form_data = clean_request([]);
 
         $validator = Validator::make($form_data, [
@@ -249,6 +261,7 @@ class  OrderController extends Controller
 
 
         $user_id = request()->user->id;
+
         $user_type = request()->user_type;;
         $field = get_user_field_from_type($user_type);
         $user_branch = request()->user->branch_id;
@@ -257,11 +270,15 @@ class  OrderController extends Controller
 
         $order_id = $form_data['order_id'];
 
+
         try {
+
             $order = $this->orderRepository->getOrderById($order_id);
+
+
             // $order = Order::findOrFail($order_id);
         } catch (\Throwable $th) {
-            //throw $th;
+            return $this->response(notification()->error('Order Not Found', 'Order not found.'));
         }
 
         $payment_method = $order->paymentMethod;
@@ -288,6 +305,13 @@ class  OrderController extends Controller
             return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
         }
 
+
+        $order_seats_with_imtiyaz_phone = $order_seats->whereNotNull('imtiyaz_phone');
+        if ($order_seats_with_imtiyaz_phone->count() > 0) {
+            return $this->response(notification()->error("Unable to refund", "Can't refund seats with imtiyaz_phone associated."));
+        }
+
+        // dd($order_seats);
         $order_coupons = OrderCoupon::where('order_id', $order_id)
             ->get();
 
@@ -620,8 +644,8 @@ class  OrderController extends Controller
 
             $zone = $seats->zone;
 
-            if($zone){
-                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label;
+            if ($zone) {
+                $type .= $zone->default == 1 ? '' : " " . $zone->condensed_label;
             }
 
 
@@ -653,8 +677,8 @@ class  OrderController extends Controller
 
             $zone = $seats->zone;
 
-            if($zone){
-                $type .= $zone->default == 1 ? '' : " ".$zone->condensed_label;
+            if ($zone) {
+                $type .= $zone->default == 1 ? '' : " " . $zone->condensed_label;
             }
 
 
@@ -804,7 +828,7 @@ class  OrderController extends Controller
 
 
         $today = Carbon::today();
-        $currentTime = Carbon::now(env('CINEMA_TIMEZONE' ));
+        $currentTime = Carbon::now(env('CINEMA_TIMEZONE'));
 
 
         $times = Time::whereNull('deleted_at')

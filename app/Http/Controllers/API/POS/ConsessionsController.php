@@ -31,9 +31,13 @@ class ConsessionsController extends Controller
     {
 
 
+        $cart_id = request()->input('cart_id');
+
+
+
         try {
 
-            $items = $this->itemRepository->getItems($branch_id);
+            $items = $this->itemRepository->getItems($branch_id , $cart_id);
         } catch (\Throwable $th) {
             return $this->response(notification()->error('Error', $th->getMessage()));
         }

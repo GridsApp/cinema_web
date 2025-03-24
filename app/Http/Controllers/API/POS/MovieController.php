@@ -5,8 +5,11 @@ namespace App\Http\Controllers\API\POS;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CartRepositoryInterface;
 use App\Models\Movie;
+use App\Models\MovieShow;
 use App\Models\System;
 use App\Models\Theater;
+use App\Models\Time;
+use Carbon\Carbon;
 use twa\cmsv2\Traits\APITrait;
 
 
@@ -58,18 +61,44 @@ class MovieController extends Controller
 
         //     ->get();
 
+
+   
+
+        $current_time = (string) now(config('app.cinema_timzone'))->format('H:i');
+
+        $round_time = round_time($current_time);
+
+        $times = Time::whereNull('deleted_at')->where('label' , '>=' , $round_time)->pluck('id')->toArray();
+
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
-            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
+            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids , $times) {
                 $q->whereDate('date', $date)
                     ->whereIn('theater_id', $theaters_ids);
+
+            
+                    if(abs(now()->diffInDays($date)) < 1){
+                      
+                        $q->whereIn('time_id' , $times);
+                    }
+
             })
-            ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
+
+            ->with(['movieShows' => function ($query) use ($theaters_ids, $date, $times) {
                 $query->whereIn('theater_id', $theaters_ids)
                     ->whereDate('date', $date)
-                    ->orderBy('time_id', 'asc'); 
+                    ->orderBy('time_id', 'asc');
+
+                    if(abs(now()->diffInDays($date)) < 1){
+                        $query->whereIn('time_id' , $times);
+                    }
+
             }])
-            ->get();
+            ->get()
+            ->sortBy(function ($movie) {
+                return optional($movie->movieShows->first())->time_id;
+            })
+            ->values();
 
 
 

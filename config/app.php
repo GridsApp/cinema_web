@@ -67,6 +67,8 @@ return [
 
     'timezone' => env('APP_TIMEZONE', 'UTC'),
 
+    'cinema_timzone' => env('CINEMA_TIMEZONE' , 'UTC'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

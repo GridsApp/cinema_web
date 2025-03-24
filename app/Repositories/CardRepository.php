@@ -30,6 +30,10 @@ class CardRepository implements CardRepositoryInterface
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null, $operator_type = null)
     {
 
+        if ($amount == 0) {
+            return false;
+        }
+
         if (!$operator_type || !$operator_id) {
             return false;
         }
@@ -85,6 +89,9 @@ class CardRepository implements CardRepositoryInterface
     }
     public function createLoyaltyTransaction($type, $amount, $user, $description, $reference = null)
     {
+        if ($amount == 0) {
+            return false;
+        }
 
         $active_card = $this->getActiveCard($user);
 
@@ -311,10 +318,35 @@ class CardRepository implements CardRepositoryInterface
     }
 
 
-    public function updateUserCard($user_id, $updateData)
+    public function updateUserCard($user_id, $barcode)
     {
-        return  UserCard::whereNull('deleted_at')->where('user_id', $user_id)
-            ->update($updateData);
+        
+
+        try {
+      
+        DB::beginTransaction();
+        
+        UserCard::whereNull('deleted_at')->whereNull('disabled_at')->where('user_id', $user_id)
+            ->update([
+                'disabled_at' => now()
+        ]);
+
+
+        $new_card = new UserCard;
+        $new_card->user_id = $user_id;
+        $new_card->barcode = $barcode;
+        $new_card->type = 'physical';
+        $new_card->save();
+
+        DB::commit();
+
+    } catch (\Throwable $th) {
+        DB::rollBack();
+        throw new Exception($th->getMessage());
+    }
+
+
+
     }
     public function generateBarcode()
     {
