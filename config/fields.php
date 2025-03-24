@@ -2,9 +2,9 @@
 
 
 
-$languages = config('languages');  
-$firstLanguage = $languages[0]['prefix'] ?? '';  
-$channel = "channel" . uniqid();  
+$languages = config('languages');
+$firstLanguage = $languages[0]['prefix'] ?? '';
+$channel = "channel" . uniqid();
 
 return [
 
@@ -29,9 +29,9 @@ return [
         'label' => 'Slug',
         'placeholder' => 'Slug',
         'name' => 'slug',
-        'channel_type' => 'receiver',  
-        'channel' => $channel,          
-        'channel_language' => $firstLanguage  
+        'channel_type' => 'receiver',
+        'channel' => $channel,
+        'channel_language' => $firstLanguage
     ],
 
     'label' => [
@@ -44,9 +44,9 @@ return [
         'placeholder' => 'Enter label',
         'name' => 'label',
         'container' => 'col-span-6',
-        'channel_type' => 'sender',   
-        'channel' => $channel,       
-        'channel_language' => $firstLanguage  
+        'channel_type' => 'sender',
+        'channel' => $channel,
+        'channel_language' => $firstLanguage
     ],
 
 
@@ -60,10 +60,10 @@ return [
         'placeholder' => 'Attributes',
         'name' => 'attributes',
         'container' => 'col-span-6',
-      
+
     ],
 
-    
+
 
 
     'long_id' => [
@@ -75,9 +75,9 @@ return [
         'label' => 'Long Id',
         'placeholder' => 'Enter Long Id',
         'name' => 'long_id',
-        
+
     ],
-    
+
     "title" => [
         'id' => uniqid(),
         'livewire' => [
@@ -182,7 +182,7 @@ return [
         'name' => 'color'
     ],
 
-  
+
 
 
     'action' =>[
@@ -317,7 +317,7 @@ return [
 
 
 
-    
+
 
     'description' => [
         'id' => uniqid(),
@@ -364,7 +364,7 @@ return [
         'name' => 'week'
     ],
 
-    
+
 
     'date' => [
         'id' => uniqid(),
@@ -561,7 +561,7 @@ return [
         'multiple' => false
     ],
 
-    
+
     'top_image' => [
         'id' => uniqid(),
         'livewire' => [
@@ -641,13 +641,13 @@ return [
         'multiple' => false
     ],
 
-    
+
     'main_image' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        
+
         'type' => twa\uikit\FieldTypes\FileUpload::class,
         'label' => 'Main Image',
         'placeholder' => 'Upload Image',
@@ -691,7 +691,7 @@ return [
     ],
 
 
-    
+
     'release_date' => [
         'id' => uniqid(),
         'livewire' => [
@@ -800,7 +800,7 @@ return [
                     'value' => '{branch_id}',
                 ],
             ]
-           
+
         ],
 
         'events' => [
@@ -851,7 +851,8 @@ return [
                     'value' => 3,
                 ],
             ]
-        ]
+        ],
+        'required' => true
     ],
 
     'hall_number' => [
@@ -935,9 +936,9 @@ return [
         'placeholder' => 'Enter Imtiyaz Phone',
         'name' => 'imtiyaz_phone'
     ],
-    
 
-    
+
+
     'default' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1291,9 +1292,9 @@ return [
         'translatable' => true,
     ],
 
-   
 
-    
+
+
     'instagram_label' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1769,7 +1770,7 @@ return [
         'name' => 'login_time',
         'container' => 'col-span-6',
     ],
-    
+
     'logout_time' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1782,7 +1783,7 @@ return [
         'name' => 'logout_time',
         'container' => 'col-span-6',
     ],
-    
+
     'user_card_id' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1929,7 +1930,7 @@ return [
         'name' => 'token_expires_at'
     ],
 
-  
+
 
     'email_verified' => [
         'id' => uniqid(),
@@ -2128,7 +2129,7 @@ return [
         'placeholder' => 'One Time Usage',
         'name' => 'one_time_usage'
     ],
-    
+
 
 
     "completed" => [
@@ -2301,7 +2302,7 @@ return [
         'multiple' => false,
         'visible_selections' => 3,
         'query_limit' => 50,
-        
+
         'options' => [
             'type' => 'static',
             'list' => [
@@ -2337,9 +2338,9 @@ return [
         'placeholder' => 'Enter Transactionable Type',
         'name' => 'transactionable_type'
     ],
-    
 
-    
+
+
     'discount_type' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2382,7 +2383,7 @@ return [
         'placeholder' => 'Printed At',
         'name' => 'printed_at'
     ],
- 
+
 
     'rate' => [
         'id' => uniqid(),
@@ -2510,8 +2511,8 @@ return [
         'container' => 'col-span-6',
         'translatable' => false,
     ],
-    
-    
+
+
     'currency' => [
 
         'id' => uniqid(),
@@ -2525,7 +2526,7 @@ return [
         'container' => 'col-span-12',
         'translatable' => false,
     ]
-    
+
 
 
     // 'textfield_options' => [
@@ -2552,10 +2553,10 @@ return [
     //         'container' => 'col-span-12',
     // ],
 
-   
 
 
-    
+
+
 ];
 
 
