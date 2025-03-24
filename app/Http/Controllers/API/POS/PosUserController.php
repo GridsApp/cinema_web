@@ -717,7 +717,7 @@ class PosUserController extends Controller
             ],
             'tables' => $result,
             'tablesHtml' => $htmlTables,
-            'total' => currency_format($total - $total_discounts ),
+            'total' => currency_format($total - $total_discounts )['display'],
             'printed_at' => (string) Carbon::now()
         ];
 
