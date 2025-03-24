@@ -23,7 +23,7 @@ class ItemsEntity extends Entity
         $this->addField("price" , ["container" => 'col-span-12', 'required' => true]);
         $this->addField("branch" , ["container" => 'col-span-12', 'required' => true]);
         $this->addField("key" , ["container" => 'col-span-12', 'required' => true]);
-    
+
         return $this->fields;
     }
 
