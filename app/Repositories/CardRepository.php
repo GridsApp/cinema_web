@@ -20,8 +20,6 @@ class CardRepository implements CardRepositoryInterface
     private UserRepositoryInterface $userRepository;
 
 
-
-
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -30,13 +28,19 @@ class CardRepository implements CardRepositoryInterface
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null, $operator_type = null)
     {
 
+
+       
+
         if ($amount == 0) {
+          
             return false;
         }
 
         if (!$operator_type || !$operator_id) {
+                   
             return false;
         }
+  
         switch ($operator_type) {
             case "App\Models\PosUser":
                 $system_id = 2;
@@ -55,6 +59,7 @@ class CardRepository implements CardRepositoryInterface
 
         $active_card = $this->getActiveCard($user);
         if (!$active_card) {
+         
             return false;
         }
 
@@ -91,10 +96,13 @@ class CardRepository implements CardRepositoryInterface
     {
         if ($amount == 0) {
             return false;
-        }
+        }          
 
+        // dd($user);
         $active_card = $this->getActiveCard($user);
 
+        
+        // dd("here");
         if (!$active_card) {
             return false;
         }
@@ -104,6 +112,9 @@ class CardRepository implements CardRepositoryInterface
             ->latest()
             ->first();
 
+
+
+  
         $currentBalance = $lastTransaction->balance ?? 0;
 
         $multiplier = $type == "out" ? -1 : 1;
@@ -195,6 +206,8 @@ class CardRepository implements CardRepositoryInterface
         $transaction = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
             ->latest()->first();
+
+            // dd($transaction->balance);
 
         return $transaction->balance ?? 0;
     }

@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Models\UserCard;
 use App\Repositories\MovieShowRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use twa\cmsv2\Traits\APITrait;
@@ -66,14 +67,14 @@ class  OrderController extends Controller
             $cart = $this->cartRepository->getCartById($cart_id);
             $cart_details = $this->cartRepository->getCartDetails($cart);
 
-            $has_topup = collect($cart_details['lines'])->contains(function($item) {
+            $has_topup = collect($cart_details['lines'])->contains(function ($item) {
                 return $item['type'] === 'Topup';
             });
 
-              
-        if ($has_topup && ($payment_method->key === 'WP' || $payment_method->key === 'WP-POS')) {
-            return $this->response(notification()->error('Cannot proceed with wallet payment', 'There is a top-up amount in the cart, and wallet payment is not allowed.'));
-        }
+
+            if ($has_topup && ($payment_method->key === 'WP' || $payment_method->key === 'WP-POS')) {
+                return $this->response(notification()->error('Cannot proceed with wallet payment', 'There is a top-up amount in the cart, and wallet payment is not allowed.'));
+            }
 
             // dd($has_topup);
         } catch (\Exception $e) {
@@ -274,9 +275,6 @@ class  OrderController extends Controller
         try {
 
             $order = $this->orderRepository->getOrderById($order_id);
-
-
-            // $order = Order::findOrFail($order_id);
         } catch (\Throwable $th) {
             return $this->response(notification()->error('Order Not Found', 'Order not found.'));
         }
@@ -293,11 +291,6 @@ class  OrderController extends Controller
             return $this->response(notification()->error('Wrong Pin', $th->getMessage()));
         }
 
-        // try {
-        //     $order_seats = $this->orderRepository->getOrderSeatsByIds($form_data['order_id'], $form_data['order_seat_ids']);
-        // } catch (\Exception $th) {
-        //     return $this->response(notification()->error('No matching order seats found for the given order', $th->getMessage()));
-        // }
 
         try {
             $order_seats = $this->orderRepository->getOrderSeatsByCodes($form_data['order_id'], $form_data['order_seat_codes']);
@@ -323,40 +316,66 @@ class  OrderController extends Controller
         $total_amount = 0;
         $total_points = 0;
 
-        foreach ($order_seats as $order_seat) {
-            $order_seat->refunded_at = now();
-            $order_seat->refunded_cashier_id = $user_id;
-            $order_seat->refunded_manager_id = $manager["id"];
-            $total_points += $order_seat->gained_points;
-            $total_amount += $order_seat->price;
-            $order_seat->save();
+
+        try {
+            DB::beginTransaction();
+            foreach ($order_seats as $order_seat) {
+                $order_seat->refunded_at = now();
+                $order_seat->refunded_cashier_id = $user_id;
+                $order_seat->refunded_manager_id = $manager["id"];
+                $total_points += $order_seat->gained_points;
+                $total_amount += $order_seat->price;
+                $order_seat->save();
 
 
-            //  ReservedSeat::where('movie_show_id', $order_seat['movie_show_id'])
-            // ->where('seat', $order_seat['seat'])
-            // ->delete();
-            try {
+                try {
 
-                $this->theaterRepository->removeFromReservedSeats($order_seat['movie_show_id'], $order_seat['seat']);
-            } catch (\Throwable $th) {
-                //throw $th;
+                    $this->theaterRepository->removeFromReservedSeats($order_seat['movie_show_id'], $order_seat['seat']);
+                } catch (\Throwable $th) {
+        
+                }
+
+                if ($payment_method->key != 'CASH') {
+
+
+                    if ($total_amount > 0 && $user_id) {
+
+                        if ($order->pos_user_id) {
+
+                            $operator_type = "App\Models\PosUser";
+                            $operator_id = $order->pos_user_id;
+                        } else {
+                            $operator_type = null;
+                            $operator_id = null;
+                        }
+
+                        $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
+             
+                        $loyaltyTransaction =    $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
+
+                     
+                    }
+                }
             }
+
+            DB::commit();
+            return $this->responseData(
+                $this->details($order_id, false),
+                notification()->success('Refund Successful', 'Your order has been successfully refunded')
+            );
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->response(notification()->error('Refund Failed', 'An error occurred: ' . $th->getMessage()));
         }
 
 
 
-        if ($payment_method->key != 'CASH') {
-            $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet");
-        }
 
 
-
-        return $this->responseData(
-            $this->details($order_id, false),
-            notification()->success('Refund Successful', 'Your order has been successfully refunded')
-        );
-
-        // return $this->response(notification()->success('Refund Successful', 'Refund Successful'));
+        // return $this->responseData(
+        //     $this->details($order_id, false),
+        //     notification()->success('Refund Successful', 'Your order has been successfully refunded')
+        // );
     }
     //To be checked By hovig
     public function get()

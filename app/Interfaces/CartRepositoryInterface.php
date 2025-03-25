@@ -35,4 +35,5 @@ interface CartRepositoryInterface
     public function getImtiyazCountFromCart($cart_id);
     public function getCouponCountFromCart($cart_id);
     public function getImtiyazByCartId($cart_id);
+
 }

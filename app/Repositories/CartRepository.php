@@ -687,4 +687,7 @@ class CartRepository implements CartRepositoryInterface
     {
         return CartCoupon::whereNull('deleted_at')->where('cart_id', $cart_id)->count();
     }
+
+
+ 
 }

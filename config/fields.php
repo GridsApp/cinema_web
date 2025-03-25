@@ -634,8 +634,8 @@ return [
             'wire:model' => 'form.{name}',
         ],
         'type' => twa\uikit\FieldTypes\FileUpload::class,
-        'label' => 'Third Image',
-        'placeholder' => 'Third Image',
+        'label' => 'Fourth Image',
+        'placeholder' => 'Fourth Image',
         'name' => 'fourth_image',
         'aspect_ratio' => 1 / 1,
         'multiple' => false
@@ -1027,6 +1027,28 @@ return [
         'name' => 'screen_type_id',
         'multiple' => false,
         'visible_selections' => 2,
+        'query_limit' => 50,
+        // 'quick_add' => 'screen-types',
+        'options' => [
+            'type' => 'query',
+            'table' => 'screen_types',
+            'field' => 'label'
+        ]
+    ],
+
+
+    'screen_type_condition' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Screen type Condition',
+        'placeholder' => 'Select Screen Type',
+        'name' => 'screen_type_id',
+        'multiple' => true,
+        'visible_selections' => 2,
+        'hint'=>'Leave it empty if you would like it to be available for all screen types',
         'query_limit' => 50,
         // 'quick_add' => 'screen-types',
         'options' => [

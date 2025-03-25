@@ -59,14 +59,14 @@ class MoviesEntity extends Entity
     }
 
     public function columns(){
-        $this->addColumn("cast" ,[], true);
+      
         $this->addColumn("main_image" );
         $this->addColumn("cover_image" );
         $this->addColumn('movie_key' ,[], true);
         $this->addColumn("condensed_name" ,[], true);
         $this->addColumn("release_date" ,[], true);
         $this->addColumn("duration" , ["label" => "Duration (min)"] , true);
-  
+        $this->addColumn("cast" ,[], true);
         $this->addColumn("director" ,[], true);
 
   

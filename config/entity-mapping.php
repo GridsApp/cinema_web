@@ -15,6 +15,7 @@ return array (
   'cinema-founders' => 'App\\Entities\\CinemaFoundersEntity',
   'cinema-growth-plans' => 'App\\Entities\\CinemaGrowthPlansEntity',
   'cinema-statistics' => 'App\\Entities\\CinemaStatisticsEntity',
+  'cms-users' => 'App\\Entities\\CmsUsers',
   'company-purposes' => 'App\\Entities\\CompanyPurposesEntity',
   'coupons' => 'App\\Entities\\CouponsEntity',
   'distributors' => 'App\\Entities\\DistributorsEntity',
@@ -61,5 +62,4 @@ return array (
   'user-verify-tokens' => 'App\\Entities\\UserVerifyTokensEntity',
   'user-wallet-transactions' => 'App\\Entities\\UserWalletTransactionsEntity',
   'users' => 'App\\Entities\\UsersEntity',
-  'cms-users' => 'App\\Entities\\CmsUsers',
 );
