@@ -206,6 +206,11 @@ return [
 
             ],
             [
+                'label' => 'Home Paragraph Banner',
+                'link' => routeObject('entity', ['slug' => 'home-paragraph-banners'])
+
+            ],
+            [
                 'label' => 'Company Purposes',
                 'link' => routeObject('entity', ['slug' => 'company-purposes'])
 

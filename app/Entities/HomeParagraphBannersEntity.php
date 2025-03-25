@@ -27,8 +27,11 @@ class HomeParagraphBannersEntity extends Entity
     }
 
     public function columns(){
-        $this->addColumn("image");  
+        $this->addColumn("first_image");  
         $this->addColumn("second_image");  
+        $this->addColumn("third_image");  
+        $this->addColumn("fourth_image");  
+      
         return $this->columns;
     }
 
