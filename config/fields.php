@@ -1172,7 +1172,8 @@ return [
             'type' => 'query',
             'table' => 'screen_types',
             'field' => 'label'
-        ]
+        ],
+       
     ],
 
     'apply_date' => [

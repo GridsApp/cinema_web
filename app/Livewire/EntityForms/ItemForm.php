@@ -132,7 +132,7 @@ class ItemForm extends Component
             'form.label' => 'required',
             // 'form.price' => 'required',
             'form.branch_id' => 'required',
-            'form.screen_type_id' => 'required'
+            // 'form.screen_type_id' => 'required'
         ];
 
         $this->validate($required_array);

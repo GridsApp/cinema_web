@@ -22,7 +22,7 @@ class ItemsEntity extends Entity
         $this->addField("label" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("branch" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("screen_type_condition" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("screen_type_condition" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("family_group_id" , ["container" => 'col-span-6', 'required' => true]);
         
         // $this->addField("key" , ["container" => 'col-span-12', 'required' => true]);
