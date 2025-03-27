@@ -141,13 +141,16 @@ class ItemForm extends Component
         $arr = [];
         $family = $this->family_group_id ? $this->family_group_id : uniqid();
         foreach($this->branch_prices as $branch_price){
+            $screen_type_id = $this->form['screen_type_id'] ?? null;
+            $screen_type_id = (is_array($screen_type_id) && count($screen_type_id) === 0) ? null : json_encode($screen_type_id);
+    
             $arr [] = [
                     'id' => $branch_price['id'] ?? null,
                     'image' => field_value(config('fields.image'), $this->form),
                     'label' => $this->form['label'],
                     'price' => $branch_price['price'],
                     'branch_id' => $branch_price['branch_id'],
-                    'screen_type_id' => json_encode($this->form['screen_type_id']),
+                    'screen_type_id' => $screen_type_id,
                     'family_group_id' => $family,
                     'created_at' => now(),
                     'updated_at' => now()

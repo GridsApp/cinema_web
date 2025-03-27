@@ -243,28 +243,28 @@ return [
     ],
 
 
-    [
-        'display' => true,
-        'label' => 'Permissions',
-        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
-        'children' => [
-            [
-                'label' => 'CMS User Roles',
-                'link' => routeObject('entity', ['slug' => 'cms-user-roles'])
-            ],
-            [
-                'label' => 'CMS Permissions',
-                'link' => routeObject('entity', ['slug' => 'cms-permissions'])
-            ],
-            [
-                'label' => 'CMS User Role Permission',
-                'link' => routeObject('entity', ['slug' => 'cms-user-role-permission'])
-            ],
+    // [
+    //     'display' => true,
+    //     'label' => 'Permissions',
+    //     'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
+    //     'children' => [
+    //         [
+    //             'label' => 'CMS User Roles',
+    //             'link' => routeObject('entity', ['slug' => 'cms-user-roles'])
+    //         ],
+    //         [
+    //             'label' => 'CMS Permissions',
+    //             'link' => routeObject('entity', ['slug' => 'cms-permissions'])
+    //         ],
+    //         [
+    //             'label' => 'CMS User Role Permission',
+    //             'link' => routeObject('entity', ['slug' => 'cms-user-role-permission'])
+    //         ],
 
 
 
 
 
-        ]
-    ],
+    //     ]
+    // ],
 ];

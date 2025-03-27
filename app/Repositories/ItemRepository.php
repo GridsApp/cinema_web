@@ -82,6 +82,8 @@ class ItemRepository implements ItemRepositoryInterface
                 });
                 $query->orWhereNull('screen_type_id');
             });
+
+          
         }
 
 
