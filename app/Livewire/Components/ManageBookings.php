@@ -38,7 +38,7 @@ class ManageBookings extends Component
 
         $cms_user = session('cms_user');
 
-        $branch_id = $cms_user['attributes']['branch_id'] ?? null;
+        // $branch_id = $cms_user['attributes']['branch_id'] ?? null;
 
         // dd($branch_id);
 
@@ -60,7 +60,7 @@ class ManageBookings extends Component
             'movie' => function($query) { $query->select('id', 'name' , 'main_image'); },
             'screenType' => function($query) { $query->select('id', 'label'); },
             ])->whereNull('deleted_at')->where('date', $date)->get()
-            ->where('theater.branch_id', $branch_id)
+            // ->where('theater.branch_id', $branch_id)
             ->map(function ($movie_show) use (&$visible) {
                 $movie = $movie_show->movie;
 

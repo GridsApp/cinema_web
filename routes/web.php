@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
 use App\Http\Controllers\PriceGroupZonesController;
@@ -111,11 +112,18 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
 
+  Route::get("/items/list", [ItemsController::class, 'render'])->name('items');
+  Route::get('/items/family/create', [ItemsController::class, 'createItem'])->name('items.create');
+  Route::get('/items/edit/{family_group_id}', [ItemsController::class, 'editItem'])->name('item.edit');
 
   Route::get("/price-groups/{id}/zones", [PriceGroupZonesController::class, 'render'])->name('price-group-zones');
   Route::get("/price-groups/{id}/zones/create", [PriceGroupZonesController::class, 'createZone'])->name('price-group-zones.create');
   Route::get("/price-groups/{id}/zones/{zone_id}/update", [PriceGroupZonesController::class, 'editZone'])->name('price-group-zones.update');
 
+
+
+
+  
 
 });
 Route::get('reports/reports/reports', function () {

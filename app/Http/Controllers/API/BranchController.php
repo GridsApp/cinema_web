@@ -111,6 +111,7 @@ class BranchController extends Controller
             $result_by_group = [];
             foreach ($branch_shows->groupBy('price_group') as $price_group => $price_group_shows) {
 
+                
                 if (count($price_group_shows) == 0) {
                     continue;
                 }
@@ -120,17 +121,14 @@ class BranchController extends Controller
                     "id" => $price_group_shows[0]['price_group_id'],
                     "label" => $price_group,
                     "movie_shows" => $price_group_shows->map(function ($show) use ($system) {
-
-                        // dd($show->system_id);
-
-                        // $disabled = $show->visibility !=
-
+                        // dd($show);
                         $disabled = !(is_array($show->system_id) && in_array($system, $show->system_id));
 
+           
                         return [
                             'id' => $show->id,
                             'time' => $show->time,
-                            'disabled' => false,
+                            'disabled' => $show->visibility == 0 ? true : false,
                             // 'disabled' => $disabled, // Work on it tomorrow
                             'percentage' => 0
                         ];

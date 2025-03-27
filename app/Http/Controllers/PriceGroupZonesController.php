@@ -32,7 +32,7 @@ class PriceGroupZonesController extends Controller
             ->addColumn("Default", "default", \twa\uikit\Classes\ColumnTypes\DefaultType::class,   \twa\uikit\Classes\ColumnOperationTypes\DefaultOperationType::class, ['default'])
             ->addTableOperation("Add Zone", route('price-group-zones.create' , ['id' => $price_group_id]), '<i class="fa-solid fa-plus"></i>')
 
-            ->addRowOperation("Edit Zone", $route, '<i class="fa-solid fa-plus"></i>');
+            ->addRowOperation("Edit Zone", $route, '<i class="fa-solid fa-plus"></i>' );
 
 
         $table = $table->get();

@@ -208,6 +208,7 @@ return [
         'label' => 'Theater Map',
         'placeholder' => 'Theater Map',
         'name' => 'theater_map',
+        'required' => true,
         'listen' =>  [
             "init" => "pricegroupselectedvalue",
             "change" =>  "pricegroupchangedvalue"
@@ -238,6 +239,17 @@ return [
         'label' => 'Group',
         'placeholder' => 'Enter Group',
         'name' => 'group'
+    ],
+
+    'family_group_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Hidden::class,
+        'label' => 'Family Group',
+        'placeholder' => 'Enter Family Group',
+        'name' => 'family_group_id'
     ],
 
     'label_hidden' => [
@@ -291,6 +303,20 @@ return [
         'label' => 'Name',
         'placeholder' => 'Enter Name',
         'name' => 'name'
+        
+    ],
+    'movie_name' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Name',
+        'placeholder' => 'Enter Name',
+        'name' => 'name',
+        'channel_type' => 'sender',
+        'channel' => $channel,
+        'channel_language' => $firstLanguage
     ],
 
     'condensed_name' => [
@@ -398,6 +424,44 @@ return [
             'field' => 'label'
         ]
     ],
+    'cms_user_role' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'CMS User Role',
+        'placeholder' => 'Select user role',
+        'name' => 'cms_user_role_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'cms_user_roles',
+            'field' => 'label'
+        ]
+    ],
+
+    'cms_permission' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'CMS Permission',
+        'placeholder' => 'Select Cms Permission',
+        'name' => 'cms_permission_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'cms_permissions',
+            'field' => 'label'
+        ]
+    ],
+    
     'cast' => [
         'id' => uniqid(),
         'livewire' => [
@@ -854,6 +918,59 @@ return [
         ],
         'required' => true
     ],
+    
+
+    'item_branch' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model.live' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Price per branch',
+        'placeholder' => 'Select branch',
+        'name' => 'branch_id',
+        'multiple' => true,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'branches',
+            'field' => 'label_en',
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => 3,
+                ],
+            ]
+        ],
+        'required' => true,
+
+        // 'events' => [
+
+        //     '@input' => '$wire.loadPrices'
+        // ]
+
+        // 'dispatch' => [
+        //     "init" => "branchselectedvalue",
+        //     "change" =>  "branchchangedvalue"
+        // ],
+    ],
+    'item_price' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Price',
+        'placeholder' => 'Enter Price',
+        'name' => 'price',
+        // 'listen' =>  [
+        //                 "change" =>  "branchchangedvalue"
+        //             ]
+    ],
+
 
     'hall_number' => [
         'id' => uniqid(),
@@ -1451,6 +1568,26 @@ return [
         ]
     ],
 
+
+
+    'user_role' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Roles',
+        'placeholder' => 'Select roles',
+        'name' => 'roles',
+        'multiple' => true,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'cms_user_roles',
+            'field' => 'label'
+        ]
+    ],
     'phone' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1902,6 +2039,7 @@ return [
         'name' => 'type',
         'container' => 'col-span-6',
     ],
+
 
     'disabled_at' => [
         'id' => uniqid(),
@@ -2547,7 +2685,34 @@ return [
         'name' => 'currency',
         'container' => 'col-span-12',
         'translatable' => false,
-    ]
+    ],
+
+    'menu_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+
+        'label' => 'Type',
+        'placeholder' => 'Enter type',
+        'name' => 'type',
+        'container' => 'col-span-6',
+    ],
+
+
+    'menu_key' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+
+        'label' => 'Menu Key',
+        'placeholder' => 'Enter Menu Key',
+        'name' => 'menu_key',
+        'container' => 'col-span-6',
+    ],
 
 
 

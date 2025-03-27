@@ -25,6 +25,7 @@ class TheaterSeatsController extends Controller
     public function listSeats($movie_show_id)
     {
    
+      
         try {
             $movie_show = MovieShow::where('id' , $movie_show_id)->orderBy('id', 'DESC')->firstOrFail();
         } catch (\Throwable $e) {
@@ -42,7 +43,7 @@ class TheaterSeatsController extends Controller
 
         $reserved_seats= $this->cartRepository->getReservedSeats($movie_show_id);
 
-        // dd($reserved_seats);
+
         $rows =  collect($theater_map)->map(function ($item) {
             $item = collect($item)->where('isSeat', true)->first();
 
@@ -78,6 +79,5 @@ class TheaterSeatsController extends Controller
         return $this->responseData($result);
 
 
-        // return $this->responseData($result);
     }
 }

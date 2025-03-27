@@ -216,6 +216,10 @@ footer {
     input::placeholder {
         @apply font-bold text-black tracking-[1.95px];
     }
+
+    input:focus {
+        outline: 0px !important ;
+    }
 }
 
 .banner {
@@ -1275,39 +1279,34 @@ select:focus {
     }
 }
 
-.cart-info{
+.cart-info {
     @apply flex  sm:flex-row flex-col  pt-5  gap-6;
 
-
-    .name{
+    .name {
         @apply font-bold text-[16px] capitalize pb-4;
     }
 
-    .details-container{
-        @apply flex flex-row gap-4 pb-3; 
+    .details-container {
+        @apply flex flex-row gap-4 pb-3;
     }
 
-    i{
-        @apply primary-color  font-bold ;
+    i {
+        @apply primary-color  font-bold;
     }
 
-    .title{
+    .title {
         @apply text-[#4C4C4C] font-bold uppercase tracking-[1.5px] text-[10px];
     }
 
-    .subtitle{
+    .subtitle {
         @apply font-light text-[11px];
     }
-
-   
 }
-.separator-line{
+.separator-line {
     // @apply border-gray-100 ;
-    border: 0.9px solid #E5E5E5 ;
-
+    border: 0.9px solid #e5e5e5;
 }
 
-
-.event-box-active{
+.event-box-active {
     @apply border border-dashed border-red-500 rounded-lg #{!important};
 }

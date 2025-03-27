@@ -3,14 +3,14 @@
 return [
 
     [
+        'key' => 'dashbord',
         'display' => true,
         'label' => 'Dashboard',
         'icon' => '<i class="fa-regular fa-grid-2"></i>',
-        'link' => "/cms",
+        'link' => "cms",
+        'permission_types' => ['entity'],
+        'entity' => 'dashbord',
     ],
-
-
-
 
     [
         'display' => false,
@@ -19,20 +19,12 @@ return [
         'children' => [
             [
                 'label' => 'Accounts',
-                'link' => routeObject('entity', ['slug' => 'cms-users'])
-
+                'link' => routeObject('entity', ['slug' => 'cms-users']),
+                'key' => 'accounts',
+                'permission_types' => ['entity'],
             ],
-        
-            [
-                'label' => 'Roles & Permissions',
-                'link' => "/cms/cms-user/roles-permissions"
-            ]
         ]
-
     ],
-
-
-
 
     [
         'display' => true,
@@ -41,10 +33,13 @@ return [
         'children' => [
 
             [
+                'key' => 'movies',
                 'label' => 'Movies',
-                'link' => routeObject('entity', ['slug' => 'movies'])
+                'link' => routeObject('entity', ['slug' => 'movies']),
+                'permission_types' => ['entity'],
             ],
             [
+                'key' => 'movie-shows',
                 'label' => 'Movie Shows',
                 'link' => routeObject('entity', ['slug' => 'movie-shows'])
             ],
@@ -57,7 +52,7 @@ return [
                 'link' => routeObject('entity', ['slug' => 'distributors'])
 
             ],
-        
+
             [
                 'label' => 'Screen Types',
                 'link' => routeObject('entity', ['slug' => 'screen-types'])
@@ -90,9 +85,9 @@ return [
         ],
     ],
 
- 
 
-   
+
+
     [
         'display' => true,
         'label' => 'User Settings',
@@ -104,9 +99,28 @@ return [
             ],
             [
                 'label' => 'Manage Wallets',
-                'link' => "/cms/manage/wallets", 
+                'link' => "/cms/manage/wallets",
             ],
-       
+
+        ]
+    ],
+    [
+        'display' => true,
+        'label' => 'Purchases',
+        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
+        'children' => [
+
+            [
+                'label' => 'Payment Methods',
+                'link' => routeObject('entity', ['slug' => 'payment-methods'])
+            ],
+
+
+            [
+                'label' => 'Orders ',
+                'link' => routeObject('entity', ['slug' => 'orders'])
+            ],
+
         ]
     ],
 
@@ -129,33 +143,28 @@ return [
 
                 // 'link' => routeObject('entity', ['slug' => 'pos-users'])
             ],
-         
+
             [
                 'label' => 'Rewards',
                 'link' => routeObject('entity', ['slug' => 'rewards'])
             ],
-           
+
             [
                 'label' => 'Coupons',
                 'link' => routeObject('entity', ['slug' => 'coupons'])
             ],
+            // [
+            //     'label' => 'Items',
+            //     'link' => routeObject('entity', ['slug' => 'items'])
+            // ],
             [
-                'label' => 'Items',
-                'link' => routeObject('entity', ['slug' => 'items'])
+                'label' => 'List Items',
+                'link' => "/cms/items/list"
             ],
-            [
-                'label' => 'Payment Methods',
-                'link' => routeObject('entity', ['slug' => 'payment-methods'])
-            ],
-           
 
-            [
-                'label' => 'Orders ',
-                'link' => routeObject('entity', ['slug' => 'orders'])
-            ],
-           
         ]
     ],
+
 
     [
         'display' => true,
@@ -174,13 +183,6 @@ return [
                 'label' => 'Informative Pages',
                 'link' => routeObject('entity', ['slug' => 'informative-pages'])
             ],
-
-            // [
-            //     'label' => 'Home Banner Paragraph',
-            //     'link' => routeObject('entity', ['slug' => 'home-paragraph-banners'])
-            // ],
-            
-
 
         ]
     ],
@@ -233,13 +235,36 @@ return [
             ],
 
 
-           
-        
-        
+
+
+
         ]
 
     ],
 
-  
 
+    [
+        'display' => true,
+        'label' => 'Permissions',
+        'icon' => '<i class="fa-solid fa-head-side-gear"></i>',
+        'children' => [
+            [
+                'label' => 'CMS User Roles',
+                'link' => routeObject('entity', ['slug' => 'cms-user-roles'])
+            ],
+            [
+                'label' => 'CMS Permissions',
+                'link' => routeObject('entity', ['slug' => 'cms-permissions'])
+            ],
+            [
+                'label' => 'CMS User Role Permission',
+                'link' => routeObject('entity', ['slug' => 'cms-user-role-permission'])
+            ],
+
+
+
+
+
+        ]
+    ],
 ];

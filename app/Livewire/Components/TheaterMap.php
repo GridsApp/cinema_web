@@ -12,7 +12,7 @@ class TheaterMap extends Component
     public $value;
     public $info;
     
-
+    
     public function getZones($id){
 
  
@@ -24,6 +24,8 @@ class TheaterMap extends Component
 
     public function render()
     {
+        
+
         return view('components.form.theater-map');
     }
 }

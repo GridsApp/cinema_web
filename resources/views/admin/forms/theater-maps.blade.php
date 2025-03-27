@@ -1,7 +1,20 @@
 <div>
 
     <form wire:submit="save">
-        <div class="container-fixed  ">
+
+        <div class="container-fixed" x-data="{disabled : true}"
+        
+        
+        @submitenabled.window="disabled = false"
+        @submitdisabled.window="disabled = true"
+
+        {{-- @toggle-disabled.window="disabled = $event.detail.disabled" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
+        {{ '@' . $info['listen']['init'] }}.window="handleValueSelected" --}}
+        
+
+        
+        
+        >
 
             <div class="container-content-height">
 
@@ -31,10 +44,10 @@
             @component('CMSView::components.panels.default', ['classes' => 'bg-[#fcfcfc] ring-1 ring-gray-300'])
                 <div class="flex justify-center gap-4">
                     {!! link_button('Cancel', '#', 'secondary') !!}
-                    {!! button("'Submit'", 'primary', '', 'submit', 'text-[12px]') !!}
-                    {{-- <button type="submit" class="btn-primary text-[12px]" :disabled="!managingSeats">
+                    {{-- {!! button("'Submit'", 'primary', '', 'submit', 'text-[12px]') !!} --}}
+                    <button type="submit" class="btn btn-primary text-[12px]" :disabled="disabled">
                         Submit
-                    </button> --}}
+                    </button>
                 </div>
             @endcomponent
 

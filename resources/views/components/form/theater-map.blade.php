@@ -1,6 +1,5 @@
 <div x-data="GeneralFunctions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
-    
     <div x-show="!managingSeats" x-cloak>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
@@ -9,7 +8,7 @@
                     <div class="twa-form-input-container">
                         <div
                             class=" twa-form-input-ring">
-                            <input x-model.number="maxRow" @input.debounce.500ms="checkAndGenerate" max="100"
+                            <input  x-model.number="maxRow" @input.debounce.500ms="checkAndGenerate" max="100"
                                 type="number" min="0"
                                 class="twa-form-input ">
                         </div>
@@ -21,7 +20,7 @@
                 <div class="twa-form-input-container">
                     <div
                         class="twa-form-input-ring">
-                        <input x-model.number="maxColumn" @input.debounce.500ms="checkAndGenerate" max="100"
+                        <input  x-model.number="maxColumn" @input.debounce.500ms="checkAndGenerate" max="100"
                             type="number" min="0"
                             class="twa-form-input ">
                     </div>

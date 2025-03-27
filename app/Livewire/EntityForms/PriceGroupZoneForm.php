@@ -63,12 +63,7 @@ class PriceGroupZoneForm extends Component
 
 
 
-    public function render()
-    {
-
-        
-        return view('pages.form.components.price-group-zone-form');
-    }
+   
 
 
     public function save()
@@ -113,6 +108,12 @@ class PriceGroupZoneForm extends Component
         // $this->resetForm();
         // $this->dispatch('record-created-' . $this->uniqeid);
         // $this->sendSuccess("Created", "Record successfully created");
+    }
+    public function render()
+    {
+
+        
+        return view('pages.form.components.price-group-zone-form');
     }
 
 }

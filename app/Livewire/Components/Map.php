@@ -16,6 +16,8 @@ class Map extends Component
     public function render()
     {
         
+   
+     
         return view('components.form.map');
     }
 }

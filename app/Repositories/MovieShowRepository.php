@@ -18,6 +18,7 @@ class MovieShowRepository implements MovieShowRepositoryInterface
         return MovieShow::query()
             ->select(
                 'movie_shows.id',
+                'movie_shows.visibility',
                 'times.label as time',
                 'theaters.label as theater',
                 'theaters.id as theater_id',

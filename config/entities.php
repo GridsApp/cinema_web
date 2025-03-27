@@ -226,7 +226,7 @@ return [
         'table' => 'theaters',
         'pagination' => 20,
         'slug' => 'theaters',
-
+      
         'onsubmit'=>[
             [
                 'name' => 'label',

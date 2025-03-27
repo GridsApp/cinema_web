@@ -14,7 +14,7 @@ class TheatersEntity extends Entity
 
 
     public $formRender = "admin.forms.theater-maps";
-
+    public $info = [];
     public $params = [
         'form' => 'admin.forms.theater-maps',
         'pagination' => 20,
@@ -26,6 +26,7 @@ class TheatersEntity extends Entity
             ]
 
         ],
+    
     ];
     public $conditions = [
         [
@@ -89,5 +90,7 @@ class TheatersEntity extends Entity
             ]);
         } catch (\Throwable $th) {
         }
+
+        
     }
 }
