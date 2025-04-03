@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1917148e256a944a4743fabae6262986",
+    "content-hash": "411a63bf0131e4f696c4e08172f23d23",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6594,6 +6594,52 @@
                 "source": "https://github.com/thewebaddicts/twacmsv2/tree/main"
             },
             "time": "2025-03-24T18:44:50+00:00"
+        },
+        {
+            "name": "twa/omni-push",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:thewebaddicts/omni-push.git",
+                "reference": "d6ee62c13b9a4af957dd6061fd402fd645a5ce6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://cdn-devops.twalab.live/devops.thewebaddicts.com/public/data/packages/6734810dd3c28.zip",
+                "reference": "d6ee62c13b9a4af957dd6061fd402fd645a5ce6f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "10.0.x-dev"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "twa\\omnipush\\providers\\WebsiteServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "twa\\omnipush\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Assaad Abou Harb",
+                    "email": "assaad@thewebaddicts.com"
+                }
+            ],
+            "description": "This package is intended to run on Push Notifications for websites & apis developed by The Web Addicts",
+            "support": {
+                "source": "https://github.com/thewebaddicts/omni-push/tree/master",
+                "issues": "https://github.com/thewebaddicts/omni-push/issues"
+            },
+            "time": "2024-11-13T10:35:58+00:00"
         },
         {
             "name": "twa/uikit",

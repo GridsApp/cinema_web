@@ -130,12 +130,13 @@ class MovieController extends Controller
 
                 return [
                     'id' => $show->id,
-                    'time' => $show->time->label,
+                    'time' => $show->time->label ?? '',
                     'theater' => [
                         'id' => $theater->id,
                         'label' => $theater->label
                     ],
-                    'screen_type' => $show->screenType->label,
+                    'screen_type' => $show->screenType->label ?? '',
+                    'price_group' => $show->priceGroup->label ?? '',
                     'seats' => [
                         'total' => $nb_seats,
                         'reserved' => $reserved_seats,
