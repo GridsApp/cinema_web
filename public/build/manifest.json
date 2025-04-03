@@ -33,19 +33,19 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-BM60jI98.css",
+    "file": "assets/app-DobngVnv.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-BCxwE___.js": {
-    "file": "assets/app-BCxwE___-DWd1LSPu.js",
-    "name": "app-BCxwE___",
-    "src": "vendor/twa/uikit/dist/app-BCxwE___.js",
+  "vendor/twa/uikit/dist/app-EvycDqf8.js": {
+    "file": "assets/app-EvycDqf8-5tfHdEMG.js",
+    "name": "app-EvycDqf8",
+    "src": "vendor/twa/uikit/dist/app-EvycDqf8.js",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-CHv-Xk-5.css": {
-    "file": "assets/app-CHv-Xk-5-CHv-Xk-5.css",
-    "src": "vendor/twa/uikit/dist/app-CHv-Xk-5.css",
+  "vendor/twa/uikit/dist/app-xuxHeXu5.css": {
+    "file": "assets/app-xuxHeXu5-xuxHeXu5.css",
+    "src": "vendor/twa/uikit/dist/app-xuxHeXu5.css",
     "isEntry": true
   }
 }

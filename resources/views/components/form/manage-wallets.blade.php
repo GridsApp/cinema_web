@@ -1,96 +1,102 @@
-<div class="manage-wallet flex flex-col gap-5">
+<div>
+    @if (cms_check_permission('view-transactions'))
+        <div class="manage-wallet flex flex-col gap-5">
 
 
-    @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Manage Wallets'])
-        <form  wire:key="{{uniqid()}}" method="POST" wire:submit.prevent="searchByCard">
-            @csrf
+            @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Manage Wallets'])
+                <form wire:key="{{ uniqid() }}" method="POST" wire:submit.prevent="searchByCard">
+                    @csrf
 
-            <div class="mb-5">
+                    <div class="mb-5">
 
-                {{-- <input type="text" wire:model="form.card_number">
+                        {{-- <input type="text" wire:model="form.card_number">
                 @error('form.card_number') {{$message}} @enderror --}}
 
-                {!! field('card_number' ) !!}
-            </div>
+                        {!! field('card_number') !!}
+                    </div>
 
-            <button type="submit" class="btn btn-primary"> Search </button>
-        </form>
-    @endcomponent
+                    <button type="submit" class="btn btn-primary"> Search </button>
+                </form>
+            @endcomponent
 
 
 
-    @if($this->form['card_number'])
+            @if ($this->form['card_number'])
 
-    @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel', 'title' => 'Transactions'])
-        <table class="twa-table table-auto">
-            <thead>
-                <tr>
-                    <th> ID </th>
-                    <th> Type </th>
-                    <th> Date </th>
-                    <th> Description </th>
-                  
-                    <th> Created By </th> 
-                    <th> System </th>
-                    <th> Amount </th>
-                    <th> Balance </th>
+                @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel', 'title' => 'Transactions'])
+                    <table class="twa-table table-auto">
+                        <thead>
+                            <tr>
+                                <th> ID </th>
+                                <th> Type </th>
+                                <th> Date </th>
+                                <th> Description </th>
 
-                </tr>
+                                <th> Created By </th>
+                                <th> System </th>
+                                <th> Amount </th>
+                                <th> Balance </th>
 
-            </thead>
-            <tbody>
+                            </tr>
 
-                @forelse($transactions as $transaction)
+                        </thead>
+                        <tbody>
 
-                {{-- @dd($transaction); --}}
-                    <tr>
-                        <td> #{{$transaction['id']}} </td>
-                        <td> {{$transaction['type'] == 'in' ? 'Topup' : 'Deduct' }} </td>
-                        <td> {{$transaction['date']}} </td>
-                        <td> {{$transaction['description']}} </td>
+                            @forelse($transactions as $transaction)
+                                {{-- @dd($transaction); --}}
+                                <tr>
+                                    <td> #{{ $transaction['id'] }} </td>
+                                    <td> {{ $transaction['type'] == 'in' ? 'Topup' : 'Deduct' }} </td>
+                                    <td> {{ $transaction['date'] }} </td>
+                                    <td> {{ $transaction['description'] }} </td>
 
-                        <td> {{$transaction['created_by']}} </td>
-                        <td> {{$transaction['system']}} </td>
+                                    <td> {{ $transaction['created_by'] }} </td>
+                                    <td> {{ $transaction['system'] }} </td>
 
-                        {{-- <td> {{  }}</td> --}}
+                                    {{-- <td> {{  }}</td> --}}
 
-                        {{-- <td> App </td>
+                                    {{-- <td> App </td>
                         <td> </td> --}}
-                        <td>{{currency_format($transaction['amount'])['display']}} </td>
-                        <td>{{currency_format($transaction['balance'])['display']}} </td>
-                    </tr>
+                                    <td>{{ currency_format($transaction['amount'])['display'] }} </td>
+                                    <td>{{ currency_format($transaction['balance'])['display'] }} </td>
+                                </tr>
 
-                @empty
-                    <tr>
-                        <td colspan="8"> No Transactions </td>
+                            @empty
+                                <tr>
+                                    <td colspan="8"> No Transactions </td>
 
-                    </tr>
-                @endforelse
-                <tr>
-                    <th colspan="7" class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">BALANCE
-                    </th>
-                    <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]"> {{ currency_format($balance)['display'] }}
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-    @endcomponent
-        @endif
+                                </tr>
+                            @endforelse
+                            <tr>
+                                <th colspan="7"
+                                    class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">
+                                    BALANCE
+                                </th>
+                                <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]">
+                                    {{ currency_format($balance)['display'] }}
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                @endcomponent
+            @endif
 
-    @if($form["card_number"])
-    @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Topup/Deduct'])
-        <form wire:key="{{uniqid()}}" method="POST" wire:submit.prevent="submitForm">
-            @csrf
+            @if ($form['card_number'])
+                @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Topup/Deduct'])
+                    <form wire:key="{{ uniqid() }}" method="POST" wire:submit.prevent="submitForm">
+                        @csrf
 
-            <div class="mb-5 grid grid-cols-12 gap-4">
-                {!! field('transaction_type') !!}
-                {!! field('amount') !!}
-                {!! field('description') !!}
-            </div>
+                        <div class="mb-5 grid grid-cols-12 gap-4">
+                            {!! field('transaction_type') !!}
+                            {!! field('amount') !!}
+                            {!! field('description') !!}
+                        </div>
 
-            <button class="btn btn-primary"> Submit </button>
-        </form>
-    @endcomponent
+                        <button class="btn btn-primary"> Submit </button>
+                    </form>
+                @endcomponent
+            @endif
+
+        </div>
     @endif
-    
 </div>

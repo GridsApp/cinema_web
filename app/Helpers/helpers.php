@@ -91,8 +91,7 @@ if (!function_exists('clean_request')) {
     {
         $formData = request()->all();
 
-
-
+        // dd($formData);
 
         foreach ($rules as $key => $value) {
 
@@ -105,9 +104,6 @@ if (!function_exists('clean_request')) {
                     $formData[$key] = str($formData['phone'])->replace(' ', '')->toString();
                     break;
                 case "email":
-
-
-
                     $formData[$key] = str($formData['email'])->replace(' ', '')->lower()->toString();
                     break;
             }

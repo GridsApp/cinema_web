@@ -29,6 +29,9 @@ class ManageWallets extends Component
 
     public function mount()
     {
+
+       
+
         $this->form['card_number'] = null;
 
         $this->form['transaction_type'] = null;
@@ -42,15 +45,22 @@ class ManageWallets extends Component
     public function searchByCard()
     {
 
-        
+
+
+        // dd(cms_check_permission('view-transactions'));
+       
+        if (!cms_check_permission('view-transactions')) {
+            $this->sendError("Permission Denied", "You do not have permission to view transactions.");
+            return;
+        }
 
         $this->validate([
             'form.card_number' => 'required'
-        ] , ['form.card_number' =>'Card number is required']);
+        ], ['form.card_number' => 'Card number is required']);
 
 
         // dd("sd");
-        
+
         try {
             $user = $this->userRepository->getUserByCardNumber($this->form['card_number']);
         } catch (\Throwable $th) {
@@ -60,7 +70,7 @@ class ManageWallets extends Component
         }
 
         // try {
-            $this->transactions = $this->cardRepository->getWalletTransactions($user);
+        $this->transactions = $this->cardRepository->getWalletTransactions($user);
         // } catch (\Throwable $th) {
         //     $this->sendError("Error", "Failed to retrieve wallet transactions for the user.");
         //     return;
@@ -80,7 +90,7 @@ class ManageWallets extends Component
             'form.amount' => 'required',
             'form.description' => 'required',
         ], [
-             'form.card_number' => 'Card number is required',
+            'form.card_number' => 'Card number is required',
             'form.transaction_type' => 'Transaction Type is required',
             'form.amount' => 'Amount is required',
             'form.description' => 'Description is required',
@@ -106,13 +116,13 @@ class ManageWallets extends Component
         try {
 
 
-        
+
 
 
             $operator_id = $cms_user->id;
             // dd($operator_id);
 
-            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], null, null , $operator_id , "twa\cmsv2\Models\CMSUser");
+            $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], null, null, $operator_id, "twa\cmsv2\Models\CMSUser");
             $this->sendSuccess("Success", "Transaction created successfully.");
         } catch (\Throwable $th) {
             $this->sendError("Error", "Failed to create the transaction. Please try again later.");

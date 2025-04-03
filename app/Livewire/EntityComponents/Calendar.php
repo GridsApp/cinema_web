@@ -15,7 +15,8 @@ class Calendar extends Component
 {
 
     use ToastTrait;
-
+    
+    public $canDrag;
     public $times;
     public $info;
 
@@ -52,7 +53,7 @@ class Calendar extends Component
 
     public function mount(){
 
-
+        $this->canDrag = cms_check_permission('can-drag');
      
         if(!$this->date_from && !$this->date_to){
 
@@ -78,7 +79,10 @@ class Calendar extends Component
                 "change" =>  "theaterchangedvalue"
             ],
         ];
+        
     }
+
+
 
 
     public function deleteMovieShows(){

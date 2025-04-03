@@ -18,7 +18,8 @@ class User extends Authenticatable
         'email',
         'phone',
         'password', 
-        'profile_picture'
+        'profile_picture',
+        'player_id'
     ];
 
 

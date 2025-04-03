@@ -25,109 +25,123 @@
                 if (!$grouped_movie_show) {
                     continue;
                 }
+                $actions = null;
+    if (cms_check_permission('can-toggle-show')) {
+        $actions = view('components.form.toggle', [
+            'model' => 'toggle.' . $grouped_movie_show['branch_identifier'],
+            'canToggle' => true,
+        ])->render();
+    }
             @endphp
-            @component('CMSView::components.panels.default', [
-                'classes' => '',
-                'title' => $grouped_movie_show['branch_name'],
-                'actions' => view('components.form.toggle', [
-                    'model' => 'toggle.' . $grouped_movie_show['branch_identifier'],
-                ])->render(),
-            ])
-                <div class="flex flex-col gap-5">
-                    @foreach ($grouped_movie_shows->groupBy('movie_id') as $grouped_movies)
-                        @php
-                            $grouped_movie = $grouped_movies[0] ?? null;
+            {{-- @if (cms_check_permission('can-toggle-show')); --}}
+                @component('CMSView::components.panels.default', [
+                    'classes' => '',
+                    'title' => $grouped_movie_show['branch_name'],
+                    'actions' => $actions
+                ])
+                    <div class="flex flex-col gap-5">
+                        @foreach ($grouped_movie_shows->groupBy('movie_id') as $grouped_movies)
+                            @php
+                                $grouped_movie = $grouped_movies[0] ?? null;
 
-                            if (!$grouped_movie) {
-                                continue;
-                            }
-                        @endphp
+                                if (!$grouped_movie) {
+                                    continue;
+                                }
+                            @endphp
 
-                        <div class="flex gap-4">
-                            <div class="w-[150px]">
-                                <img src="{{ $grouped_movie['movie_image'] }}" alt="" class="rounded-lg">
-                            </div>
-                            <div class="flex-1 gap-10">
-                                <div class="flex flex-col gap-6">
-
-
-                                    <div class="flex items-center justify-between">
-                                        <div class="title-label">{{ $grouped_movie['movie_name'] }}</div>
+                            <div class="flex gap-4">
+                                <div class="w-[150px]">
+                                    <img src="{{ $grouped_movie['movie_image'] }}" alt="" class="rounded-lg">
+                                </div>
+                                <div class="flex-1 gap-10">
+                                    <div class="flex flex-col gap-6">
 
 
-                                        @include('components.form.toggle', [
-                                            'model' => 'toggle.' . $grouped_movie['movie_identifier'],
-                                        ])
-                                    </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="title-label">{{ $grouped_movie['movie_name'] }}</div>
 
 
-                                    <div class="grid grid-cols-5 gap-4">
-                                        @foreach ($grouped_movies as $movie_show)
-                                            @php
+                                            @if (cms_check_permission('can-toggle-show'))
+                                            @include('components.form.toggle', [
+                                                'model' => 'toggle.' . $grouped_movie['movie_identifier'],
+                                                'canToggle' => true,
+                                            ])
+                                        @endif
+                                        
+                                        </div>
 
-                                                $date = now()->parse($movie_show['movie_show_date']);
 
-                                                $theater_id = $movie_show['theater_id'];
+                                        <div class="grid grid-cols-5 gap-4">
+                                            @foreach ($grouped_movies as $movie_show)
+                                                @php
 
-                                                $date_from =
-                                                    (clone $date)->format('l') == 'Thursday'
-                                                        ? $date
-                                                        : (clone $date)->previous(\Carbon\Carbon::THURSDAY);
+                                                    $date = now()->parse($movie_show['movie_show_date']);
 
-                                                $date_to = (clone $date_from)->addDays(6);
+                                                    $theater_id = $movie_show['theater_id'];
 
-                                                $date_from = $date_from->format('d-m-Y');
-                                                $date_to = $date_to->format('d-m-Y');
+                                                    $date_from =
+                                                        (clone $date)->format('l') == 'Thursday'
+                                                            ? $date
+                                                            : (clone $date)->previous(\Carbon\Carbon::THURSDAY);
 
-                                                $link =
-                                                    "/cms/movie-shows?theater_id=$theater_id&date_from=$date_from&date_to=$date_to&movie_show_id=" .
-                                                    $movie_show['movie_show_id'];
+                                                    $date_to = (clone $date_from)->addDays(6);
 
-                                            @endphp
+                                                    $date_from = $date_from->format('d-m-Y');
+                                                    $date_to = $date_to->format('d-m-Y');
 
-                                            <div class="border relative border-gray-200 px-4 py-4 rounded-lg">
+                                                    $link =
+                                                        "/cms/movie-shows?theater_id=$theater_id&date_from=$date_from&date_to=$date_to&movie_show_id=" .
+                                                        $movie_show['movie_show_id'];
+                                                @endphp
 
-                                                <a class="absolute top-[15px] right-[15px]" href="{{ $link }}"><i
-                                                        class="fa-light fa-pen-to-square"></i></a>
+                                                <div class="border relative border-gray-200 px-4 py-4 rounded-lg">
 
-                                                <div class="text-label pr-[20px]">
-                                                    <span class="font-bold">Theater:</span>
-                                                    {{ $movie_show['theater_label'] }}
+                                                    <a class="absolute top-[15px] right-[15px]"
+                                                        href="{{ $link }}"><i
+                                                            class="fa-light fa-pen-to-square"></i></a>
+
+                                                    <div class="text-label pr-[20px]">
+                                                        <span class="font-bold">Theater:</span>
+                                                        {{ $movie_show['theater_label'] }}
+                                                    </div>
+                                                    <div class="text-label">
+                                                        <span class="font-bold">Time:</span>
+                                                        {{ convertTo12HourFormat($movie_show['time_label']) }}
+                                                    </div>
+                                                    <div class="text-label">
+                                                        <span class="font-bold">Screen type:</span>
+                                                        {{ $movie_show['screen_type_label'] }}
+                                                    </div>
+
+                                                    <div class="flex items-center gap-2">
+                                                        @if (cms_check_permission('can-toggle-show'))
+   
+
+                                                        @include('components.form.toggle', [
+                                                            'model' =>
+                                                                'toggle.' . $movie_show['movie_show_identifier'],
+                                                            'canToggle' => cms_check_permission('can-toggle-show'),
+                                                        ])
+                                                        <span class="text-xs">Enable Book</span>
+                                                        @endif
+                                                    </div>
+
                                                 </div>
-                                                <div class="text-label">
-                                                    <span class="font-bold">Time:</span>
-                                                    {{ convertTo12HourFormat($movie_show['time_label']) }}
-                                                </div>
-                                                <div class="text-label">
-                                                    <span class="font-bold">Screen type:</span>
-                                                    {{ $movie_show['screen_type_label'] }}
-                                                </div>
-
-                                                <div class="flex items-center gap-2">
-                                                    @include('components.form.toggle', [
-                                                        'model' =>
-                                                            'toggle.' . $movie_show['movie_show_identifier'],
-                                                    ])
-                                                    <span class="text-xs">Enable Book</span>
-                                                </div>
-
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endcomponent
+                        @endforeach
+                    </div>
+                @endcomponent
 
-        @empty
+            @empty
 
-            @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Movie Shows'])
-                <p class="text-xs ">No available shows on this date.</p>
-            @endcomponent
-
-        @endforelse
+                @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Movie Shows'])
+                    <p class="text-xs ">No available shows on this date.</p>
+                @endcomponent
+            @endforelse
 
     </div>
 

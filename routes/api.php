@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], function () {
     Route::prefix('auth')->group(function () {
         Route::prefix('user')->group(function () {
+            Route::post('set-player', [App\Http\Controllers\API\UserController::class, 'setPlayer'])->middleware([AuthMandatoryMiddleware::class]);
+
             Route::get('account', [App\Http\Controllers\API\UserController::class, 'getAccount'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
             Route::post('complete-profile', [App\Http\Controllers\API\UserController::class, 'completeProfile'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
@@ -94,6 +96,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         ], 200);
     });
 
+    Route::get('/notifications', [App\Http\Controllers\API\NotificationController::class, 'list']);
 
     Route::group(['prefix' => 'cart', 'middleware' => AuthMandatoryMiddleware::class], function () {
 

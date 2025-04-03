@@ -22,6 +22,10 @@ class Movie extends Model
 // {
 //     return $this->hasMany(MovieGenre::class, 'id', 'genre_id');
 // }
+public function genre()
+{
+    return $this->belongsTo(MovieGenre::class, 'genre_id')->whereNull('deleted_at');
+}
 
 public function movieShows()
 {

@@ -28,10 +28,9 @@ class MovieController extends Controller
 
     public function show($id)
     {
-
-
         $user = request()->user;
 
+     
         $movie = $this->movieRepository->getMovie($id, $user);
 
         if (!$movie) {

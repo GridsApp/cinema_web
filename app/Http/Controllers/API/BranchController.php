@@ -83,6 +83,7 @@ class BranchController extends Controller
     public function moviesShows($branch_id, $movie_id)
     {
 
+        // dd($branch_id);
 
         $date = request()->input('date');
         $system = request()->input('system', 1);

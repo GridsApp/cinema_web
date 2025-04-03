@@ -185,7 +185,7 @@ return [
 
 
 
-    'action' =>[
+    'action' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -303,7 +303,7 @@ return [
         'label' => 'Name',
         'placeholder' => 'Enter Name',
         'name' => 'name'
-        
+
     ],
     'movie_name' => [
         'id' => uniqid(),
@@ -461,7 +461,7 @@ return [
             'field' => 'label'
         ]
     ],
-    
+
     'cast' => [
         'id' => uniqid(),
         'livewire' => [
@@ -918,7 +918,7 @@ return [
         ],
         'required' => true
     ],
-    
+
 
     'item_branch' => [
         'id' => uniqid(),
@@ -1165,7 +1165,7 @@ return [
         'name' => 'screen_type_id',
         'multiple' => true,
         'visible_selections' => 2,
-        'hint'=>'Leave it empty if you would like it to be available for all screen types',
+        'hint' => 'Leave it empty if you would like it to be available for all screen types',
         'query_limit' => 50,
         // 'quick_add' => 'screen-types',
         'options' => [
@@ -1173,7 +1173,7 @@ return [
             'table' => 'screen_types',
             'field' => 'label'
         ],
-       
+
     ],
 
     'apply_date' => [
@@ -1534,7 +1534,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    'passcode' =>[
+    'passcode' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1562,9 +1562,9 @@ return [
             'type' => 'static',
             'list' => [
 
-                    ['value' => 'cashier' , 'label' => 'Cashier'],
-                    ['value' => 'manager' , 'label' => 'Manager'],
-                ]
+                ['value' => 'cashier', 'label' => 'Cashier'],
+                ['value' => 'manager', 'label' => 'Manager'],
+            ]
 
         ]
     ],
@@ -1632,9 +1632,9 @@ return [
             'type' => 'static',
             'list' => [
 
-                    ['value' => 'male' , 'label' => 'Male'],
-                    ['value' => 'female' , 'label' => 'Female'],
-                ]
+                ['value' => 'male', 'label' => 'Male'],
+                ['value' => 'female', 'label' => 'Female'],
+            ]
 
         ]
     ],
@@ -1656,9 +1656,9 @@ return [
             'type' => 'static',
             'list' => [
 
-                    ['value' => 'about' , 'label' => 'About Page'],
-                    ['value' => 'home' , 'label' => 'Home Page'],
-                ]
+                ['value' => 'about', 'label' => 'About Page'],
+                ['value' => 'home', 'label' => 'Home Page'],
+            ]
 
         ]
     ],
@@ -1784,7 +1784,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    'item_id'=>[
+    'item_id' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1797,7 +1797,7 @@ return [
         'name' => 'item_id',
         'container' => 'col-span-6',
     ],
-    'order_id'=>[
+    'order_id' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1810,7 +1810,7 @@ return [
         'name' => 'order_id',
         'container' => 'col-span-6',
     ],
-    'cart_id'=>[
+    'cart_id' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1823,7 +1823,7 @@ return [
         'name' => 'cart_id',
         'container' => 'col-span-6',
     ],
-    'movie_show_id'=>[
+    'movie_show_id' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1837,7 +1837,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    'seat'=>[
+    'seat' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -2385,7 +2385,7 @@ return [
         'multiple' => false,
         'visible_selections' => 3,
         'query_limit' => 50,
-//        'quick_add' => 'movie-genres',
+        //        'quick_add' => 'movie-genres',
         'options' => [
             'type' => 'query',
             'table' => 'distributors',
@@ -2446,7 +2446,7 @@ return [
         'container' => 'col-span-12',
 
         'listen' =>  [
-//            "init" => "distributorselectedvalue",
+            //            "init" => "distributorselectedvalue",
             "change" =>  "distributorchangedvalue"
         ]
     ],
@@ -2468,12 +2468,12 @@ return [
             'type' => 'static',
             'list' => [
 
-                    ['value' => 'topup' , 'label' => 'Top-Up'],
-                    ['value' => 'deduct' , 'label' => 'Deduct'],
-                ]
+                ['value' => 'topup', 'label' => 'Top-Up'],
+                ['value' => 'deduct', 'label' => 'Deduct'],
+            ]
 
-            ],
-            'container' => 'col-span-12',
+        ],
+        'container' => 'col-span-12',
     ],
 
 
@@ -2484,7 +2484,7 @@ return [
         ],
         'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Transactionable Id',
-        'placeholder' => 'EnterTransactionable Id',
+        'placeholder' => 'Enter Transactionable Id',
         'name' => 'transactionable_id'
     ],
 
@@ -2499,6 +2499,31 @@ return [
         'placeholder' => 'Enter Transactionable Type',
         'name' => 'transactionable_type'
     ],
+
+    
+
+    'userable_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Userable Id',
+        'placeholder' => 'Enter Userable Id',
+        'name' => 'userable_id'
+    ],
+
+    'userable_model' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Userable Model',
+        'placeholder' => 'Enter Userable Model',
+        'name' => 'userable_model'
+    ],
+
 
 
 
@@ -2593,7 +2618,7 @@ return [
         'container' => 'col-span-12',
     ],
 
-     'financial_phone' => [
+    'financial_phone' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -2742,9 +2767,198 @@ return [
     // ],
 
 
+    'player_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => ' Player Id',
+        'placeholder' => 'Enter Player Id',
+        'name' => 'player_id'
+    ],
+
+    "survey_submitted" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Toggle::class,
+        'label' => 'Survey Submitted',
+        'placeholder' => 'Survey Submitted',
+        'name' => 'survey_submitted'
+    ],
+
+    'rating_movie' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Movie',
+        'placeholder' => 'Enter rating Movie',
+        'name' => 'rating_movie'
+    ],
+
+    'rating_popcorn_pepsi' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating popcorn pepsi',
+        'placeholder' => 'Enter rating popcorn pepsi',
+        'name' => 'rating_popcorn_pepsi'
+    ],
+
+
+    'rating_other_items' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Other Items',
+        'placeholder' => 'Enter Other Items',
+        'name' => 'rating_other_items'
+    ],
+
+
+    'rating_ticketing_service' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Ticketing Service',
+        'placeholder' => 'Enter Ticketing Service',
+        'name' => 'rating_ticketing_service'
+    ],
+
+
+
+    'rating_cafeteria_service' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Cafeteria Service',
+        'placeholder' => 'Enter Cafeteria Service',
+        'name' => 'rating_cafeteria_service'
+    ],
+
+
+
+    'rating_users_service' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Users Service',
+        'placeholder' => 'Enter Users Service',
+        'name' => 'rating_users_service'
+    ],
+
+
+    'rating_ticketing_friendliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Ticketing Friendliness',
+        'placeholder' => 'Enter Rating Ticketing Friendliness',
+        'name' => 'rating_ticketing_friendliness'
+    ],
+
+
+
+    'rating_cafeteria_friendliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Cafeteria Friendliness',
+        'placeholder' => 'Enter Rating Cafeteria Friendliness',
+        'name' => 'rating_cafeteria_friendliness'
+    ],
+
+
+
+    'rating_users_friendliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Users Friendliness',
+        'placeholder' => 'Enter Rating users Friendliness',
+        'name' => 'rating_users_friendliness'
+    ],
+
+
+    'rating_ticketing_cleanliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Ticketing Cleanliness',
+        'placeholder' => 'Enter Ticketing Cleanliness',
+        'name' => 'rating_ticketing_cleanliness'
+    ],
+
+
+    'rating_cafeteria_cleanliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Cafeteria Cleanliness',
+        'placeholder' => 'Enter Cafeteria Cleanliness',
+        'name' => 'rating_cafeteria_cleanliness'
+    ],
+
+
+    'rating_users_cleanliness' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating Users Cleanliness',
+        'placeholder' => 'Enter Users Cleanliness',
+        'name' => 'rating_users_cleanliness'
+    ],
+
+
+    'rating_app' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Rating App',
+        'placeholder' => 'Enter Rating App',
+        'name' => 'rating_app'
+    ],
+
+
+    'message' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textarea::class,
+        'label' => 'Message',
+        'placeholder' => 'Enter Message',
+        'name' => 'message'
+    ],
 
 
 
 ];
-
-

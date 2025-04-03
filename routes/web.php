@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
 
+
+
+
+Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
+    ->name('survey-link');
+
+  Route::post('/survey', [App\Http\Controllers\SurveyController::class, 'submitSurvey']);
+  
+  
+
 Route::view('/app/update/google' , 'pages.update-google');
 
 Route::prefix('payment')->group(function () {

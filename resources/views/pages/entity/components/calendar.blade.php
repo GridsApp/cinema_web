@@ -5,6 +5,7 @@
             {!! field('theater') !!}
         @endcomponent
     </div>
+
     <div class="col-span-12">
         <div wire:key="{{ uniqid() }}" x-on:record-created-{{ $info['id'] }}.window='handleCreateCallback'
             x-on:record-not-created-{{ $info['id'] }}.window='handleErrorCallback'>
@@ -34,13 +35,14 @@
 
                             <div class="flex gap-3">
 
-
+                                @if(cms_check_permission('edit-movie-shows'))
                                 <template x-if="selected.length == 1">
                                     <button @click="openDrawer($event , 'editDrawer')" type="button"
                                         class="text-[12px] focus:ring-offset-white focus:shadow-outline group inline-flex items-center justify-center gap-x-2 border outline-none transition-all duration-200 ease-in-out hover:shadow-sm focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:opacity-80  px-4 py-2 text-secondary-50 ring-secondary-500 bg-secondary-500 focus:bg-secondary-600 hover:bg-secondary-600 border-transparent focus:ring-offset-2 dark:focus:ring-offset-dark-900 dark:focus:ring-secondary-600 dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:hover:ring-secondary-600 rounded-md">
                                         Edit
                                     </button>
                                 </template>
+                                @endif
 
                                 <template x-if="selected.length == 1">
                                     <button @click="selectGroup" type="button"
@@ -50,15 +52,17 @@
                                 </template>
 
 
-
+                                @if(cms_check_permission('edit-movie-shows'))
                                 <template x-if="selected.length > 1">
                                     <button @click="openDrawer($event , 'editAllDrawer')" type="button"
                                         class="text-[12px] focus:ring-offset-white focus:shadow-outline group inline-flex items-center justify-center gap-x-2 border outline-none transition-all duration-200 ease-in-out hover:shadow-sm focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:opacity-80  px-4 py-2 text-primary-50 ring-primary-500 bg-primary-500 focus:bg-primary-600 hover:bg-primary-600 border-transparent focus:ring-offset-2 dark:focus:ring-offset-dark-900 dark:focus:ring-primary-600 dark:bg-primary-700 dark:hover:bg-primary-600 dark:hover:ring-primary-600 rounded-md">
                                         Edit all selected
                                     </button>
                                 </template>
+                                @endif
+                                
 
-
+                                @if(cms_check_permission('delete-movie-shows'))
                                 <template x-if="selected.length > 0">
 
                                     <button x-on:click="deleteMovieShows()" type="button"
@@ -67,8 +71,9 @@
                                     </button>
 
                                 </template>
+                               @endif
                             </div>
-
+                         @if(cms_check_permission('create-movie-shows'))
                             <template x-if="selected.length === 0">
                                 <button @if (!$this->theater_id) disabled @endif
                                     @click="openDrawer($event, 'createDrawer')" type="button"
@@ -78,6 +83,7 @@
                                 </button>
                             </template>
 
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -125,15 +131,18 @@
                                             @endforeach
                                         </div>
 
+                                     
 
                                         @foreach ($events->where('dayIndex', $i) as $event)
-                                            {{-- @dd($event); --}}
-                                            <div class="event-box twa-event-backdiv @if($event['active']) event-box-active @endif"
+                                       
+                                            {{-- @dd($canDrag); --}}
+                                            <div class="event-box twa-event-backdiv @if ($event['active']) event-box-active @endif"
                                                 style="
                                             height: {{ $event['height'] }}px;
                                             top: {{ $event['top'] }}px
                                         "
-                                                draggable="@if ($event['reserved'] > 0){{'false'}}@else{{'true'}}@endif"
+                                                draggable="{{ ($event['reserved'] == 0 && $canDrag) ? 'true' : 'false'; }}"
+                                                {{-- draggable="@if ($event['reserved'] > 0){{'false'}}@else{{'true'}}@endif" --}}
                                                 x-on:dragstart="dragStart('{{ json_encode($event) }}')"
                                                 x-on:dragend="dragEnd" data-id="{{ $event['id'] }}"
                                                 data-group="{{ $event['group'] }}">

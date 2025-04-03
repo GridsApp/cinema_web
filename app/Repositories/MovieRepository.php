@@ -10,6 +10,7 @@ use App\Models\MovieDirector;
 use App\Models\MovieFavorite;
 use App\Models\MovieGenre;
 use App\Models\MovieLanguage;
+use App\Models\MovieReview;
 use App\Models\MovieShow;
 use App\Models\Order;
 use App\Models\OrderSeat;
@@ -23,6 +24,7 @@ class MovieRepository implements MovieRepositoryInterface
     {
         $movie = Movie::whereNull('deleted_at')->where('id', $id)->first();
 
+        
         if (!$movie) {
             return null;
         }
@@ -70,6 +72,7 @@ class MovieRepository implements MovieRepositoryInterface
         }
         $can_review = false;
         if ($user) {
+            // dd($user);
 
             $orders = Order::whereNull('deleted_at')
                 ->where('user_id', $user->id)
@@ -81,13 +84,27 @@ class MovieRepository implements MovieRepositoryInterface
                 ->where('movie_id', $movie->id)
                 ->first();
 
+                // dd($order_seat);
+
             $can_review = !$order_seat;
+
 
             if ($order_seat) {
                 $duration = $movie->duration;
                 $datetime = Carbon::parse($order_seat->date . ' ' . $order_seat->time->label)->addMinutes($duration);
 
-                $can_review = Carbon::now()->greaterThan($datetime);
+                // $can_review = Carbon::now()->greaterThan($datetime);
+
+                if (Carbon::now()->greaterThan($datetime)) {
+                    
+                    $hasReviewed = MovieReview::where('user_id', $user->id)
+                        ->where('movie_id', $movie->id)
+                        ->whereNull('deleted_at')
+                        ->exists();
+    
+                        // dd($hasReviewed);
+                    $can_review = !$hasReviewed;
+                }
             }
         }
 
@@ -200,6 +217,7 @@ class MovieRepository implements MovieRepositoryInterface
     public function searchMovies($search)
     {
 
+       
         $words = explode(" ", $search);
 
         return Movie::whereNull('deleted_at')->where(function ($q) use ($words) {
@@ -214,12 +232,11 @@ class MovieRepository implements MovieRepositoryInterface
             }
        
         })
-
-
             ->limit(10)
             ->get()->map(function ($movie) {
                 return [
                     'id' => $movie->id,
+                    'genre' => $movie->genre->label,
                     'name' => $movie->name,
                     'description' => $movie->description,
                     'duration' => minutes_to_human($movie->duration),

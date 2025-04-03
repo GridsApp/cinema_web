@@ -46,7 +46,7 @@ class AuthController extends Controller
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => [
-                'required', 
+                'required',
                 'min:8',
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
@@ -68,7 +68,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             $user = $this->userRepository->createUser($phone_number, $form_data["password"]);
         }
-        
+
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -204,8 +204,8 @@ class AuthController extends Controller
 
         if (!$user) {
             $user = new User();
-            $user->name = $form_data['name'];
-            $user->email = $form_data['email'];
+            $user->name = $form_data['name'] ?? null;
+            $user->email = $form_data['email'] ?? null;
             $user->login_provider = $login_provider;
             $user->token = $this->tokenRepository->createUserToken();
         }

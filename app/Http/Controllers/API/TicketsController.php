@@ -54,6 +54,15 @@ class TicketsController extends Controller
 
 
 
+            // env('APP_URL')."/survey/".$item->id."/". $item->user_id ."/".md5($item->id.$item->user_id);
+
+            $survey_link = route('survey-link' , [
+                'order_id' =>  $order->id,
+                'user_id' => $order->user_id,
+                'token' => md5($order->id.$order->user_id)
+            ]);
+
+
             return [
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
@@ -63,6 +72,8 @@ class TicketsController extends Controller
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
                 'screen_type' => $movieShow->screenType->label ?? '',
+                'price_group' => $movieShow->priceGroup->label ?? '',
+                'survey_link' => $survey_link,
                 'seats' => $seats->pluck('seat')->implode(","),
                 'order' => [
                     'id' => $order->id ?? null,
@@ -113,6 +124,11 @@ class TicketsController extends Controller
                 'duration' => $movieShow->movie->duration,
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
+
+                'screen_type' => $movieShow->screenType->label ?? '',
+                'price_group' => $movieShow->priceGroup->label ?? '',
+                'survey_link' => null,
+
                 'seats' => $seats->pluck('seat')->implode(","),
                 'order' => [
                     'id' => $order->id ?? null,

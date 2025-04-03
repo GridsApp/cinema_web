@@ -35,6 +35,8 @@ class UsersEntity extends Entity
         $this->addField("token", ["container" => 'col-span-7']);
         $this->addField("login_provider", ["container" => 'col-span-7']);
         $this->addField("identifier", ["container" => 'col-span-7']);
+        $this->addField("player_id", ["container" => 'col-span-7']);
+        
         // $this->addField("signature", ["container" => 'col-span-7']);
         
 

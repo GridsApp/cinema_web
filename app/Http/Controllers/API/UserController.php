@@ -31,9 +31,9 @@ class UserController extends Controller
     private ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository;
     private CartRepositoryInterface $cartRepository;
     private OrderRepository $orderRepository;
-    
 
-    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, CardRepositoryInterface $cardRepository, OTPRepositoryInterface $otpRepository, ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository,CartRepositoryInterface $cartRepository,OrderRepository $orderRepository)
+
+    public function __construct(TokenRepositoryInterface $tokenRepository, UserRepositoryInterface $userRepository, CardRepositoryInterface $cardRepository, OTPRepositoryInterface $otpRepository, ResetPasswordTokenRepositoryInterface $resetPasswordTokenRepository, CartRepositoryInterface $cartRepository, OrderRepository $orderRepository)
     {
         $this->tokenRepository = $tokenRepository;
         $this->userRepository = $userRepository;
@@ -71,7 +71,8 @@ class UserController extends Controller
     }
 
 
-    public function uploadProfileImage(){
+    public function uploadProfileImage()
+    {
 
 
         $form_data = clean_request();
@@ -85,12 +86,12 @@ class UserController extends Controller
 
         $user = request()->user;
 
-        $image = $form_data['profile_picture']; 
+        $image = $form_data['profile_picture'];
         $folder = uniqid();
         $extension = $image->getClientOriginalExtension();
         $originalFilename = $folder . '.' . $extension;
 
-      
+
         $image->storeAs("public/data/{$folder}", 'thumb.webp');
         $image->storeAs("public/data/{$folder}", 'image.webp');
 
@@ -99,7 +100,6 @@ class UserController extends Controller
         $user->save();
 
         return $this->response(notification()->success('Profile Picture succesfully added', 'Profile Picture succesfully added'));
-
     }
 
     public function updateProfile()
@@ -210,11 +210,14 @@ class UserController extends Controller
 
         $user = request()->user;
 
-        if (Hash::check($form_data['password'], $user->password)) {
+        // dd(md5($form_data['password']));
+        // 64e39c60d69afe351b48472307add2c5
+        // e817f2468050b328642e82ce4f756237
+        if (md5($form_data['password']) === $user->password) {
             return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
         }
 
-        if (!Hash::check($form_data['current_password'], $user->password)) {
+        if (md5($form_data['current_password']) !== $user->password) {
             return $this->response(notification()->error('Error', 'Current password is incorrect'), 403);
         }
 
@@ -240,7 +243,7 @@ class UserController extends Controller
             return $this->response(notification()->error('You have entered invalid phone/password or not verified', $e->getMessage()));
         }
 
-   
+
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -280,10 +283,11 @@ class UserController extends Controller
             return $this->response(notification()->error('User not found', $e->getMessage()));
         }
 
-        if (Hash::check($form_data['password'], $user->password)) {
+        
+        if (md5($form_data['password']) === $user->password) {
             return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
         }
-
+        
         $this->userRepository->changePassword($user, $form_data['password']);
 
         return $this->response(notification()->success('Password succesfully changed', 'Password succesfully changed'));
@@ -292,7 +296,7 @@ class UserController extends Controller
     public function deleteAccount()
     {
 
-    
+
         $user = request()->user;
 
         $this->userRepository->deleteAccount($user);
@@ -312,14 +316,14 @@ class UserController extends Controller
 
         $user = request()->user;
         $user_type = request()->user_type;
-      
+
 
         try {
             $system_id = get_system_from_type($user_type);
         } catch (\Throwable $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
-       
+
 
 
         try {
@@ -339,13 +343,13 @@ class UserController extends Controller
             return $this->response(notification()->error('Invalid Amount', "Please enter amount less than " . $maximum_recharge_amount));
         }
 
-   
+
         try {
             $this->cartRepository->addTopupToCart($cart->id, $form_data['amount']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Error adding amount to cart', $th->getMessage()));
         }
-    
+
 
         try {
             $payment_method = $this->orderRepository->getPaymentMethodById($form_data['payment_method_id']);
@@ -353,18 +357,38 @@ class UserController extends Controller
             return $this->response(notification()->error('Payment Method Not Found', $th->getMessage()));
         }
 
-       
-        if(!in_array($payment_method->key , ['OP'])){
+
+        if (!in_array($payment_method->key, ['OP'])) {
             return $this->response(notification()->error('Payment Method Not Supported', 'Payment Method Not Supported'));
         }
 
 
         try {
             $order = app(\App\Http\Controllers\API\OrderController::class);
-            return $order->createOrder( $cart->id, $payment_method);
+            return $order->createOrder($cart->id, $payment_method);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order Attempt Failed', $e->getMessage()));
         }
+    }
 
+    public function setPlayer()
+    {
+        $form_data = clean_request([]);
+
+        $check = $this->validateRequiredFields($form_data, ['player_id']);
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+
+        if ($user) {
+            $user->player_id = $form_data['player_id'];
+            $user->save();
+
+            return $this->response(notification()->error('Player ID updated successfully.', 'Player ID updated successfully.'));
+        }
+
+        // return $this->response(['error' => 'User not found.'], 404);
     }
 }

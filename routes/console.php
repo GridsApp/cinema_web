@@ -25,7 +25,7 @@ Artisan::command('twa:entities', function () {
             if (class_exists($fullClassName)) {
                 $checkClass = new $fullClassName;
 
-                if($checkClass->slug) {
+                if ($checkClass->slug) {
                     $config[$checkClass->slug] = $fullClassName;
                 }
             }
@@ -40,19 +40,31 @@ Artisan::command('twa:entities', function () {
 
 
 
-Artisan::command('twa:migrate', function () {
+    Artisan::command('twa:migrate', function () {
+
+        $this->comment("Started");
+    
+        (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
+    
+        $this->comment("Finished");
+    })->purpose('Migrating tables');
+
+    
+
+
+
+Artisan::command('twa:generatePermissions', function () {
 
     $this->comment("Started");
 
-    (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
+    (new twa\cmsv2\Http\Controllers\EntityController)->generatePermissions();
 
     $this->comment("Finished");
-
-})->purpose('Migrating tables');
+})->purpose('Permissions tables');
 
 
 Artisan::command('twa:dataTransfer', function () {
-   
+
 
     // Read users from the database of the live version
     // Create a user in the new database and get the new id.
