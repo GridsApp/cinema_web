@@ -72,7 +72,8 @@ class TicketsController extends Controller
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
                 'screen_type' => $movieShow->screenType->label ?? '',
-                'price_group' => $movieShow->priceGroup->label ?? '',
+                
+                'price_group' => $movieShow->theater->priceGroup->label ?? '',
                 'survey_link' => $survey_link,
                 'seats' => $seats->pluck('seat')->implode(","),
                 'order' => [
@@ -126,7 +127,7 @@ class TicketsController extends Controller
                 'theater' => $movieShow->theater->label ?? '',
 
                 'screen_type' => $movieShow->screenType->label ?? '',
-                'price_group' => $movieShow->priceGroup->label ?? '',
+                'price_group' => $movieShow->theater->priceGroup->label ?? '',
                 'survey_link' => null,
 
                 'seats' => $seats->pluck('seat')->implode(","),

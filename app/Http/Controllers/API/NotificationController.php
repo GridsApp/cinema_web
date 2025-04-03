@@ -12,20 +12,20 @@ class NotificationController extends Controller
 
     use APITrait;
     
-    public function list()
-    {
+    // public function list()
+    // {
        
-        $notifications = CmsSentPushNotification::whereNull('deleted_at')->get()->map(function ($notification) {
-            return [
-                'id' => $notification->id,
-                'title' => $notification->title,
-                'message' => $notification->message,
-                'text' => $notification->text,
-                'image' => get_image($notification->image),
-                'created_at' => $notification->created_at,
-            ];
-        });
+    //     $notifications = CmsSentPushNotification::whereNull('deleted_at')->get()->map(function ($notification) {
+    //         return [
+    //             'id' => $notification->id,
+    //             'title' => $notification->title,
+    //             'message' => $notification->message,
+    //             'text' => $notification->text,
+    //             'image' => get_image($notification->image),
+    //             'created_at' => $notification->created_at,
+    //         ];
+    //     });
 
-        return $this->responseData($notifications);
-    }
+    //     return $this->responseData($notifications);
+    // }
 }

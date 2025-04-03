@@ -2789,6 +2789,17 @@ return [
         'name' => 'survey_submitted'
     ],
 
+    "super_admin" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Toggle::class,
+        'label' => 'Super Admin',
+        'placeholder' => 'Super Admin',
+        'name' => 'super_admin'
+    ],
+
     'rating_movie' => [
         'id' => uniqid(),
         'livewire' => [

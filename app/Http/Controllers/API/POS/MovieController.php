@@ -128,6 +128,7 @@ class MovieController extends Controller
                 $total_available_seats += $nb_seats - $reserved_seats;
                 $total_reserved_seats += $reserved_seats;
 
+              
                 return [
                     'id' => $show->id,
                     'time' => $show->time->label ?? '',
@@ -136,7 +137,7 @@ class MovieController extends Controller
                         'label' => $theater->label
                     ],
                     'screen_type' => $show->screenType->label ?? '',
-                    'price_group' => $show->priceGroup->label ?? '',
+                    'price_group' => $show->theater->priceGroup->label ?? '',
                     'seats' => [
                         'total' => $nb_seats,
                         'reserved' => $reserved_seats,
