@@ -240,7 +240,7 @@ class CartController extends Controller
     {
         $form_data = clean_request([]);
 
-        $check = $this->validateRequiredFields($form_data, ['cart_id', 'item_id']);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'branch_item_id']);
         if ($check) {
             return $this->response($check);
         }
@@ -255,13 +255,13 @@ class CartController extends Controller
         }
 
         try {
-            $this->itemRepository->getItemById($form_data['item_id']);
+            $this->itemRepository->getItemById($form_data['branch_item_id']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Item not found', $th->getMessage()));
         }
 
         try {
-            $this->cartRepository->addItemToCart($form_data['cart_id'], $form_data['item_id']);
+            $this->cartRepository->addItemToCart($form_data['cart_id'], $form_data['branch_item_id']);
             return $this->response(notification()->success('Item added  to the cart successfully', 'Item added successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error adding item to cart', $e->getMessage()));
@@ -271,18 +271,18 @@ class CartController extends Controller
     {
 
         $form_data = clean_request([]);
-        $check = $this->validateRequiredFields($form_data, ['cart_id', 'item_id']);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'branch_item_id']);
 
         if ($check) {
             return $this->response($check);
         }
         try {
-            $this->itemRepository->getItemById($form_data['item_id']);
+            $this->itemRepository->getItemById($form_data['branch_item_id']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Item not found', $th->getMessage()));
         }
         try {
-            $this->cartRepository->removeItemFromCart($form_data['cart_id'], $form_data['item_id']);
+            $this->cartRepository->removeItemFromCart($form_data['cart_id'], $form_data['branch_item_id']);
             return $this->response(notification()->success('Item removed successfully', 'Item removed successfully'));
         } catch (\Exception $e) {
             return $this->response(notification()->error('Error removing Item', $e->getMessage()));
@@ -765,7 +765,8 @@ class CartController extends Controller
                 'wallet_balance' => $card['wallet_balance'],
                 'type' => $card['type']
             ];
-        } elseif ($cartDetails['card_number']) {
+        } 
+        elseif ($cartDetails['card_number']) {
 
             try {
                 $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);

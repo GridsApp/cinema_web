@@ -25,7 +25,10 @@ class RewardsEntity extends Entity
         $this->addField("image", ["container" => 'col-span-12']);
         $this->addField("description", ["container" => 'col-span-12', 'required' => true]);
 
-        $this->addField("one_time_usage", ["container" => 'col-span-12', 'required' => true]);
+        $this->addField('zones' , ['container' => 'col-span-12']);
+        $this->addField('items' , ['container' => 'col-span-12']);
+
+        // $this->addField("one_time_usage", ["container" => 'col-span-12', 'required' => true]);
 
         return $this->fields;
     }

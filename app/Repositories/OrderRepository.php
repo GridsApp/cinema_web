@@ -11,6 +11,7 @@ use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\BranchItem;
 use App\Models\CartCoupon;
 
 use App\Models\Item;
@@ -181,13 +182,17 @@ class OrderRepository implements OrderRepositoryInterface
             }
         }
 
+   
         foreach ($cart_items as $cart_item) {
-            $item = Item::find($cart_item['item_id']);
+    
+            $branch_item = BranchItem::find($cart_item['branch_item_id']);
+            // dd($branch_item);
             $orderItem = new OrderItem();
-            $orderItem->item_id = $cart_item['item_id'];
+            $orderItem->branch_item_id = $cart_item['branch_item_id'];
+            $orderItem->item_id = $branch_item->item_id;
             $orderItem->order_id = $order->id;
-            $orderItem->price = $item->price;
-            $orderItem->label = $item->label;
+            $orderItem->price = $branch_item->price;
+            $orderItem->label = $branch_item->item->label;
             $orderItem->save();
         }
 

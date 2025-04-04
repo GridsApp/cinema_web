@@ -16,26 +16,23 @@ class ItemsEntity extends Entity
         'pagination' => 20,
     ];
 
-    public function fields(){
+    public function fields()
+    {
+        $this->addField("label", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("image", ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("screen_type_condition", ["container" => 'col-span-7', 'required' => false]);
+        // $this->addField("family_group_id", ["container" => 'col-span-6', 'required' => true]);
 
-        $this->addField("image" , ["container" => 'col-span-12', 'required' => true]);
-        $this->addField("label" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("branch" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("screen_type_condition" , ["container" => 'col-span-6', 'required' => false]);
-        $this->addField("family_group_id" , ["container" => 'col-span-6', 'required' => true]);
-        
-        // $this->addField("key" , ["container" => 'col-span-12', 'required' => true]);
-     
+
+
         return $this->fields;
     }
 
-    public function columns(){
-        $this->addColumn("image" );
-        $this->addColumn("label" );
-        $this->addColumn("price" );
+    public function columns()
+    {
+        $this->addColumn("image");
+        $this->addColumn("label");
+        $this->addColumn("screen_type_condition");
         return $this->columns;
     }
-
-
 }

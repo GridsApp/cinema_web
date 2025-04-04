@@ -92,7 +92,7 @@ class RewardRepository implements RewardRepositoryInterface
     public function generateRedeemCode()
     {
         do {
-            $code = str(str()->random(14))->upper();
+            $code = "RWD-".str(str()->random(5))->upper();
         } while (UserReward::where('code', $code)->whereNull('deleted_at')->exists());
     
         return $code;

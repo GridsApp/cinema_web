@@ -31,6 +31,9 @@ class PriceGroupZoneForm extends Component
         $fields = [
             'label',
             'condensed_label',
+            'iso',
+       
+
             'color',
             // 'default',
             'price_settings',
@@ -71,6 +74,7 @@ class PriceGroupZoneForm extends Component
         $required_array = [
             'form.label' => 'required',
             'form.condensed_label' => 'required',
+            'form.iso' => 'required',
             'form.color' => 'required',
             'form.price_settings' => 'required'
         ];
@@ -78,6 +82,7 @@ class PriceGroupZoneForm extends Component
         $required_messages = [
             'form.label' => 'label',
             'form.condensed_label' => 'condensed label',
+            'form.iso' => 'iso',
 
             'form.color' => 'color',
             'form.price_settings' => 'price settings',
@@ -98,6 +103,7 @@ class PriceGroupZoneForm extends Component
 
         $price_group_zone->label = $this->form['label'];
         $price_group_zone->condensed_label =  $this->form['condensed_label'];
+        $price_group_zone->iso =  $this->form['iso'];
         $price_group_zone->color =  $this->form['color'];
         $price_group_zone->price_settings =  $this->form['price_settings'];      
         $price_group_zone->save(); 

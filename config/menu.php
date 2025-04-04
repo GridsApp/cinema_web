@@ -103,6 +103,11 @@ return [
                 'label' => 'Theaters',
                 'link' => routeObject('entity', ['slug' => 'theaters'])
             ],
+            // [
+            //     'key' => 'seat-types',
+            //     'label' => 'Seat Types',
+            //     'link' => routeObject('entity', ['slug' => 'seat-types'])
+            // ],
             [
                 'key' => 'price-groups',
                 'label' => 'Price Groups',
@@ -217,10 +222,10 @@ return [
                 'label' => 'Coupons',
                 'link' => routeObject('entity', ['slug' => 'coupons'])
             ],
-            // [
-            //     'label' => 'Items',
-            //     'link' => routeObject('entity', ['slug' => 'items'])
-            // ],
+            [
+                'label' => 'Items',
+                'link' => routeObject('entity', ['slug' => 'items'])
+            ],
             [
                 'key' => 'list-items',
                 'label' => 'List Items',

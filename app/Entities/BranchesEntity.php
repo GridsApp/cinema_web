@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Facades\Route;
 use twa\cmsv2\Entities\Entity;
 
 class BranchesEntity extends Entity
@@ -26,6 +27,18 @@ class BranchesEntity extends Entity
     public $params = [
         'pagination' => 20,
     ];
+    public function setRowOperations()
+    {
+
+
+        $route = "/".Route::getRoutes()->getByName('branch-items')->uri();
+        $this->setRowOperation("View Items" , $route , '<i class="fa-solid fa-eye"></i>');
+
+        $edit_route = "/".Route::getRoutes()->getByName('entity.update')->uri();
+        $this->setRowOperation("Edit" ,  str_replace('{slug}' , $this->slug , $edit_route),  '<i class="fa-solid fa-edit"></i>');
+  
+    }
+
 
     public function fields(){
 

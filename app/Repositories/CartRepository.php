@@ -167,7 +167,7 @@ class CartRepository implements CartRepositoryInterface
         $item = $this->itemRepository->getItemById($item_id);
         try {
             $cart_item = new CartItem();
-            $cart_item->item_id = $item_id;
+            $cart_item->branch_item_id = $item_id;
             $cart_item->cart_id = $cart_id;
             $cart_item->price = $item->price;
             $cart_item->save();
@@ -181,7 +181,7 @@ class CartRepository implements CartRepositoryInterface
     {
 
         try {
-            $cart_item = CartItem::where('cart_id', $cart_id)->where('item_id', $item_id)->orderBy('id', 'desc')->firstOrFail();
+            $cart_item = CartItem::where('cart_id', $cart_id)->where('branch_item_id', $item_id)->orderBy('id', 'desc')->firstOrFail();
 
 
             $cart_item->delete();
@@ -494,8 +494,6 @@ class CartRepository implements CartRepositoryInterface
     public function getCartDetails($cart)
     {
 
-
-        // dd($cart);
         try {
             $cart_id = $cart->id;
 
@@ -506,7 +504,6 @@ class CartRepository implements CartRepositoryInterface
 
             $imtiyaz_phones = $this->getCartImtiyaz($cart_id)->pluck('phone');
 
-          // $totalDiscounts = $validCoupons->sum('flat_discount');
 
             $cart_seats = $this->getCartSeats($cart_id);
             $zone_ids = $cart_seats->pluck('zone_id');
@@ -548,11 +545,11 @@ class CartRepository implements CartRepositoryInterface
 
 
             $cart_items = $this->getCartItems($cart_id);
-            $item_ids = $cart_items->pluck('item_id');
+            $item_ids = $cart_items->pluck('branch_item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
             $cart_items = $cart_items->map(function ($cart_item) use ($items) {
-                $item = $items[$cart_item['item_id']];
+                $item = $items[$cart_item['branch_item_id']];
                 $unit_price = $item->price;
 
 
@@ -596,23 +593,23 @@ class CartRepository implements CartRepositoryInterface
             $total += $cart_topups->sum('price.value');
 
             // $cart_coupons = $this->getCartCoupons($cart_id);
-            // $cart_coupons = $cart_coupons->map(function ($cart_coupon) {
-            //     $unit_price = $cart_coupon->amount;
+            $cart_coupons = $cart_coupons->map(function ($cart_coupon) {
+                $unit_price = $cart_coupon->amount;
 
 
-            //     if (!($cart_coupon['quantity'] ?? null)) {
-            //         $cart_coupon['quantity'] = 1;
-            //     }
+                if (!($cart_coupon['quantity'] ?? null)) {
+                    $cart_coupon['quantity'] = 1;
+                }
 
-            //     return [
-            //         'id' => $cart_coupon['id'],
-            //         'type' => "Coupon",
-            //         'label' => "Applied Coupon ",
-            //         'unit_price' => currency_format($unit_price, "-"),
-            //         'quantity' => 1,
-            //         'price' => currency_format($unit_price, "-"),
-            //     ];
-            // });
+                return [
+                    'id' => $cart_coupon['id'],
+                    'type' => "Coupon",
+                    'label' => "Applied Coupon ",
+                    'unit_price' => currency_format($unit_price, "-"),
+                    'quantity' => 1,
+                    'price' => currency_format($unit_price, "-"),
+                ];
+            });
 
             $discount = $cart_coupons->sum('price.value');
             $discount = $discount >= $total_seats ? $total_seats : $discount;

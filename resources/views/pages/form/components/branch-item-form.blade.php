@@ -3,15 +3,10 @@
         <div class="container-content-height-2">
             <div class="grid grid-cols-12 gap-5">
 
-
-                {!! field('label' , 'col-span-7') !!}
-                {!! field('condensed_label', 'col-span-7') !!}
-                {!! field('iso', 'col-span-7') !!}
-                {!! field('color', 'col-span-7') !!}
-     
-                {!! field('price_settings', 'col-span-7') !!}
-      
-               
+                {!! field('predefined_item_id', 'col-span-7') !!}
+                {!! field('price', 'col-span-7') !!}
+                {!! field('hide', 'col-span-7') !!}
+          
             </div>
         </div>
         <div class="my-4">

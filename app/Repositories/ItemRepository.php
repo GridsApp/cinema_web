@@ -2,33 +2,36 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\CartRepositoryInterface;
+
 use App\Interfaces\ItemRepositoryInterface;
+use App\Models\BranchItem;
 use App\Models\CartSeat;
 use App\Models\Item;
-use App\Models\Theater;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
+
 
 class ItemRepository implements ItemRepositoryInterface
 {
 
-    // private CartRepositoryInterface $cartRepository;
-
-
-
-
-    // public function __construct(CartRepositoryInterface $cartRepository)
-    // {
-    //     $this->cartRepository = $cartRepository;
-
-    // }
-
 
     public function getItemById($item_id)
     {
+
         try {
+
+            $item = BranchItem::query()
+            ->select('branch_items.id as id' , 'branch_items.price' , 'items.label' , 'items.image' , 'items.screen_type_id')
+            ->whereNull('branch_items.deleted_at')
+            ->where('branch_items.hide' , '!=' , 1)
+            ->where('branch_items.id' , $item_id)
+            ->join('items' , function($join){
+               return $join->on('branch_items.item_id' , 'items.id')
+                ->whereNull('items.deleted_at');
+            })
+            ->firstOrFail();
+              
+            return $item;
 
             return Item::where('id', $item_id)->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
@@ -41,7 +44,18 @@ class ItemRepository implements ItemRepositoryInterface
 
         try {
 
-            return Item::whereIn('id', $item_ids)->whereNull('deleted_at')->get();
+            return BranchItem::query()
+            ->select('branch_items.id as id' , 'branch_items.price' , 'items.label' , 'items.image' , 'items.screen_type_id')
+            ->whereNull('branch_items.deleted_at')
+            ->where('branch_items.hide' , '!=' , 1)
+            ->whereIn('branch_items.id' , $item_ids)
+            ->join('items' , function($join){
+               return $join->on('branch_items.item_id' , 'items.id')
+                ->whereNull('items.deleted_at');
+            })
+            ->get();
+              
+            
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
@@ -67,23 +81,33 @@ class ItemRepository implements ItemRepositoryInterface
     {
 
 
-       $query = Item::whereNull('deleted_at')->where('branch_id', $branch_id);
+    $query = BranchItem::query()
+        ->select('branch_items.id as id' , 'branch_items.price' , 'items.label' , 'items.image' , 'items.screen_type_id')
+        ->whereNull('branch_items.deleted_at')
+        ->where('branch_items.hide' , '!=' , 1)
+        ->where('branch_items.branch_id' , $branch_id)
+      
+
+        ->join('items' , function($join){
+            return $join->on('branch_items.item_id' , 'items.id')
+             ->whereNull('items.deleted_at');
+         });
 
         if ($cart_id) {
             $screen_ids = $this->getCartMovieScreenType($cart_id);
+            // dd($screen_ids);
+
             $query->where(function ($query) use ($screen_ids) {
                 $query->where(function ($q) use ($screen_ids) {
                     foreach ($screen_ids as $screen_id) {
                         $q->orWhere(function ($q1) use ($screen_id) {
-                            $q1->where('screen_type_id', 'LIKE', '%"' . $screen_id . '"%');
-                            $q1->orWhere('screen_type_id', 'LIKE', "%'" . $screen_id . "'%");
+                            $q1->where('items.screen_type_id', 'LIKE', '%"' . $screen_id . '"%');
+                            $q1->orWhere('items.screen_type_id', 'LIKE', "%'" . $screen_id . "'%");
                         });
                     }
                 });
-                $query->orWhereNull('screen_type_id');
-            });
-
-          
+                $query->orWhereNull('items.screen_type_id');
+            }); 
         }
 
 

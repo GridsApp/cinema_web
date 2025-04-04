@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BranchItemsController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
@@ -129,6 +130,9 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/price-groups/{id}/zones", [PriceGroupZonesController::class, 'render'])->name('price-group-zones');
   Route::get("/price-groups/{id}/zones/create", [PriceGroupZonesController::class, 'createZone'])->name('price-group-zones.create');
   Route::get("/price-groups/{id}/zones/{zone_id}/update", [PriceGroupZonesController::class, 'editZone'])->name('price-group-zones.update');
+
+  Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');
+  Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
 
 
 

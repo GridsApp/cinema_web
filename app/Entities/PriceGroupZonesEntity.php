@@ -49,6 +49,8 @@ class PriceGroupZonesEntity extends Entity
 
         $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("condensed_label" , ["container" => 'col-span-7']);
+        $this->addField("iso" , ["container" => 'col-span-7']);
+        
         $this->addField("color" , ["container" => 'col-span-7']);
         $this->addField("price_groups" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("default" , ["container" => 'col-span-7 hidden']);

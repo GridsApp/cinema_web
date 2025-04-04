@@ -33,7 +33,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
 
             Route::get('/rewards', [App\Http\Controllers\API\RewardController::class, 'list'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
-            Route::post('{reward_id}/rewards/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
+            Route::post('rewards/{reward_id}/redeem', [App\Http\Controllers\API\RewardController::class, 'redeem'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::prefix('tickets/list')->group(function () {
                 Route::get('history', [App\Http\Controllers\API\TicketsController::class, 'history'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);

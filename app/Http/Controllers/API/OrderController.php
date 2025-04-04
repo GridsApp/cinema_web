@@ -433,7 +433,7 @@ class  OrderController extends Controller
         $order_items = $order_items->map(function ($order_item) {
             return [
                 'item_id' => $order_item->item_id,
-                'item_id' => $order_item->item_id,
+                // 'item_id' => $order_item->item_id,
                 'label' => $order_item->label,
                 'price' => currency_format($order_item->price),
 

@@ -5,6 +5,7 @@ return array (
   'about-paragraphs' => 'App\\Entities\\AboutParagraphsEntity',
   'access-tokens' => 'App\\Entities\\AccessTokensEntity',
   'board-members' => 'App\\Entities\\BoardMembersEntity',
+  'branch-items' => 'App\\Entities\\BrancheItemsEntity',
   'branches' => 'App\\Entities\\BranchesEntity',
   'cart-coupons' => 'App\\Entities\\CartCouponsEntity',
   'cart-imtiyaz' => 'App\\Entities\\CartImtiyazEntity',

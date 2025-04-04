@@ -101,6 +101,21 @@ return [
         'name' => 'position',
     ],
 
+    "iso" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'ISO',
+        'placeholder' => 'Enter ISO',
+        'name' => 'iso',
+     
+        'channel_type' => 'receiver',
+        'channel' => 'isoslug',
+        'channel_language' => null
+    ],
+
 
 
     "created_at" => [
@@ -327,7 +342,8 @@ return [
         'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Condensed name',
         'placeholder' => 'Enter Movie Condensed Name',
-        'name' => 'condensed_name'
+        'name' => 'condensed_name',
+      
     ],
 
     'condensed_label' => [
@@ -338,7 +354,10 @@ return [
         'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Condensed Label',
         'placeholder' => 'Enter Condensed Label',
-        'name' => 'condensed_label'
+        'name' => 'condensed_label',
+        'channel_type' => 'sender',
+        'channel' => 'isoslug',
+        'channel_language' => null
     ],
 
 
@@ -424,6 +443,46 @@ return [
             'field' => 'label'
         ]
     ],
+
+
+    'predefined_item_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Item',
+        'placeholder' => 'Select Item ',
+        'name' => 'item_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'items',
+            'field' => 'label'
+        ]
+    ],
+    'branch_item_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Branch Item',
+        'placeholder' => 'Select Branch Item ',
+        'name' => 'branch_item_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        // 'options' => [
+        //     'type' => 'query',
+        //     'table' => 'branch_items',
+        //     'field' => 'label'
+        // ]
+    ],
+
+    
     'cms_user_role' => [
         'id' => uniqid(),
         'livewire' => [
@@ -462,25 +521,7 @@ return [
         ]
     ],
 
-    'cast' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        'type' => twa\uikit\FieldTypes\Select::class,
-        'label' => 'Cast',
-        'placeholder' => 'Select movie casts',
-        'name' => 'cast_id',
-        'multiple' => true,
-        'visible_selections' => 2,
-        'query_limit' => 50,
-        'quick_add' => 'movie-casts',
-        'options' => [
-            'type' => 'query',
-            'table' => 'movie_casts',
-            'field' => 'name'
-        ]
-    ],
+    
     'director' => [
         'id' => uniqid(),
         'livewire' => [
@@ -878,6 +919,68 @@ return [
 
     ],
 
+    'zones' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Zones that will be redeemed',
+        'placeholder' => 'Select Zone',
+        'name' => 'zones',
+        'multiple' => true,
+        'visible_selections' => 5,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'price_group_zones',
+            'field' => 'condensed_label',
+            'parent' => [
+                'table' => 'price_groups',
+                'key' => 'price_group_id',
+                'field' => 'label',
+            ]
+        ]
+    ],
+  
+    'items' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Extras that will be redeemed',
+        'placeholder' => 'Select Extras',
+        'name' => 'item_id',
+        'multiple' => true,
+        'visible_selections' => 5,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'items',
+            'field' => 'label'
+        ]
+    ],
+
+    'cast' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Cast',
+        'placeholder' => 'Select movie casts',
+        'name' => 'cast_id',
+        'multiple' => true,
+        'visible_selections' => 2,
+        'query_limit' => 50,
+        'quick_add' => 'movie-casts',
+        'options' => [
+            'type' => 'query',
+            'table' => 'movie_casts',
+            'field' => 'name'
+        ]
+    ],
 
 
     "visibility" => [
@@ -889,6 +992,17 @@ return [
         'label' => 'Visibility',
         'placeholder' => 'Visibility',
         'name' => 'visibility'
+    ],
+
+    "hide" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Toggle::class,
+        'label' => 'Hide',
+        'placeholder' => 'Hide',
+        'name' => 'hide'
     ],
 
     'branch' => [

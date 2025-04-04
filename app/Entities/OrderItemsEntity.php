@@ -18,6 +18,8 @@ class OrderItemsEntity extends Entity
     ];
 
     public function fields(){
+        
+        $this->addField("branch_item_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("item_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("order_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("label" , ["container" => 'col-span-6', 'required' => true]);
