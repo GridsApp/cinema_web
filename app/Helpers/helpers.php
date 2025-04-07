@@ -2,7 +2,7 @@
 
 use App\Helpers\Timezone\TimezoneMapper;
 use App\Http\Controllers\UploadController;
-
+use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\File;
 use Livewire\Livewire;
 
@@ -80,12 +80,27 @@ if (!function_exists('currency_format')) {
 }
 
 
+if (!function_exists('create_payment_log')) {
+    function create_payment_log($message,$payload,$payment_attempt_id)
+    {
+       $payment_attempt_log= new PaymentAttemptLog();
+       $payment_attempt_log->message=$message;       
+       $payment_attempt_log->payload=$payload;       
+       $payment_attempt_log->payment_attempt_id=$payment_attempt_id;       
+       $payment_attempt_log->save();     
+       
+       return $payment_attempt_log;
+    }
+}
+
 if (!function_exists('get_header_access_token')) {
     function get_header_access_token()
     {
         return request()->header('access-token');
     }
 }
+
+
 if (!function_exists('clean_request')) {
     function clean_request($rules = [])
     {

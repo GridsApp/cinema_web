@@ -33,6 +33,8 @@ class CartSeatsEntity extends Entity
         $this->addField("cart_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("price" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("imtiyaz_phone" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("reward_code" , ["container" => 'col-span-6']);
+        
         
         // $this->addField("discount" , ["container" => 'col-span-6', 'required' => false]);
         // $this->addField("final_price" , ["container" => 'col-span-6', 'required' => false]);

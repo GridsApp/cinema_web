@@ -358,7 +358,7 @@ class UserController extends Controller
         }
 
 
-        if (!in_array($payment_method->key, ['OP'])) {
+        if (!str($payment_method->key)->contains('OP')) {
             return $this->response(notification()->error('Payment Method Not Supported', 'Payment Method Not Supported'));
         }
 

@@ -17,9 +17,12 @@ class ManageBookings extends Component
 
     #[Url]
     public $date;
+    public $canToggle;
+
 
     public function mount(){
 
+        $this->canToggle = cms_check_permission('can-toggle-show');
         if(!$this->date){
             $this->date = now()->format('d-m-Y');
         }else{

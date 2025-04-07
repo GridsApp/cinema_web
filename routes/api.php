@@ -125,6 +125,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/coupon/remove', [App\Http\Controllers\API\CartController::class, 'removeCouponFromCart']);
 
 
+        Route::post('/reward/add', [App\Http\Controllers\API\CartController::class, 'addRewardToCart']);
+
         //ONLY for POS
         Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart'])->middleware(POSUserMiddleware::class);
         Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart'])->middleware(POSUserMiddleware::class);
@@ -181,14 +183,14 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
         Route::group([
             'prefix' => 'user',
-            'middlewares' => [AuthMandatoryMiddleware::class, POSUserMiddleware::class]
+            'middleware' => [AuthMandatoryMiddleware::class, POSUserMiddleware::class]
         ], function () {
             Route::post('create', [App\Http\Controllers\API\POS\CustomersController::class, 'createUser']);
             Route::post('check/phone', [App\Http\Controllers\API\POS\CustomersController::class, 'getPhone']);
             Route::post('edit', [App\Http\Controllers\API\POS\CustomersController::class, 'editUser']);
             Route::post('card/info', [App\Http\Controllers\API\CardController::class, 'getCardInfo']);
             Route::get('card/update', [App\Http\Controllers\API\CardController::class, 'updateUserCard']);
-            Route::post('/redeem-code', [App\Http\Controllers\API\RewardController::class, "posRedeemCode"])->middleware((AuthMandatoryMiddleware::class));;
+            Route::post('redeem-code', [App\Http\Controllers\API\RewardController::class, "posRedeemCode"]);
         });
 
 

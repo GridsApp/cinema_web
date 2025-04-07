@@ -56,6 +56,7 @@ class AuthMandatoryMiddleware
             return $this->response(notification()->error("Access Token has expired or is invalid", "Access Token has expired or is invalid"));
         }
 
+        
 
         try {
             switch($access_token->type){

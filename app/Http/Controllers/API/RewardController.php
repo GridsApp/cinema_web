@@ -40,7 +40,7 @@ class RewardController extends Controller
 
         $user = request()->user;
         $user_type = request()->user_type;
-        // dd($user);
+ 
         $form_data = clean_request([]);
         $validator = Validator::make($form_data, [
             'code' => 'required',
@@ -52,59 +52,31 @@ class RewardController extends Controller
             return  $this->responseValidation($validator);
         }
         // $user = request()->user;
-        $user_reward = $this->rewardRepository->getRewardByCode($form_data['code']);
 
-        if (!$user_reward) {
-            return $this->response(notification()->error('Code Not Found', 'Code Not Found'));
+        try {
+            $user_reward = $this->rewardRepository->getUserRewardByCode($form_data['code']);
+        } catch (\Throwable $th) {
+            return $this->response(notification()->error('Code Not Found', $th->getMessage()));   
         }
+       
+
         $user_reward->used_at = now();
         $user_reward->save();
 
 
-        // dd($user->branch->label_en);
-
         $reward = Reward::whereNull('deleted_at')->where('id',$user_reward->reward_id)->first();
-        // dd($reward);
+  
         return $this->responseData([
-            'reward_id' =>$user_reward->reward_id,
+            'reference' => $user_reward->reward_id,
             'label' => $reward->title,
             'description' => $reward->description,
             'code' => $user_reward->code,
-            'cashier' => $user->name,
-            'branch'=>[
-                'label_en'=>$user->branch->label_en,
-                'label_ar'=>$user->branch->label_ar,
-            ]
-
+            'cashier' => $user ? [
+                'id' => $user->id,
+                'name' => $user->name
+            ] : null
         ]);
-        // return $this->response(notification()->success('Code Used Successfully', 'Code has been successfully Used.'));
-
-
-        // $user_reward =   $this->rewardRepository->getUsedReward($user->id, $reward->id);
-
-
-        // if ($user_reward && $reward->one_time_usage == 1) {
-        //     return $this->response(notification()->error('Already redeemed', "You have already redeemed this reward'"));
-        // } elseif ($user_reward && $user_reward->used_at == null) {
-        //     return $this->response(notification()->error('Already redeemed', "You have already redeemed this reward'"));
-        // }
-
-
-        // try {
-        //     DB::beginTransaction();
-
-        //     $user_reward = $this->rewardRepository->createUserReward($user->id, $reward->id);
-
-        //     $this->cardRepository->createLoyaltyTransaction('out', $reward->redeem_points, $user, "Redeem Reward", $user_reward->id);
-
-
-        //     DB::commit();
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     return $this->response(notification()->error('Error', $th->getMessage()));
-        // }
-
-
+       
     }
 
 

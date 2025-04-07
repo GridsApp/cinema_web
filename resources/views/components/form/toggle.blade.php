@@ -3,14 +3,20 @@
         <div class="flex items-center">
 
         {{-- @dd($canToggle); --}}
-            <div class="relative flex items-center justify-end">
-                <input  x-on:change="toggleChanged('{{ str($model)->explode('.')[1] }}')" x-model="{{ $model }}"
+            <div class="relative flex items-center justify-end"
+            >
+                <input 
+                :class="{ 'cursor-not-allowed ': {{ !$canToggle ? 'true' : 'false' }}, 'cursor-pointer': {{ $canToggle ? 'true' : 'false' }} }"
+
+                 x-on:change="toggleChanged('{{ str($model)->explode('.')[1] }}')" x-model="{{ $model }}"
                     type="checkbox"
-                   
+                    :disabled="{{ !$canToggle ? 'true' : 'false' }}"
                     class="peer absolute inset-y-0 left-0.5 translate-x-0 my-0.5 transform cursor-pointer appearance-none rounded-full border-0 bg-white shadow transition duration-200 ease-in-out checked:bg-none checked:text-white focus:outline-none focus:ring-0 focus:ring-offset-0 h-4 w-4 checked:translate-x-4"
                     
                     >
                 <div
+                :class="{ 'cursor-not-allowed ': {{ !$canToggle ? 'true' : 'false' }}, 'cursor-pointer': {{ $canToggle ? 'true' : 'false' }} }"
+
                     class="bg-secondary-200  block cursor-pointer rounded-full transition duration-100 ease-in-out group-focus:ring-2 group-focus:ring-offset-2 peer-focus:ring-2 peer-focus:ring-offset-2 h-5 w-9 peer-checked:bg-primary-500 peer-focus:ring-primary-500 group-focus:ring-primary-500 ">
                 </div>
             </div>

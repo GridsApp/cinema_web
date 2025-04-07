@@ -7,6 +7,7 @@ use App\Http\Controllers\ManageWalletController;
 use App\Http\Controllers\PriceGroupZonesController;
 use App\Livewire\Website\ForgotPasswordForm;
 use App\Livewire\Website\OtpVerificationForm;
+use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -15,21 +16,54 @@ use Illuminate\Support\Facades\URL;
 
 
 Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
-    ->name('survey-link');
+  ->name('survey-link');
 
-  Route::post('/survey', [App\Http\Controllers\SurveyController::class, 'submitSurvey']);
-  
-  
+Route::post('/survey', [App\Http\Controllers\SurveyController::class, 'submitSurvey']);
 
-Route::view('/app/update/google' , 'pages.update-google');
+
+
+Route::view('/app/update/google', 'pages.update-google');
 
 Route::prefix('payment')->group(function () {
   Route::get('/initialize/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'initialize'])->name('payment.initialize');
-  Route::get('/callback/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'callback'])->name('payment.callback');
+  Route::get('/response/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'omniResponse'])->name('payment.response');
+
   Route::get('/response', function () {
-    echo request()->input('type');
-  })->name('payment.response');
+    echo "";
+  })->name('payment.response.status');
+
+
+  Route::get('/callback/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'callback'])->name('payment.callback');
+  // Route::get('/response', function () {
+  //   echo request()->input('type');
+  // })->name('payment.response');
 });
+
+Route::get("hyperpay/redirect/{provider_key}/{log_id}/{attempt_id}/{token}", function ($provider_key, $log_id, $attempt_id, $token) {
+
+  $log =  \App\Models\PaymentAttemptLog::find($log_id);
+  
+
+  if(!$log){
+    return abort("403" , "Token Missmatch");
+  }
+
+
+  $payload = $log->payload ?? null;
+
+
+
+  if ($token != md5(($payload["id"]??'') . $attempt_id . $provider_key . ($payload["integrity"]?? ''))) {
+    return abort("403" , "Token Missmatch");
+  }
+
+  return view('payment.hyperpay.redirect', [
+    'provider_key' => $provider_key,
+    'attempt_id' => $attempt_id,
+    'integrity' => $payload["integrity"],
+    'checkout_id' => $payload["id"]
+  ]);
+})->name('hyperpay-redirect-link');
 
 Route::get('/set/language/{lang}', function ($lang) {
   session(['locale' => $lang]);
@@ -133,12 +167,6 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');
   Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
-
-
-
-
-  
-
 });
 Route::get('reports/reports/reports', function () {
 

@@ -100,13 +100,14 @@ class  OrderController extends Controller
         $payment_attempt->save();
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 
+       
 
-        switch ($payment_method->key) {
-            case 'CASH':
-            case 'CC-DC':
-            case 'CC-DC-SWITCH':
-            case 'CC-DC-QICARD':
 
+       
+        switch ($payment_method->payment_type) {
+            case 'cash':
+            case 'cc_dc':
+           
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
@@ -125,8 +126,10 @@ class  OrderController extends Controller
 
                 break;
 
-            case 'OP':
-
+            case 'op':
+        
+              
+              
                 return $this->responseData([
                     'redirect' => route(
                         "payment.initialize",
@@ -141,11 +144,9 @@ class  OrderController extends Controller
 
                 break;
 
-            case 'WP-POS':
-            case 'WP':
 
+            case 'wp':
 
-                // dd("here");
                 $card_number = $cart->card_number ?? null;
 
 

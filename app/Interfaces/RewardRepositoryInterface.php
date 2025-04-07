@@ -7,7 +7,7 @@ interface RewardRepositoryInterface
    
     public function getRewards($user);
     public function getRewardById($reward_id);
-    public function getRewardByCode($code);
+    public function getUserRewardByCode($code);
     public function getUsedReward($user_id , $reward_id);
     public function getUsedRewards($user_id);
     public function createUserReward($user_id,$reward_id);

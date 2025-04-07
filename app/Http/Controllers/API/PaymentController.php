@@ -12,6 +12,8 @@ use App\Models\PaymentMethod;
 
 use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Traits\APITrait;
+use App\Repositories\PaymentGateways\Hyperpay;
+use App\Repositories\PaymentGateways\Zaincash;
 
 class PaymentController extends Controller
 {
@@ -79,14 +81,46 @@ class PaymentController extends Controller
             return abort(404);
         }
 
+    
+
         $return_url = $this->omniPayRepository->createPayment($payment_attempt);
 
         return redirect($return_url);
     }
 
+    public function omniResponse($payment_attempt_id){
+
+
+        $payment_attempt = PaymentAttempt::find($payment_attempt_id);
+
+        // dd($payment_attempt);
+        if(!$payment_attempt){
+            return redirect()->route('payment.response.status', [
+                'type' => 'fail',
+                'title' => 'Payment Failure',
+                'message' => 'Payment has been failed to be completed'
+            ]);
+        }
+
+
+        $check_payment = $this->omniPayRepository->checkPayment($payment_attempt);
+
+        if(!$check_payment){
+            return redirect()->route('payment.response.status', [
+                'type' => 'fail',
+                'title' => 'Payment Failure',
+                'message' => 'Payment has been failed to be completed'
+            ]);
+        }
+    
+        return $this->callback($payment_attempt);
+    }
+
 
     public function callback($payment_attempt_id)
     {
+
+
 
         try {
 
@@ -94,21 +128,14 @@ class PaymentController extends Controller
             DB::beginTransaction();
 
 
-            $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->whereNull('converted_at')->first();
-
-            if (!$payment_attempt) {
-                return redirect()->route('payment.response', [
-                    'type' => 'fail',
-                    'title' => 'Payment already completed',
-                    'message' => 'Payment was already completed'
-                ]);
+            if(is_numeric($payment_attempt_id)){
+                $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->first(); 
+            }else{
+                $payment_attempt = $payment_attempt_id;
             }
 
-
-            $check = $this->omniPayRepository->checkPayment($payment_attempt);
-
-            if (!$check) {
-                return redirect()->route('payment.response', [
+            if (!$payment_attempt || ($payment_attempt && !$payment_attempt->converted_at)) {
+                return redirect()->route('payment.response.status', [
                     'type' => 'fail',
                     'title' => 'Payment Failure',
                     'message' => 'Payment has been failed to be completed'
@@ -116,8 +143,6 @@ class PaymentController extends Controller
             }
 
             $payment_attempt->completed_at = now();
-
-
 
             $service = app(\App\Services\OmnipayCallbackService::class);
             $callback = $service->callback($payment_attempt);
@@ -127,7 +152,7 @@ class PaymentController extends Controller
 
                 $payment_attempt->save();
 
-                return redirect()->route('payment.response', [
+                return redirect()->route('payment.response.status', [
                     'type' => 'error',
 
                     'title' => 'Payment Successfull but something went wrong',
@@ -141,7 +166,7 @@ class PaymentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('payment.response', [
+            return redirect()->route('payment.response.status', [
                 'type' => 'success',
                 'id' => $callback["order_id"],
                 'title' => 'Payment Successfull',
@@ -151,7 +176,7 @@ class PaymentController extends Controller
 
             DB::rollBack();
 
-            return redirect()->route('payment.response', [
+            return redirect()->route('payment.response.status', [
                 'type' => 'error',
                 'title' => 'Something went wrong',
                 'message' => 'Something went wrong'

@@ -20,6 +20,7 @@ use App\Models\CartSeat;
 use App\Models\CartTopup;
 use App\Models\OrderSeat;
 use App\Models\ReservedSeat;
+use App\Models\Reward;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -231,6 +232,61 @@ class CartRepository implements CartRepositoryInterface
 
         return $cart;
     }
+
+    public function addUserRewardIdToCart($cart_id, $user_reward)
+    {
+        // try {
+
+        //     DB::beginTransaction();
+
+        //     $cart = $this->getCartById($cart_id);
+
+            // $reward = Reward::findOrFail($user_reward->reward_id);
+
+            
+            // $cart_seats = CartSeat::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
+            // $cart_items = CartItem::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
+
+            // $zones = $reward->zones;
+            // $items = $reward->items;
+
+            // foreach($cart_seats as $cart_seat){
+            //     if($cart_seat->)
+            // }
+
+            // foreach($cart_seats as $cart_seat){
+                
+            // }
+
+           
+            
+            // foreach($items as $item){
+
+            // }
+            
+
+
+        //     $cart->user_reward_id = $user_reward->id;
+        //     $cart->save();
+
+
+
+
+
+
+        //     DB::commit();
+        // } catch (ModelNotFoundException $e) {
+        //     DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // }
+
+        // return $cart;
+    }
+
+    
     public function removeCardNumberFromCart($cart_id)
     {
         try {

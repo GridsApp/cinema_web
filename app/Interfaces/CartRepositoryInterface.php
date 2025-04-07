@@ -15,6 +15,10 @@ interface CartRepositoryInterface
     public function addTopupToCart($cart_id,$amount);
     public function removeTopupFromCart($cart_id );
     public function addCardNumberToCart($cart_id, $card_number);
+    public function addUserRewardIdToCart($cart_id, $user_reward_id);
+
+
+    
     public function removeCardNumberFromCart($cart_id);
     public function getReservedSeats($movie_show_id);
     public function getCartSeats($cart_id , $grouped = false);

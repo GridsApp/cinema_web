@@ -21,6 +21,8 @@ class CartItemsEntity extends Entity
         $this->addField("branch_item_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("cart_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("price", ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("reward_code" , ["container" => 'col-span-6']);
+
        
         return $this->fields;
     }

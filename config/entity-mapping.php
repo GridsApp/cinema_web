@@ -44,6 +44,7 @@ return array (
   'order-seats' => 'App\\Entities\\OrderSeatsEntity',
   'order-topups' => 'App\\Entities\\OrderTopupsEntity',
   'orders' => 'App\\Entities\\OrdersEntity',
+  'payment-attempt-logs' => 'App\\Entities\\PaymentAttemptLogsEntity',
   'payment-attempts' => 'App\\Entities\\PaymentAttemptsEntity',
   'payment-methods' => 'App\\Entities\\PaymentMethodsEntity',
   'pos-users' => 'App\\Entities\\PosUsersEntity',

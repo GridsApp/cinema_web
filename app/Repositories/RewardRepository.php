@@ -6,6 +6,8 @@ use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\RewardRepositoryInterface;
 use App\Models\Reward;
 use App\Models\UserReward;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RewardRepository implements RewardRepositoryInterface
 {
@@ -58,11 +60,23 @@ class RewardRepository implements RewardRepositoryInterface
         return Reward::find($reward_id);
     }
 
-    public function getRewardByCode($code)
+    public function getUserRewardByCode($code)
     {
 
-        return UserReward::whereNull('deleted_at')->whereNull('used_at')->where('code',$code)->first();
 
+        try {
+
+           $user_reward= UserReward::whereNull('deleted_at')->whereNull('used_at')->where('code',$code)->firstOrFail();
+           
+        } catch (ModelNotFoundException $e) {
+            throw new Exception($e->getMessage());
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+
+        return $user_reward;
+      
         // dd($user_reward);
     }
 

@@ -10,6 +10,7 @@ use App\Interfaces\ItemRepositoryInterface;
 
 use App\Interfaces\MovieShowRepositoryInterface;
 use App\Interfaces\PriceGroupZoneRepositoryInterface;
+use App\Interfaces\RewardRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
@@ -38,6 +39,7 @@ class CartController extends Controller
     private UserRepositoryInterface $userRepository;
     private CouponRepositoryInterface $couponRepository;
     private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
+    private RewardRepositoryInterface $rewardRepository;
 
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -48,7 +50,8 @@ class CartController extends Controller
         CardRepositoryInterface $cardRepository,
         UserRepositoryInterface $userRepository,
         CouponRepositoryInterface $couponRepository,
-        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository
+        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository,
+        RewardRepositoryInterface $rewardRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -59,6 +62,7 @@ class CartController extends Controller
         $this->userRepository = $userRepository;
         $this->couponRepository = $couponRepository;
         $this->priceGroupZoneRepository = $priceGroupZoneRepository;
+        $this->rewardRepository = $rewardRepository;
     }
 
 
@@ -807,5 +811,43 @@ class CartController extends Controller
             'subtotal' => $cartDetails["subtotal"],
             'lines' => $cartDetails["lines"],
         ]));
+    }
+
+    public function addRewardToCart()
+    {
+        $form_data = clean_request([]);
+        $check = $this->validateRequiredFields($form_data, ['cart_id', 'code']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+            $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
+        }
+
+        try {
+          $user_reward=  $this->rewardRepository->getUserRewardByCode($form_data['code']);
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Code not found', $e->getMessage()));
+        }
+
+        try {
+            $this->cartRepository->addUserRewardIdToCart($form_data['cart_id'], $user_reward);
+
+
+
+
+
+        } catch (\Exception $th) {
+            return $this->response(notification()->error('Error adding User Reward to cart', $th->getMessage()));
+        }
+
+        return $this->response(notification()->success('User Reward added to the cart successfully', 'Code added successfully'));
     }
 }

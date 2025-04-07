@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "firebase/php-jwt": "^6.11",
         "intervention/image": "^3",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",

@@ -942,7 +942,55 @@ return [
             ]
         ]
     ],
+
+    'user_reward_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'User Reward',
+        'placeholder' => 'Select User Reward',
+        'name' => 'user_reward_id',
+        'multiple' => false,
+        'visible_selections' => 5,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'user_rewards',
+            'field' => 'title'
+        ]
+       
+    ],
+
+    'reward_code' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Reward Code',
+        'placeholder' => 'Select Reward Code',
+        'name' => 'reward_code',
+    ],
+
+
+    'payload' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textarea::class,
+        'label' => 'Payload',
+        'placeholder' => 'Select Payload',
+        'name' => 'payload',
+    ],
   
+  
+
+    
+
+    
     'items' => [
         'id' => uniqid(),
         'livewire' => [
@@ -951,7 +999,7 @@ return [
         'type' => twa\uikit\FieldTypes\Select::class,
         'label' => 'Extras that will be redeemed',
         'placeholder' => 'Select Extras',
-        'name' => 'item_id',
+        'name' => 'items',
         'multiple' => true,
         'visible_selections' => 5,
         'query_limit' => 50,
@@ -1752,6 +1800,30 @@ return [
 
         ]
     ],
+    'payment_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Payment Type',
+        'placeholder' => 'Select Payment Type',
+        'name' => 'payment_type',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+
+                ['value' => 'cc_dc', 'label' => 'Credit / Debit Card'],
+                ['value' => 'op', 'label' => 'Online Payment'],
+                ['value' => 'wp', 'label' => 'Wallet Payment'],
+                ['value' => 'cash', 'label' => 'Cash Payment'],
+            ]
+
+        ]
+    ],
 
 
     'position' => [
@@ -2078,6 +2150,18 @@ return [
         'label' => 'Payment Method Id',
         'placeholder' => 'Payment Method Id',
         'name' => 'payment_method_id',
+        'container' => 'col-span-6',
+    ],
+
+    'payment_attempt_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Payment Attempt Id',
+        'placeholder' => 'Payment Attempt Id',
+        'name' => 'payment_attempt_id',
         'container' => 'col-span-6',
     ],
 

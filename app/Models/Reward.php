@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Reward extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'zones' => 'array',
+        'items' => 'array'
+    ];
 }
