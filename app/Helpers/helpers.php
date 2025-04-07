@@ -81,11 +81,12 @@ if (!function_exists('currency_format')) {
 
 
 if (!function_exists('create_payment_log')) {
-    function create_payment_log($message,$payload,$payment_attempt_id)
+    function create_payment_log($message,$payload,$payment_attempt_id , $type = "error")
     {
        $payment_attempt_log= new PaymentAttemptLog();
        $payment_attempt_log->message=$message;       
        $payment_attempt_log->payload=$payload;       
+       $payment_attempt_log->type = $type;
        $payment_attempt_log->payment_attempt_id=$payment_attempt_id;       
        $payment_attempt_log->save();     
        

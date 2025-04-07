@@ -4,7 +4,7 @@ namespace App\Repositories\PaymentGateways;
 
 use Illuminate\Support\Facades\Http;
 use App\Classes\PaymentData;
-
+use App\Models\PaymentAttemptLog;
 
 class Hyperpay
 {
@@ -50,7 +50,7 @@ class Hyperpay
             dd("API INVALID RESPONSE");
         }
 
-        $log = create_payment_log("API REQUEST CREATED" , $response , $attempt->id);
+        $log = create_payment_log("API REQUEST CREATED" , $response , $attempt->id , "init");
    
         $link = route('hyperpay-redirect-link' , [
             'provider_key' => $this->provider_key,
@@ -75,7 +75,10 @@ class Hyperpay
 
     public function checkPayment($attempt , $parameters){
 
-        $gateway_init = $attempt->init_response;
+      
+
+        $gateway_log = PaymentAttemptLog::where('payment_attempt_id' , $attempt->id)->where('type' , 'init')->orderBy('id' , 'DESC')->first();
+        $gateway_init = $gateway_log->payload;
   
         if(!isset($gateway_init["id"])){
             create_payment_log("MISSING QUERY SOME PARAMS" , $parameters , $attempt->id);
@@ -105,7 +108,7 @@ class Hyperpay
             return response(["title" => "Payment was not successfull"  , "message" => "Payment was not successfull" ] , 400);
         }
 
-        create_payment_log("PAID SUCCESSFULLY (FINAL RESPONSE)" , $response , $attempt->id);
+        create_payment_log("PAID SUCCESSFULLY (FINAL RESPONSE)" , $response , $attempt->id , 'response');
 
         $attempt->converted_at = now();
         $attempt->payment_reference = $response->resultDetails->AuthCode ?? "";

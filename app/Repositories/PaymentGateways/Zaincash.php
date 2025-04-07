@@ -2,7 +2,7 @@
 
 namespace App\Repositories\PaymentGateways;
 
-
+use App\Models\PaymentAttemptLog;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -110,8 +110,8 @@ class Zaincash
             }
         }
 
-
-        $gateway_init = $attempt->init_response;
+        $gateway_log = PaymentAttemptLog::where('payment_attempt_id' , $attempt->id)->where('type' , 'init')->orderBy('id' , 'DESC')->first();
+        $gateway_init = $gateway_log->payload;
 
         if(!isset($gateway_init["id"])){     
             create_payment_log("MISSING QUERY SOME PARAMS" , $parameters , $attempt->id);
