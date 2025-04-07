@@ -21,6 +21,7 @@ class PaymentAttemptLogsEntity extends Entity
         $this->addField("payload", ["container" => 'col-span-7']);
         $this->addField("message" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("payment_attempt_id", ["container" => 'col-span-7']);
+        $this->addField("logs_type", ["container" => 'col-span-7']);
       
         return $this->fields;
     }

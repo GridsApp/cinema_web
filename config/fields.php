@@ -1410,6 +1410,17 @@ return [
         'name' => 'first_name'
     ],
 
+    "logs_type" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Type',
+        'placeholder' => 'Type',
+        'name' => 'type'
+    ],
+
     "last_name" => [
         'id' => uniqid(),
         'livewire' => [
