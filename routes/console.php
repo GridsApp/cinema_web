@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MovieShow;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -87,3 +88,18 @@ Artisan::command('twa:dataTransfer', function () {
 
 
 })->purpose('Transfering tables');
+
+
+Artisan::command('twa:EnableTodayMovieShows', function () {
+
+    $this->comment("Started");
+
+    $today = now()->format('Y-m-d');
+
+    $count = MovieShow::whereDate('date', $today)
+        ->where('visibility', 0) 
+        ->update(['visibility' => 1]);
+
+
+    $this->comment("Finished");
+})->purpose('Enable Today Movie Shows')->dailyAt('01:00');

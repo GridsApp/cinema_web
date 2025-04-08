@@ -8,7 +8,7 @@ class CmsUsers extends BaseCmsUsers
 {
 
     public function attributes(){
-        $this->addAttribute("branch");
+        $this->addAttribute("branch_attribute");
 
         return $this->attributes;
     }

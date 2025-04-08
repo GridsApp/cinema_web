@@ -1081,6 +1081,34 @@ return [
         'required' => true
     ],
 
+    'branch_attribute' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Branch',
+        'placeholder' => 'Select branch',
+        'name' => 'branch_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'branches',
+            'field' => 'label_en',
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => 3,
+                ],
+            ]
+        ],
+
+    ],
+
 
     'item_branch' => [
         'id' => uniqid(),

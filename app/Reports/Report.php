@@ -9,6 +9,7 @@ class Report
 
     public $columns = [];
     public $rows = [];
+    public $footer = [];
 
     public function __construct()
     {
@@ -35,6 +36,21 @@ class Report
         //     'label' => $label
         // ]);
     }
+
+    public function setFooter($column , $value){
+        
+        $footer = []; 
+
+        foreach($this->columns as $column){
+            if($column['name'] == $column){
+                $footer[$column['name']] = $value;
+            }else{
+                $footer[$column['name']] = $footer[$column['name']] ?? "-";
+            }
+        }
+        
+    }
+
 
 
     public function header(){

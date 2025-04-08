@@ -128,7 +128,7 @@ class MovieShowForm extends Component
             $movie_show->end_time_id = $this->form['time_id'] + $slots - 1;
             $movie_show->duration = $movie->duration;
             $movie_show->date = $date;
-            $movie_show->visibility = 1;
+            $movie_show->visibility = 0;
             // $movie_show->system_id = ["1"];
             $movie_show->group = $group;
             $movie_show->color = $this->form['color'];

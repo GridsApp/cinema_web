@@ -18,6 +18,8 @@ class DailyAdmitsReport extends Report
 
 
 
+       
+
 //        Movie
 //        Distributer
 //        Type
@@ -42,6 +44,8 @@ class DailyAdmitsReport extends Report
     }
 
     public function footer(){
+        $this->setFooter("id" , 2);
+        $this->setFooter("id" , 2);
 
     }
 

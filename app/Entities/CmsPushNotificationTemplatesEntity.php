@@ -49,7 +49,9 @@ class CmsPushNotificationTemplatesEntity extends Entity
 
         $route = "/" . Route::getRoutes()->getByName('send-notification')->uri();
   
-    
+        $edit_route = "/".Route::getRoutes()->getByName('entity.update')->uri();
+        $this->setRowOperation("Edit" ,  str_replace('{slug}' , $this->slug , $edit_route),  '<i class="fa-solid fa-edit"></i>');
+  
         $this->setRowOperation("Send", $route, '<i class="fa-solid fa-eye"></i>');
     }
 

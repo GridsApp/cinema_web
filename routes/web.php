@@ -42,10 +42,10 @@ Route::prefix('payment')->group(function () {
 Route::get("hyperpay/redirect/{provider_key}/{log_id}/{attempt_id}/{token}", function ($provider_key, $log_id, $attempt_id, $token) {
 
   $log =  \App\Models\PaymentAttemptLog::find($log_id);
-  
 
-  if(!$log){
-    return abort("403" , "Token Missmatch");
+
+  if (!$log) {
+    return abort("403", "Token Missmatch");
   }
 
 
@@ -53,8 +53,8 @@ Route::get("hyperpay/redirect/{provider_key}/{log_id}/{attempt_id}/{token}", fun
 
 
 
-  if ($token != md5(($payload["id"]??'') . $attempt_id . $provider_key . ($payload["integrity"]?? ''))) {
-    return abort("403" , "Token Missmatch");
+  if ($token != md5(($payload["id"] ?? '') . $attempt_id . $provider_key . ($payload["integrity"] ?? ''))) {
+    return abort("403", "Token Missmatch");
   }
 
   return view('payment.hyperpay.redirect', [
@@ -78,7 +78,7 @@ Route::get('/set/language/{lang}', function ($lang) {
 
   return redirect($url);
 })->name('language-switcher');
-// Route::middleware(\App\Http\Middleware\CinemaDefaultMiddleware::class)->get('/', function () {   });
+Route::middleware(\App\Http\Middleware\CinemaDefaultMiddleware::class)->get('/', function () {   });
 
 Route::group([
   'prefix'     => '/{cinema_prefix}/{language_prefix}/',

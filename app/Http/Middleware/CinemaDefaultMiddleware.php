@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\GeneratedModels\CinemasModel;
+use App\Models\Branch;
 use Closure;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
@@ -37,12 +38,13 @@ class CinemaDefaultMiddleware
     )
 )";
 
-        $cinemas = CinemasModel::select("*")
+        $cinemas = Branch::select("*")
             ->selectRaw("$haversine AS distance")
             ->orderby("distance", "asc")
-            ->where('cancelled' , 0)
+            ->whereNull('deleted_at')
             ->get();
 
+            // dd($cinemas);
      if(isset($cinemas) && count($cinemas)>0){
 
          if(!isset($cinemas[0]['web_prefix']) || empty($cinemas[0]['web_prefix'])){
@@ -60,6 +62,6 @@ class CinemaDefaultMiddleware
          return response()->json(['status' => 'error', 'message' => 'You do not have any cinema defined in your CMS yet.'], 500);
 
      }
-//        return $next($request);
+
     }
 }
