@@ -110,7 +110,7 @@ return [
         'label' => 'ISO',
         'placeholder' => 'Enter ISO',
         'name' => 'iso',
-     
+
         'channel_type' => 'receiver',
         'channel' => 'isoslug',
         'channel_language' => null
@@ -343,7 +343,7 @@ return [
         'label' => 'Condensed name',
         'placeholder' => 'Enter Movie Condensed Name',
         'name' => 'condensed_name',
-      
+
     ],
 
     'condensed_label' => [
@@ -422,6 +422,19 @@ return [
         'name' => 'date'
     ],
 
+    'filter_date' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Date::class,
+        'label' => 'Date',
+        'placeholder' => 'Enter date',
+        'name' => 'date',
+        'required' => true
+    ],
+
+
 
 
     'genre' => [
@@ -482,7 +495,7 @@ return [
         // ]
     ],
 
-    
+
     'cms_user_role' => [
         'id' => uniqid(),
         'livewire' => [
@@ -521,7 +534,7 @@ return [
         ]
     ],
 
-    
+
     'director' => [
         'id' => uniqid(),
         'livewire' => [
@@ -960,7 +973,7 @@ return [
             'table' => 'user_rewards',
             'field' => 'title'
         ]
-       
+
     ],
 
     'reward_code' => [
@@ -985,12 +998,12 @@ return [
         'placeholder' => 'Select Payload',
         'name' => 'payload',
     ],
-  
-  
 
-    
 
-    
+
+
+
+
     'items' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1074,14 +1087,16 @@ return [
                     'type' => 'where',
                     'column' => 'branches.id',
                     'operand' => null,
-                    'value' => 3,
+                    'value' => 1,
                 ],
             ]
         ],
         'required' => true
     ],
 
-    'branch_attribute' => [
+
+
+    'filter_branch' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -1102,9 +1117,38 @@ return [
                     'type' => 'where',
                     'column' => 'branches.id',
                     'operand' => null,
-                    'value' => 3,
+                    'value' => 1,
                 ],
             ]
+
+        ],
+        'required' => true
+    ],
+
+    'branch_attribute' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Branch',
+        'placeholder' => 'Select branch',
+        'name' => 'branch_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'branches',
+            'field' => 'label_en',
+            // 'conditions' => [
+            //     [
+            //         'type' => 'where',
+            //         'column' => 'branches.id',
+            //         'operand' => null,
+            //         'value' => 3,
+            //     ],
+            // ]
         ],
 
     ],
@@ -2737,7 +2781,7 @@ return [
         'name' => 'transactionable_type'
     ],
 
-    
+
 
     'userable_id' => [
         'id' => uniqid(),

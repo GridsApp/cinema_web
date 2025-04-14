@@ -31,5 +31,11 @@ public function movieShows()
 {
     return $this->hasMany(MovieShow::class);
 }
+
+public function distributor()
+{
     
+    return $this->belongsTo(Distributor::class, 'distributor_id')->whereNull('deleted_at');
+}
+
 }

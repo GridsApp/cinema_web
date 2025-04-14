@@ -16,6 +16,11 @@ class DistributorsEntity extends Entity
         $this->addField("label" , ["container" => 'col-span-7' , 'required' => true]);
         // $this->addField("main_image" , ["container" => 'col-span-7' , 'required' => true]);
         $this->addField("commission_settings", ["container" => 'col-span-7' ,'required' => true]);
+        $this->addField("condensed_label" , ["container" => 'col-span-7' ]);
+
+        
+
+
         return $this->fields;
     }
 

@@ -588,6 +588,7 @@ class CartRepository implements CartRepositoryInterface
                     'movie_show_id' => $cart_seat['movie_show_id'],
                     'seat' => $cart_seat['seat'],
                     'type' => "Seat",
+                    'theater' =>$cart_seat->theater->label,
                     'label' => $zone->priceGroup->label . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label),
                     'unit_price' => currency_format($unit_price),
                     'quantity' => $cart_seat['quantity'],

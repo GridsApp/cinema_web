@@ -39,9 +39,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Interfaces\ResetPasswordTokenRepositoryInterface::class , \App\Repositories\ResetPasswordTokenRepository::class);
         $this->app->bind(\App\Interfaces\HovigRepositoryInterface::class , \App\Repositories\HovigRepository::class);
 
+        $this->app->bind(\App\Interfaces\ReportRepositoryInterface::class, \App\Repositories\ReportRepository::class);
         
-        
-
     }
 
     /**

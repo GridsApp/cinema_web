@@ -2,10 +2,8 @@
 
 return [
 
-    [
-        'group' => '',
-        'report' => App\Reports\DailyAdmitsReport::class
+    'directories' => [
+        'app/Reports'
     ]
-
 
 ];

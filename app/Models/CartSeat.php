@@ -13,6 +13,12 @@ class CartSeat extends Model
         return $this->belongsTo(PriceGroupZone::class , 'zone_id' , 'id');
     }
 
+
+
+    public function theater(){
+        return $this->belongsTo(Theater::class , 'theater_id' , 'id');
+    }
+
     public function movieShow()
     {
         return $this->belongsTo(MovieShow::class, 'movie_show_id', 'id')->whereNull('deleted_at');

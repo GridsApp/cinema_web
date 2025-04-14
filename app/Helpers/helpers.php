@@ -5,6 +5,7 @@ use App\Http\Controllers\UploadController;
 use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\File;
 use Livewire\Livewire;
+use Carbon\Carbon;
 
 if (!function_exists('get_timezone')) {
     function get_timezone($lat, $lng, $fallback = null)
@@ -12,6 +13,32 @@ if (!function_exists('get_timezone')) {
         return (new TimezoneMapper)->mapCoordinates(latitude: $lat, longitude: $lng, fallback: $fallback);
     }
 }
+
+if (!function_exists('get_date_range')) {
+    function get_date_range($date)
+    {
+        $searchDate = Carbon::parse($date);
+        $searchDay = strtolower($searchDate->format('l'));
+
+        $lastThursday = $searchDay != "thursday" ? Carbon::createFromTimeStamp(strtotime("last Thursday", $searchDate->timestamp)) : $searchDate;
+
+        $nextWednesday = $searchDay != "wednesday" ? Carbon::createFromTimeStamp(strtotime("next Wednesday", $searchDate->timestamp)) : $searchDate;
+
+        $thursday = (string)$lastThursday;
+        $wednesday = (string)$nextWednesday;
+        $wednesday = str_replace("00:00:00", "23:59:59", $wednesday);
+
+        $first_thursday = Carbon::parse("first thursday of this year");
+        $week_nb = ($first_thursday->diffInDays($lastThursday) / 7) + 1;
+
+        return [
+            "week_nb" => $week_nb,
+            "range" => [$thursday, $wednesday]
+        ];
+    }
+}
+
+
 
 if (!function_exists('get_setting')) {
     function get_setting($key, $locale = "en")
