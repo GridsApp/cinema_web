@@ -446,14 +446,7 @@ if (!function_exists('link_button')) {
     function link_button($label, $href, $type, $grid = null)
     {
 
-        // $directory = resource_path('views/components/buttons'); // Path to the views directory
-        // $files = collect(File::allFiles($directory))->map(function ($file) {
-        //     return str_replace(".blade.php", "", $file->getFilename());
-        // })->toArray();
-
-        // if (!in_array($type, $files)) {
-        //     $type = "primary";
-        // }
+       
 
         $type = "primary";
 
