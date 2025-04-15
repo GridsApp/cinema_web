@@ -21,8 +21,6 @@ class ItemsController extends Controller
         $route = "/" . Route::getRoutes()->getByName('item.edit')->uri();
 
     
-        // dd($route);
-        // $route =;
         $table =  (new \twa\uikit\Classes\Table\TableData('Items ', 'items'))
 
             ->setAffectedOnDeletion('family_group_id')

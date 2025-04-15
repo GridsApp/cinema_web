@@ -94,6 +94,7 @@ class PriceGroupZoneForm extends Component
 
 
         if($this->zone_id){
+    
             $price_group_zone = PriceGroupZone::find($this->zone_id);
         }else{
             $price_group_zone = new PriceGroupZone();

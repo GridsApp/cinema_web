@@ -8,7 +8,6 @@
                 {!! field('condensed_label', 'col-span-7') !!}
                 {!! field('iso', 'col-span-7') !!}
                 {!! field('color', 'col-span-7') !!}
-     
                 {!! field('price_settings', 'col-span-7') !!}
       
                

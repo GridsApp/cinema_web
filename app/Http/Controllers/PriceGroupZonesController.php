@@ -12,15 +12,11 @@ class PriceGroupZonesController extends Controller
     public function render($price_group_id)
     {
 
-
         $price_group = PriceGroup::whereNull('deleted_at')->where('id', $price_group_id)->firstOrFail();
 
         $route = "/" . Route::getRoutes()->getByName('price-group-zones.update')->uri();
 
         $route = str($route)->replace(["{id}", "{zone_id}"], [$price_group_id, "{id}"])->toString();
-
-
-
 
         $table = (new \twa\uikit\Classes\Table\TableData('Price Group Zones', 'price_group_zones'))
             ->selects(['id'])

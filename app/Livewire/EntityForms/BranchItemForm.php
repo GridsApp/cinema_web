@@ -51,9 +51,12 @@ class BranchItemForm extends Component
 
     public function mount()
     {
+      
         $item = null;
 
+ 
         if($this->item_id){
+ 
           $item = DB::table('branch_items')->find($this->item_id);
         }
 
@@ -80,10 +83,13 @@ class BranchItemForm extends Component
 
         $this->validate($required_array, [], $required_messages);
 
+      
 
         if($this->item_id){
+    
             $branch_item = BranchItem::find($this->item_id);
         }else{
+       
             $branch_item = new BranchItem();
             $branch_item->branch_id = $this->branch_id;
         }
@@ -99,7 +105,7 @@ class BranchItemForm extends Component
     }
     public function render()
     {
-
+    
         
         return view('pages.form.components.branch-item-form');
     }
