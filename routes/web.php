@@ -166,7 +166,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/price-groups/{id}/zones/{zone_id}/update", [PriceGroupZonesController::class, 'editZone'])->name('price-group-zones.update');
 
 
-// Make sure this is first
+
 Route::get("/branches/{id}/items/{item_id}/update", [BranchItemsController::class, 'editItem'])->name('items.edit');
 Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
 Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');

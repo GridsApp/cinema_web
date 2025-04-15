@@ -68,4 +68,6 @@ return array (
   'user-verify-tokens' => 'App\\Entities\\UserVerifyTokensEntity',
   'user-wallet-transactions' => 'App\\Entities\\UserWalletTransactionsEntity',
   'users' => 'App\\Entities\\UsersEntity',
+  // 'reports' => 'App\\Entities\\CartSeatsEntity',
+
 );
