@@ -44,9 +44,7 @@ class BranchItemsController extends Controller
             $table->addRowOperation("Edit", $route, '<i class="fa-solid fa-plus"></i>');
         // }
 
-        // if (!cms_check_permission("delete-zone")) {
-        //     $table->disableDelete();
-        // }
+       
         $table = $table->get();
 
         return view('pages.branch-items', ['table' => $table, 'branch' => $branch]);
