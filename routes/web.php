@@ -5,14 +5,12 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
 use App\Http\Controllers\PriceGroupZonesController;
+use App\Http\Controllers\WeekController;
 use App\Livewire\Website\ForgotPasswordForm;
 use App\Livewire\Website\OtpVerificationForm;
 use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
-
-
-
 
 
 Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
@@ -78,7 +76,7 @@ Route::get('/set/language/{lang}', function ($lang) {
 
   return redirect($url);
 })->name('language-switcher');
-Route::middleware(\App\Http\Middleware\CinemaDefaultMiddleware::class)->get('/', function () {   });
+Route::middleware(\App\Http\Middleware\CinemaDefaultMiddleware::class)->get('/', function () {});
 
 Route::group([
   'prefix'     => '/{cinema_prefix}/{language_prefix}/',
@@ -167,10 +165,9 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
 
 
-Route::get("/branches/{id}/items/{item_id}/update", [BranchItemsController::class, 'editItem'])->name('items.edit');
-Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
-Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');
-
+  Route::get("/branches/{id}/items/{item_id}/update", [BranchItemsController::class, 'editItem'])->name('items.edit');
+  Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
+  Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');
 });
 Route::get('reports/reports/reports', function () {
 
@@ -187,3 +184,6 @@ Route::get('reports/reports/reports', function () {
 
   dd($report->rows);
 });
+
+
+Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']); 

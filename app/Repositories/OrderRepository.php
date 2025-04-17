@@ -98,9 +98,16 @@ class OrderRepository implements OrderRepositoryInterface
         $order->payment_method_id = $payment_method_id;
         $order->payment_reference = $payment_attempt->payment_reference;
 
+        // dd($cart_items);
         if(!$branch_id && ($cart_seats[0]['theater_id'] ?? null)){
             $theater = Theater::find($cart_seats[0]['theater_id']);
             $branch_id = $theater->branch_id ?? null;
+        }
+
+        // dd($cart_items[0]);
+        if (!$branch_id && isset($cart_items[0])) {
+            $branchItem = BranchItem::find($cart_items[0]->branch_item_id);
+            $branch_id = $branchItem->branch_id ?? null;
         }
 
         $order->branch_id = $branch_id;

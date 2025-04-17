@@ -26,6 +26,17 @@ class Order  extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function screenType()
+    {
+        return $this->belongsTo(ScreenType::class, 'screen_type_id');
+    }
+
     public function posUser()
     {
         return $this->belongsTo(PosUser::class, 'pos_user_id');
@@ -52,5 +63,7 @@ class Order  extends Model
     {
         return $this->hasMany(OrderTopup::class, 'order_id')->whereNull('deleted_at');
     }
+
+
 
 }

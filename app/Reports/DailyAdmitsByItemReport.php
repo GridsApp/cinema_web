@@ -79,7 +79,8 @@ class DailyAdmitsByItemReport extends DefaultReport
 
 
 
-        $date = $this->filterResults['date'];
+        $date = $this->filterResults['date'] ?? null;
+        $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
         $dateRange = $this->getRangeDate($date);
@@ -92,7 +93,6 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
             ->whereNull('deleted_at')
-            // ->whereNull('refunded_at')
             ->whereBetween('created_at', $lastWeekDateRange)
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
@@ -103,7 +103,6 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
 
             ->whereNull('deleted_at')
-            // ->whereNull('refunded_at')
             ->whereBetween('created_at', $lastWeekDateRange)
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
@@ -113,7 +112,6 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
             ->whereNull('deleted_at')
-            // ->whereNull('refunded_at')
             ->whereDate('created_at', '<=', $dateRange[1])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
@@ -122,7 +120,6 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
 
             ->whereNull('deleted_at')
-            // ->whereNull('refunded_at')
             ->whereDate('created_at', '<=', $dateRange[1])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
@@ -157,12 +154,18 @@ class DailyAdmitsByItemReport extends DefaultReport
         ];
 
         $booked_items = OrderItem::query()
-            ->select("order_items.*", "item_id as identifier")
-            ->whereNull('deleted_at')
-            // ->whereNull('refunded_at')
-            ->whereBetween('created_at', $dateRange)
-
-            ->get()
+        ->join('branch_items', 'order_items.order_id', '=', 'orders.id')
+            ->select("order_items.*", 'orders.branch_id', "item_id as identifier")
+            ->whereNull('order_items.deleted_at');
+            
+            if ($dateRange) {
+                $booked_items->whereBetween('order_items.created_at', $dateRange);
+            }
+            if ($branch_id) {
+                $booked_items->where('orders.branch_id', $branch_id);
+            }
+    
+            $booked_items=$booked_items->get()
             ->groupBy('identifier')
             // dd($booked_items);
 

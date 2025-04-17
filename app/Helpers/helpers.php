@@ -108,16 +108,16 @@ if (!function_exists('currency_format')) {
 
 
 if (!function_exists('create_payment_log')) {
-    function create_payment_log($message,$payload,$payment_attempt_id , $type = "error")
+    function create_payment_log($message, $payload, $payment_attempt_id, $type = "error")
     {
-       $payment_attempt_log= new PaymentAttemptLog();
-       $payment_attempt_log->message=$message;       
-       $payment_attempt_log->payload=$payload;       
-       $payment_attempt_log->type = $type;
-       $payment_attempt_log->payment_attempt_id=$payment_attempt_id;       
-       $payment_attempt_log->save();     
-       
-       return $payment_attempt_log;
+        $payment_attempt_log = new PaymentAttemptLog();
+        $payment_attempt_log->message = $message;
+        $payment_attempt_log->payload = $payload;
+        $payment_attempt_log->type = $type;
+        $payment_attempt_log->payment_attempt_id = $payment_attempt_id;
+        $payment_attempt_log->save();
+
+        return $payment_attempt_log;
     }
 }
 
@@ -442,11 +442,37 @@ if (!function_exists('button')) {
     }
 }
 
+if (!function_exists('get_formatted_week_range')) {
+    function get_formatted_week_range($date)
+    {
+        $date = Carbon::parse($date);
+        $startOfWeek = $date->copy()->startOfWeek(Carbon::THURSDAY);
+        $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
+
+        $weekNumber = $startOfWeek->isoWeek(); // ISO week number (can use ->week() if you prefer)
+        $formattedStart = $startOfWeek->format('D d-M');
+        $formattedEnd = $endOfWeek->format('D d-M');
+
+        return "Week {$weekNumber} Range: {$formattedStart} - {$formattedEnd}";
+    }
+}
+
+
+if (!function_exists('get_range_date')) {
+    function get_range_date($date)
+    {
+        $date = Carbon::parse($date);
+        $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);  // Start of the week (Thursday)
+        $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);  // End of the week (Wednesday)
+
+        return ['start' => $startOfWeek, 'end' => $endOfWeek];
+    }
+}
 if (!function_exists('link_button')) {
     function link_button($label, $href, $type, $grid = null)
     {
 
-       
+
 
         $type = "primary";
 

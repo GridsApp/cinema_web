@@ -305,7 +305,7 @@ class CartRepository implements CartRepositoryInterface
         $cart_seats = CartSeat::whereNull('cart_seats.deleted_at')
             ->where('cart_seats.movie_show_id', $movie_show_id)
             ->join('carts', function($q){
-               $q->on('cart_seats.cart_id', '=', 'carts.id');
+            //    $q->on('cart_seats.cart_id', '=', 'carts.id');
                $q->where('carts.expires_at', '>', now());
             })
             ->pluck('seat');

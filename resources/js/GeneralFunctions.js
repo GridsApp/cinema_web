@@ -50,6 +50,41 @@ export default class GeneralFunctions {
         };
     }
 
+    filterForm() {
+        return {
+            disabled: false,
+            weekRange: '',
+            date: '',  
+            init() {
+                this.fetchWeekRange(this.date); 
+                this.$watch('date', (value) => {
+                    this.fetchWeekRange(value);  
+                });
+            },
+
+            fetchWeekRange(date) {
+                if (!date) return;
+                fetch(`/get/week/range/${date}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        this.weekRange = html;  
+                    });
+            },
+
+          
+            dateChanged(event) {
+           
+                const selectedDate = event.target.value;
+     
+              
+                this.date = selectedDate;
+
+              
+                this.fetchWeekRange(selectedDate);
+            }
+        };
+    }
+
     initPriceSettings() {
         return {
             conditions: [{ day: "", price: "0" }],
@@ -521,7 +556,6 @@ export default class GeneralFunctions {
                     this.selectedType > 0 &&
                     oldSelectedType != null
                 ) {
-                  
                     this.generateSeats();
                 } else if (
                     currentMaxRow > 0 &&
@@ -556,13 +590,7 @@ export default class GeneralFunctions {
             },
 
             async generateGrid() {
-
-
-              
-
-                window.dispatchEvent(
-                    new CustomEvent('submitdisabled')
-                );
+                window.dispatchEvent(new CustomEvent("submitdisabled"));
 
                 this.cells = [];
                 await this.simulateLoading();
@@ -597,9 +625,7 @@ export default class GeneralFunctions {
                 this.gridGenerated = true;
                 this.checkIfSeatSelected();
 
-
                 //dispatch window event
-
             },
 
             simulateLoading() {
@@ -625,7 +651,7 @@ export default class GeneralFunctions {
 
                 cell.isSeat = !cell.isSeat;
                 cell.color = zone.color;
-              
+
                 this.checkIfSeatSelected();
             },
 
@@ -676,14 +702,9 @@ export default class GeneralFunctions {
             },
 
             generateSeats() {
-
-
                 // this.$dispatch('submitenabled');
 
-                window.dispatchEvent(
-                    new CustomEvent('submitenabled')
-                );
-
+                window.dispatchEvent(new CustomEvent("submitenabled"));
 
                 var array = [];
                 var rowNumber = 0;
@@ -771,10 +792,7 @@ export default class GeneralFunctions {
             },
 
             resetSeats() {
-
-                window.dispatchEvent(
-                    new CustomEvent('submitdisabled')
-                );
+                window.dispatchEvent(new CustomEvent("submitdisabled"));
 
                 this.maxRow = "";
                 this.maxColumn = "";
@@ -784,10 +802,6 @@ export default class GeneralFunctions {
                 this.gridGenerated = false;
                 this.managingSeats = false;
             },
-        
-            
-            
-          
         };
     }
 

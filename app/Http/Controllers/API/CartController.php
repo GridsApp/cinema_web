@@ -197,17 +197,13 @@ class CartController extends Controller
             return $this->response(notification()->error('Seats Alredy Reserved', 'Seats Alredy Reserved'));
         }
 
-
-
+        dd($reserved_seats);
         try {
             DB::beginTransaction();
 
             foreach ($seats as $seat) {
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
-
-
-
             DB::commit();
         } catch (\Exception $th) {
             // dd("here");

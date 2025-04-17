@@ -15,6 +15,22 @@ class DailyAdmitsReport extends DefaultReport
 
     public $label = "Daily Admits";
 
+    // $this->addFilter('filter_start_date');
+    // $this->addFilter('filter_end_date');
+    // $this->addFilter('filter_branch');
+    // $this->addFilter('filter_movie');
+  
+    // $this->addFilter('filter_time');
+
+    // $this->addFilter('filter_system');
+    // $this->addFilter('filter_payment_method');
+    // $this->addFilter('filter_reference');
+    // $this->addFilter('filter_ticket_status');
+
+    // $this->addFilter('filter_pos_user');
+    // $this->addFilter('filter_user_phone');
+    // $this->addFilter('filter_amount_min');
+    // $this->addFilter('filter_amount_max');
 
     public function filters()
     {
@@ -86,7 +102,8 @@ class DailyAdmitsReport extends DefaultReport
 
 
 
-        $date = $this->filterResults['date'];
+        $date = $this->filterResults['date'] ?? null;
+        $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
         $dateRange = $this->getRangeDate($date);
@@ -142,7 +159,6 @@ class DailyAdmitsReport extends DefaultReport
             'monday' => 0,
             'tuesday' => 0,
             'wednesday' => 0,
-
             'thursday_income' => 0,
             'friday_income' => 0,
             'saturday_income' => 0,
@@ -150,8 +166,6 @@ class DailyAdmitsReport extends DefaultReport
             'monday_income' => 0,
             'tuesday_income' => 0,
             'wednesday_income' => 0,
-
-
             'current_admits' => 0,
             'current_income' => 0,
             'last_week_admits' => 0,
@@ -161,16 +175,27 @@ class DailyAdmitsReport extends DefaultReport
         ];
 
         $booked_seats = OrderSeat::with('movie.distributor', 'zone')
-            ->select("order_seats.*", DB::raw("CONCAT(movie_id,'_' , zone_id) as identifier"))
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->select(
+                'order_seats.*',
+                'orders.branch_id',
+                DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier")
+            )
+            ->whereNull('order_seats.deleted_at')
+            ->whereNull('order_seats.refunded_at');
 
-            ->whereNull('deleted_at')
-            ->whereNull('refunded_at')
-            ->whereBetween('date', $dateRange)
 
-            ->get()
+        if ($dateRange) {
+            $booked_seats->whereBetween('order_seats.date', $dateRange);
+        }
+        if ($branch_id) {
+            $booked_seats->where('orders.branch_id', $branch_id);
+        }
+
+        $booked_seats = $booked_seats->get()
             ->groupBy('identifier')
 
-            ->map(function ($order_seats) use ($last_week_booked_seats_admits, $last_week_booked_seats_income, $all_time_booked_seats_admits,$all_time_booked_seats_income, &$footer) {
+            ->map(function ($order_seats) use ($last_week_booked_seats_admits, $last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income, &$footer) {
 
                 $first_order_seat = $order_seats->first();
 
@@ -179,11 +204,11 @@ class DailyAdmitsReport extends DefaultReport
                 }
 
 
-                $movie = $first_order_seat->movie;
+                $movie = $first_order_seat->movie ?? '';
                 $distributor = $movie->distributor->condensed_label ?? '';
-                $zone = $first_order_seat->zone;
+                $zone = $first_order_seat->zone ?? '';
                 $zone = ($zone->priceGroup->label ?? '') . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label ?? '');
-                $week = $first_order_seat->week;
+                $week = $first_order_seat->week ?? '';
 
                 $dayCounts = [
                     'thursday' => 0,
@@ -269,8 +294,6 @@ class DailyAdmitsReport extends DefaultReport
                 $footer['last_life_admits'] += $data['last_life_admits'];
                 $footer['last_life_income'] += $data['last_life_income'];
 
-
-
                 $data['thursday'] = number_format($data['thursday']);
                 $data['friday'] = number_format($data['friday']);
                 $data['saturday'] = number_format($data['saturday']);
@@ -300,7 +323,6 @@ class DailyAdmitsReport extends DefaultReport
             })->filter()->values();
 
 
-
         $footer['thursday'] = number_format($footer['thursday']);
         $footer['friday'] = number_format($footer['friday']);
         $footer['saturday'] = number_format($footer['saturday']);
@@ -324,57 +346,9 @@ class DailyAdmitsReport extends DefaultReport
         $footer['last_life_admits'] = number_format($footer['last_life_admits']);
         $footer['last_life_income'] = number_format($footer['last_life_income']);
 
-
-
         $this->setFooter($footer);
 
         return $booked_seats;
-
-
-
-
-
-
-
-        // return [
-
-        //     [
-
-        //         'movie' => 'Hovig',
-        //         'distributer' => '',
-        //         'type' => '',
-        //         'week' => '',
-        //         'thursday' => '',
-        //         'friday' => '',
-        //         'saturday' => '',
-        //         'sunday' => '',
-        //         'monday' => '',
-        //         'tuesday' => '',
-        //         'wednesday' => '',
-        //         'current' => '',
-        //         'last_week' => '',
-        //         'last_life' => ''
-        //     ],
-        //     [
-
-        //         'movie' => 'Nourhane',
-        //         'distributer' => '',
-        //         'type' => '',
-        //         'week' => '',
-        //         'thursday' => '',
-        //         'friday' => '',
-        //         'saturday' => '',
-        //         'sunday' => '',
-        //         'monday' => '',
-        //         'tuesday' => '',
-        //         'wednesday' => '',
-        //         'current' => '',
-        //         'last_week' => '',
-        //         'last_life' => ''
-        //     ]
-
-
-        // ];
     }
 
     public function footer()

@@ -422,17 +422,7 @@ return [
         'name' => 'date'
     ],
 
-    'filter_date' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        'type' => twa\uikit\FieldTypes\Date::class,
-        'label' => 'Date',
-        'placeholder' => 'Enter date',
-        'name' => 'date',
-        'required' => true
-    ],
+  
 
 
 
@@ -1096,34 +1086,7 @@ return [
 
 
 
-    'filter_branch' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        'type' => twa\uikit\FieldTypes\Select::class,
-        'label' => 'Branch',
-        'placeholder' => 'Select branch',
-        'name' => 'branch_id',
-        'multiple' => false,
-        'visible_selections' => 3,
-        'query_limit' => 50,
-        'options' => [
-            'type' => 'query',
-            'table' => 'branches',
-            'field' => 'label_en',
-            'conditions' => [
-                [
-                    'type' => 'where',
-                    'column' => 'branches.id',
-                    'operand' => null,
-                    'value' => 1,
-                ],
-            ]
-
-        ],
-        'required' => true
-    ],
+   
 
     'branch_attribute' => [
         'id' => uniqid(),
@@ -3252,5 +3215,265 @@ return [
     ],
 
 
+    'filter_branch' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Branch',
+        'placeholder' => 'Select branch',
+        'name' => 'branch_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'container' => 'col-span-12',
+        'options' => [
+            'type' => 'query',
+            'table' => 'branches',
+            'field' => 'label_en',
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => 1,
+                ],
+            ]
 
+        ],
+      
+
+    ],
+
+
+    'filter_movie' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Movie',
+        'placeholder' => 'Select Movie',
+        'name' => 'movie_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'movies',
+            'field' => 'name',
+
+        ],
+
+        'container' => 'col-span-4',
+    ],
+
+    'filter_payment_method' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Payment Method',
+        'placeholder' => 'Select Payment Method',
+        'name' => 'payment_method_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'payment_methods',
+            'field' => 'label',
+
+        ],
+          'container' => 'col-span-4',
+
+    ],
+
+    'filter_time' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Show Time',
+        'placeholder' => 'Select Show Time',
+        'name' => 'time_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'times',
+            'field' => 'label',
+
+        ],
+
+        'container' => 'col-span-4',
+    ],
+
+    'filter_system' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select System',
+        'placeholder' => 'Select System',
+        'name' => 'system_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'systems',
+            'field' => 'label',
+
+        ],
+          'container' => 'col-span-4',
+
+    ],
+
+
+    'filter_pos_user' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Cashier',
+        'placeholder' => 'Select Cashier',
+        'name' => 'pos_user_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'pos_users',
+            'field' => 'username',
+
+        ],
+
+        'container' => 'col-span-6',
+    ],
+
+      'filter_date' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Date::class,
+        'label' => 'Date',
+        'placeholder' => 'Enter date',
+        'name' => 'date',
+        'required' => true,
+
+        'events' => [
+            '@input' => 'dateChanged'
+        ],
+        
+    ],
+
+    'filter_start_date' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Date::class,
+        'label' => 'Start Date',
+        'placeholder' => 'Select Start Date',
+        'name' => 'start_date',
+        'container' => 'col-span-6',
+    ],
+
+
+    'filter_end_date' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Date::class,
+        'label' => 'End Date',
+        'placeholder' => 'Select End Date',
+        'name' => 'end_date',
+        'container' => 'col-span-6',
+    ],
+
+
+    'filter_reference' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Reference',
+        'placeholder' => 'Enter Reference',
+        'name' => 'reference',
+        'container' => 'col-span-4',
+    ],
+
+
+    'filter_amount_min' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Amount Minimum',
+        'placeholder' => 'Amount Minimum',
+        'name' => 'amount_min',
+        'container' => 'col-span-6',
+    ],
+
+
+    'filter_amount_max' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Amount Maximum',
+        'placeholder' => 'Amount Maximum',
+        'name' => 'amount_max',
+        'container' => 'col-span-6',
+    ],
+
+
+    'filter_user_phone' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Phone',
+        'placeholder' => 'Enter Phone',
+        'name' => 'phone',
+        'container' => 'col-span-6',
+    ],
+
+
+    'filter_ticket_status' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Ticket Status',
+        'placeholder' => 'Select Ticket Status',
+        'name' => 'ticket_status',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+
+                ['value' => 'sold_tickets', 'label' => 'Sold Tickets'],
+                ['value' => 'refunded_tickets', 'label' => 'Refunded Tickets'],
+            ]
+
+            ],
+        'container' => 'col-span-4',
+    ],
 ];

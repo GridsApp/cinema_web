@@ -26,6 +26,10 @@ class OrderSeat extends Model
     {
         return $this->belongsTo(Theater::class, 'theater_id')->whereNull('deleted_at');
     }
+    public function screenType()
+    {
+        return $this->belongsTo(ScreenType::class, 'screen_type_id');
+    }
 
     public function zone()
     {
@@ -41,7 +45,18 @@ class OrderSeat extends Model
     {
         return $this->belongsTo(Order::class, 'order_id')->whereNull('deleted_at');
     }
+
+    public function refundedCashier()
+    {
+        return $this->belongsTo(PosUser::class, 'refunded_cashier_id')->whereNull('deleted_at');
+    }
+    public function refundedManager()
+    {
+        return $this->belongsTo(PosUser::class, 'refunded_manager_id')->whereNull('deleted_at');
+    }
     
   
+    
+    
     
 }
