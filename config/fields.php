@@ -2839,6 +2839,33 @@ return [
         'name' => 'comment',
         'container' => 'col-span-12',
     ],
+    
+
+
+    'dist_share_percentage' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Distributor Share Percentage',
+        'placeholder' => 'Enter distributor share percentage',
+        'name' => 'dist_share_percentage',
+        'container' => 'col-span-12',
+    ],
+
+
+    'dist_share_amount' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Distributor Share amnout',
+        'placeholder' => 'Enter distibutor share amount',
+        'name' => 'dist_share_amount',
+        'container' => 'col-span-12',
+    ],
     'signature' => [
         'id' => uniqid(),
         'livewire' => [

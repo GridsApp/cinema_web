@@ -21,7 +21,6 @@ class SOAReport extends DefaultReport
     {
         $this->addFilter('filter_date');
         $this->addFilter('filter_branch');
-     
     }
 
 
@@ -36,15 +35,41 @@ class SOAReport extends DefaultReport
         $this->addColumn("movie", "Movie");
         $this->addColumn("wk", "WK");
         $this->addColumn("tickets_sold", "Tickets Sold");
-        $this->addColumn("nb_topups", "Quantity");
-        $this->addColumn("total_price", "Total Amount");
-        $this->addColumn("branch", "Branch");
-        $this->addColumn("booked_by", "Served By");
-        $this->addColumn("system", "Via");
-        $this->addColumn("payment_method", "Payment Method");
+        $this->addColumn("total_sales", "Gross Box Office");
+        $this->addColumn("tax_amount", "TAX 5% Amount");
+        $this->addColumn("net_total_sales", "Net Box Office");
+        $this->addColumn("share_percentage", "Share %");
+        $this->addColumn("rank", "Movie Rank");
+        $this->addColumn("dist_share_amount", "Distributor Share Amount");
+        $this->addColumn("cinema_share_amount", "Cinema Share");
+
+        $this->addColumn("glasses_count", "3D Glass");
+        $this->addColumn("glasses_amount", "3D Glass Amount");
+
+        $this->addColumn("last_week_tickets", "Last Week Tickets");
+        $this->addColumn("last_week_nbo", "Last Week NBO");
+
+        $this->addColumn("life_to_date_tickets", "Life to Date Tickets");
+        $this->addColumn("life_to_date_nbo", "Life to Date NBO");
+
+        $this->addColumn("diferred_income_tickets", "Deferred Income Tickets");
+        $this->addColumn("diferred_income_gbo", "Deferred Income GBO");
+        $this->addColumn("diferred_income_nbo", "Deferred Income NBO");
     }
 
-
+    public function getWeekTotals($data)
+    {
+       
+        $admits = $data['tickets_sold'];  
+        
+   
+        $income = $data['total_sales'] ?? 0; 
+        return [
+            'admits' => $admits,
+            'income' => $income,
+        ];
+    }
+    
 
     public function rows()
     {
@@ -58,92 +83,106 @@ class SOAReport extends DefaultReport
 
 
         $footer = [
-            'created_at' => 'Total',
-            'customer_name' => '-',
-            'reference' => '-',
-            'topup' => '-',
-            'unit_price' => '-',
-            'nb_topups' => 0,
-            'total_price' => 0,
-            'branch' => '-',
-            'booked_by' => '-',
-            'system' => '-',
-            'payment_method' => '-',
+
+
+            'imdb' => 'Total',
+            'distributor' => '-',
+            'movie' => '-',
+            'wk' => '-',
+            'tickets_sold' => 0,
+            'total_sales' => 0,
+            'tax_amount' => 0,
+            'net_total_sales' => 0,
+            'share_percentage' => '-',
+            'rank' => '-',
+            'dist_share_amount"' => 0,
+            'cinema_share_amount"' => 0,
+
+            'glasses_count"' => 0,
+            'glasses_amount"' => 0,
+
+            'last_week_tickets"' => 0,
+            'last_week_nbo"' => 0,
+
+            'life_to_date_tickets"' => 0,
+            'life_to_date_nbo"' => 0,
+
+            'diferred_income_tickets"' => 0,
+            'diferred_income_gbo"' => 0,
+            'diferred_income_nbo"' => 0,
         ];
 
 
-        $baseQuery = DB::table('order_topups')
-            ->join('orders', 'order_topups.order_id', '=', 'orders.id')
-            ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
-            ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
-            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-            ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-            // ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
-            // ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
-            // ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
-            // ->leftJoin('pos_users as refunded_by_user', 'order_seats.refunded_cashier_id', '=', 'refunded_by_user.id')
-            // ->leftJoin('pos_users as refunded_manager_user', 'order_seats.refunded_manager_id', '=', 'refunded_manager_user.id')
-            // ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
-            ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
+        $baseQuery = DB::table('order_seats')
+
+            ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
+            ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id') // 👈 add this line
             ->select([
-                'orders.id as order_id',
-                'orders.reference',
-                'orders.user_id',
-                'customers.name as customer_name',
-                'pos_users.name as booked_by',
-                'orders.branch_id',
-                'branches.label_en as branch',
-                'orders.payment_method_id',
-                'payment_methods.label as payment_method',
-                'order_topups.price as unit_price',
-                'order_topups.label as topup',
+                'order_seats.id',
+                'order_seats.price as unit_price',
 
-                DB::raw('COUNT(*) as topups_count'),
+                // DB::raw('COUNT(*) as seats_count'),
                 // DB::raw("GROUP_CONCAT(seat) as seats"),
-                DB::raw("CONCAT(order_topups.order_id,'_',orders.reference) as computed_identifier"),
-                'order_topups.created_at',
-                'systems.label as system',
+                DB::raw("CONCAT(order_seats.movie_id) as computed_identifier"),
+
+
+                'movies.name as movie',
+                'movies.movie_key as imdb',
+                'distributors.label as distributor_label',
+                'order_seats.week as week',
+                'order_seats.dist_share_percentage as dist_share_percentage',
+                'order_seats.dist_share_amount as dist_share_amount',
+                DB::raw('COUNT(order_seats.id) as tickets_sold'),
+                DB::raw('SUM(order_seats.price) as total_sales'),
+
             ])
-
-            ->whereNull('order_topups.deleted_at')
+            ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
+            ->whereNull('order_seats.deleted_at')
+            // ->orderBy('id', 'ASC')
             ->groupBy('computed_identifier');
-
-
         $results = $baseQuery->get();
 
-
-        // dd($results);
         $rows = $results->map(function ($row) use (&$footer) {
-
-            $unit_price = $row->unit_price;
-            $topups_count = $row->topups_count;
-            $total_price = $unit_price * $topups_count;
-
-
+            $totals = $this->getWeekTotals([
+                'tickets_sold' => $row->tickets_sold,
+                'total_sales' =>  $row->total_sales ?? 0,
+            ]);
             $data = [
-                'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
-                'customer_name' => $row->customer_name ?? '',
-                'reference' => $row->reference,
-                'unit_price' => number_format($unit_price),
-                'nb_topups' => $topups_count,
-                'total_price' => number_format($total_price),
-                'topup' => $row->topup,
-                'branch' => $row->branch ?? '-',
-                'theater' => $row->theater ?? '-',
-                'booked_by' => $row->booked_by ?? '-',
-                'system' => $row->system ?? '-',
-                'payment_method' => $row->payment_method ?? '-',
+                'imdb' => $row->imdb,
+                'distributor' => $row->distributor_label,
+                'movie' => $row->movie,
+                'wk' => $row->week,
+                'tickets_sold' => $totals['admits'], 
+                'total_sales' => $totals['income'],
+                'tax_amount' => 0,
+                'net_total_sales' => 0,
+                'share_percentage' => $row->dist_share_percentage,
+                'rank' => '-',
+                'dist_share_amount' => $row->dist_share_amount,
+                'cinema_share_amount"' => 0,
+
+                'glasses_count"' => 0,
+                'glasses_amount"' => 0,
+
+                'last_week_tickets"' => 0,
+                'last_week_nbo"' => 0,
+
+                'life_to_date_tickets"' => 0,
+                'life_to_date_nbo"' => 0,
+
+                'diferred_income_tickets"' => 0,
+                'diferred_income_gbo"' => 0,
+                'diferred_income_nbo"' => 0,
+
             ];
-            $footer['nb_topups'] += $topups_count;
-            $footer['total_price'] += $total_price;
 
 
             return $data;
         })->filter()->values();
 
-        $footer['nb_topups'] = $footer['nb_topups'];
-        $footer['total_price'] = number_format($footer['total_price']);
-
+        // $footer['nb_seats'] = number_format($footer['nb_seats']);
+        // $footer['total_price'] = number_format($footer['total_price']);
+        // $footer['refund_amount'] = number_format($footer['refund_amount']);
 
         $this->setFooter($footer);
 

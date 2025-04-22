@@ -50,7 +50,7 @@ class CardRepository implements CardRepositoryInterface
                 $system_id = 1;
                 break;
 
-            case "twa\cmsv2\Models\CMSUser":
+            case "twa\cmsv2\Models\CmsUser":
                 $system_id = 5;
                 break;
             default:

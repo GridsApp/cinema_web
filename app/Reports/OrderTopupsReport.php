@@ -79,6 +79,8 @@ class OrderTopupsReport extends DefaultReport
             'payment_method' => '-',
         ];
 
+        
+
 
         $baseQuery = DB::table('order_topups')
             ->join('orders', 'order_topups.order_id', '=', 'orders.id')

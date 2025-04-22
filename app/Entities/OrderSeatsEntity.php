@@ -38,10 +38,8 @@ class OrderSeatsEntity extends Entity
         $this->addField("zone_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("imtiyaz_phone" , ["container" => 'col-span-6', 'required' => true]);
 
-
-        // $this->addField("discount" , ["container" => 'col-span-6', 'required' => false]);
-        // $this->addField("final_price" , ["container" => 'col-span-6', 'required' => false]);
-
+        $this->addField("dist_share_percentage", ["container" => 'col-span-6']);
+        $this->addField("dist_share_amount", ["container" => 'col-span-6']);
   
         return $this->fields;
     }

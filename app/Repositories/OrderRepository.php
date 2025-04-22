@@ -15,6 +15,7 @@ use App\Models\BranchItem;
 use App\Models\CartCoupon;
 
 use App\Models\Item;
+use App\Models\Movie;
 use App\Models\MovieShow;
 
 use App\Models\Order;
@@ -60,7 +61,7 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public function createOrderFromCart($payment_attempt , $branch_id = null)
+    public function createOrderFromCart($payment_attempt, $branch_id = null)
     {
 
         $cart_id = $payment_attempt->reference;
@@ -98,13 +99,13 @@ class OrderRepository implements OrderRepositoryInterface
         $order->payment_method_id = $payment_method_id;
         $order->payment_reference = $payment_attempt->payment_reference;
 
-        // dd($cart_items);
-        if(!$branch_id && ($cart_seats[0]['theater_id'] ?? null)){
+
+        if (!$branch_id && ($cart_seats[0]['theater_id'] ?? null)) {
             $theater = Theater::find($cart_seats[0]['theater_id']);
             $branch_id = $theater->branch_id ?? null;
         }
 
-        // dd($cart_items[0]);
+
         if (!$branch_id && isset($cart_items[0])) {
             $branchItem = BranchItem::find($cart_items[0]->branch_item_id);
             $branch_id = $branchItem->branch_id ?? null;
@@ -134,25 +135,34 @@ class OrderRepository implements OrderRepositoryInterface
             $coupon->save();
         }
 
-        
+
 
         foreach ($cart_seats as $cart_seat) {
-            // $movieShow = $cart_seat->movieShow;
-            // try {
-            //     $movie_show = MovieShow::findOrFail($cart_seat['movie_show_id']);
-            // } catch (ModelNotFoundException $e) {
-            //     throw new ModelNotFoundException("Movie with ID {$cart_seat['movie_show_id']} not found.");
-            // }
 
-
-            // $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
-
-
-            // $object_seat = $this->theaterRepository->getSeatFromTheaterMap($theater_map, $cart_seat['seat']);
             $price = $cart_seat['price'];
 
             $points_conversion = 1;
             $total_points += $price * $points_conversion;
+
+            $movie = Movie::find($cart_seat['movie_id']);
+
+            $dist_share_percentage = 0;
+            if ($movie && $movie->commission_settings) {
+                $settings = json_decode($movie->commission_settings, true);
+
+                $week = $cart_seat['week'];
+                $conditions = $settings['conditions'] ?? [];
+                $defaultPercentage = $settings['defaultPercentage'] ?? 0;
+
+             
+                $index = $week - 1;
+
+                if (isset($conditions[$index])) {
+                    $dist_share_percentage = $conditions[$index];
+                } else {
+                    $dist_share_percentage = $defaultPercentage;
+                }
+            }
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
@@ -168,10 +178,9 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->time_id = $cart_seat['time_id'];
             $orderSeat->week = $cart_seat['week'];
             $orderSeat->zone_id = $cart_seat['zone_id'];
-            $orderSeat->imtiyaz_phone = $cart_seat['imtiyaz_phone'];
-            // $orderSeat->discount = $cart_seat['discount'];
-            // $orderSeat->final_price = $cart_seat['final_price'];
-            // $orderSeat->discout_type = $cart_seat['discount_type'];
+            $orderSeat->dist_share_percentage = $dist_share_percentage;
+            $orderSeat->dist_share_amount = $price * ($dist_share_percentage / 100);
+
             $orderSeat->save();
             $reservedSeat = new ReservedSeat();
             // dd($cart_seat['movie_show_id']);
@@ -189,11 +198,11 @@ class OrderRepository implements OrderRepositoryInterface
             }
         }
 
-   
+
         foreach ($cart_items as $cart_item) {
-    
+
             $branch_item = BranchItem::find($cart_item['branch_item_id']);
-            // dd($branch_item);
+
             $orderItem = new OrderItem();
             $orderItem->branch_item_id = $cart_item['branch_item_id'];
             $orderItem->item_id = $branch_item->item_id;
@@ -256,7 +265,6 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             $user_order = Order::where('user_id', $user_id)
                 ->whereNull('deleted_at')->get();
-             
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -332,7 +340,8 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public function getOrderRefundedSeats($order_id , $grouped= false){
+    public function getOrderRefundedSeats($order_id, $grouped = false)
+    {
         try {
 
             if ($grouped) {
@@ -414,22 +423,20 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public function getOrderCoupons($order_id) {
+    public function getOrderCoupons($order_id)
+    {
         try {
             $order_coupons = OrderCoupon::whereNull('deleted_at')
                 ->where('order_id', $order_id)
-               
+
                 ->get();
-    
-               
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
         return $order_coupons;
-
     }
- 
-  
+
+
     public function getOrderItems($order_id, $grouped = false)
     {
 
@@ -449,7 +456,7 @@ class OrderRepository implements OrderRepositoryInterface
                 })
                 ->get();
 
-                // dd($user_order_item);
+            // dd($user_order_item);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -488,7 +495,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function getPosuserLastOrder($pos_user_id)
     {
         try {
-           return Order::whereNull('deleted_at')
+            return Order::whereNull('deleted_at')
                 ->where('pos_user_id', $pos_user_id)
                 ->orderBy('id', 'desc')
                 ->firstOrFail();
@@ -506,12 +513,13 @@ class OrderRepository implements OrderRepositoryInterface
         return $reference;
     }
 
-    public function generateLongId($id){
-        return date("Y")."-".date("m").'-'.str_pad($id, 6, '0', STR_PAD_LEFT);  
+    public function generateLongId($id)
+    {
+        return date("Y") . "-" . date("m") . '-' . str_pad($id, 6, '0', STR_PAD_LEFT);
     }
 
 
-   public function generateBarcode()
+    public function generateBarcode()
     {
         do {
             $number = (string) rand(10000000000000000, 99999999999999999);
