@@ -519,7 +519,7 @@ class  OrderController extends Controller
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
             $item_lines = $order_items->map(function ($order_item) use ($items) {
-                $item = $items[$order_item['item_id']];
+               
                 $unit_price = $order_item->price;
 
                 return [
