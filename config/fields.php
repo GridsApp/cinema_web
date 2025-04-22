@@ -3372,6 +3372,7 @@ return [
         'events' => [
             '@input' => 'dateChanged'
         ],
+        'container'=>'col-span-12'
         
     ],
 
@@ -3475,5 +3476,28 @@ return [
 
             ],
         'container' => 'col-span-4',
+    ],
+
+    'category' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Categories',
+        'placeholder' => 'Select Categories',
+        'name' => 'category',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+                ['value' => 'glasses', 'label' => 'Glasses'],
+                ['value' => 'others', 'label' => 'Others'],
+                
+            ]
+
+        ]
     ],
 ];

@@ -277,8 +277,6 @@ class DailyAdmitsReport extends DefaultReport
                 $footer['monday'] += $data['monday'];
                 $footer['tuesday'] += $data['tuesday'];
                 $footer['wednesday'] += $data['wednesday'];
-
-
                 $footer['thursday_income'] += $data['thursday_income'];
                 $footer['friday_income'] += $data['friday_income'];
                 $footer['saturday_income'] += $data['saturday_income'];
