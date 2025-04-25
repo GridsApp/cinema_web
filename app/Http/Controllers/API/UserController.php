@@ -240,18 +240,16 @@ class UserController extends Controller
             return $this->responseValidation($validator);
         }
 
-        try {
-            $user = $this->userRepository->getVerifiedUserByPhone($form_data['phone']);
-        } catch (\Throwable $e) {
-            return $this->response(notification()->error('You have entered invalid phone/password or not verified', $e->getMessage()));
+        $user = $this->userRepository->getVerifiedUserByPhone($form_data['phone']);
+    
+        if(!$user){
+            return $this->response(notification()->error('Incorrect Credentials', 'You have entered invalid phone/password or not verified'));
         }
-
 
         if(!$user->email){
             return $this->response(notification()->error('Email Required', 'Your account does not have an email address'));
         }
         
-
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
