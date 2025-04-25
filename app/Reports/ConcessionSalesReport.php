@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Reports\DefaultReport;
 
 
-class OrderGlassesReport extends DefaultReport
+class ConcessionSalesReport extends DefaultReport
 {
 
-    public $label = "Order Glasses";
-
+    public $label = "Concession Sales";
+ 
 
 
     public function filters()

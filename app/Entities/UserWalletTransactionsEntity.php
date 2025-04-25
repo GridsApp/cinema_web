@@ -29,6 +29,7 @@ class UserWalletTransactionsEntity extends Entity
         $this->addField("system", ["container" => 'col-span-7']);
         $this->addField("transactionable_id", ["container" => 'col-span-7']);
         $this->addField("transactionable_type", ["container" => 'col-span-7']);
+        $this->addField("long_id", ["container" => 'col-span-7']);
 
 
 // transactionable_id 1

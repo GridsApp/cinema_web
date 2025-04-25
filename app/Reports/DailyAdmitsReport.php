@@ -100,8 +100,6 @@ class DailyAdmitsReport extends DefaultReport
             return;
         }
 
-
-
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 

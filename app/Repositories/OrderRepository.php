@@ -95,6 +95,7 @@ class OrderRepository implements OrderRepositoryInterface
         $order->barcode =   $this->generateBarcode();
         $order->reference =  $this->generateReference();
         $order->user_id =  $user_id;
+        // $order->long_id =  $this->generateLongId($order->id);
         $order->pos_user_id =  $cart->pos_user_id;
         $order->payment_method_id = $payment_method_id;
         $order->payment_reference = $payment_attempt->payment_reference;
@@ -114,9 +115,13 @@ class OrderRepository implements OrderRepositoryInterface
         $order->branch_id = $branch_id;
         $order->save();
 
-        $total_points = 0;
 
-        // $cart_coupon_ids = CartCoupon::whereNull('deleted_at')->where('cart_id', $cart->id)->pluck('coupon_id');
+        $order->long_id = $this->generateLongId($order->id);
+
+
+        $order->save();
+
+        $total_points = 0;
         try {
             $cart_coupon_ids = $this->cartRepository->getCartCouponsIds($cart->id);
         } catch (\Throwable $th) {
@@ -154,7 +159,7 @@ class OrderRepository implements OrderRepositoryInterface
                 $conditions = $settings['conditions'] ?? [];
                 $defaultPercentage = $settings['defaultPercentage'] ?? 0;
 
-             
+
                 $index = $week - 1;
 
                 if (isset($conditions[$index])) {
@@ -179,7 +184,9 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->week = $cart_seat['week'];
             $orderSeat->zone_id = $cart_seat['zone_id'];
             $orderSeat->dist_share_percentage = $dist_share_percentage;
-            $orderSeat->dist_share_amount = $price * ($dist_share_percentage / 100);
+            // $orderSeat->dist_share_amount = $price * ($dist_share_percentage / 100);
+            $orderSeat->dist_share_amount = calculate_share_amount($price,$dist_share_percentage,5);
+
 
             $orderSeat->save();
             $reservedSeat = new ReservedSeat();
@@ -209,6 +216,7 @@ class OrderRepository implements OrderRepositoryInterface
             $orderItem->order_id = $order->id;
             $orderItem->price = $branch_item->price;
             $orderItem->label = $branch_item->item->label;
+            $orderItem->item_code = $branch_item->item->item_code;
             $orderItem->save();
         }
 

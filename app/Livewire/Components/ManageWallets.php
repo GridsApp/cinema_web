@@ -143,10 +143,6 @@ class ManageWallets extends Component
     public function render()
     {
 
-
-
-
-
         return view('components.form.manage-wallets');
     }
 }

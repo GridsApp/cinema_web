@@ -90,6 +90,13 @@ class CardRepository implements CardRepositoryInterface
         $transaction->system_id = $system_id;
 
         $transaction->save();
+
+
+
+        $transaction->long_id = generateLongId($transaction->id);
+
+
+        $transaction->save();
         return true;
     }
     public function createLoyaltyTransaction($type, $amount, $user, $description, $reference = null)
@@ -135,6 +142,9 @@ class CardRepository implements CardRepositoryInterface
         $transaction->user_card_id = $active_card["id"];
         $transaction->save();
 
+        $transaction->long_id = generateLongId($transaction->id);
+
+        $transaction->save();
         return true;
     }
     public function createCard($user, $barcode = null, $type = 'digital')

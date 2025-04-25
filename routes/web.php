@@ -168,6 +168,21 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/branches/{id}/items/{item_id}/update", [BranchItemsController::class, 'editItem'])->name('items.edit');
   Route::get("/branches/{id}/items/create", [BranchItemsController::class, 'createItem'])->name('branch-item.create');
   Route::get("/branches/{id}/items", [BranchItemsController::class, 'render'])->name('branch-items');
+
+
+  Route::group(['prefix' => 'distributor'], function () {
+
+  Route::get('/box-office-report' , [\App\Http\Controllers\BoxOfficeReportController::class , 'render'])->name('box-office-report.render');
+  Route::get('/box-office-report/result' , [\App\Http\Controllers\BoxOfficeReportController::class , 'result'])->name('box-office-report.render-result');
+
+  Route::get('/box-office-summary' , [\App\Http\Controllers\BoxOfficeReportController::class , 'renderSummary'])->name('box-office-summary.render');
+  Route::get('/box-office-report-summary/result' , [\App\Http\Controllers\BoxOfficeReportController::class , 'renderSummaryResult'])->name('box-office-report-summary.render-result');
+
+
+  Route::get('/distributor-film-hire' , [\App\Http\Controllers\DistributorSharesController::class , 'render'])->name('distributor-film-hire.render');
+  Route::get('/distributor-film-hire/result' , [\App\Http\Controllers\DistributorSharesController::class , 'result'])->name('distributor-film-hire.render-result');
+
+  });
 });
 Route::get('reports/reports/reports', function () {
 
@@ -186,4 +201,4 @@ Route::get('reports/reports/reports', function () {
 });
 
 
-Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']); 
+Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']);

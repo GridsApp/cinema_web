@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Facades\Route;
 use twa\cmsv2\Entities\Entity;
 
 class DistributorsEntity extends Entity
@@ -24,6 +25,21 @@ class DistributorsEntity extends Entity
         return $this->fields;
     }
 
+
+    public function setTableOperations()
+    {
+
+        // $route = "/".Route::getRoutes()->getByName('box-office-report')->uri();
+        // dd($route);
+        // $this->setRowOperation("View Items" , $route , '<i class="fa-solid fa-eye"></i>');
+
+            $this->setTableOperation("Add New Record",  route('entity.create', ['slug' => $this->slug]),  '<i class="fa-solid fa-plus"></i>');
+            $this->setTableOperation("Box Office Report",  route('box-office-report.render') ,  '');
+            $this->setTableOperation("Box Office Summary",  route('box-office-summary.render'),  '');
+            $this->setTableOperation("Distributor Film Hire",  route('distributor-film-hire.render'),  '');
+         
+     
+    }
     public function columns(){
 
         $this->addColumn("label");

@@ -100,10 +100,6 @@ class  OrderController extends Controller
         $payment_attempt->save();
         $token = md5($payment_attempt->id . '' . $user_id . '' . $payment_attempt->payment_method_id . '' . round($payment_attempt->amount, 0));
 
-       
-
-
-       
         switch ($payment_method->payment_type) {
             case 'cash':
             case 'cc_dc':
@@ -782,7 +778,7 @@ class  OrderController extends Controller
                 'id' => $order->id,
                 'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
 
-                'long_id' => $this->orderRepository->generateLongId($order->id),
+                'long_id' =>  $order->long_id ?? '',
                 'reference' =>  $order->reference,
                 'barcode' =>  $order->barcode,
                 'system' => $order->system->label ?? '',

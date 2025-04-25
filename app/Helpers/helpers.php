@@ -808,4 +808,31 @@ if (!function_exists('minutes_to_human')) {
             }
         }
     }
+
+    if (!function_exists('taxCalculation')) {
+        function taxCalculation($amount, $inclusive = false)
+        {
+            $perc = 5;
+
+            if ($inclusive) {
+                return $amount - ($amount / (1 + $perc / 100));
+            } else {
+                return $amount * ($perc / 100);
+            }
+        }
+    }
+
+    if (!function_exists('generateLongId')) {
+        function generateLongId($id)
+        {
+            return date("Y") . "-" . date("m") . '-' . str_pad($id, 6, '0', STR_PAD_LEFT);
+        }
+    }
+
+    if (!function_exists('calculate_share_amount')) {
+        function calculate_share_amount($amount , $share_perc , $tax){
+            return (((100 - $tax) / 100) * $amount) * ($share_perc / 100);
+        }
+    }
+
 }

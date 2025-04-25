@@ -2150,6 +2150,8 @@ return [
         'name' => 'used_at',
         'container' => 'col-span-6',
     ],
+
+ 
     'login_time' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2234,6 +2236,20 @@ return [
         'label' => 'Barcode',
         'placeholder' => 'Enter Barcode',
         'name' => 'barcode',
+        'container' => 'col-span-6',
+    ],
+
+    'item_code' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+
+        'label' => 'Item Code',
+        'placeholder' => 'Enter Item Code',
+        'name' => 'item_code',
         'container' => 'col-span-6',
     ],
     'card_number' => [
@@ -3363,6 +3379,29 @@ return [
     ],
 
 
+    'filter_distributor' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Distributor',
+        'placeholder' => 'Select Distributor',
+        'name' => 'distributor_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'distributors',
+            'field' => 'label',
+
+        ],
+          'container' => 'col-span-4',
+
+    ],
+
+
     'filter_pos_user' => [
         'id' => uniqid(),
         'livewire' => [
@@ -3441,6 +3480,19 @@ return [
         'container' => 'col-span-4',
     ],
 
+    'filter_card_number' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Card Number',
+        'placeholder' => 'Enter Card Number',
+        'name' => 'card_number',
+        'container' => 'col-span-12',
+    ],
+
+    
 
     'filter_amount_min' => [
         'id' => uniqid(),
@@ -3480,6 +3532,19 @@ return [
         'container' => 'col-span-6',
     ],
 
+
+    'filter_user_email' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Email',
+        'placeholder' => 'Enter Email',
+        'name' => 'email',
+        'container' => 'col-span-6',
+    ],
+    
 
     'filter_ticket_status' => [
         'id' => uniqid(),
@@ -3527,4 +3592,57 @@ return [
 
         ]
     ],
+
+
+
+    'filter_date_type' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Date Type',
+        'placeholder' => 'Select Date Type',
+        'name' => 'date_type',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+                ['value' => 'single', 'label' => 'Single'],    
+            ]
+
+            ],
+        'container' => 'col-span-12',
+    ],
+
+
+    'filter_wallet_status' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Status',
+        'placeholder' => 'Select Status',
+        'name' => 'status',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'static',
+            'list' => [
+                ['value' => 'expired', 'label' => 'Expired'],    
+                ['value' => 'valid', 'label' => 'valid'],    
+            ]
+
+            ],
+        'container' => 'col-span-12',
+    ],
+
+
+    
+
+    
 ];

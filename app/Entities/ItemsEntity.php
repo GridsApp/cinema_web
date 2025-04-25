@@ -22,6 +22,7 @@ class ItemsEntity extends Entity
         $this->addField("image", ["container" => 'col-span-7', 'required' => true]);
         $this->addField("screen_type_condition", ["container" => 'col-span-7', 'required' => false]);
         $this->addField("category", ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("item_code", ["container" => 'col-span-6', 'required' => true]);
 
 
 

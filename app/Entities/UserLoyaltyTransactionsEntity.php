@@ -24,6 +24,7 @@ class UserLoyaltyTransactionsEntity extends Entity
         $this->addField("type", ["container" => 'col-span-7']);
         $this->addField("balance", ["container" => 'col-span-7']);
         $this->addField("reference", ["container" => 'col-span-7']);
+        $this->addField("long_id", ["container" => 'col-span-7']);
 
 
 
