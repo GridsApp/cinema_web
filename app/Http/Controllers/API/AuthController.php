@@ -51,7 +51,7 @@ class AuthController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*?&]/',
+                'regex:/[@$!%*?&.]/',
             ],
             'confirm_password' => 'required|same:password'
         ]);

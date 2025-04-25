@@ -202,7 +202,7 @@ class UserController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*?&]/',
+                'regex:/[@$!%*?&]./',
             ],
             'confirm_password' => 'required|same:password'
         ]);
@@ -247,6 +247,11 @@ class UserController extends Controller
         }
 
 
+        if(!$user->email){
+            return $this->response(notification()->error('Email Required', 'Your account does not have an email address'));
+        }
+        
+
         return $this->responseData([
             'user_token' =>  $user->token,
             'verify_drivers' => $this->otpRepository->getDrivers(),
@@ -264,7 +269,7 @@ class UserController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*?&]/',
+                'regex:/[@$!%*?&]./',
             ],
             'confirm_password' => 'required|same:password',
             'reset_token' => 'required'
