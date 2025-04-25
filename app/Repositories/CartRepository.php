@@ -118,7 +118,7 @@ class CartRepository implements CartRepositoryInterface
 
         try {
 
-            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date);
+            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date , $movie_show->time->label);
 
             $cart_seat = new CartSeat();
             $cart_seat->seat = $seat;

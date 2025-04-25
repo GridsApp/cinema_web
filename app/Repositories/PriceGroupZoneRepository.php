@@ -13,15 +13,22 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 {
 
-    public function getPriceByZonePerDate($zone_id , $date){
+
+    public function getPriceByZonePerDate($zone_id , $date , $time = null){
         try {
+
+            $period = get_setting('time_period') <= $time ? 'before' : 'after';
+
             $price_group_zone =  PriceGroupZone::where('id', $zone_id)->whereNull('deleted_at')->firstOrFail();
 
             $price_settings = $price_group_zone->price_settings;
 
             $day = strtolower(now()->parse($date)->format('l'));
 
-            $condition = collect($price_settings['conditions'])->where('day' , $day)->first();
+            $condition = collect($price_settings['conditions'])
+            ->where('day' , $day)
+            ->where('period' , $period)
+            ->first();
 
             if($condition){
                 return $condition['price'];

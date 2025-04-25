@@ -3644,5 +3644,16 @@ return [
 
     
 
+    'time_period' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Time Period',
+        'placeholder' => 'Time Period',
+        'name' => 'time_period',
+        'container' => 'col-span-12',
+    ],
     
 ];

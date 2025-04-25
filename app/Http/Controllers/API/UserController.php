@@ -120,6 +120,8 @@ class UserController extends Controller
         }
         if (isset($form_data['email'])) {
             $updateData['email'] = $form_data['email'];
+            $updateData['email_verified_at']= now();
+          
             $validation['email'] = ['required', 'email', new UniqueEmail($user->id)];
         }
         if (isset($form_data['phone'])) {
@@ -182,6 +184,7 @@ class UserController extends Controller
 
         $user = request()->user;
         $user->email = $form_data['email'];
+        $user->email_verified_at = now();
         $user->name = $form_data['name'];
         $user->save();
 

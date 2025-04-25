@@ -237,8 +237,6 @@ class DailyAdmitsReport extends DefaultReport
                 }
 
 
-
-
                 $data = [
                     'movie' => $movie?->name ?? '',
                     'distributor' => $distributor,

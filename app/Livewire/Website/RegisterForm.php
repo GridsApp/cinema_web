@@ -64,22 +64,21 @@ class RegisterForm extends Component
 
     public function submit()
     {
-// dd($this->phone);
 
         $this->validate();
 
-        try {
-            $user = $this->userRepository->getUserByPhone($this->phone);
-            dd($user);
-            $this->sendError("You are already registered user", "You are already registered user");
-            return;
-        } catch (\Exception $e) {
-            $user = $this->userRepository->createUser($this->phone, $this->password);
-            $this->sendSuccess("Registered Successfully ", "Registered Successfully");
+        $user = $this->userRepository->getVerifiedUserByPhone($this->phone);
+
+        if($user){
+            return $this->sendError("You are already registered user", "You are already registered user");
         }
 
+        $user = $this->userRepository->createVerifiedUser($this->phone, $this->password);
+       
         $this->cardRepository->createCard($user);
-
+        
+        $this->sendSuccess("Registered Successfully ", "Registered Successfully");
+      
         return redirect()->route('login-web', [
             'cinema_prefix' => $this->cinemaPrefix,
             'language_prefix' => $this->langPrefix,

@@ -1,4 +1,11 @@
 <div x-data="GeneralFunctions.initPriceSettings()">
+    @php
+    $settings = collect(config('settings'));
+
+    $timePeriod = $settings->firstWhere('field', 'time_period')['value'] ?? '';
+@endphp
+
+{{-- @dd($timePeriod); --}}
     <label class="twa-form-label">
         {{ $info['label'] }}
     </label>
@@ -24,9 +31,9 @@
             <template x-for="(condition,index) in conditions">
                 <div class="flex gap-3 items-center mb-2" wire:key="index">
                     {{--                    <input x-model="conditions[index].day" /> --}}
-                    <div class="twa-form-label min-w-[50px]">
+                    <div class="twa-form-label min-w-[120px]">
 
-                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px]"
+                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
                             x-model="conditions[index].day" :key="'select' + index">
 
                             <option value=""> Choose day</option>
@@ -41,6 +48,19 @@
 
                         </select>
                     </div>
+
+                    <div class="twa-form-label min-w-[120px]">
+    
+                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
+                            x-model="conditions[index].period" :key="'select' + index">
+                            <option value="before" >Before {{$timePeriod}}</option>
+                            <option value="after" >After {{$timePeriod}}</option>
+                
+
+                        </select>
+                    </div>
+
+
                     <div class="twa-form-input-container twa-form-input-ring flex-1">
 
                         <input class="twa-form-input " type="text" x-model="conditions[index].price">

@@ -41,12 +41,41 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
+
+
+    public function createVerifiedUser($phone_number, $password = null)
+    {
+        $user = new User;
+        $user->phone = $phone_number;
+        $user->token = $this->tokenRepository->createUserToken();
+        $user->phone_verified_at = now();
+
+        // if ($password) {
+        //     $user->password = Hash::make($password);
+        // }
+
+        if ($password) {
+            $user->password = md5($password);
+        }
+        $user->save();
+
+        return $user;
+    }
+
+
+
+
+
+    
+
     public function createCustomer($phone_number, $password, $full_name, $email, $gender = null, $dom = null, $dob = null)
     {
         $user = new User;
         $user->phone = $phone_number;
         $user->name = $full_name;
         $user->email = $email;
+        $user->email_verified_at = $email ? now() : null;
+        $user->phone_verified_at = $phone_number ? now() : null;
         $user->gender = $gender;
         $user->dob = $dob;
         $user->dom = $dom;
@@ -70,6 +99,7 @@ class UserRepository implements UserRepositoryInterface
                 ->whereNull('deleted_at')
 
 
+
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
@@ -80,16 +110,12 @@ class UserRepository implements UserRepositoryInterface
 
     public function getVerifiedUserByPhone($phone_number)
     {
-        // dd($phone_number);
-
-        try {
-            $user = User::where('phone', $phone_number)
+       
+        $user = User::where('phone', $phone_number)
                 ->whereNull('deleted_at')
                 ->whereNotNull('phone_verified_at')
-                ->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            throw new Exception($e->getMessage());
-        }
+                ->first();
+       
         return $user;
     }
 

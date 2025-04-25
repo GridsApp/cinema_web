@@ -63,16 +63,27 @@ class AuthController extends Controller
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
 
-        try {
-            $user = $this->userRepository->getUserByPhone($phone_number);
-        } catch (\Exception $e) {
-            $user = $this->userRepository->createUser($phone_number, $form_data["password"]);
+
+        $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
+       
+        if($user){
+            return $this->response(notification()->error('Already registered' , 'This account is already registered'));
         }
+        
+        $user = $this->userRepository->createVerifiedUser($phone_number, $form_data["password"]);
+
+        $this->cardRepository->createCard($user);
 
         return $this->responseData([
-            'user_token' =>  $user->token,
-            'verify_drivers' => $this->otpRepository->getDrivers(),
+            'user' => $user->format(),
+            'access_token' => $this->tokenRepository->createAccessToken($user)
         ]);
+
+
+        // return $this->responseData([
+        //     'user_token' =>  $user->token,
+        //     'verify_drivers' => $this->otpRepository->getDrivers(),
+        // ]);
     }
 
     public function login()
@@ -95,20 +106,16 @@ class AuthController extends Controller
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
 
-        try {
-            $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
-        } catch (\Exception $e) {
-            return $this->response(notification()->error('You have entered invalid phone/password or not verified', $e->getMessage()));
+  
+        $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
+        
+        if(!$user){
+            return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
-
-
-        // dd($user->password);
-        // if (!Hash::check($form_data['password'], $user->password)) {
 
         if (md5($form_data['password']) != $user->password) {
             return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
-
 
         return $this->responseData([
             'user' => $user->format(),
@@ -118,6 +125,10 @@ class AuthController extends Controller
 
     public function check()
     {
+
+
+        // We removed the validation
+
 
         $form_data = clean_request([
             'phone' => 'phone'
