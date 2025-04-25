@@ -81,6 +81,8 @@ class CartRepository implements CartRepositoryInterface
     }
     public function createCart($user_id, $user_type, $system_id)
     {
+        $minutes = get_setting('timer_reset_card') ?? 1;
+        // dd(get_setting('timer_reset_card'));
         try {
 
 
@@ -90,7 +92,7 @@ class CartRepository implements CartRepositoryInterface
             $cart = new Cart();
             $cart->{$field} = $user_id;
             $cart->system_id = $system_id;
-            $cart->expires_at = now()->addMinutes(1);
+            $cart->expires_at = now()->addMinutes($minutes);
             $cart->save();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());

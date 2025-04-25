@@ -3655,5 +3655,19 @@ return [
         'name' => 'time_period',
         'container' => 'col-span-12',
     ],
+
+    'timer_reset_card' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Time Reset Card',
+        'placeholder' => 'Time Reset Card',
+        'name' => 'timer_reset_card',
+        'container' => 'col-span-12',
+    ],
+
+    
     
 ];

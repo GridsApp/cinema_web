@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\MovieRepositoryInterface;
 use App\Interfaces\MovieReviewRepositoryInterface;
 use App\Models\MovieReview;
 use Illuminate\Support\Facades\Validator;
@@ -13,13 +14,24 @@ class ReviewController extends Controller
 
     use APITrait;
 
+    // private MovieReviewRepositoryInterface $movieReviewRepository;
+
+    // public function __construct(MovieReviewRepositoryInterface $movieReviewRepository)
+    // {
+    //     $this->movieReviewRepository = $movieReviewRepository;
+    // }
+
+
+    private MovieRepositoryInterface $movieRepository;
     private MovieReviewRepositoryInterface $movieReviewRepository;
+  
 
-    public function __construct(MovieReviewRepositoryInterface $movieReviewRepository)
+    public function __construct(MovieRepositoryInterface $movieRepository,MovieReviewRepositoryInterface $movieReviewRepository)
     {
+        $this->movieRepository = $movieRepository;
         $this->movieReviewRepository = $movieReviewRepository;
+      
     }
-
 
     public function review()
     {
@@ -40,6 +52,12 @@ class ReviewController extends Controller
         $user_type = request()->user_type;
 
         $movie_id = $form_data['movie_id'];
+
+
+
+        // $movie= $this->movieRepository->getMovie($movie_id);
+
+        // dd($movie);
 
         try {
             $last_review = $this->movieReviewRepository->getLastReviewByUserAndMovie($user_id, $movie_id);

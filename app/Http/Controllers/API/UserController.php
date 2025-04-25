@@ -217,11 +217,11 @@ class UserController extends Controller
         // 64e39c60d69afe351b48472307add2c5
         // e817f2468050b328642e82ce4f756237
         if (md5($form_data['password']) === $user->password) {
-            return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
+            return $this->response(notification()->error('You have entered an already existing password', 'You have entered an already existing password'), 403);
         }
 
         if (md5($form_data['current_password']) !== $user->password) {
-            return $this->response(notification()->error('Error', 'Current password is incorrect'), 403);
+            return $this->response(notification()->error('Current password is incorrect', 'Current password is incorrect'), 403);
         }
 
         $this->userRepository->changePassword($user, $form_data['password']);
@@ -291,7 +291,7 @@ class UserController extends Controller
 
         
         if (md5($form_data['password']) === $user->password) {
-            return $this->response(notification()->error('Error', 'You have entered an already existing password'), 403);
+            return $this->response(notification()->error('You have entered an already existing password', 'You have entered an already existing password'), 403);
         }
         
         $this->userRepository->changePassword($user, $form_data['password']);
