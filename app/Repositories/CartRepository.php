@@ -90,7 +90,7 @@ class CartRepository implements CartRepositoryInterface
             $cart = new Cart();
             $cart->{$field} = $user_id;
             $cart->system_id = $system_id;
-            $cart->expires_at = now()->addMinutes(5);
+            $cart->expires_at = now()->addMinutes(1);
             $cart->save();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
