@@ -3,6 +3,7 @@
 use App\Models\MovieShow;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use \Illuminate\Support\Facades\File;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -12,7 +13,13 @@ Artisan::command('inspire', function () {
 Artisan::command('twa:entities', function () {
     $this->comment("Started");
 
-    $files = \Illuminate\Support\Facades\File::files(app_path('Entities'));
+    $files = File::files(app_path('Entities'));
+    $other_files = File::files(base_path('vendor/twa/cmsv2/src/Entities'));
+
+
+    $files = [...$files , ...$other_files];
+    // $files = \Illuminate\Support\Facades\File::files();
+
     $config = [];
 
     foreach ($files as $file) {

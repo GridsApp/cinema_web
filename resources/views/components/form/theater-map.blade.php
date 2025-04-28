@@ -1,5 +1,8 @@
 <div x-data="GeneralFunctions.initMap()" {{ '@' . $info['listen']['change'] }}.window="handleValueChanged"
+
+
     {{ '@' . $info['listen']['init'] }}.window="handleValueSelected">
+    {{-- @dd($info['listen']['change']); --}}
     <div x-show="!managingSeats" x-cloak>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">

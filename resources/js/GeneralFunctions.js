@@ -495,6 +495,7 @@ export default class GeneralFunctions {
                 if (this.selectedType != null) {
                     let response = await this.$wire.getZones(this.selectedType);
                     this.zones = response.original;
+
                     let zone = collect(this.zones).where("default", 1).first();
 
                     if (reset) {
@@ -571,6 +572,7 @@ export default class GeneralFunctions {
                 const currentMaxColumn = parseInt(this.maxColumn) || 0;
 
                 if (currentMaxRow > 0 && currentMaxColumn > 0) {
+                    console.log(this.selectedType);
                     if (this.selectedType != null) {
                         this.generateGrid();
                     } else {

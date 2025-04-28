@@ -18,8 +18,8 @@ return array (
   'cinema-statistics' => 'App\\Entities\\CinemaStatisticsEntity',
   'cms-push-notification-templates' => 'App\\Entities\\CmsPushNotificationTemplatesEntity',
   'cms-sent-push-notifications' => 'App\\Entities\\CmsSentPushNotificationsEntity',
-  'cms-user-roles' => 'App\\Entities\\CmsUserRoles',
-  'cms-users' => 'App\\Entities\\CmsUsers',
+  'cms-user-roles' => 'twa\\cmsv2\\Entities\\CmsUserRoles',
+  'cms-users' => 'twa\\cmsv2\\Entities\\CmsUsers',
   'company-purposes' => 'App\\Entities\\CompanyPurposesEntity',
   'coupons' => 'App\\Entities\\CouponsEntity',
   'distributors' => 'App\\Entities\\DistributorsEntity',
@@ -54,7 +54,7 @@ return array (
   'reset-password-tokens' => 'App\\Entities\\ResetPasswordTokensEntity',
   'rewards' => 'App\\Entities\\RewardsEntity',
   'screen-types' => 'App\\Entities\\ScreenTypesEntity',
-  'settings' => 'App\\Entities\\SettingsEntity',
+  'settings' => 'twa\\cmsv2\\Entities\\SettingsEntity',
   'slideshows' => 'App\\Entities\\SlideshowsEntity',
   'survey-results' => 'App\\Entities\\SurveyResultsEntity',
   'systems' => 'App\\Entities\\SystemsEntity',
@@ -68,6 +68,6 @@ return array (
   'user-verify-tokens' => 'App\\Entities\\UserVerifyTokensEntity',
   'user-wallet-transactions' => 'App\\Entities\\UserWalletTransactionsEntity',
   'users' => 'App\\Entities\\UsersEntity',
-  // 'reports' => 'App\\Entities\\CartSeatsEntity',
-
+  'cms-permissions' => 'twa\\cmsv2\\Entities\\CmsPermissions',
+  'cms-user-role-permission' => 'twa\\cmsv2\\Entities\\CmsUserRolePermission',
 );
