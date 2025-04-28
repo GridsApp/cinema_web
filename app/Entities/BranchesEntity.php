@@ -60,7 +60,7 @@ class BranchesEntity extends Entity
     }
 
     public function columns(){
-        $this->addColumn("label",['translatable'=>true] );
+        $this->addColumn("label_en",['translatable'=>true] );
         $this->addColumn("image" );
         $this->addColumn("description",['translatable'=>true]);
         $this->addColumn("latitude" );
