@@ -39,6 +39,7 @@ class DailyAdmitsReportByDistributor extends DefaultReport
 
 
         $week_info = get_date_range($this->filterResults['date']);
+  
         $dates =  CarbonPeriod::create($week_info['range'][0], $week_info['range'][1]);
 
 
@@ -83,7 +84,7 @@ class DailyAdmitsReportByDistributor extends DefaultReport
 
         $date = $this->filterResults['date'];
 
-
+        $branch_id = $this->filterResults['branch_id'] ?? null;
         $dateRange = $this->getRangeDate($date);
 
 
@@ -141,13 +142,20 @@ class DailyAdmitsReportByDistributor extends DefaultReport
         ];
 
         $booked_seats = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-            ->select("order_seats.*", DB::raw("movies.distributor_id as identifier"))
+        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->select("order_seats.*",'orders.branch_id', DB::raw("movies.distributor_id as identifier"))
+            
 
             ->whereNull('order_seats.deleted_at')
-            ->whereNull('order_seats.refunded_at')
-            ->whereBetween('order_seats.date', $dateRange)
-
-            ->get()
+            ->whereNull('order_seats.refunded_at');
+            // ->whereBetween('order_seats.date', $dateRange)
+            if ($dateRange) {
+                $booked_seats->whereBetween('order_seats.date', $dateRange);
+            }
+            if ($branch_id) {
+                $booked_seats->where('orders.branch_id', $branch_id);
+            }
+            $booked_seats = $booked_seats->get()
             ->groupBy('identifier')
 
             ->map(function ($order_seats) use ($last_week_booked_seats_admits,$last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income,&$footer) {

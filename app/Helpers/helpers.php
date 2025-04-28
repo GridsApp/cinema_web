@@ -458,16 +458,7 @@ if (!function_exists('get_formatted_week_range')) {
 }
 
 
-if (!function_exists('get_range_date')) {
-    function get_range_date($date)
-    {
-        $date = Carbon::parse($date);
-        $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);  // Start of the week (Thursday)
-        $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);  // End of the week (Wednesday)
 
-        return ['start' => $startOfWeek, 'end' => $endOfWeek];
-    }
-}
 if (!function_exists('link_button')) {
     function link_button($label, $href, $type, $grid = null)
     {
@@ -515,9 +506,6 @@ if (!function_exists('get_breadcrumbs_items')) {
                 $current = $current[$index] ?? $current["children"][$index];
 
                 if (isset($current['link'])) {
-                    // dd($current['link']);
-
-
                 }
                 $result[] = $current;
             } else {
@@ -822,6 +810,7 @@ if (!function_exists('minutes_to_human')) {
         }
     }
 
+
     if (!function_exists('generateLongId')) {
         function generateLongId($id)
         {
@@ -830,9 +819,27 @@ if (!function_exists('minutes_to_human')) {
     }
 
     if (!function_exists('calculate_share_amount')) {
-        function calculate_share_amount($amount , $share_perc , $tax){
+        function calculate_share_amount($amount, $share_perc, $tax)
+        {
             return (((100 - $tax) / 100) * $amount) * ($share_perc / 100);
         }
     }
 
+    if (!function_exists('get_range_date')) {
+        function get_range_date($date)
+        {
+            $date = Carbon::parse($date);
+            $startOfWeek = $date->startOfWeek(Carbon::THURSDAY); 
+            $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY); 
+    
+            return ['start' => $startOfWeek, 'end' => $endOfWeek];
+    
+            // $date = Carbon::parse($date);
+            // $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);
+    
+            // $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
+    
+            // return [$startOfWeek, $endOfWeek];
+        }
+    }
 }

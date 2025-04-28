@@ -32,15 +32,26 @@ class PaymentController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
-      
 
+        $exclude_types = request()->input('exclude_types' , []);
+      
+        if(!is_array($exclude_types)){
+            $exclude_types = json_decode($exclude_types , 1);
+        }
+
+        if(!is_array($exclude_types)){
+            $exclude_types = [];
+        }
+        
         try {
             $system_id = get_system_from_type($user_type);
         } catch (\Throwable $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
        
-        $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)->get()->map(function ($payment_method) {
+        $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
+        ->whereNotIn('payment_type' , $exclude_types)
+        ->get()->map(function ($payment_method) {
             return [
                 'id' => $payment_method->id,
                 'label' => $payment_method->label,

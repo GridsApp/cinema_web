@@ -81,13 +81,15 @@ class CartRepository implements CartRepositoryInterface
     }
     public function createCart($user_id, $user_type, $system_id)
     {
-        $minutes = get_setting('timer_reset_card') ?? 1;
+        $minutes = (int) get_setting('timer_reset_card') ?? 1;
+
+
         // dd(get_setting('timer_reset_card'));
         try {
 
 
             $field = get_user_field_from_type($user_type);
-
+           
 
             $cart = new Cart();
             $cart->{$field} = $user_id;

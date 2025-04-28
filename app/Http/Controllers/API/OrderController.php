@@ -612,7 +612,7 @@ class  OrderController extends Controller
         $order_seats = null;
         try {
 
-            $order_seats = $this->orderRepository->getOrderSeats($order->id, $grouped = false);
+            $order_seats = $this->orderRepository->getOrderSeats($order->id,  false);
         } catch (\Throwable $e) {
 
             return $this->response(notification()->error('Order seats not found', $e->getMessage()));
@@ -741,11 +741,6 @@ class  OrderController extends Controller
             $pos_user = null;
         }
 
-        // dd( $pos_user_id->branch);
-
-
-
-
         $order_discounts = $order_discounts->map(function ($item) {
             return [
                 'label' => $item->label ?? '',
@@ -808,7 +803,7 @@ class  OrderController extends Controller
         ];
 
         if ($API) {
-            return $this->responseData($result, notification()->success('Order fetched', 'Order fetched'));
+            return $this->responseData($result);
         } else {
             return $result;
         }

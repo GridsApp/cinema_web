@@ -42,7 +42,7 @@ class DailyAdmitsByItemReport extends DefaultReport
         $dates =  CarbonPeriod::create($week_info['range'][0], $week_info['range'][1]);
 
 
-        
+
         foreach ($dates as $date) {
             $this->addColumn(strtolower($date->format('l')), $date->isoFormat('ddd') . " " . $date->format('d-M') . '<br> Admits');
             $this->addColumn(strtolower($date->format('l')) . '_income', $date->isoFormat('ddd') . " " . $date->format('d-M') . '<br>  Income');
@@ -97,7 +97,7 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
-            // dd($last_week_booked_seats_admits);
+        // dd($last_week_booked_seats_admits);
 
         $last_week_booked_seats_income = OrderItem::query()
             ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
@@ -154,18 +154,20 @@ class DailyAdmitsByItemReport extends DefaultReport
         ];
 
         $booked_items = OrderItem::query()
-        ->join('branch_items', 'order_items.order_id', '=', 'orders.id')
-            ->select("order_items.*", 'orders.branch_id', "item_id as identifier")
+        ->join('orders', 'order_items.order_id', '=', 'orders.id')
+        ->join('branch_items', 'branch_items.id', '=', 'order_items.item_id')
+        
+            ->select("order_items.*", 'orders.branch_id', "branch_items.item_id as identifier")
             ->whereNull('order_items.deleted_at');
-            
-            if ($dateRange) {
-                $booked_items->whereBetween('order_items.created_at', $dateRange);
-            }
-            if ($branch_id) {
-                $booked_items->where('orders.branch_id', $branch_id);
-            }
-    
-            $booked_items=$booked_items->get()
+
+        if ($dateRange) {
+            $booked_items->whereBetween('order_items.created_at', $dateRange);
+        }
+        if ($branch_id) {
+            $booked_items->where('orders.branch_id', $branch_id);
+        }
+
+        $booked_items = $booked_items->get()
             ->groupBy('identifier')
             // dd($booked_items);
 
@@ -201,9 +203,9 @@ class DailyAdmitsByItemReport extends DefaultReport
                 ];
 
                 foreach ($order_items as $order_item) {
-                   
+
                     $dayName = strtolower(Carbon::parse($order_item->date)->format('l'));
-                  
+
                     $dayCounts[$dayName] += 1;
                     $dayIncomes[$dayName] += $order_item->price;
                 }
@@ -306,7 +308,7 @@ class DailyAdmitsByItemReport extends DefaultReport
         });
 
 
-  
+
         $footer['thursday'] = number_format($footer['thursday']);
         $footer['friday'] = number_format($footer['friday']);
         $footer['saturday'] = number_format($footer['saturday']);
@@ -337,10 +339,6 @@ class DailyAdmitsByItemReport extends DefaultReport
         $this->setFooter($footer);
 
         return $booked_items;
-
-
-
-
     }
 
     public function footer()

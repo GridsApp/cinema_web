@@ -13,10 +13,11 @@ class WeekController extends Controller
         $week_info = get_range_date($date);
 
 
+     
         $start_date = $week_info['start'];
         $end_date = $week_info['end'];
 
-
+        // dd($week_info);
         $period = CarbonPeriod::create(Carbon::now()->startOfYear(), $end_date);
         $week = 0;
         foreach ($period as $p) {

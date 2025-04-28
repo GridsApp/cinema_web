@@ -15,7 +15,9 @@ use App\Models\MovieShow;
 use App\Models\Order;
 use App\Models\OrderSeat;
 use App\Models\Theater;
+use App\Models\Time;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MovieRepository implements MovieRepositoryInterface
 {
@@ -72,40 +74,31 @@ class MovieRepository implements MovieRepositoryInterface
         }
         $can_review = false;
         if ($user) {
-            // dd($user);
+            // dd("e");
+           
+            $now_time = now()->subHours(3)->format('h:i');
+            $times = Time::where('label' , '<=' , $now_time)->pluck('id');
 
-            $orders = Order::whereNull('deleted_at')
-                ->where('user_id', $user->id)
-                ->pluck('id');
-
-            $order_seat = OrderSeat::whereNull('deleted_at')
-                ->whereNull('refunded_at')
-                ->whereIn('order_id', $orders)
-                ->where('movie_id', $movie->id)
+            $seats_found = DB::table('order_seats')->whereNull('order_seats.refunded_at')->where('order_seats.movie_id', $movie->id)
+                ->join('orders' , 'order_seats.order_id' ,'orders.id')
+                ->where(function($q) use ($times){
+                    $q->whereDate('order_seats.date' , '<' , now());
+                    $q->orWhere(function($q1) use ($times){
+                        $q1->whereDate('order_seats.date' , now());
+                        $q1->whereIn('order_seats.time_id' , $times);
+                    });
+                })
+                ->where('orders.user_id' , $user->id)
                 ->first();
+
+                // dd($seats_found);
 
                 // dd($order_seat);
 
-            $can_review = !$order_seat;
+            $can_review = $seats_found ? true : false;
 
 
-            if ($order_seat) {
-                $duration = $movie->duration;
-                $datetime = Carbon::parse($order_seat->date . ' ' . $order_seat->time->label)->addMinutes($duration);
-
-                // $can_review = Carbon::now()->greaterThan($datetime);
-
-                if (Carbon::now()->greaterThan($datetime)) {
-                    
-                    $hasReviewed = MovieReview::where('user_id', $user->id)
-                        ->where('movie_id', $movie->id)
-                        ->whereNull('deleted_at')
-                        ->exists();
-    
-                        // dd($hasReviewed);
-                    $can_review = !$hasReviewed;
-                }
-            }
+        
         }
 
         $movie = [

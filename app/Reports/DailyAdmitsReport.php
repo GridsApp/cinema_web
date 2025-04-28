@@ -44,9 +44,6 @@ class DailyAdmitsReport extends DefaultReport
 
 
         if (!$this->filterResults) {
-
-
-
             return;
         }
 
@@ -82,16 +79,16 @@ class DailyAdmitsReport extends DefaultReport
         $date = $this->getFilter('date');
     }
 
-    public function getRangeDate($date)
-    {
+    // public function getRangeDate($date)
+    // {
 
-        $date = Carbon::parse($date);
-        $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);
+    //     $date = Carbon::parse($date);
+    //     $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);
 
-        $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
+    //     $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
 
-        return [$startOfWeek, $endOfWeek];
-    }
+    //     return [$startOfWeek, $endOfWeek];
+    // }
 
 
     public function rows()
@@ -104,10 +101,10 @@ class DailyAdmitsReport extends DefaultReport
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
-        $dateRange = $this->getRangeDate($date);
+        $dateRange = get_range_date($date);
 
 
-        $lastWeekDateRange = $this->getRangeDate(now()->parse($date)->subWeek());
+        $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
         $last_week_booked_seats_admits = OrderSeat::with('movie.distributor', 'zone')
             ->select(DB::raw("CONCAT(movie_id,'_' , zone_id) as identifier"), DB::raw("COUNT(*) as count"))
@@ -126,13 +123,11 @@ class DailyAdmitsReport extends DefaultReport
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
-
-
         $all_time_booked_seats_admits = OrderSeat::with('movie.distributor', 'zone')
             ->select(DB::raw("CONCAT(movie_id,'_' , zone_id) as identifier"), DB::raw("COUNT(*) as count"))
             ->whereNull('deleted_at')
             ->whereNull('refunded_at')
-            ->whereDate('date', '<=', $dateRange[1])
+            ->whereDate('date', '<=', $dateRange['start'])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
@@ -141,7 +136,7 @@ class DailyAdmitsReport extends DefaultReport
             ->select(DB::raw("CONCAT(movie_id,'_' , zone_id) as identifier"), DB::raw("SUM(price) as count"))
             ->whereNull('deleted_at')
             ->whereNull('refunded_at')
-            ->whereDate('date', '<=', $dateRange[1])
+            ->whereDate('date', '<=', $dateRange['start'])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
