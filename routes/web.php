@@ -35,7 +35,7 @@ Route::get('/nourhane-migrate', function(){
 // });
 
 
-$movies= DB::connection('iraqi_cinema_old')->table('movies')->get();
+$movies= DB::connection('iraqi_cinema_old')->table('screen_types')->get();
 
 dd($movies);
 
