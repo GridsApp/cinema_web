@@ -25,7 +25,8 @@ class TimeSeeder extends Seeder
 
         while ($start <= $end) {
             DB::table('times')->insert([
-                'label' => $start->format('H:i')
+                'label' => $start->format('H:i'),
+                // 'label' => $start->format('h:i A')
             ]);
 
             $start->addMinutes(15);
