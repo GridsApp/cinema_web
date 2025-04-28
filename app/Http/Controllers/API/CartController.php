@@ -197,7 +197,7 @@ class CartController extends Controller
             return $this->response(notification()->error('Seats Alredy Reserved', 'Seats Alredy Reserved'));
         }
 
-        dd($reserved_seats);
+      
         try {
             DB::beginTransaction();
 

@@ -119,6 +119,7 @@ class CartRepository implements CartRepositoryInterface
     public function addSeatToCart($cart_id, $seat, $movie_show, $zone_id)
     {
 
+        // dd($zone_id, $movie_show->date , $movie_show->time->label);
 
         try {
 
