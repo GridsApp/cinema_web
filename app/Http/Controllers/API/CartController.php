@@ -197,19 +197,7 @@ class CartController extends Controller
             return $this->response(notification()->error('Seats Alredy Reserved', 'Seats Alredy Reserved'));
         }
 
-
-        $queries = [];
- 
-        DB::listen(function ($query) use (&$queries) {
-            $queries[] = [
-                'sql' => $query->sql,
-                'bindings' => $query->bindings,
-                'time' => $query->time,
-            ];
-        });
-         
-
-   
+        // dd($reserved_seats);
         try {
             DB::beginTransaction();
 
@@ -217,14 +205,10 @@ class CartController extends Controller
                 $this->cartRepository->addSeatToCart($form_data['cart_id'], $seat['code'], $movie_show, $seat['zone']);
             }
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (\Exception $th) {
             // dd("here");
             DB::rollBack();
-            dd([
-                'Executed queries' => $queries,
-                'Error message' => $e->getMessage(),
-            ]);
-            return $this->response(notification()->error('Error adding seats to cart', $e->getMessage()));
+            return $this->response(notification()->error('Error adding seats to cart', $th->getMessage()));
         }
 
         return $this->response(notification()->success('Seats added to the cart successfully', 'Seats added successfully'));
