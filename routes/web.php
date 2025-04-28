@@ -12,11 +12,26 @@ use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Process;
-
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 
 Route::get('/nourhane-migrate', function(){
-  Process::run('php artisan migrate');
+  // Process::run('php artisan migrate');
+
+  Schema::create('cache', function (Blueprint $table) {
+    $table->string('key')->primary();
+    $table->mediumText('value');
+    $table->integer('expiration');
+});
+
+Schema::create('cache_locks', function (Blueprint $table) {
+    $table->string('key')->primary();
+    $table->string('owner');
+    $table->integer('expiration');
+});
+
+
 });
 
 
