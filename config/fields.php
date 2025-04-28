@@ -214,22 +214,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    'theater_map_json' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        'type' => App\Entities\FieldTypes\TheaterMap::class,
-        'label' => 'Theater Map',
-        'placeholder' => 'Theater Map',
-        'name' => 'theater_map',
-        'required' => true,
-        'listen' =>  [
-            "init" => "pricegroupselectedvalue",
-            "change" =>  "pricegroupchangedvalue"
-        ],
-
-    ],
+ 
     // 'theater_map' => [
     //     'id' => uniqid(),
     //     'livewire' => [
@@ -471,7 +456,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Select::class,
+        'type' => twa\uikit\FieldTypes\BigNumber::class,
         'label' => 'Branch Item',
         'placeholder' => 'Select Branch Item ',
         'name' => 'branch_item_id',
@@ -792,7 +777,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Select::class,
+        'type' => twa\uikit\FieldTypes\BigNumber::class,
         'label' => 'Payment Method Id',
         'placeholder' => 'Enter Payment Method Id',
         'name' => 'payment_method_id'
@@ -1206,6 +1191,23 @@ return [
     ],
 
 
+    'theater_map_json' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => App\Entities\FieldTypes\TheaterMap::class,
+        'label' => 'Theater Map',
+        'placeholder' => 'Theater Map',
+        'name' => 'theater_map',
+        'required' => true,
+        'listen' =>  [
+            "init" => "pricegroupselectedvalue",
+            "change" =>  "pricegroupchangedvalue"
+        ],
+
+    ],
+
     'color' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1330,6 +1332,9 @@ return [
             'field' => 'label'
         ]
     ],
+
+    // BigNumber
+
     'screen_type' => [
         'id' => uniqid(),
         'livewire' => [
