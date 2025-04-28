@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchItemsController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
+use App\Http\Controllers\MigrationsController;
 use App\Http\Controllers\PriceGroupZonesController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\WeekController;
@@ -20,7 +21,15 @@ use Illuminate\Support\Facades\Schema;
 
 
 
-Route::get('/nourhane-migrate', [SurveyController::class , 'migration']);
+Route::group([
+  'prefix' => '/migrations',
+
+], function () {
+  Route::get('/theaters', [MigrationsController::class, 'theaters']);
+});
+
+
+
 
 
 
@@ -183,16 +192,15 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::group(['prefix' => 'distributor'], function () {
 
-  Route::get('/box-office-report' , [\App\Http\Controllers\BoxOfficeReportController::class , 'render'])->name('box-office-report.render');
-  Route::get('/box-office-report/result' , [\App\Http\Controllers\BoxOfficeReportController::class , 'result'])->name('box-office-report.render-result');
+    Route::get('/box-office-report', [\App\Http\Controllers\BoxOfficeReportController::class, 'render'])->name('box-office-report.render');
+    Route::get('/box-office-report/result', [\App\Http\Controllers\BoxOfficeReportController::class, 'result'])->name('box-office-report.render-result');
 
-  Route::get('/box-office-summary' , [\App\Http\Controllers\BoxOfficeReportController::class , 'renderSummary'])->name('box-office-summary.render');
-  Route::get('/box-office-report-summary/result' , [\App\Http\Controllers\BoxOfficeReportController::class , 'renderSummaryResult'])->name('box-office-report-summary.render-result');
+    Route::get('/box-office-summary', [\App\Http\Controllers\BoxOfficeReportController::class, 'renderSummary'])->name('box-office-summary.render');
+    Route::get('/box-office-report-summary/result', [\App\Http\Controllers\BoxOfficeReportController::class, 'renderSummaryResult'])->name('box-office-report-summary.render-result');
 
 
-  Route::get('/distributor-film-hire' , [\App\Http\Controllers\DistributorSharesController::class , 'render'])->name('distributor-film-hire.render');
-  Route::get('/distributor-film-hire/result' , [\App\Http\Controllers\DistributorSharesController::class , 'result'])->name('distributor-film-hire.render-result');
-
+    Route::get('/distributor-film-hire', [\App\Http\Controllers\DistributorSharesController::class, 'render'])->name('distributor-film-hire.render');
+    Route::get('/distributor-film-hire/result', [\App\Http\Controllers\DistributorSharesController::class, 'result'])->name('distributor-film-hire.render-result');
   });
 });
 Route::get('reports/reports/reports', function () {

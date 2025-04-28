@@ -76,27 +76,5 @@ class SurveyController extends Controller
     }
 
 
-    public function migration(){
-
-        $theater_mapping = [
-            "1" => 1, 
-            "4" => 2, 
-            "3" => 3, 
-            "2" => 4, 
-            "9" => 5, 
-            "10" => 6, 
-            "12" => 7, 
-            "13" => 8, 
-            "8" => 9, 
-            "14" => 10, 
-          ];
-          
-          
-          $theaters = DB::connection('iraqi_cinema_old')
-          ->table('theaters')
-          ->get();
-          
-          dd($theaters);
-
-    }
+   
 }
