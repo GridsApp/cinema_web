@@ -180,7 +180,9 @@ class Calendar extends Component
         }
 
         $gap = 0;
-        $this->events = MovieShow::select([
+
+
+        $selects = [
             'movie_shows.id',
             'movie_shows.group',
             'movie_shows.color',
@@ -188,8 +190,17 @@ class Calendar extends Component
             'times.label as time',
             'movie_shows.duration',
             'movie_shows.week',
-            DB::raw("DATE_FORMAT(movie_shows.date, '%d-%m-%Y') as date")
-        ])
+           
+        ];
+
+        if(env('DB_CONNECTION') == 'pgsql'){
+            $selects [] = DB::raw("TO_CHAR(movie_shows.date, 'DD-MM-YYYY')");
+        }else{
+            $selects [] = DB::raw("DATE_FORMAT(movie_shows.date, '%d-%m-%Y') as date");
+        }
+
+
+        $this->events = MovieShow::select($selects)
             ->where('movie_shows.theater_id', $this->theater_id)
             ->whereBetween('movie_shows.date', [Carbon::parse($this->date_from), Carbon::parse($this->date_to)])
             ->leftJoin('movies', 'movie_shows.movie_id', 'movies.id')
