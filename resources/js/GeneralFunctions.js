@@ -522,6 +522,12 @@ export default class GeneralFunctions {
             },
 
             handleValueSelected(event) {
+
+                console.log("here");
+                console.log(event);
+                console.log("here");
+
+
                 this.selectedType = event.detail.selected;
                 this.getZones(false);
 
@@ -537,6 +543,9 @@ export default class GeneralFunctions {
             },
 
             handleValueChanged(event) {
+
+
+            
                 var oldSelectedType = this.selectedType;
 
                 this.selectedType = event.detail.selected;

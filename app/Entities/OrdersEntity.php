@@ -22,7 +22,7 @@ class OrdersEntity extends Entity
     public function fields(){
         $this->addField("user_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("pos_user_id" , ["container" => 'col-span-6', 'required' => false]);
-        $this->addField("system" , ["container" => 'col-span-6', 'required' => true]);
+        $this->addField("system_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("reference" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("barcode" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("payment_method_id" , ["container" => 'col-span-6', 'required' => true]);

@@ -388,7 +388,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Number::class,
+        'type' => twa\uikit\FieldTypes\BigNumber::class,
         'label' => 'Week ',
         'placeholder' => 'Week',
         'name' => 'week'
@@ -1247,7 +1247,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Number::class,
+        'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Imtiyaz Phone',
         'placeholder' => 'Enter Imtiyaz Phone',
         'name' => 'imtiyaz_phone'
@@ -2280,7 +2280,7 @@ return [
         'label' => 'Coupon',
         'placeholder' => 'Select Coupon ',
         'name' => 'coupon_id',
-        'multiple' => true,
+        'multiple' => false,
         'visible_selections' => 3,
         'query_limit' => 50,
         'options' => [
@@ -2868,7 +2868,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'type' => twa\uikit\FieldTypes\Number::class,
         'label' => 'Distributor Share Percentage',
         'placeholder' => 'Enter distributor share percentage',
         'name' => 'dist_share_percentage',
@@ -2881,7 +2881,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'type' => twa\uikit\FieldTypes\Number::class,
         'label' => 'Distributor Share amnout',
         'placeholder' => 'Enter distibutor share amount',
         'name' => 'dist_share_amount',

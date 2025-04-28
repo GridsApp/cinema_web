@@ -24,7 +24,7 @@
     "src": "public/images/cinema_bg.jpeg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-DXQTTnEu.js",
+    "file": "assets/app-BinxXs-L.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -37,10 +37,10 @@
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
-  "vendor/twa/uikit/dist/app-EvycDqf8.js": {
-    "file": "assets/app-EvycDqf8-5tfHdEMG.js",
-    "name": "app-EvycDqf8",
-    "src": "vendor/twa/uikit/dist/app-EvycDqf8.js",
+  "vendor/twa/uikit/dist/app-CtC0RKbr.js": {
+    "file": "assets/app-CtC0RKbr-9midqcvc.js",
+    "name": "app-CtC0RKbr",
+    "src": "vendor/twa/uikit/dist/app-CtC0RKbr.js",
     "isEntry": true
   },
   "vendor/twa/uikit/dist/app-wZphN37q.css": {
