@@ -44,7 +44,7 @@ class BranchesEntity extends Entity
 
         $this->addField("label" , ["container" => 'col-span-6', 'required' => true,'translatable'=>true]);
         $this->addField("web_prefix" , ["container" => 'col-span-6', 'required' => true]);
-        $this->addField("image" , ["container" => 'col-span-12', 'required' => true]);
+        $this->addField("image" , ["container" => 'col-span-12', 'required' => false]);
         $this->addField("description" , ["container" => 'col-span-12','translatable'=>true]);
         $this->addField("latitude" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("longitude" , ["container" => 'col-span-6', 'required' => true]);
