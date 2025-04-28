@@ -11,6 +11,14 @@ use App\Livewire\Website\OtpVerificationForm;
 use App\Models\PaymentAttemptLog;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Process;
+
+
+
+Route::get('/nourhane-migrate', function(){
+  Process::run('php artisan migrate');
+});
+
 
 
 Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
@@ -199,6 +207,7 @@ Route::get('reports/reports/reports', function () {
 
   dd($report->rows);
 });
+
 
 
 Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']);
