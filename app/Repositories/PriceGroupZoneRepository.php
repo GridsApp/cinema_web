@@ -19,9 +19,9 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 
             $period = get_setting('time_period') <= $time ? 'before' : 'after';
 
-            $price_group_zone =  PriceGroupZone::whereNull('deleted_at')->first();
+            $price_group_zone =  PriceGroupZone::where('id', $zone_id)->whereNull('deleted_at')->first();
 
-            dd($price_group_zone);
+            // dd($price_group_zone);
 
             $price_settings = $price_group_zone->price_settings;
 

@@ -123,30 +123,29 @@ class CartRepository implements CartRepositoryInterface
 
         try {
 
-            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date , "12:00");
+            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date ,$movie_show->time->label);
 
-            $cart_seat = new CartSeat();
-            $cart_seat->seat = $seat;
-            $cart_seat->cart_id = $cart_id;
-            $cart_seat->zone_id = $zone_id;
-            $cart_seat->movie_show_id = $movie_show->id;
-            $cart_seat->movie_id = $movie_show->movie_id;
-            $cart_seat->date = $movie_show->date;
-            $cart_seat->week = $movie_show->week;
-            $cart_seat->screen_type_id = $movie_show->screen_type_id;
-            $cart_seat->theater_id = $movie_show->theater_id;
-            $cart_seat->time_id = $movie_show->time_id;
-            $cart_seat->price = $price;
-            // $cart_seat->final_price = $price;
-            // $cart_seat->discount = 0;
-            $cart_seat->save();
+            // $cart_seat = new CartSeat();
+            // $cart_seat->seat = $seat;
+            // $cart_seat->cart_id = $cart_id;
+            // $cart_seat->zone_id = $zone_id;
+            // $cart_seat->movie_show_id = $movie_show->id;
+            // $cart_seat->movie_id = $movie_show->movie_id;
+            // $cart_seat->date = $movie_show->date;
+            // $cart_seat->week = $movie_show->week;
+            // $cart_seat->screen_type_id = $movie_show->screen_type_id;
+            // $cart_seat->theater_id = $movie_show->theater_id;
+            // $cart_seat->time_id = $movie_show->time_id;
+            // $cart_seat->price = $price;
+          
+            // $cart_seat->save();
 
      
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
     
-        return $cart_seat;
+        // return $cart_seat;
     }
     public function removeSeatFromCart($cart_id, $seat, $movie_show_id)
     {
