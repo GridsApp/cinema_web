@@ -49,6 +49,19 @@ return [
         'channel_language' => $firstLanguage
     ],
 
+    'label_en' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Label',
+        'placeholder' => 'Enter label',
+        'name' => 'label_en',
+        'container' => 'col-span-6',
+    
+    ],
+
 
     'attributes' => [
         'id' => uniqid(),

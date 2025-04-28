@@ -5,6 +5,7 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ManageBookingController;
 use App\Http\Controllers\ManageWalletController;
 use App\Http\Controllers\PriceGroupZonesController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\WeekController;
 use App\Livewire\Website\ForgotPasswordForm;
 use App\Livewire\Website\OtpVerificationForm;
@@ -19,27 +20,7 @@ use Illuminate\Support\Facades\Schema;
 
 
 
-Route::get('/nourhane-migrate', function(){
-  // Process::run('php artisan migrate');
-
-//   Schema::create('cache', function (Blueprint $table) {
-//     $table->string('key')->primary();
-//     $table->mediumText('value');
-//     $table->integer('expiration');
-// });
-
-// Schema::create('cache_locks', function (Blueprint $table) {
-//     $table->string('key')->primary();
-//     $table->string('owner');
-//     $table->integer('expiration');
-// });
-
-
-$movies= DB::connection('iraqi_cinema_old')->table('screen_types')->get();
-
-dd($movies);
-
-});
+Route::get('/nourhane-migrate', [SurveyController::class , 'migration']);
 
 
 
