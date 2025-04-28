@@ -15,6 +15,10 @@ class MovieShowRepository implements MovieShowRepositoryInterface
     public function getMovieShows($branch_id, $movie_id, $date)
     {
 
+
+        
+
+
         return MovieShow::query()
             ->select(
                 'movie_shows.id',
@@ -29,9 +33,9 @@ class MovieShowRepository implements MovieShowRepositoryInterface
                 'price_groups.id as price_group_id',
                 'branches.id as branch_id',
             )
-            ->selectRaw('IF(branches.id = ' . $branch_id . ', 1, 0) as `default`')
+            ->selectRaw(env('DB_CONNECTION') == 'pgsql' ? 'CASE WHEN branches.id = ' . $branch_id . ' THEN 1 ELSE 0 END as "default"' : 'IF(branches.id = ' . $branch_id . ', 1, 0) as `default`')
             ->whereNull('movie_shows.deleted_at')
-            ->where('movie_shows.date', $date)
+            ->whereDate('movie_shows.date', $date)
             ->where('movie_shows.movie_id', $movie_id)
             ->leftJoin('theaters', 'movie_shows.theater_id', 'theaters.id')
             ->leftJoin('price_groups', 'theaters.price_group_id', 'price_groups.id')

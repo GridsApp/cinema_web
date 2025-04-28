@@ -194,7 +194,7 @@ class Calendar extends Component
         ];
 
         if(env('DB_CONNECTION') == 'pgsql'){
-            $selects [] = DB::raw("TO_CHAR(movie_shows.date, 'DD-MM-YYYY')");
+            $selects [] = DB::raw("TO_CHAR(movie_shows.date, 'DD-MM-YYYY') as date");
         }else{
             $selects [] = DB::raw("DATE_FORMAT(movie_shows.date, '%d-%m-%Y') as date");
         }
