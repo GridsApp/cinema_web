@@ -133,9 +133,6 @@ class BranchController extends Controller
 
            
                         $reserved_seats = count($this->cartRepository->getReservedSeats($show->id));
-                        $theater = $show->theater;
-
-                        
                         $nb_seats = $show->theater->nb_seats;
                         
 
@@ -144,7 +141,7 @@ class BranchController extends Controller
                             'time' => $show->time,
                             'disabled' => $show->visibility == 0 ? true : false,
                             // 'percentage' => 0
-                            'percentage' => round($reserved_seats / $nb_seats, 2)
+                            'percentage' => round(($reserved_seats * 100) / $nb_seats, 2)
                         ];
                     })
                 ];
