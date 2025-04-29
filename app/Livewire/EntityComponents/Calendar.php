@@ -187,7 +187,7 @@ class Calendar extends Component
             'movie_shows.group',
             'movie_shows.color',
             'movies.name as label',
-            'times.label as time',
+            'times.iso as time',
             'movie_shows.duration',
             'movie_shows.week',
            
@@ -223,6 +223,7 @@ class Calendar extends Component
                 ];
 
             });
+           
     }
 
     public function render()
