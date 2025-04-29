@@ -21,12 +21,11 @@ class BranchItemsController extends Controller
         $route = str($route)->replace(["{id}", "{item_id}"], [$branch_id, "{id}"])->toString();
 //  dd($route);
 
-
-
         $table = (new \twa\uikit\Classes\Table\TableData('Branch Items', 'branch_items'))
             ->selects(['id'])
             ->belongsTo('items', 'item_id',  true)
             ->addColumn("Image", "image", \twa\uikit\Classes\ColumnTypes\Image::class, \twa\uikit\Classes\ColumnOperationTypes\DefaultOperationType::class, ['items.image'])
+            ->addCondition('where', 'branch_id', $branch_id)
 
             ->addColumn("Item", "item", \twa\uikit\Classes\ColumnTypes\Tag::class, \twa\uikit\Classes\ColumnOperationTypes\DefaultOperationType::class, ['items.label'])
     
