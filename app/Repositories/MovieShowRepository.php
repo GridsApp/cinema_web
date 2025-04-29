@@ -19,10 +19,8 @@ class MovieShowRepository implements MovieShowRepositoryInterface
        
         $times = [];
 
-        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') == now()->parse($date)->format('Y-m-d');
+        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
 
-
-        dd($strict);
         if($strict){
             $currentTime = (string) now()->setTimezone(env('TIMEZONE','Asia/Baghdad'))->format('H:i');
             $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
