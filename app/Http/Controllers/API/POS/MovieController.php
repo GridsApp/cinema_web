@@ -131,7 +131,7 @@ class MovieController extends Controller
               
                 return [
                     'id' => $show->id,
-                    'time' => $show->time->label ?? '',
+                    'time' => $show->time->iso ?? '',
                     'theater' => [
                         'id' => $theater->id,
                         'label' => $theater->label

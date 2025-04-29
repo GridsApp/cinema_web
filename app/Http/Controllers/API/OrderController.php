@@ -416,7 +416,7 @@ class  OrderController extends Controller
                     'movie_name' => $order_seat->movie->name ?? '',
                     'theater' => $order_seat->theater->hall_number ?? '',
                     'showdate' => now()->parse($order_seat->date)->format('d M, Y') ?? '',
-                    'showtime' => isset($order_seat->time->label) ? convertTo12HourFormat($order_seat->time->label) : ''
+                    'showtime' => isset($order_seat->time->iso) ? convertTo12HourFormat($order_seat->time->iso) : ''
                 ]
             ];
         });
@@ -672,7 +672,7 @@ class  OrderController extends Controller
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
                 'branch' => $seats->theater->branch->label ?? '',
                 'date' => now()->parse($seats->date)->format('d M, Y'),
-                'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
+                'time' => isset($seats->time->iso) ? convertTo12HourFormat($seats->time->iso) : '',
                 'theater' => $seats->theater->label ?? '',
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
@@ -707,7 +707,7 @@ class  OrderController extends Controller
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
                 'branch' => $seats->theater->branch->label ?? '',
                 'date' => now()->parse($seats->date)->format('d M, Y'),
-                'time' => isset($seats->time->label) ? convertTo12HourFormat($seats->time->label) : '',
+                'time' => isset($seats->time->iso) ? convertTo12HourFormat($seats->time->iso) : '',
                 'theater' => $seats->theater->label ?? '',
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
@@ -911,7 +911,7 @@ class  OrderController extends Controller
                     'movie_name' => $order_seat->movie->name ?? '',
                     'theater' => $order_seat->theater->hall_number ?? '',
                     'showdate' => now()->parse($order_seat->date)->format('d M, Y') ?? '',
-                    'showtime' => isset($order_seat->time->label) ? convertTo12HourFormat($order_seat->time->label) : ''
+                    'showtime' => isset($order_seat->time->iso) ? convertTo12HourFormat($order_seat->time->iso) : ''
                 ]
             ];
         });

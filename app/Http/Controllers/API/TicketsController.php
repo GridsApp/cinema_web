@@ -43,7 +43,7 @@ class TicketsController extends Controller
             $movieShow = $seats->pluck('movieShow')->first();
             $movie_image = get_image($movieShow->movie->main_image);
 
-            $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->label);
+            $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->iso);
             $movie_duration = $movieShow->movie->duration ?? 0; // Movie duration in minutes
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
@@ -67,7 +67,7 @@ class TicketsController extends Controller
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-                'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : '',
+                'showtime' => isset($movieShow->time->iso) ? convertTo12HourFormat($movieShow->time->iso) : '',
                 'duration' => $movieShow->movie->duration,
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
@@ -110,7 +110,7 @@ class TicketsController extends Controller
             $movieShow = $seats->pluck('movieShow')->first();
             $movie_image = get_image($movieShow->movie->main_image);
 
-            $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->label);
+            $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->iso);
             $movie_duration = $movieShow->movie->duration ?? 0;
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
@@ -121,7 +121,7 @@ class TicketsController extends Controller
                 'movie_name' => $movieShow->movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-                'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : '',
+                'showtime' => isset($movieShow->time->iso) ? convertTo12HourFormat($movieShow->time->iso) : '',
                 'duration' => $movieShow->movie->duration,
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',

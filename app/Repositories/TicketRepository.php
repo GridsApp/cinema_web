@@ -83,7 +83,7 @@ class TicketRepository implements TicketRepositoryInterface
     //     //                 'movie_name' => $movieShow->movie->name ?? '',
     //     //                 'theater' => $movieShow->theater->hall_number ?? '',
     //     //                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
-    //     //                 'showtime' => isset($movieShow->time->label) ? convertTo12HourFormat($movieShow->time->label) : ''
+    //     //                 'showtime' => isset($movieShow->time->iso) ? convertTo12HourFormat($movieShow->time->iso) : ''
     //     //             ]
     //     //         ];
     //     //     });

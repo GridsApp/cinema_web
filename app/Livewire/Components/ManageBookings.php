@@ -113,7 +113,7 @@ class ManageBookings extends Component
                     'price_group_label' => $price_group->label,
 
                     'time_id' => $time->id ?? null,
-                    'time_label' => $time->label ?? null,
+                    'time_label' => $time->iso ?? null,
 
                     'screen_type_id' => $screen_type->id ?? null,
                     'screen_type_label' => $screen_type->label ?? null,

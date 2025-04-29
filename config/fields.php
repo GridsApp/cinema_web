@@ -59,7 +59,7 @@ return [
         'placeholder' => 'Enter label',
         'name' => 'label_en',
         'container' => 'col-span-6',
-    
+
     ],
 
 
@@ -227,7 +227,7 @@ return [
         'container' => 'col-span-6',
     ],
 
- 
+
     // 'theater_map' => [
     //     'id' => uniqid(),
     //     'livewire' => [
@@ -388,7 +388,7 @@ return [
         'translatable' => true,
     ],
 
-    
+
     'duration' => [
         'id' => uniqid(),
         'livewire' => [
@@ -436,7 +436,7 @@ return [
         'name' => 'date'
     ],
 
-  
+
 
 
 
@@ -539,25 +539,7 @@ return [
     ],
 
 
-    'director' => [
-        'id' => uniqid(),
-        'livewire' => [
-            'wire:model' => 'form.{name}',
-        ],
-        'type' => twa\uikit\FieldTypes\Select::class,
-        'label' => 'Director',
-        'placeholder' => 'Select movie director',
-        'name' => 'director_id',
-        'multiple' => false,
-        'visible_selections' => 3,
-        'query_limit' => 50,
-        'quick_add' => 'movie-directors',
-        'options' => [
-            'type' => 'query',
-            'table' => 'movie_directors',
-            'field' => 'name'
-        ]
-    ],
+
     'language' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1048,6 +1030,25 @@ return [
     ],
 
 
+    'director' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Director',
+        'placeholder' => 'Select movie director',
+        'name' => 'director_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'quick_add' => 'movie-directors',
+        'options' => [
+            'type' => 'query',
+            'table' => 'movie_directors',
+            'field' => 'name'
+        ]
+    ],
     "visibility" => [
         'id' => uniqid(),
         'livewire' => [
@@ -1100,7 +1101,7 @@ return [
 
 
 
-   
+
 
     'branch_attribute' => [
         'id' => uniqid(),
@@ -2185,7 +2186,7 @@ return [
         'container' => 'col-span-6',
     ],
 
- 
+
     'login_time' => [
         'id' => uniqid(),
         'livewire' => [
@@ -2889,7 +2890,7 @@ return [
         'name' => 'comment',
         'container' => 'col-span-12',
     ],
-    
+
 
 
     'dist_share_percentage' => [
@@ -3319,7 +3320,7 @@ return [
             ]
 
         ],
-      
+
 
     ],
 
@@ -3364,7 +3365,7 @@ return [
             'field' => 'label',
 
         ],
-          'container' => 'col-span-4',
+        'container' => 'col-span-4',
 
     ],
 
@@ -3408,7 +3409,7 @@ return [
             'field' => 'label',
 
         ],
-          'container' => 'col-span-4',
+        'container' => 'col-span-4',
 
     ],
 
@@ -3431,7 +3432,7 @@ return [
             'field' => 'label',
 
         ],
-          'container' => 'col-span-4',
+        'container' => 'col-span-4',
 
     ],
 
@@ -3458,7 +3459,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-      'filter_date' => [
+    'filter_date' => [
         'id' => uniqid(),
         'livewire' => [
             'wire:model' => 'form.{name}',
@@ -3472,8 +3473,8 @@ return [
         'events' => [
             '@input' => 'dateChanged'
         ],
-        'container'=>'col-span-12'
-        
+        'container' => 'col-span-12'
+
     ],
 
     'filter_start_date' => [
@@ -3526,7 +3527,7 @@ return [
         'container' => 'col-span-12',
     ],
 
-    
+
 
     'filter_amount_min' => [
         'id' => uniqid(),
@@ -3578,7 +3579,7 @@ return [
         'name' => 'email',
         'container' => 'col-span-6',
     ],
-    
+
 
     'filter_ticket_status' => [
         'id' => uniqid(),
@@ -3600,7 +3601,7 @@ return [
                 ['value' => 'refunded_tickets', 'label' => 'Refunded Tickets'],
             ]
 
-            ],
+        ],
         'container' => 'col-span-4',
     ],
 
@@ -3621,7 +3622,7 @@ return [
             'list' => [
                 ['value' => 'glasses', 'label' => 'Glasses'],
                 ['value' => 'others', 'label' => 'Others'],
-                
+
             ]
 
         ]
@@ -3644,10 +3645,10 @@ return [
         'options' => [
             'type' => 'static',
             'list' => [
-                ['value' => 'single', 'label' => 'Single'],    
+                ['value' => 'single', 'label' => 'Single'],
             ]
 
-            ],
+        ],
         'container' => 'col-span-12',
     ],
 
@@ -3667,16 +3668,16 @@ return [
         'options' => [
             'type' => 'static',
             'list' => [
-                ['value' => 'expired', 'label' => 'Expired'],    
-                ['value' => 'valid', 'label' => 'valid'],    
+                ['value' => 'expired', 'label' => 'Expired'],
+                ['value' => 'valid', 'label' => 'valid'],
             ]
 
-            ],
+        ],
         'container' => 'col-span-12',
     ],
 
 
-    
+
 
     'time_period' => [
         'id' => uniqid(),
@@ -3735,6 +3736,6 @@ return [
         'placeholder' => 'Enter Contact Email',
         'name' => 'contact_email'
     ],
-    
-    
+
+
 ];

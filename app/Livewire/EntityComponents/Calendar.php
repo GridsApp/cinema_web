@@ -69,7 +69,7 @@ class Calendar extends Component
         $this->date_to = $referenceDate->copy()->addDays(9)->format("d-m-Y");
 
     }
-        $this->times = Time::whereNull('deleted_at')->get()->pluck('label')->toArray();
+        $this->times = Time::whereNull('deleted_at')->get()->pluck('iso')->toArray();
 
 
         $this->info = [
