@@ -17,8 +17,8 @@ class DistributorsEntity extends Entity
         $this->addField("label" , ["container" => 'col-span-7' , 'required' => true]);
         $this->addField("condensed_label" , ["container" => 'col-span-7' ]);
         $this->addField("distributor_contact_name" , ["container" => 'col-span-7' , 'required' => true]);
-        $this->addField("distributor_contact_number" , ["container" => 'col-span-7' , 'required' => true]);
-        $this->addField("distributor_contact_email" , ["container" => 'col-span-7' , 'required' => true]);
+        $this->addField("distributor_contact_number" , ["container" => 'col-span-7' ]);
+        $this->addField("distributor_contact_email" , ["container" => 'col-span-7' ]);
         // $this->addField("main_image" , ["container" => 'col-span-7' , 'required' => true]);
         $this->addField("commission_settings", ["container" => 'col-span-7' ,'required' => true]);
 
