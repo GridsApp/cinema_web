@@ -167,8 +167,21 @@ class MovieRepository implements MovieRepositoryInterface
                         ->whereDate('date', $date) // Now Showing
                         ->whereIn('theater_id', $theaters_ids);
                 })
-                    ->orWhereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
-                    ->orWhereBetween('release_date', [$today, $comingSoonOffset]); // Coming Soon
+
+                ->orWhere(function ($q) use ($oneMonthAgo, $today, $theaters_ids) {
+                    $q->whereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
+                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
+                          $subQ->whereIn('theater_id', $theaters_ids);
+                      });
+                })
+                ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids) {
+                    $q->whereBetween('release_date', [$today, $comingSoonOffset]) // Coming Soon
+                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
+                          $subQ->whereIn('theater_id', $theaters_ids);
+                      });
+                });
+                    // ->orWhereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
+                    // ->orWhereBetween('release_date', [$today, $comingSoonOffset]); // Coming Soon
             })
             ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today) {
                 $query->whereBetween('date', [$recentShowtimeCutoff, $today]);
