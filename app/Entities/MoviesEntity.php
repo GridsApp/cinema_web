@@ -36,8 +36,8 @@ class MoviesEntity extends Entity
         $this->addField("condensed_name" , ["container" => 'col-span-7']);
         $this->addField("description" , ["container" => 'col-span-7', 'required' => true,'translatable'=>true]);
         $this->addField("duration" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("cast" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("director" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("cast" , ["container" => 'col-span-7']);
+        $this->addField("director" , ["container" => 'col-span-7']);
         $this->addField("genre" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("age_rating" , ["container" => 'col-span-7', 'required' => true]);
 

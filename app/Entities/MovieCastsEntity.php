@@ -15,7 +15,7 @@ class MovieCastsEntity extends Entity
     public function fields(){
 
         $this->addField("name" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("image" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("image" , ["container" => 'col-span-7']);
 
 
         return $this->fields;
@@ -23,8 +23,8 @@ class MovieCastsEntity extends Entity
 
     public function columns(){
 
-        $this->addColumn("name" , ["container" => 'col-span-7']);
-        $this->addColumn("image" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addColumn("name");
+        $this->addColumn("image");
 
 
         return $this->columns;
