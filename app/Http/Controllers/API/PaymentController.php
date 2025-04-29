@@ -60,6 +60,9 @@ class PaymentController extends Controller
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
        
+
+        
+
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
         ->whereIn('id' , $ids)
         ->get()->map(function ($payment_method) {
@@ -70,7 +73,7 @@ class PaymentController extends Controller
 
 
                 // 'system' => $payment_method->sytem_id,
-                'sublabel' => $payment_method->key == "WP" ? 'Current Balance : 46,000' : '',
+                'sublabel' => $payment_method->key == "WP" ? 'Current Balance : To be filled' : '',
                 'image' => get_image($payment_method->image),
 
             ];
