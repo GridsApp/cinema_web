@@ -97,15 +97,22 @@ class TicketsController extends Controller
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
             ->join('orders', 'orders.id', 'order_seats.order_id')
             ->where('orders.user_id', $user->id)
+
+            ->selectRaw("CONCAT(order_seats.movie_show_id, '-', orders.id) AS identifier")
+
             ->whereNull('order_seats.refunded_at')
             ->get()
-            ->groupBy('movie_show_id');
+            ->groupBy('identifier');
 
 
         if ($order_seats->isEmpty()) {
             return $this->response(notification()->error('No upcomming orders found', 'No upcomming orders found'));
         }
-        $order_seats = $order_seats->map(function ($seats, $movie_show_id) {
+        $order_seats = $order_seats->map(function ($seats, $identifier) {
+
+
+            // $movie_show_id = str($identifier)->explode('-')[0] ?? '';
+
             $order = $seats->pluck('order')->first();
             $movieShow = $seats->pluck('movieShow')->first();
             $movie_image = get_image($movieShow->movie->main_image);
