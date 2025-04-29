@@ -125,7 +125,7 @@ export default class GeneralFunctions {
             },
 
             addCondition() {
-                this.conditions.push({ day: "", price: "0" });
+                this.conditions.push({ day: "", price: "0" , period : "" });
             },
 
             deleteCondition(index) {

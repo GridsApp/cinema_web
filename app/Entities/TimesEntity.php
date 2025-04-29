@@ -20,6 +20,7 @@ class TimesEntity extends Entity
     public function fields(){
 
         $this->addField("label" , ["container" => 'col-span-7']);
+        $this->addField("iso" , ["container" => 'col-span-7']);
 
 
         return $this->fields;

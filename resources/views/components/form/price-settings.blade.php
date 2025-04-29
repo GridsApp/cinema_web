@@ -53,6 +53,7 @@
     
                         <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
                             x-model="conditions[index].period" :key="'select' + index">
+                            <option value=""> Choose Period</option>
                             <option value="before" >Before {{$timePeriod}}</option>
                             <option value="after" >After {{$timePeriod}}</option>
                 

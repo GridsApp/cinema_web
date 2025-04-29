@@ -17,7 +17,7 @@ class TimeSeeder extends Seeder
     public function run(): void
     {
 
-        $start = Carbon::createFromTime(12, 0);
+        $start = Carbon::createFromTime(10, 0);
         $end = Carbon::createFromTime(23, 0);
 
 
@@ -25,8 +25,8 @@ class TimeSeeder extends Seeder
 
         while ($start <= $end) {
             DB::table('times')->insert([
-                'label' => $start->format('H:i'),
-                // 'label' => $start->format('h:i A')
+                'iso' => $start->format('H:i'),
+                'label' => $start->format('h:i A')
             ]);
 
             $start->addMinutes(15);
