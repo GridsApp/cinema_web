@@ -17,7 +17,7 @@ class MovieGenresEntity extends Entity
 
     public function fields(){
 
-        $this->addField("label" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("label" , ["container" => 'col-span-7', 'required' => true,'translatable' => true]);
 
 
         return $this->fields;
