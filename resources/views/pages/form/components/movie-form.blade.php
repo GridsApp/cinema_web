@@ -82,8 +82,8 @@
                 <div class="col-span-12">
                     @component('CMSView::components.panels.default', ['title' => 'Commission Settings'])
                         <div class="grid grid-cols-12 gap-5">
-                            {!! field('distributor', 'col-span-6') !!}
-                            {!! field('distributor_commission_settings', 'col-span-6') !!}
+                            {!! field('distributor', 'col-span-12') !!}
+                            {!! field('distributor_commission_settings', 'col-span-12') !!}
                         </div>
                     @endcomponent
                 </div>
