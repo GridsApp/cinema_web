@@ -222,7 +222,6 @@ class OrderRepository implements OrderRepositoryInterface
 
         $total = 0;
         foreach ($cart_topups as $cart_topup) {
-
             $total += $cart_topup->amount;
             $orderTopup = new OrderTopup();
             $orderTopup->order_id = $order->id;
@@ -232,8 +231,6 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         foreach ($cart_coupons as $cart_coupon) {
-
-            $total += $cart_coupon->amount;
             $orderCoupon = new OrderCoupon();
             $orderCoupon->order_id = $order->id;
             $orderCoupon->amount = $cart_coupon->amount;
