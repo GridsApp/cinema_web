@@ -33,7 +33,7 @@ class MovieRepository implements MovieRepositoryInterface
 
         $genres = [];
         if (is_array($movie->genre_id) && count($movie->genre_id) > 0) {
-            $genres = MovieGenre::select("id", "label")->whereIn('id', $movie->genre_id)->whereNull('deleted_at')->get();
+            $genres = MovieGenre::select("id", "label_".app()->getLocale()." as label")->whereIn('id', $movie->genre_id)->whereNull('deleted_at')->get();
         }
 
         $casts = [];
@@ -136,7 +136,7 @@ class MovieRepository implements MovieRepositoryInterface
 
 
         $available_genre_ids = $movies->pluck('genre_id')->flatten()->unique()->values();
-        $genres = MovieGenre::select("id", "label")->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
+        $genres = MovieGenre::select("id", "label_".app()->getLocale()." as label")->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
         return $movies->map(function ($movie) use ($genres) {
             return [
@@ -177,7 +177,7 @@ class MovieRepository implements MovieRepositoryInterface
 
 
         $available_genre_ids = $movies->pluck('genre_id')->flatten()->unique()->values();
-        $genres = MovieGenre::select("id", "label")->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
+        $genres = MovieGenre::select("id", "label_".app()->getLocale().' as label')->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
         return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset) {
 
