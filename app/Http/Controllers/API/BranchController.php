@@ -134,6 +134,8 @@ class BranchController extends Controller
            
                         $reserved_seats = count($this->cartRepository->getReservedSeats($show->id));
                         $theater = $show->theater;
+
+                        
                         $nb_seats = $show->theater->nb_seats;
                         
 
