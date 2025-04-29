@@ -18,7 +18,7 @@ class PriceGroupsEntity extends Entity
             'values' => [
                  'label' => 'Default',
                  'condensed_label' => 'Default',
-                 'color' => '#6b7280',
+                 'color' => '#00b90f',
                  'default' => 1,
                  'price_group_id' => '{id}'
             ]
