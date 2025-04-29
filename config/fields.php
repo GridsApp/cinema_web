@@ -457,7 +457,7 @@ return [
         'options' => [
             'type' => 'query',
             'table' => 'movie_genres',
-            'field' => 'label'
+            'field' => 'label_en'
         ]
     ],
 
