@@ -98,7 +98,7 @@ class BranchController extends Controller
             $date = now();
         }
 
-        $movie_shows = $this->movieShowRepository->getMovieShows($branch_id, $movie_id, $date);
+        $movie_shows = $this->movieShowRepository->getMovieShows($branch_id, $movie_id, $date , true);
 
         $result = [];
 

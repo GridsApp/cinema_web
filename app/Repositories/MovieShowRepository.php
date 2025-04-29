@@ -13,16 +13,14 @@ use Illuminate\Support\Facades\DB;
 class MovieShowRepository implements MovieShowRepositoryInterface
 {
 
-    public function getMovieShows($branch_id, $movie_id, $date)
+    public function getMovieShows($branch_id, $movie_id, $date , $strict = false)
     {
 
-        $strict = false; // by default false
-
-        $strict = true;
+       
         $times = [];
 
         if($strict){
-            $currentTime = (string) now()->setTimezone('Asia/Baghdad')->format('h:i');
+            $currentTime = (string) now()->setTimezone('Asia/Baghdad')->format('H:i');
             $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
         }
 
