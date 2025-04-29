@@ -9,25 +9,29 @@ use twa\cmsv2\Traits\APITrait;
 use App\Interfaces\BranchRepositoryInterface;
 use App\Interfaces\MovieRepositoryInterface;
 use App\Interfaces\MovieShowRepositoryInterface;
+use App\Interfaces\CartRepositoryInterface;
 
 class BranchController extends Controller
 {
 
     use APITrait;
 
+
     private MovieRepositoryInterface $movieRepository;
     private MovieShowRepositoryInterface $movieShowRepository;
     private BranchRepositoryInterface $branchRepository;
+    private CartRepositoryInterface $cartRepository;
 
     public function __construct(
         MovieRepositoryInterface $movieRepository,
         MovieShowRepositoryInterface $movieShowRepository,
-        BranchRepositoryInterface $branchRepository
-
+        BranchRepositoryInterface $branchRepository,
+        CartRepositoryInterface $cartRepository
     ) {
         $this->movieRepository = $movieRepository;
         $this->movieShowRepository = $movieShowRepository;
         $this->branchRepository = $branchRepository;
+        $this->cartRepository = $cartRepository;
     }
 
 
@@ -118,6 +122,8 @@ class BranchController extends Controller
                 }
 
 
+
+
                 $result_by_group[] = [
                     "id" => $price_group_shows[0]['price_group_id'],
                     "label" => $price_group,
@@ -126,11 +132,17 @@ class BranchController extends Controller
                         // $disabled = !(is_array($show->system_id) && in_array($system, $show->system_id));
 
            
+                        $reserved_seats = count($this->cartRepository->getReservedSeats($show->id));
+                        $theater = $show->theater;
+                        $nb_seats = $show->theater->nb_seats;
+                        
+
                         return [
                             'id' => $show->id,
                             'time' => $show->time,
                             'disabled' => $show->visibility == 0 ? true : false,
-                            'percentage' => 50
+                            // 'percentage' => 0
+                            'percentage' => round($reserved_seats / $nb_seats, 2)
                         ];
                     })
                 ];
