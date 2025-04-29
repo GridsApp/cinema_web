@@ -10,27 +10,24 @@ use App\Models\Time;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
-use Carbon\Carbon;
-
 class MovieShowRepository implements MovieShowRepositoryInterface
 {
 
     public function getMovieShows($branch_id, $movie_id, $date , $strict = false)
     {
 
+       
         $times = [];
 
-        // Ensure date is in the timezone context
-        $today = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d');
-        $inputDate = Carbon::parse($date)->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d');
-    
-        $strict = $today === $inputDate;
-    
-        if ($strict) {
-            $currentTime = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('H:i');
-            $times = Time::where('iso', '>=', $currentTime)->pluck('id')->toArray();
+        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') == now()->parse($date)->format('Y-m-d');
+
+
+        dd($strict);
+        if($strict){
+            $currentTime = (string) now()->setTimezone(env('TIMEZONE','Asia/Baghdad'))->format('H:i');
+            $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
         }
-    
+
         return MovieShow::query()
             ->select(
                 'movie_shows.id',
@@ -39,20 +36,21 @@ class MovieShowRepository implements MovieShowRepositoryInterface
                 'theaters.label as theater_label',
                 'theaters.id as theater_id',
                 'price_groups.label as price_group',
-                'branches.label_' . app()->getLocale() . ' as branch',
+                'branches.label_'.app()->getLocale().' as branch',
+                
                 'times.id as time_id',
                 'price_groups.id as price_group_id',
                 'branches.id as branch_id',
             )
-            ->selectRaw(env('DB_CONNECTION') == 'pgsql'
-                ? 'CASE WHEN branches.id = ' . $branch_id . ' THEN 1 ELSE 0 END as "default"'
-                : 'IF(branches.id = ' . $branch_id . ', 1, 0) as `default`')
+            ->selectRaw(env('DB_CONNECTION') == 'pgsql' ? 'CASE WHEN branches.id = ' . $branch_id . ' THEN 1 ELSE 0 END as "default"' : 'IF(branches.id = ' . $branch_id . ', 1, 0) as `default`')
             ->whereNull('movie_shows.deleted_at')
             ->whereDate('movie_shows.date', $date)
             ->where('movie_shows.movie_id', $movie_id)
-            ->when($strict, function ($q) use ($times) {
-                $q->whereIn('movie_shows.time_id', $times);
+
+            ->when($strict , function($q) use ($times){
+                $q->whereIn('movie_shows.time_id' , $times);
             })
+
             ->leftJoin('theaters', 'movie_shows.theater_id', 'theaters.id')
             ->leftJoin('price_groups', 'theaters.price_group_id', 'price_groups.id')
             ->leftJoin('times', 'movie_shows.time_id', 'times.id')
