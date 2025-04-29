@@ -20,7 +20,7 @@ class MovieShowRepository implements MovieShowRepositoryInterface
         $times = [];
 
         if($strict){
-            $currentTime = (string) now()->setTimezone('Asia/Baghdad')->format('H:i');
+            $currentTime = (string) now()->setTimezone(env('TIMEZONE','Asia/Baghdad'))->format('H:i');
             $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
         }
 
