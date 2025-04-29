@@ -1335,7 +1335,7 @@ return [
         'options' => [
             'type' => 'query',
             'table' => 'times',
-            'field' => 'label'
+            'field' => 'iso'
         ]
 
     ],
@@ -1359,7 +1359,7 @@ return [
         'options' => [
             'type' => 'query',
             'table' => 'times',
-            'field' => 'label'
+            'field' => 'iso'
         ]
     ],
 
