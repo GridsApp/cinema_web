@@ -65,7 +65,7 @@ class IMDBRepository
         $age_rating = $this->createOrGetID($AgeRate , "movie_age_ratings" , "label");
         $language = $this->createOrGetID($json["Language"] , "movie_languages" , "label");
         $casts = $this->createOrGetIDs($json["Actors"] , "movie_casts" , "name");
-        $genres = $this->createOrGetIDs($json["Genre"] , "movie_genres" , ["label"]);
+        $genres = $this->createOrGetIDs($json["Genre"] , "movie_genres" , ["label_en"]);
 
         $image = $json["Poster"] ==  "N/A" || empty( $json["Poster"]) ? null : $json["Poster"];
 
