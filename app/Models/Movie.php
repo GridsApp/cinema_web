@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Movie extends Model
 {
@@ -32,6 +33,13 @@ public function movieShows()
     return $this->hasMany(MovieShow::class);
 }
 
+
+protected function description(): Attribute
+{
+    return Attribute::make(
+        get: fn(mixed $value, array $attributes) => $attributes['description_'.app()->getLocale()]  
+    );
+}
 public function distributor()
 {
     

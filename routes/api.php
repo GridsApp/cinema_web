@@ -114,7 +114,8 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemToCart']);
         Route::post('/item/remove', [App\Http\Controllers\API\CartController::class, 'removeItemFromCart']);
 
-        Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsToCart']);
+        Route::post('/seat/add', [App\Http\Controllers\API\CartController::class, 'addSeatsTo
+        Cart']);
         Route::post('/seat/remove', [App\Http\Controllers\API\CartController::class, 'removeSeatFromCart']);
 
         Route::post('/imtiyaz/add', [App\Http\Controllers\API\CartController::class, 'addImtiyazToCart'])->middleware(POSUserMiddleware::class);

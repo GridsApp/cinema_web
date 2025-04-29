@@ -373,6 +373,22 @@ return [
         'name' => 'description',
         'container' => 'col-span-12',
     ],
+
+
+    'movie_description' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textarea::class,
+        'label' => 'Description',
+        'placeholder' => 'Enter description',
+        'name' => 'description',
+        'container' => 'col-span-12',
+        'translatable' => true,
+    ],
+
+    
     'duration' => [
         'id' => uniqid(),
         'livewire' => [

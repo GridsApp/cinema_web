@@ -20,7 +20,7 @@ class IMDBRepository
             $nbr = random_int(1000000, 9999999);
         } while (Movie::where("movie_key", "=", $nbr)->first() instanceof Movie);
 
-        return "IC".$nbr;
+        return "IH".$nbr;
 
     }
 

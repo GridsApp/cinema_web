@@ -43,7 +43,7 @@
                             {!! field('movie_name', 'col-span-6') !!}
                             {!! field('condensed_name', 'col-span-6') !!}
                             {!! field('slug', 'col-span-12') !!}
-                            {!! field('description', 'col-span-12') !!}
+                            {!! field('movie_description', 'col-span-12') !!}
                             {!! field('duration', 'col-span-12') !!}
                             {!! field('release_date', 'col-span-12') !!}
                         </div>
