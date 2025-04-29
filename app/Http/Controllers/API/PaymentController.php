@@ -32,17 +32,28 @@ class PaymentController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
+        $location = request()->location;
 
-        $exclude_types = request()->input('exclude_types' , []);
-      
-        if(!is_array($exclude_types)){
-            $exclude_types = json_decode($exclude_types , 1);
+
+        switch($location){
+
+            case 'TOPUP':
+                $ids = [1,7];
+            break;
+
+            case 'CHECKOUT':
+                $ids = [3];
+            break;
+
+            default:
+
+            $ids = [1,2,3,4,5,6,7];
+
+            break;
+
         }
 
-        if(!is_array($exclude_types)){
-            $exclude_types = [];
-        }
-        
+    
         try {
             $system_id = get_system_from_type($user_type);
         } catch (\Throwable $th) {
@@ -50,7 +61,7 @@ class PaymentController extends Controller
         }
        
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
-        ->whereNotIn('payment_type' , $exclude_types)
+        ->whereIn('id' , $ids)
         ->get()->map(function ($payment_method) {
             return [
                 'id' => $payment_method->id,
