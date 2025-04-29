@@ -3686,6 +3686,39 @@ return [
         'container' => 'col-span-12',
     ],
 
+
+    'distributor_contact_name' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Contact Name',
+        'placeholder' => 'Enter Contact Name',
+        'name' => 'contact_name'
+    ],
+
+    'distributor_contact_number' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Contact Number',
+        'placeholder' => 'Enter Contact Number',
+        'name' => 'contact_number'
+    ],
+
+    'distributor_contact_email' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Contact Email',
+        'placeholder' => 'Enter Contact Email',
+        'name' => 'contact_email'
+    ],
     
     
 ];

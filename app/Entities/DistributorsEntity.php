@@ -15,9 +15,13 @@ class DistributorsEntity extends Entity
 
     public function fields(){
         $this->addField("label" , ["container" => 'col-span-7' , 'required' => true]);
+        $this->addField("condensed_label" , ["container" => 'col-span-7' ]);
+        $this->addField("distributor_contact_name" , ["container" => 'col-span-7' , 'required' => true]);
+        $this->addField("distributor_contact_number" , ["container" => 'col-span-7' , 'required' => true]);
+        $this->addField("distributor_contact_email" , ["container" => 'col-span-7' , 'required' => true]);
         // $this->addField("main_image" , ["container" => 'col-span-7' , 'required' => true]);
         $this->addField("commission_settings", ["container" => 'col-span-7' ,'required' => true]);
-        $this->addField("condensed_label" , ["container" => 'col-span-7' ]);
+
 
         
 
@@ -43,6 +47,7 @@ class DistributorsEntity extends Entity
     public function columns(){
 
         $this->addColumn("label");
+        $this->addColumn("condensed_label");
         $this->addColumn("created_at");
         $this->addColumn("updated_at");
         return $this->columns;
