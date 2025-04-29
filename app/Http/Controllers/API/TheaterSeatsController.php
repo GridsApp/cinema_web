@@ -42,7 +42,7 @@ class TheaterSeatsController extends Controller
         $columns = [];
         foreach($theater_map as $single_theater_map){
             $code = collect($single_theater_map)->where('row' , "!=" , null)->first();
-            $columns[$code] = collect($single_theater_map)->map(function ($item) {
+            $columns[$code['row']] = collect($single_theater_map)->map(function ($item) {
                 return (string) ($item['column'] ?? "");
             })->toArray();
         }
