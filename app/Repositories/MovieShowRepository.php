@@ -6,6 +6,7 @@ use App\Interfaces\MovieShowRepositoryInterface;
 use App\Models\Branch;
 use App\Models\MovieShow;
 use App\Models\Theater;
+use App\Models\Time;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,15 @@ class MovieShowRepository implements MovieShowRepositoryInterface
     public function getMovieShows($branch_id, $movie_id, $date)
     {
 
+        $strict = false; // by default false
 
-        
+        $strict = true;
+        $times = [];
 
+        if($strict){
+            $currentTime = (string) now()->timzone('Asia/Baghdad')->format('h:i');
+            $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
+        }
 
         return MovieShow::query()
             ->select(
@@ -37,6 +44,11 @@ class MovieShowRepository implements MovieShowRepositoryInterface
             ->whereNull('movie_shows.deleted_at')
             ->whereDate('movie_shows.date', $date)
             ->where('movie_shows.movie_id', $movie_id)
+
+            ->when($strict , function($q) use ($times){
+                $q->whereIn('movie_shows.time_id' , $times);
+            })
+
             ->leftJoin('theaters', 'movie_shows.theater_id', 'theaters.id')
             ->leftJoin('price_groups', 'theaters.price_group_id', 'price_groups.id')
             ->leftJoin('times', 'movie_shows.time_id', 'times.id')

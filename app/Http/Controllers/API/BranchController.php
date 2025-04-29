@@ -123,15 +123,14 @@ class BranchController extends Controller
                     "label" => $price_group,
                     "movie_shows" => $price_group_shows->map(function ($show) use ($system) {
                         // dd($show);
-                        $disabled = !(is_array($show->system_id) && in_array($system, $show->system_id));
+                        // $disabled = !(is_array($show->system_id) && in_array($system, $show->system_id));
 
            
                         return [
                             'id' => $show->id,
                             'time' => $show->time,
                             'disabled' => $show->visibility == 0 ? true : false,
-                            // 'disabled' => $disabled, // Work on it tomorrow
-                            'percentage' => 0
+                            'percentage' => 50
                         ];
                     })
                 ];

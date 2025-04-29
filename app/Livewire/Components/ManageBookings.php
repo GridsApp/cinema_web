@@ -57,7 +57,7 @@ class ManageBookings extends Component
 
         $movie_shows = MovieShow::with([
             'time' => function ($query) {
-                $query->select('id', 'label');
+                $query->select('id', 'iso');
             },
             'theater' => function ($query) {
                 $query->select("id", "label", "branch_id", "hall_number", "price_group_id");
@@ -117,8 +117,6 @@ class ManageBookings extends Component
 
                     'screen_type_id' => $screen_type->id ?? null,
                     'screen_type_label' => $screen_type->label ?? null,
-
-
 
                     'branch_identifier' => 'key_' . $branch->id,
                     'movie_identifier' => 'key_' . $branch->id . '_' . $movie->id,
