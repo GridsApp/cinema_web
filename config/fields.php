@@ -1172,7 +1172,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Number::class,
+        'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Hall Number',
         'placeholder' => 'Enter Hall Number',
         'prefix' => 'Theater',
