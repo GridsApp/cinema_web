@@ -75,6 +75,7 @@ class MovieController extends Controller
         $round_time = round_time($current_time);
 
         
+        $times = [];
         if($strict){
             $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
         }
