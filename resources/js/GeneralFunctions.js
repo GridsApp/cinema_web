@@ -601,7 +601,7 @@ export default class GeneralFunctions {
             },
 
             async generateGrid() {
-                window.dispatchEvent(new CustomEvent("submitdisabled"));
+                // window.dispatchEvent(new CustomEvent("submitdisabled"));
 
                 this.cells = [];
                 await this.simulateLoading();
