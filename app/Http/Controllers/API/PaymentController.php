@@ -36,19 +36,35 @@ class PaymentController extends Controller
         $user_type = request()->user_type;
 
         $location = request()->location;
+        try {
+            $system_id = get_system_from_type($user_type);
+        } catch (\Throwable $th) {
+            return  $this->response(notification()->error("Error", $th->getMessage()));
+        }
+       
 
-        // $system = request()->sy;
+        $location = $location . '_' . $system_id;
 
-        // dd($system);
+        // dd($location);
         switch($location){
 
-            case 'TOPUP':
+            case 'TOPUP_1':
                 $ids = [1,7];
             break;
 
-            case 'CHECKOUT':
+            case 'CHECKOUT_1':
                 $ids = [3];
             break;
+
+            case 'TOPUP_2':
+                $ids = [1,2,5,6,7];
+            break;
+
+
+            case 'CHECKOUT_2':
+                $ids = [1,2,4,5,6,7];
+            break;
+
 
             default:
 
@@ -59,11 +75,6 @@ class PaymentController extends Controller
         }
 
     
-        try {
-            $system_id = get_system_from_type($user_type);
-        } catch (\Throwable $th) {
-            return  $this->response(notification()->error("Error", $th->getMessage()));
-        }
        
 
 // dd($user);
