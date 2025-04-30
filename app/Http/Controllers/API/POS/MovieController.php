@@ -68,7 +68,7 @@ class MovieController extends Controller
 
         
 
-        $strict = true;
+        $strict = false;
         $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
 
 
@@ -93,14 +93,18 @@ class MovieController extends Controller
 
             })
 
-            ->with(['movieShows' => function ($query) use ($theaters_ids, $date, $times) {
+            ->with(['movieShows' => function ($query) use ($theaters_ids, $date, $times , $strict) {
                 $query->whereIn('theater_id', $theaters_ids)
                     ->whereDate('date', $date)
                     ->orderBy('time_id', 'asc');
 
-                    if(abs(now()->diffInDays($date)) < 1){
-                        $query->whereIn('time_id' , $times);
+                    if($strict){
+                        $query->whereIn('time_id' , $times);     
                     }
+
+                    // if(abs(now()->diffInDays($date)) < 1){
+                    //     $query->whereIn('time_id' , $times);
+                    // }
 
             }])
             ->get()
@@ -167,7 +171,7 @@ class MovieController extends Controller
                     'total' => $total_seats,
                     'reserved' => $total_reserved_seats,
                     'available' => $total_available_seats,
-                    'percentage' => round($total_reserved_seats / $total_seats, 2)
+                    'percentage' => $total_seats == 0 ? 0 : round($total_reserved_seats / $total_seats, 2)
                 ],
                 'movieShows' => $movieShows
             ];
