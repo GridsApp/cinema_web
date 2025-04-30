@@ -85,7 +85,7 @@ class OrderRepository implements OrderRepositoryInterface
             } catch (\Throwable $th) {
                 
                 $user_id = null;
-                dd($th);
+                // dd($th);
             }
         }
 
