@@ -469,18 +469,22 @@ class  OrderController extends Controller
         $orders = $this->orderRepository->getUserOrders($user->id)->map(function ($order) {
 
             try {
-                $order_seats = $this->orderRepository->getOrderSeats($order->id, $groude = true);
+                $order_seats = $this->orderRepository->getOrderSeats($order->id, true);
             } catch (\Throwable $e) {
                 return $this->response(notification()->error('Order seats not found', $e->getMessage()));
             }
 
+
+
+         
+            
             $zone_ids = $order_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
             $total_discounts = 0;
             $subtotal = 0;
+            // $imtiyaz_discounts = collect();
 
-
-            $seat_lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts) {
+            $seat_lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts,&$imtiyaz_discounts) {
 
                 $zone = $zones[$order_seat['zone_id']];
                 if (!$zone) {
@@ -491,6 +495,14 @@ class  OrderController extends Controller
 
                 $total_discounts += $order_seat['total_discount'];
 
+                // dump($order_seat);
+                // if (!empty($order_seat['imtiyaz_phone'])) {
+                  
+                //     $imtiyaz_discounts->push([
+                //         'label' => 'Imtiyaz Discount - ' . $order_seat['label'],
+                //         'price' => currency_format($unit_price),
+                //     ]);
+                // }
 
                 return [
                     'id' => $order_seat['order_id'],
@@ -503,6 +515,8 @@ class  OrderController extends Controller
                 ];
             })->filter();
 
+
+            // dump( $seat_lines);
             try {
                 $order_items = $this->orderRepository->getOrderItems($order->id, true);
             } catch (\Throwable $e) {
@@ -517,11 +531,6 @@ class  OrderController extends Controller
             } catch (\Throwable $e) {
                 return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
             }
-
-
-
-            // dd($order_discounts);
-
 
             $item_ids = $order_items->pluck('item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
@@ -569,8 +578,12 @@ class  OrderController extends Controller
     
                 ];
             });
+ 
     
-    
+            // $order_discounts = $order_discounts->merge($imtiyaz_discounts);
+
+
+            $discount = $order_discounts->sum('price.value');
     
     
             $discount =  collect($order_discounts)->sum('price.value');

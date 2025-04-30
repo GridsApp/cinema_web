@@ -175,6 +175,7 @@ class OrderRepository implements OrderRepositoryInterface
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
+            $orderSeat->imtiyaz_phone = $cart_seat['imtiyaz_phone'];
             $orderSeat->label =  $this->getSeatLabel($cart_seat->zone);
             $orderSeat->price = $cart_seat['price'];
             $orderSeat->gained_points = $price * $points_conversion;
@@ -323,6 +324,7 @@ class OrderRepository implements OrderRepositoryInterface
                     'week',
                     'created_at',
                     'price',
+                    'imtiyaz_phone',
                     // 'final_price',
                     // 'discount',
                     DB::raw('count(*) as quantity'),
@@ -342,6 +344,8 @@ class OrderRepository implements OrderRepositoryInterface
                     $query->groupBy('identifier');
                 })
                 ->get();
+
+ 
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

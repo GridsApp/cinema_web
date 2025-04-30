@@ -23,4 +23,5 @@ interface OrderRepositoryInterface
 
 
     public function getOrderCoupons($order_id);
+    // public function getOrderSeats($order_id);
 }
