@@ -591,7 +591,7 @@ class CartRepository implements CartRepositoryInterface
                
                 // NOTE Hovig add the movie show id hereee
                 return [
-                    'id' => $cart_seat['id'],
+                    'id' => $cart_seat['id'] ?? 0,
                     'movie_show_id' => $cart_seat['movie_show_id'],
                     'seat' => $cart_seat['seat'],
                     'type' => "Seat",
