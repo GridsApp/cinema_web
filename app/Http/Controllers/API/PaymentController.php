@@ -81,8 +81,8 @@ class PaymentController extends Controller
 
 
                 // 'system' => $payment_method->sytem_id,
-                'sublabel' => $payment_method->key == "WP"
-                ? 'Current Balance: ' . $balance
+                'sublabel' => $payment_method->key === "WP"
+                ? 'Current Balance: ' . number_format($balance)
                 : '',
                 'image' => get_image($payment_method->image),
 
