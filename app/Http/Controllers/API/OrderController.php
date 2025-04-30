@@ -582,7 +582,7 @@ class  OrderController extends Controller
 
 
             $subtotal = $lines->sum('price.value');
-            $total_discounts = $lines->sum('discount.value');
+            // $total_discounts = $lines->sum('discount.value');
 
 
             return [
@@ -591,7 +591,7 @@ class  OrderController extends Controller
                 'quantity' => $order->seats->count(),
                 'subtotal' => currency_format($subtotal),
                 'total_discount' => currency_format($discount),
-                'total' => currency_format($subtotal - $total_discounts),
+                'total' => currency_format($subtotal - $discount),
                 'payment_method' => $order->paymentMethod->label,
                 'lines' => $lines
 
