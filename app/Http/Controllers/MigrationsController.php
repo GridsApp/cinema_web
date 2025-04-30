@@ -130,6 +130,7 @@ class MigrationsController extends Controller
                         ->table('pos_users')
                         ->where('cancelled',0)
                         ->where('active' , 1)
+                        ->whereNotNull('cinema_id')
                         ->get()->map(function($pos_user) use($branch_mapping){
                             return [
                                 'name' => $pos_user->name,
