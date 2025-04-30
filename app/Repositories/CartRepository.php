@@ -322,7 +322,7 @@ class CartRepository implements CartRepositoryInterface
     public function getCartSeats($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'cart_id', 'zone_id', 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'label' ,'cart_id', 'zone_id', 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
 
         try {
 
