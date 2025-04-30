@@ -78,7 +78,9 @@ class PaymentController extends Controller
 
 
                 // 'system' => $payment_method->sytem_id,
-                'sublabel' => $payment_method->key == "WP" ? 'Current Balance : To be filled' : '',
+                'sublabel' => $payment_method->key == "WP"
+                ? 'Current Balance: ' . $this->cardRepository->getWalletBalance($user)
+                : '',
                 'image' => get_image($payment_method->image),
 
             ];
