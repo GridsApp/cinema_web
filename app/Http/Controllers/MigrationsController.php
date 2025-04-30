@@ -140,20 +140,23 @@ class MigrationsController extends Controller
                                 'branch_id' => $branch_mapping[$pos_user->cinema_id],
                                 'role' => $pos_user->user_role,
                             ];
-                        });
+                        })->toArray();
 
-                        dd($old_pos_users);
+                      
+
+        $affected = DB::table('pos_users')->insert($old_pos_users);
 
 
+        dd($affected);
 
-        $array = [
-            'name',
-            'username',
-            'passcode',
-            'pincode',
-            'branch_id',
-            'role',
-        ];
+        // $array = [
+        //     'name',
+        //     'username',
+        //     'passcode',
+        //     'pincode',
+        //     'branch_id',
+        //     'role',
+        // ];
 
     }
 }
