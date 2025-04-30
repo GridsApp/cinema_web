@@ -68,7 +68,7 @@ class Zaincash
 
             $transaction_id = $array['id'];
            
-            create_payment_log("SESSION CREATED" , $array , $attempt->id);
+            create_payment_log("SESSION CREATED" , $array , $attempt->id,"init");
             
             $link = $this->data["gatewayUrl"]."/pay?id=".$transaction_id;
 

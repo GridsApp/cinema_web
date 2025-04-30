@@ -38,7 +38,7 @@ class MoviesEntity extends Entity
         $this->addField("duration" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("cast" , ["container" => 'col-span-7']);
         $this->addField("director" , ["container" => 'col-span-7']);
-        $this->addField("genre" , ["container" => 'col-span-7', 'required' => true]);
+        $this->addField("genre" , ["container" => 'col-span-7']);
         $this->addField("age_rating" , ["container" => 'col-span-7', 'required' => true]);
 
         $this->addField("language" , ["container" => 'col-span-7', 'required' => true]);
