@@ -16,8 +16,8 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 
     public function getPriceByZonePerDate($zone_id , $date , $time = null){
         try {
-
-            $period = get_setting('time_period') <= $time ? 'before' : 'after';
+            
+            $period = $time <= get_setting('time_period') ? 'before' : 'after';
 
             $price_group_zone =  PriceGroupZone::where('id', $zone_id)->whereNull('deleted_at')->firstOrFail();
 
