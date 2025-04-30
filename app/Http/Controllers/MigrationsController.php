@@ -167,7 +167,7 @@ class MigrationsController extends Controller
     
             // Check for transactions for this user id
 
-            $card = DB::connection('iraqi_cinema_old')->table('user_wallet_transactions')
+            $card = DB::connection('iraqi_cinema_old')->table('user_loyalty_cards')
             ->where('expired' , '!=' , 1)
             ->where('cancelled' , 0)
             ->where('user_id' , $user->id)
