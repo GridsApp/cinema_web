@@ -38,6 +38,13 @@ class TheaterSeatsController extends Controller
         $theater_map =$theater->theater_map;
 
   
+        try {
+            $maxCount = max(array_map('count', $theater_map));
+            $emptyArray = array_fill(0, $maxCount, "");
+        } catch (\Throwable $th) {
+            $emptyArray = [""];
+        }
+      
 
         $columns = [];
         foreach($theater_map as $single_theater_map){
@@ -47,7 +54,7 @@ class TheaterSeatsController extends Controller
                     return (string) ($item['column'] ?? "");
                 })->toArray();
             }else{
-                $columns[""] = [""];
+                $columns[""] = $emptyArray;
             }
         }
 
