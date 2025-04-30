@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API\POS;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\CartRepositoryInterface;
+use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Models\Movie;
 use App\Models\MovieShow;
+use App\Models\PriceGroupZone;
 use App\Models\System;
 use App\Models\Theater;
 use App\Models\Time;
@@ -21,14 +23,15 @@ class MovieController extends Controller
     //cartRepository
 
     private CartRepositoryInterface $cartRepository;
-
+    private PriceGroupZoneRepositoryInterface $priceGroupZoneRepository;
 
 
     public function __construct(
-        CartRepositoryInterface $cartRepository
-
+        CartRepositoryInterface $cartRepository,
+        PriceGroupZoneRepositoryInterface $priceGroupZoneRepository
     ) {
         $this->cartRepository = $cartRepository;
+        $this->priceGroupZoneRepository = $priceGroupZoneRepository;
     }
 
     public function getBranchPosActiveMovieShows($branch_id)
@@ -145,6 +148,12 @@ class MovieController extends Controller
                 $total_reserved_seats += $reserved_seats;
 
               
+                $priceGroup = $show->theater->priceGroup;
+
+                $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
+
+                $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
+
                 return [
                     'id' => $show->id,
                     'time' => $show->time->label ?? '',
@@ -153,7 +162,7 @@ class MovieController extends Controller
                         'label' => $theater->label
                     ],
                     'screen_type' => $show->screenType->label ?? '',
-                    'price_group' => $show->theater->priceGroup->label ?? '',
+                    'price_group' => $priceGroup->label ?? '',
                     'seats' => [
                         'total' => $nb_seats,
                         'reserved' => $reserved_seats,
@@ -161,7 +170,7 @@ class MovieController extends Controller
                         'percentage' => round($reserved_seats / $nb_seats, 2)
                     ],
                     'duration' => $show->duration,
-                    'price' => currency_format(10000)
+                    'price' => currency_format($price)
                 ];
             });
 
