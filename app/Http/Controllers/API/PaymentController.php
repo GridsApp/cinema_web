@@ -64,13 +64,16 @@ class PaymentController extends Controller
         }
        
 
-
+// dd($user);
       $balance=  $this->cardRepository->getWalletBalance($user);
         
 
+    //   dd($balance);
+
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
         ->whereIn('id' , $ids)
-        ->get()->map(function ($payment_method,$balance) {
+        ->get()->map(function ($payment_method) use($balance) {
+            // dd($balance);npm
             return [
                 'id' => $payment_method->id,
                 'label' => $payment_method->label,
