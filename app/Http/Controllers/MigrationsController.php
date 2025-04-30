@@ -291,7 +291,11 @@ class MigrationsController extends Controller
 
 
             DB::connection('iraqi_cinema_old')
-                ->table('users')->update([
+
+
+                ->table('users')
+                ->where('id' , $user->id)
+                ->update([
                     'treated' => 1
                 ]);
 
