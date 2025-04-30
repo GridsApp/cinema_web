@@ -510,6 +510,17 @@ class  OrderController extends Controller
             }
 
 
+            // dd($order);
+            try {
+
+                $order_discounts = $this->orderRepository->getOrderCoupons($order->id);
+            } catch (\Throwable $e) {
+                return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
+            }
+
+            // dd($order_discounts);
+
+
             $item_ids = $order_items->pluck('item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
@@ -547,9 +558,26 @@ class  OrderController extends Controller
             });
 
             $seat_lines = collect($seat_lines);
+
+
+            $order_discounts = $order_discounts->map(function ($item) {
+                return [
+                    'label' => $item->label ?? '',
+                    'price' => currency_format($item->amount),
+    
+                ];
+            });
+    
+    
+    
+    
+            $discount =  collect($order_discounts)->sum('price.value');
+
+            // dd($discount);
             // $item_lines = collect($item_lines);
             // $topup_lines = collect($topup_lines);
 
+            // dd($seat_lines);
             $lines = $seat_lines->merge($item_lines)->merge($topup_lines);
 
 
@@ -562,7 +590,7 @@ class  OrderController extends Controller
                 'date' => $order->created_at,
                 'quantity' => $order->seats->count(),
                 'subtotal' => currency_format($subtotal),
-                'total_discount' => currency_format($total_discounts),
+                'total_discount' => currency_format($discount),
                 'total' => currency_format($subtotal - $total_discounts),
                 'payment_method' => $order->paymentMethod->label,
                 'lines' => $lines
