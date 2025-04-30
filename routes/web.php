@@ -25,6 +25,7 @@ Route::get('test/test/test' , function(){
 
   $price = app(PriceGroupZoneRepositoryInterface::class)->getPriceByZonePerDate(4, "2025-05-01" , "11:45");
 
+  dd($price);
 });
 
 
