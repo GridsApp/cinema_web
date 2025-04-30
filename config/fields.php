@@ -2070,13 +2070,16 @@ return [
             'wire:model' => 'form.{name}',
         ],
 
-        'type' => twa\uikit\FieldTypes\Select::class,
+        'type' => twa\uikit\FieldTypes\BigNumber::class,
 
         'label' => 'Order Id',
         'placeholder' => 'Enter order id',
         'name' => 'order_id',
         'container' => 'col-span-6',
     ],
+
+
+    
     'cart_id' => [
         'id' => uniqid(),
         'livewire' => [
