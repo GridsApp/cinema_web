@@ -71,31 +71,6 @@ Artisan::command('twa:generatePermissions', function () {
 })->purpose('Permissions tables');
 
 
-Artisan::command('twa:dataTransfer', function () {
-
-
-    // Read users from the database of the live version
-    // Create a user in the new database and get the new id.
-
-
-    // calculate wallet balance from user_wallet_transactions and loyalty balance from user_loyalty_transactiions 
-    // by the old user id.
-
-    //create 1 transaction for each in the new table "Consolidated wallet/loyalty amount"
-
-
-    // pos users
-    // coupons
-
-    //Manual
-
-    // cinemas
-    // theaters
-
-
-
-})->purpose('Transfering tables');
-
 
 
 
@@ -150,3 +125,16 @@ Artisan::command('twa:updateVite', function () {
     file_put_contents($viteConfigPath, $content); 
 
 });
+
+
+Artisan::command('twa:dataTransfer {limit}', function ($limit) {
+
+    $this->comment("Started");
+
+    (new app\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+
+    $this->comment("Finished");
+  
+
+})->purpose('Transfering tables');
+

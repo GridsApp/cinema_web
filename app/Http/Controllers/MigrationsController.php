@@ -110,10 +110,10 @@ class MigrationsController extends Controller
 
 
 
-    public function migrateUsers()
+    public function migrateUsers($limit , $consoleThis)
     {
 
-        $limit = 1;
+        // $limit = 10000;
 
 
 
@@ -137,13 +137,15 @@ class MigrationsController extends Controller
             ->table('users')
             ->where('treated' , 0)
             ->where('cancelled', 0)
-            ->where('id' , 95905)
+            // ->where('id' , 95905)
             ->limit($limit)
             ->get();
 
 
 
-        foreach ($users as $user) {
+
+
+        foreach ($users as $index => $user) {
             $info = [
                 'old_user_id' => $user->id,
                 'name' => $user->name,
@@ -292,6 +294,8 @@ class MigrationsController extends Controller
                 ->table('users')->update([
                     'treated' => 1
                 ]);
+
+                $consoleThis->comment('DONE :'. count($users).' / '.$index + 1 . ' | ID:' .$user->id);
                 
                 DB::commit();
                 
@@ -299,6 +303,8 @@ class MigrationsController extends Controller
             } catch (\Throwable $th) {
                   
                     DB::rollBack();
+
+                    $consoleThis->comment('ERROR :'. count($users).' / '.$index + 1 . 'ID:' .$user->id);
 
                     dd($th);
 
