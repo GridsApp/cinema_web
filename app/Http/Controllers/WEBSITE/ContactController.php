@@ -45,14 +45,7 @@ class ContactController extends Controller
         $management_phone = get_setting("management_phone" , app()->getLocale());
         $management_email = get_setting("management_email" , app()->getLocale());
 
-        // $whatsapp_label = $settings_collection->firstWhere('key', 'whattsapp_label')['value'] ?? null;
-        // $whatsapp = $settings_collection->firstWhere('key', 'whattsapp')['value'] ?? null;
-        // $facebook = $settings_collection->firstWhere('key', 'facebook')['value'] ?? null;
-        // $facebook_label = $settings_collection->firstWhere('key', 'facebook_label')['value'] ?? null;
-        // $instagram = $settings_collection->firstWhere('key', 'instagram')['value'] ?? null;
-        // $instagram_label = $settings_collection->firstWhere('key', 'instagram_label')['value'] ?? null;
-        // $x_label = $settings_collection->firstWhere('key', 'x_label')['value'] ?? null;
-        // $x = $settings_collection->firstWhere('key', 'x')['value'] ?? null;
+        
     
         return view('website.pages.contact-us', compact(
             'whatsapp_label',

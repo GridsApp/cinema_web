@@ -4,7 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Classes\OmnipayCallbackService;
 use App\Http\Controllers\Controller;
-
+use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\OmniPayRepositoryInterface;
 
 use App\Models\PaymentAttempt;
@@ -20,10 +21,12 @@ class PaymentController extends Controller
     use APITrait;
 
     private OmniPayRepositoryInterface $omniPayRepository;
+    private CardRepositoryInterface $cardRepository;
 
-    public function __construct(OmniPayRepositoryInterface $omniPayRepository)
+    public function __construct(OmniPayRepositoryInterface $omniPayRepository,CardRepositoryInterface $cardRepository)
     {
         $this->omniPayRepository = $omniPayRepository;
+        $this->cardRepository = $cardRepository;
     }
 
     public function list()
@@ -61,6 +64,8 @@ class PaymentController extends Controller
         }
        
 
+
+      $balance=  $this->cardRepository->getWalletBalance($user);
         
 
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
