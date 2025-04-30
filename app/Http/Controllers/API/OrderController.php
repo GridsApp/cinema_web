@@ -495,7 +495,7 @@ class  OrderController extends Controller
                 return [
                     'id' => $order_seat['order_id'],
                     'type' => "Seat",
-                    'label' => $zone->label,
+                    'label' => $order_seat['label'],
                     'unit_price' => currency_format($order_seat['price']),
                     'quantity' => $order_seat['quantity'],
                     'price' => currency_format(($unit_price * $order_seat['quantity'])),
@@ -517,6 +517,8 @@ class  OrderController extends Controller
             } catch (\Throwable $e) {
                 return $this->response(notification()->error('Order Discounts not found', $e->getMessage()));
             }
+
+
 
             // dd($order_discounts);
 
