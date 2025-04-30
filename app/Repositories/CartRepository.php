@@ -342,13 +342,13 @@ class CartRepository implements CartRepositoryInterface
     public function getCartItems($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? [DB::raw("CONCAT(COALESCE(item_id, '0'), '') as concatenated_item_id"), 'cart_id', 'item_id', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? [DB::raw("CONCAT(COALESCE(branch_item_id, '0'), '') as concatenated_item_id"), 'cart_id', 'branch_item_id', DB::raw('count(*) as quantity')] : "*";
 
         try {
             $user_cart_item = CartItem::select($select)->whereNull('deleted_at')
                 ->where('cart_id', $cart_id)
                 ->when($grouped, function ($query) {
-                    $query->groupBy('item_id');
+                    $query->groupBy('branch_item_id');
                 })
                 ->get();
         } catch (Exception $e) {
@@ -608,7 +608,7 @@ class CartRepository implements CartRepositoryInterface
             $total = $total_seats;
 
 
-            $cart_items = $this->getCartItems($cart_id);
+            $cart_items = $this->getCartItems($cart_id ,true);
             $item_ids = $cart_items->pluck('branch_item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
@@ -622,7 +622,7 @@ class CartRepository implements CartRepositoryInterface
                 }
 
                 return [
-                    'id' => $cart_item['id'],
+                    'id' => $cart_item['id'] ?? 0,
                     'type' => "Item",
                     'label' => $item->label,
                     'unit_price' => currency_format($unit_price),
@@ -634,7 +634,7 @@ class CartRepository implements CartRepositoryInterface
             $total += $cart_items->sum('price.value');
 
 
-            $cart_topups = $this->getCartTopups($cart_id);
+            $cart_topups = $this->getCartTopups($cart_id , true);
             $cart_topups = $cart_topups->map(function ($cart_topup) {
                 $unit_price = $cart_topup->amount;
 
