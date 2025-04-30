@@ -322,7 +322,7 @@ class CartRepository implements CartRepositoryInterface
     public function getCartSeats($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'label' ,'cart_id', 'zone_id', 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'cart_id', 'zone_id', 'theater_id' , 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
 
         try {
 
@@ -564,10 +564,14 @@ class CartRepository implements CartRepositoryInterface
 
 
             $cart_seats = $this->getCartSeats($cart_id,true);
+            // $cart_seats2 = $this->getCartSeats($cart_id);
+            
+            // dd($cart_seats , $cart_seats2);
+
             $zone_ids = $cart_seats->pluck('zone_id');
-
+            
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
-
+          
             $total_discount = 0;
 
             $cart_seats = $cart_seats->map(function ($cart_seat) use ($zones, &$total_discount) {
@@ -584,6 +588,7 @@ class CartRepository implements CartRepositoryInterface
                 if (!($cart_seat['quantity'] ?? null)) {
                     $cart_seat['quantity'] = 1;
                 }
+               
                 // NOTE Hovig add the movie show id hereee
                 return [
                     'id' => $cart_seat['id'],
