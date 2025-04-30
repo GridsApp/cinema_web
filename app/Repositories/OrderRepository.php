@@ -311,6 +311,7 @@ class OrderRepository implements OrderRepositoryInterface
                 $select = [
                     DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0')) as identifier"),
                     'order_id',
+                    'label',
                     'seat',
                     'zone_id',
                     'movie_show_id',
