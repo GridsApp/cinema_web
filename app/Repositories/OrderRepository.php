@@ -60,6 +60,8 @@ class OrderRepository implements OrderRepositoryInterface
         $this->couponRepository = $couponRepository;
     }
 
+ 
+
 
     public function createOrderFromCart($payment_attempt, $branch_id = null)
     {
@@ -171,7 +173,7 @@ class OrderRepository implements OrderRepositoryInterface
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
-            $orderSeat->label =  $cart_seat->zone->label;
+            $orderSeat->label =  $this->getSeatLabel($cart_seat->zone);
             $orderSeat->price = $cart_seat['price'];
             $orderSeat->gained_points = $price * $points_conversion;
             $orderSeat->order_id = $order->id;
@@ -531,5 +533,22 @@ class OrderRepository implements OrderRepositoryInterface
         } while (Order::where('barcode', $number)->whereNull('deleted_at')->first());
 
         return $number;
+    }
+
+    public function getSeatLabel($zone){
+
+        $label = "";
+
+        if($zone->default != 1){
+            $label = $zone->label;
+        }
+
+        $priceGroupLabel = $zone->priceGroup->label ?? '';
+
+        if(!empty($priceGroupLabel)){
+            $label =  $priceGroupLabel.' '. $label;
+        }
+       
+        return $label ;
     }
 }

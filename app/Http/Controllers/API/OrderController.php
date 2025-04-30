@@ -347,7 +347,6 @@ class  OrderController extends Controller
                         }
 
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
-             
                         $loyaltyTransaction =    $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
 
                      
