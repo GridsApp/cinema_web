@@ -83,7 +83,9 @@ class OrderRepository implements OrderRepositoryInterface
                 $user_card = $this->cardRepository->getCardByBarcode($cart->card_number);
                 $user_id =  $user_card->user_id ?? null;
             } catch (\Throwable $th) {
+                
                 $user_id = null;
+                dd($th);
             }
         }
 

@@ -563,7 +563,7 @@ class CartRepository implements CartRepositoryInterface
             $imtiyaz_phones = $this->getCartImtiyaz($cart_id)->pluck('phone');
 
 
-            $cart_seats = $this->getCartSeats($cart_id);
+            $cart_seats = $this->getCartSeats($cart_id,true);
             $zone_ids = $cart_seats->pluck('zone_id');
 
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
