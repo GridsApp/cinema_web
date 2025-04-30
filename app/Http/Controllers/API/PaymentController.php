@@ -70,7 +70,7 @@ class PaymentController extends Controller
 
         $payment_methods = PaymentMethod::whereNull('deleted_at')->where('system_id',$system_id)
         ->whereIn('id' , $ids)
-        ->get()->map(function ($payment_method) {
+        ->get()->map(function ($payment_method,$balance) {
             return [
                 'id' => $payment_method->id,
                 'label' => $payment_method->label,
@@ -79,7 +79,7 @@ class PaymentController extends Controller
 
                 // 'system' => $payment_method->sytem_id,
                 'sublabel' => $payment_method->key == "WP"
-                ? 'Current Balance: ' . $this->cardRepository->getWalletBalance($user)
+                ? 'Current Balance: ' . $balance
                 : '',
                 'image' => get_image($payment_method->image),
 
