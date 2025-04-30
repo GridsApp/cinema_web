@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PriceGroupZone;
 use App\Models\Theater;
+use App\Models\UserCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -109,15 +110,34 @@ class MigrationsController extends Controller
 
 
 
-    public function users()
+    public function migrateUsers()
     {
 
-        $limit = 10000;
+        $limit = 1;
+
+
+
+        $reward_mapping = [
+            "1" => 7,
+            "2" => 7,
+            "3" => 2,
+            "4" => 8,
+            "5" => 9,
+            "7" => 7,
+            "8" => 10,
+            "9" => 5,
+            "10" => 6,
+            "11" => 4,
+            "12" => 1,
+            "13" => 3
+        ];
 
 
         $users = DB::connection('iraqi_cinema_old')
             ->table('users')
+            ->where('treated' , 0)
             ->where('cancelled', 0)
+            ->where('id' , 114)
             ->limit($limit)
             ->get();
 
@@ -140,13 +160,28 @@ class MigrationsController extends Controller
             ];
 
 
+
+            try {
+           
+            DB::beginTransaction();
+    
             // Check for transactions for this user id
 
-            $card_number = '';
+            $card = DB::connection('iraqi_cinema_old')->table('user_wallet_transactions')
+            ->where('expired' , '!=' , 1)
+            ->where('cancelled' , 0)
+            ->where('user_id' , $user->id)
+            ->orderBy('id' , 'DESC')
+            ->first();
+            
 
+            $new_user_id = DB::table('users')->insertGetId($info);
 
+            $total_wallet_balance = 0;
+            $total_loyalty_balance  = 0;
 
-            $total_wallet_balance = DB::table('user_wallet_transactions')
+            if($card){
+                $total_wallet_balance = DB::connection('iraqi_cinema_old')->table('user_wallet_transactions')
                 ->selectRaw("
                         SUM(CASE WHEN type = 'topup' THEN amount ELSE 0 END) -
                         SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
@@ -155,32 +190,104 @@ class MigrationsController extends Controller
                 ->where('cancelled', 0)
                 ->value('balance');
 
+                $total_loyalty_balance = DB::connection('iraqi_cinema_old')->table('user_loyalty_point_transactions')
+                ->selectRaw("
+                        SUM(CASE WHEN type = 'add' THEN amount ELSE 0 END) -
+                        SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
+                ")
+                ->where('user_id', $user->id)
+                ->where('cancelled', 0)
+                ->value('balance');
+
+                $card_number = $card->card_number;
+                $card_type = strlen($card_number) == 16 ? 'physical' : 'digital'; 
+
+            }else{
+       
+                do {
+                    $card_number = (string) rand(10000000000000000, 99999999999999999);
+                } while (UserCard::where('barcode', $card_number)->whereNull('deleted_at')->first());
+        
+                $card_type = 'digital'; 
+
+            }
 
 
-            $total_loyalty_balance = DB::table('user_loyalty_point_transactions')
-            ->selectRaw("
-                    SUM(CASE WHEN type = 'add' THEN amount ELSE 0 END) -
-                    SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
-            ")
-            ->where('user_id', $user->id)
+         
+            $card_id = DB::table('user_cards')->insertGetId([
+                'user_id' => $new_user_id,
+                'barcode' => $card_number,
+                'type' => $card_type
+            ]);
+           
+
+
+            if($total_wallet_balance > 0){
+              $user_wallet_transactions_id =   DB::table('user_wallet_transactions')->insertGetId([
+                    'user_card_id' => $card_id,
+                    'type' => 'in',
+                    'amount' => $total_wallet_balance,
+                    'balance' =>  $total_wallet_balance,
+                    'description' => 'System Migration',
+                    'user_id' => $new_user_id,
+                    'reference' => 'SYS',
+                ]);
+
+                DB::table('user_wallet_transactions')->where('id' , $user_wallet_transactions_id)->update([
+                    'long_id' => generateLongId($user_wallet_transactions_id)
+                ]);
+            }
+
+            if($total_loyalty_balance > 0){
+                $user_loyalty_transactions_id = DB::table('user_loyalty_transactions')->insertGetId([
+                    'user_card_id' => $card_id,
+                    'type' => 'in',
+                    'amount' => $total_loyalty_balance,
+                    'balance' =>  $total_loyalty_balance,
+                    'description' => 'System Migration',
+                    'user_id' => $new_user_id,
+                    'reference' => 'SYS',
+                ]);
+
+                DB::table('user_loyalty_transactions')->where('id' , $user_loyalty_transactions_id)->update([
+                    'long_id' => generateLongId($user_loyalty_transactions_id)
+                ]);
+            }
+
+         
+            $redeem_rewards = DB::connection('iraqi_cinema_old')
+            ->table('redeem_rewards')
             ->where('cancelled', 0)
-            ->value('balance');
+            ->where('used' , '!=' , 1)
+            ->where('user_id' , $user->id)
+            ->get()->map(function($reward) use ($new_user_id , $reward_mapping){
+                return [
+                    'user_id' => $new_user_id,
+                    'reward_id' => $reward_mapping[$reward->reward_id] ,
+                    'code' => $reward->code
+                ];
+            })->toArray();
 
 
-            $total_loyalty_balance += '';
+            DB::table('user_rewards')->insert($redeem_rewards);
+                
 
 
+            DB::connection('iraqi_cinema_old')
+                ->table('users')->update([
+                    'treated' => 1
+                ]);
+                
+                DB::commit();
+                
+            
+            } catch (\Throwable $th) {
+                  
+                    DB::rollBack();
 
-            // Check 
+                    dd($th);
 
-
-
-
-            // Create User
-            // Create Card
-            // Create 1 Wallet Transaction
-            // Create 1 Loyalty Transaction
-
+            }
 
         }
 
@@ -221,6 +328,9 @@ class MigrationsController extends Controller
             "8" => 5,
             "14" => 10,
         ];
+
+
+
 
         $old_pos_users =   DB::connection('iraqi_cinema_old')
             ->table('pos_users')
