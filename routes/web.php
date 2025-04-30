@@ -25,7 +25,7 @@ Route::group([
   'prefix' => '/migrations',
 
 ], function () {
-  Route::get('/pos-users', [MigrationsController::class, 'theaters']);
+  Route::get('/pos-users', [MigrationsController::class, 'posUsers']);
 });
 
 
