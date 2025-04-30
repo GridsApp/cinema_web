@@ -83,6 +83,7 @@ class MovieController extends Controller
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
             ->whereHas('movieShows', function ($q) use ($date, $theaters_ids , $times , $strict) {
+                $q->whereNull('deleted_at');
                 $q->whereDate('date', $date)
                     ->whereIn('theater_id', $theaters_ids);
 
@@ -95,6 +96,7 @@ class MovieController extends Controller
             })
 
             ->with(['movieShows' => function ($query) use ($theaters_ids, $date, $times , $strict) {
+                $query->whereNull('deleted_at');
                 $query->whereIn('theater_id', $theaters_ids)
                     ->whereDate('date', $date)
                     ->orderBy('time_id', 'asc');
