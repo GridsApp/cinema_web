@@ -131,7 +131,7 @@ Artisan::command('twa:dataTransfer {limit}', function ($limit) {
 
     $this->comment("Started");
 
-    (new app\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
 
     $this->comment("Finished");
   
