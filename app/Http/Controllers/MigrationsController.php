@@ -138,7 +138,7 @@ class MigrationsController extends Controller
             ->where('treated' , 0)
             ->where('cancelled', 0)
             // ->where('id' , 95905)
-            ->where('segment' , 'A')
+            ->where('segment' , 'B')
             ->limit($limit)
             ->get();
 
