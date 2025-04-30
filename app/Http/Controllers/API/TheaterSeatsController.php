@@ -42,9 +42,11 @@ class TheaterSeatsController extends Controller
         $columns = [];
         foreach($theater_map as $single_theater_map){
             $code = collect($single_theater_map)->where('row' , "!=" , null)->first();
-            $columns[$code['row']] = collect($single_theater_map)->map(function ($item) {
-                return (string) ($item['column'] ?? "");
-            })->toArray();
+            if($code){
+                $columns[$code['row']] = collect($single_theater_map)->map(function ($item) {
+                    return (string) ($item['column'] ?? "");
+                })->toArray();
+            }
         }
 
         $reserved_seats= $this->cartRepository->getReservedSeats($movie_show_id);

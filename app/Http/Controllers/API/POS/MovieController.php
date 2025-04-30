@@ -66,20 +66,29 @@ class MovieController extends Controller
 
         $current_time = (string) now(config('app.cinema_timzone'))->format('H:i');
 
+        
+
+        $strict = true;
+        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
+
+
         $round_time = round_time($current_time);
 
-        $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
+        
+        if($strict){
+            $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
+        }
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
-            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids , $times) {
+            ->whereHas('movieShows', function ($q) use ($date, $theaters_ids , $times , $strict) {
                 $q->whereDate('date', $date)
                     ->whereIn('theater_id', $theaters_ids);
 
-            
-                    if(abs(now()->diffInDays($date)) < 1){
-                      
-                        $q->whereIn('time_id' , $times);
+                    if($strict){
+                        // if(abs(now()->diffInDays($date)) < 1){
+                            $q->whereIn('time_id' , $times);
+                        // }
                     }
 
             })
