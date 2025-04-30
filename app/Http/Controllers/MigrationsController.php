@@ -38,7 +38,7 @@ class MigrationsController extends Controller
     //        $new_theater->label = $theater->label;
     //        $new_theater->branch_id = $branch_mapping[$theater->cinema_id];
     //        $new_theater->hall_number = $matches[0] ?? null; 
-           
+
     //        $new_theater->price_group_id = 
     //        $new_theater->theater_map = 
     //        $new_theater->nb_seats = 
@@ -48,22 +48,22 @@ class MigrationsController extends Controller
 
 
     //         $cells = DB::connection('iraqi_cinema_old')->table('cells')->where('cancelled',0)->where('theater_id', $theater->uuid)->where('cancelled',0)->orderBy('abscissa', 'ASC')->orderBy('ordinate', 'ASC')->get()->keyBy('code');
-          
+
     //         $cells_zones = $cells->unique('zone_id')->pluck('zone_id')->filter(function ($value) { return !is_null($value); })->values()->toArray();
 
     //         $zones = DB::connection('iraqi_cinema_old')->table('zones')->where('cancelled',0)->whereIn('id',$cells_zones)->get()->keyBy('id');
-    
-            
-    
+
+
+
 
 
     //         $cells = $cells->map(function($cell) use ($zones , $theater) {
-                
+
 
 
     //             $old_zone = isset($zones[$cell->zone_id]) ? $zones[$cell->zone_id] : null;
 
-               
+
 
     //             PriceGroupZone::where('label' , )-
 
@@ -71,9 +71,9 @@ class MigrationsController extends Controller
 
 
 
-                
+
     //             return $this->createCell($cell->is_seat == 0 ? "empty" : "seat", $cell->label , $cell->id ,in_array($cell->label , $reserved) ? 1 : 0 , isset($zones[$cell->zone_id]) ? $zones[$cell->zone_id] : null , isset($zones[$cell->zone_id]) ? $zones[$cell->zone_id]['disabled']: 0);
-           
+
 
     //             return [
     //             "isSeat" => true,
@@ -94,7 +94,7 @@ class MigrationsController extends Controller
     //                 "color" =>  $zone && isset($zone->color) ? ($reserved ? $reserved_color : $zone->color) : ($reserved ?  $reserved_color : $available_color),
     //                 "zone_id" => $zone->id ?? null
     //         ];
-           
+
     //         });
 
 
@@ -109,40 +109,136 @@ class MigrationsController extends Controller
 
 
 
-    public function posUsers(){
+    public function users()
+    {
+
+        $limit = 10000;
+
+
+        $users = DB::connection('iraqi_cinema_old')
+            ->table('users')
+            ->where('cancelled', 0)
+            ->limit($limit)
+            ->get();
+
+
+
+        foreach ($users as $user) {
+            $info = [
+                'old_user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'password' => $user->password,
+                'dob' => $user->dob,
+                'dom' => $user->dom,
+                'gender' => $user->gender,
+                'login_provider' => $user->provider,
+                'identifier' => $user->identifier,
+                'phone_verified_at' => 1,
+                'email_verified_at' => 1
+            ];
+
+
+            // Check for transactions for this user id
+
+            $card_number = '';
+
+
+
+            $total_wallet_balance = DB::table('user_wallet_transactions')
+                ->selectRaw("
+                        SUM(CASE WHEN type = 'topup' THEN amount ELSE 0 END) -
+                        SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
+                ")
+                ->where('user_id', $user->id)
+                ->where('cancelled', 0)
+                ->value('balance');
+
+
+
+            $total_loyalty_balance = DB::table('user_loyalty_point_transactions')
+            ->selectRaw("
+                    SUM(CASE WHEN type = 'add' THEN amount ELSE 0 END) -
+                    SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
+            ")
+            ->where('user_id', $user->id)
+            ->where('cancelled', 0)
+            ->value('balance');
+
+
+            $total_loyalty_balance += '';
+
+
+
+            // Check 
+
+
+
+
+            // Create User
+            // Create Card
+            // Create 1 Wallet Transaction
+            // Create 1 Loyalty Transaction
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+        // 
+
+
+        // I want to move all users
+        // wallet balance
+        // loyalty balance
+        // redeemed
+
+    }
+
+
+    public function posUsers()
+    {
 
 
 
         $branch_mapping = [
-                    "1" => 1,
-                    "4" => 2,
-                    "3" => 3,
-                    "2" => 4,
-                    "9" => 5,
-                    "10" => 6,
-                    "12" => 7,
-                    "13" => 8,
-                    "8" => 9,
-                    "14" => 10,
-                ];
-        
-             $old_pos_users=   DB::connection('iraqi_cinema_old')
-                        ->table('pos_users')
-                        ->where('cancelled',0)
-                        ->where('active' , 1)
-                        ->whereNotNull('cinema_id')
-                        ->get()->map(function($pos_user) use($branch_mapping){
-                            return [
-                                'name' => $pos_user->name,
-                                'username' => $pos_user->username,
-                                'passcode' => $pos_user->password,
-                                'pincode' => $pos_user->pin,
-                                'branch_id' => $branch_mapping[$pos_user->cinema_id],
-                                'role' => $pos_user->user_role,
-                            ];
-                        })->toArray();
+            "1" => 1,
+            "4" => 4,
+            "3" => 3,
+            "2" => 2,
+            "9" => 6,
+            "10" => 7,
+            "12" => 8,
+            "13" => 9,
+            "8" => 5,
+            "14" => 10,
+        ];
 
-                      
+        $old_pos_users =   DB::connection('iraqi_cinema_old')
+            ->table('pos_users')
+            ->where('cancelled', 0)
+            ->where('active', 1)
+            ->whereNotNull('cinema_id')
+            ->get()->map(function ($pos_user) use ($branch_mapping) {
+                return [
+                    'name' => $pos_user->name,
+                    'username' => $pos_user->username,
+                    'passcode' => $pos_user->password,
+                    'pincode' => $pos_user->pin,
+                    'branch_id' => $branch_mapping[$pos_user->cinema_id],
+                    'role' => $pos_user->user_role,
+                ];
+            })->toArray();
+
+
 
         $affected = DB::table('pos_users')->insert($old_pos_users);
 
