@@ -37,7 +37,9 @@ class PaymentController extends Controller
 
         $location = request()->location;
 
+        // $system = request()->sy;
 
+        // dd($system);
         switch($location){
 
             case 'TOPUP':

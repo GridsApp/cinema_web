@@ -68,7 +68,7 @@ class MovieController extends Controller
 
         $round_time = round_time($current_time);
 
-        $times = Time::whereNull('deleted_at')->where('label' , '>=' , $round_time)->pluck('id')->toArray();
+        $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
             ->whereNull('deleted_at')
