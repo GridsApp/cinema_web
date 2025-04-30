@@ -44,7 +44,7 @@
                 <div class="flex justify-center gap-4">
                     {!! link_button('Cancel', '#', 'secondary') !!}
                     {{-- {!! button("'Submit'", 'primary', '', 'submit', 'text-[12px]') !!} --}}
-                    <button type="submit" class="btn btn-primary text-[12px]" :disabled="disabled">
+                    <button type="submit" class="btn btn-primary text-[12px]" >
                         Submit
                     </button>
                 </div>
