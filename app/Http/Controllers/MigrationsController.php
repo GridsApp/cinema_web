@@ -137,7 +137,7 @@ class MigrationsController extends Controller
             ->table('users')
             ->where('treated' , 0)
             ->where('cancelled', 0)
-            ->where('id' , 114)
+            ->where('id' , 95905)
             ->limit($limit)
             ->get();
 
@@ -156,7 +156,9 @@ class MigrationsController extends Controller
                 'login_provider' => $user->provider,
                 'identifier' => $user->identifier,
                 'phone_verified_at' => 1,
-                'email_verified_at' => 1
+                'email_verified_at' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
             ];
 
 
@@ -217,7 +219,9 @@ class MigrationsController extends Controller
             $card_id = DB::table('user_cards')->insertGetId([
                 'user_id' => $new_user_id,
                 'barcode' => $card_number,
-                'type' => $card_type
+                'type' => $card_type,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
            
 
@@ -231,6 +235,13 @@ class MigrationsController extends Controller
                     'description' => 'System Migration',
                     'user_id' => $new_user_id,
                     'reference' => 'SYS',
+
+                    'system_id' => 5,
+                    'transactionable_id' => 1,
+                    'transactionable_type' => 'twa\cmsv2\Models\CmsUser',
+
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 DB::table('user_wallet_transactions')->where('id' , $user_wallet_transactions_id)->update([
@@ -247,6 +258,8 @@ class MigrationsController extends Controller
                     'description' => 'System Migration',
                     'user_id' => $new_user_id,
                     'reference' => 'SYS',
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 DB::table('user_loyalty_transactions')->where('id' , $user_loyalty_transactions_id)->update([
@@ -264,7 +277,9 @@ class MigrationsController extends Controller
                 return [
                     'user_id' => $new_user_id,
                     'reward_id' => $reward_mapping[$reward->reward_id] ,
-                    'code' => $reward->code
+                    'code' => $reward->code,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ];
             })->toArray();
 
