@@ -150,8 +150,8 @@ class OrderRepository implements OrderRepositoryInterface
 
             $price = $cart_seat['price'];
 
-            $points_conversion = 1;
-            $total_points += $price * $points_conversion;
+            $points_conversion = 1000;
+            $total_points += $price / $points_conversion;
 
             $movie = Movie::find($cart_seat['movie_id']);
 

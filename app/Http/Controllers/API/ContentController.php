@@ -124,6 +124,12 @@ class ContentController extends Controller
             ];
         })->filter()->values()->toArray();
 
+
+        if(request()->input('type') == 'object'){
+            $settings = collect($settings)->pluck('value' , 'key')->toArray();
+        }
+
+
         return $this->responseData($settings);
     }
 }

@@ -193,8 +193,9 @@ class CartController extends Controller
 
         $reserved_seats = $this->cartRepository->getReservedSeats($form_data['movie_show_id']);
 
+    
         if ($seats->pluck('code')->intersect($reserved_seats)->count() > 0) {
-            return $this->response(notification()->error('Seats Alredy Reserved', 'Seats Alredy Reserved'));
+            return $this->response(notification()->error('Seats Already Reserved', 'Seats Already Reserved'));
         }
 
         // dd($reserved_seats);

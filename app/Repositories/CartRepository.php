@@ -304,13 +304,14 @@ class CartRepository implements CartRepositoryInterface
     public function getReservedSeats($movie_show_id)
     {
 
+    
         $cart_seats = CartSeat::whereNull('cart_seats.deleted_at')
             ->where('cart_seats.movie_show_id', $movie_show_id)
             ->join('carts', function($q){
-            //    $q->on('cart_seats.cart_id', '=', 'carts.id');
+               $q->on('cart_seats.cart_id', '=', 'carts.id');
                $q->where('carts.expires_at', '>', now());
-            })
-            ->pluck('seat');
+               $q->whereNull('carts.deleted_at');
+            })->pluck('seat');
 
         $reserved_seats = ReservedSeat::whereNull('deleted_at')
             ->where('movie_show_id', $movie_show_id)->pluck('seat');
