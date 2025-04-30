@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
+
+
 Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], function () {
 
     Route::prefix('auth')->group(function () {

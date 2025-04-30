@@ -8,6 +8,7 @@ use App\Http\Controllers\MigrationsController;
 use App\Http\Controllers\PriceGroupZonesController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\WeekController;
+use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Livewire\Website\ForgotPasswordForm;
 use App\Livewire\Website\OtpVerificationForm;
 use App\Models\PaymentAttemptLog;
@@ -20,12 +21,19 @@ use Illuminate\Support\Facades\Schema;
 
 
 
+Route::get('test/test/test' , function(){
+
+  $price = app(PriceGroupZoneRepositoryInterface::class)->getPriceByZonePerDate(4, "2025-05-01" , "11:45");
+
+});
+
+
 
 Route::group([
   'prefix' => '/migrations',
 
 ], function () {
-  
+
   Route::get('/pos-users', [MigrationsController::class, 'posUsers']);
   Route::get('/users', [MigrationsController::class, 'migrateUsers']);
 

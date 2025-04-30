@@ -3687,7 +3687,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Number::class,
+        'type' => twa\uikit\FieldTypes\Textfield::class,
         'label' => 'Time Period',
         'placeholder' => 'Time Period',
         'name' => 'time_period',
