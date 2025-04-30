@@ -1782,7 +1782,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'type' => twa\uikit\FieldTypes\Password::class,
         'label' => 'Passcode',
         'placeholder' => 'Enter passcode',
         'name' => 'passcode',

@@ -128,7 +128,18 @@ class MigrationsController extends Controller
         
              $old_pos_users=   DB::connection('iraqi_cinema_old')
                         ->table('pos_users')
-                        ->get();
+                        ->where('canceled',0)
+                        ->where('active' , 1)
+                        ->get()->map(function($pos_user) use($branch_mapping){
+                            return [
+                                'name' => $pos_user->name,
+                                'username' => $pos_user->username,
+                                'passcode' => $pos_user->password,
+                                'pincode' => $pos_user->pin,
+                                'branch_id' => $branch_mapping[$pos_user->cinema_id],
+                                'role' => $pos_user->user_role,
+                            ];
+                        });
 
                         dd($old_pos_users);
 

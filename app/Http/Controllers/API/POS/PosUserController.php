@@ -73,7 +73,7 @@ class PosUserController extends Controller
 
 
 
-    if ($form_data['passcode'] != $pos_user->passcode) {
+    if (md5($form_data['passcode']) != $pos_user->passcode) {
       return $this->response(notification()->error("You have entered invalid pos_username/password or branch", 'You have entered invalid username/password or branch'));
     }
 
