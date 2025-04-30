@@ -128,7 +128,7 @@ class MigrationsController extends Controller
         
              $old_pos_users=   DB::connection('iraqi_cinema_old')
                         ->table('pos_users')
-                        ->where('canceled',0)
+                        ->where('cancelled',0)
                         ->where('active' , 1)
                         ->get()->map(function($pos_user) use($branch_mapping){
                             return [
