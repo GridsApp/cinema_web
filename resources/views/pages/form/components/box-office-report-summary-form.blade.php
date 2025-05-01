@@ -20,7 +20,7 @@
         <div class="flex w-full gap-4 " style=" padding: 1rem 1.875rem;">
             <a class="btn bg-gray-300 text-white w-full">Clear
                 filters</a>
-            <button :disabled="disabled" class="btn btn-primary w-full">Refine</button>
+            <button :disabled="disabled" target="_blank" class="btn btn-primary w-full">Refine</button>
         </div>
     </form>
 
