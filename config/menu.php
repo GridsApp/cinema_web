@@ -136,7 +136,6 @@ return [
 
 
 
-
     [
         'display' => true,
         'label' => 'User Settings',
@@ -368,5 +367,15 @@ return [
 
 
         ]
+
+        
     ],
+
+    [
+        'key' => 'reports',
+        'label' => 'Reports',
+        'link' => '/cms/reports',
+    ],
+
+
 ];
