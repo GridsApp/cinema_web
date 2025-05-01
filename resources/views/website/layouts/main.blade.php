@@ -13,12 +13,12 @@
 </head>
 
 <body>
-    {{-- @if (!isset($no_header) || (isset($no_header) && $no_header == false))
+    @if (!isset($no_header) || (isset($no_header) && $no_header == false))
     <div>
         @include('website.partials.header', ['compact' => true])
     </div>
 
-    @endif --}}
+    @endif
     @php
 
         $is_home = request()->route()->getName() == 'home';
@@ -69,7 +69,7 @@
 
         });
     </script>
-    
+
     @include('website.partials.footer')
 
 </body>
