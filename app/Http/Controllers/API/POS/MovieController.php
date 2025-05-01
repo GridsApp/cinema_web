@@ -150,9 +150,13 @@ class MovieController extends Controller
               
                 $priceGroup = $show->theater->priceGroup;
 
-                // $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
+                $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
 
-                // $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
+                try {
+                    $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
+                } catch (\Throwable $th) {
+                    dd($th);
+                }
 
                 return [
                     'id' => $show->id,
