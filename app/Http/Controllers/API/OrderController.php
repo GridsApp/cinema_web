@@ -806,7 +806,7 @@ class  OrderController extends Controller
 
         $result = [
             'loyalty_points_balance' => $user_loyalty_balance ? [
-                "value" => $user_loyalty_balance,
+                "value" => round($user_loyalty_balance),
                 "display" => $user_loyalty_balance . ' points'
             ] : null,
 
