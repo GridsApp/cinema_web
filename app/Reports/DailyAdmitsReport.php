@@ -13,7 +13,7 @@ use twa\cmsv2\Reports\DefaultReport;
 class DailyAdmitsReport extends DefaultReport
 {
 
-    public $label = "Daily Admits";
+    public $label = "Daily Admits and Income";
 
     // $this->addFilter('filter_start_date');
     // $this->addFilter('filter_end_date');

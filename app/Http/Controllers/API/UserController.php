@@ -249,6 +249,10 @@ class UserController extends Controller
         if(!$user->email){
             return $this->response(notification()->error('Email Required', 'Your account does not have an email address'));
         }
+
+
+        //send an email
+
         
         return $this->responseData([
             'user_token' =>  $user->token,

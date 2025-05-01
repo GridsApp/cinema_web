@@ -67,13 +67,10 @@ class MovieController extends Controller
 
    
 
-        $current_time = (string) now(config('app.cinema_timzone'))->format('H:i');
+        $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
 
-        
-
-        $strict = false;
+        $strict = true;
         $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
-
 
         $round_time = round_time($current_time);
 
