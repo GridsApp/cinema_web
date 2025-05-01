@@ -3511,6 +3511,20 @@ return [
 
     ],
 
+    'filter_dist_date' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Date::class,
+        'label' => 'Date',
+        'placeholder' => 'Enter date',
+        'name' => 'date',
+        'required' => true,
+        'container' => 'col-span-12'
+
+    ],
+
     'filter_start_date' => [
         'id' => uniqid(),
         'livewire' => [

@@ -23,10 +23,10 @@
 
     <table class="info-table">
         <tr>
-            <td> Distributor: {{$distributer}}</td>
-            <td> Branch: {{$cinema}}</td>
-            <td> From: {{ $start_date }} </td>
-            <td> Until:  {{ $end_date }} </td>
+            <td> Distributor: {{$distributor}}</td>
+            <td> Branch: {{$branch}}</td>
+            {{-- <td> From: {{ $start_date }} </td>
+            <td> Until:  {{ $end_date }} </td> --}}
         </tr>
     </table>
 

@@ -5,7 +5,7 @@
         x-on:query-completed.window="disabled = false" x-on:start-report.window="disabled = true">
         <div class="card-body grid grid-cols-12 gap-3 card-body-rounded-bottom">
           
-            {!! field('filter_date', 'col-span-12') !!}
+            {!! field('filter_dist_date', 'col-span-12') !!}
             {!! field('filter_distributor', 'col-span-6') !!}
             {!! field('filter_branch', 'col-span-6') !!}
     

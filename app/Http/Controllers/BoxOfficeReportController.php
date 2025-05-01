@@ -24,6 +24,10 @@ class BoxOfficeReportController extends Controller
         $end_date = $request->input('end_date');
         $distributorId = $request->input('distributor_id');
 
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
 
         $branchLabel = 'ALL BRANCHES';
         if ($branchId) {
@@ -179,7 +183,7 @@ class BoxOfficeReportController extends Controller
             'mainResult' => $baseQuery,
             'detailedResult' => $result,
             'totals' => $totals,
-            'movie_totals' => $movie_totals,
+            // 'movie_totals' => $movie_totals,
             'branchLabel' => $branchLabel,
             'startDate' => $start_date,
             'endDate' => $end_date,
@@ -201,6 +205,13 @@ class BoxOfficeReportController extends Controller
         $end_date = $request->input('end_date');
         $distributorId = $request->input('distributor_id');
 
+
+
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+        
         $branch = 'ALL BRANCHES';
         if ($branchId) {
             $branchModel = Branch::find($branchId);
@@ -230,10 +241,7 @@ class BoxOfficeReportController extends Controller
         }
     
         if ($distributorId) {
-            $query->where('movies.distributor_id', $distributorId);
-        }
-        if ($branchId) {
-    $query->where('orders.branch_id', $branchId);
+    $query->where('movies.distributor_id', $distributorId);
 }
         // if ($branchId) {
         //     $query->where('order_seats.branch_id', $branchId);
