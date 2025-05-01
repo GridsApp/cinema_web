@@ -110,6 +110,7 @@ Route::group([
 
   Route::get('/', [\App\Http\Controllers\WEBSITE\HomePageController::class, 'home'])->name('home');
   Route::get('/about-us', [\App\Http\Controllers\WEBSITE\AboutController::class, 'about'])->name('about');
+  Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
   Route::get('/contact-us', [App\Http\Controllers\WEBSITE\ContactController::class, 'contact'])->name('contact');
   Route::get('/movies/listing', [\App\Http\Controllers\WEBSITE\MovieController::class, 'listing'])->name('movie-listing');
 
