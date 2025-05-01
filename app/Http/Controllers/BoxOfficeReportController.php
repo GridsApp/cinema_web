@@ -226,6 +226,10 @@ class BoxOfficeReportController extends Controller
             $branch = $branchModel?->label ?? 'Unknown Branch';
         }
 
+        $dist = Distributor::where('id', $distributorId)->whereNull('deleted_at')->first();
+        $title = 'BOR_' .$branch . '_'. ($dist->label??'Unknown Distributor').'_'.$start_date. '_'. $end_date;
+
+
         $query = DB::table('order_seats')
             ->join('movies', 'order_seats.movie_id', '=', 'movies.id')
             ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
@@ -310,6 +314,7 @@ class BoxOfficeReportController extends Controller
             'start_date' => $start_date,
             'end_date' => $end_date,
             'branch' => $branch,
+            'title' => $title
         ]);
     }
 
