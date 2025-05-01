@@ -1,5 +1,4 @@
 <div>
-
     <form class="card" wire:submit.prevent="applyFilters" x-data="GeneralFunctions.filterForm()"
         x-on:query-completed.window="disabled = false" x-on:start-report.window="disabled = true">
         <div class="card-body grid grid-cols-12 gap-3 card-body-rounded-bottom">

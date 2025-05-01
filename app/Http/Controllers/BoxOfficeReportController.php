@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use twa\uikit\Traits\ToastTrait;
 
 class BoxOfficeReportController extends Controller
 {
+
 
 
     public function render()
@@ -24,10 +26,7 @@ class BoxOfficeReportController extends Controller
         $end_date = $request->input('end_date');
         $distributorId = $request->input('distributor_id');
 
-        $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]);
+
 
         $branchLabel = 'ALL BRANCHES';
         if ($branchId) {
@@ -211,7 +210,7 @@ class BoxOfficeReportController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        
+
         $branch = 'ALL BRANCHES';
         if ($branchId) {
             $branchModel = Branch::find($branchId);

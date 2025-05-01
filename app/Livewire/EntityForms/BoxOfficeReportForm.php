@@ -32,16 +32,23 @@ class BoxOfficeReportForm extends Component
 
     public function applyFilters()
     {
+        $this->validate([
+            'form.start_date' => 'required',
+            'form.end_date' => 'required',
+        ], [
+            'form.start_date.required' => 'Start date is required.',
+            'form.end_date.required' => 'End date is required.',
+           
+        ]);
+    
         $params = [
-            'start_date'     => $this->form['start_date'] ?? null,
-            'end_date'       => $this->form['end_date'] ?? null,
-            'distributor_id'  => $this->form['distributor_id'] ?? null, 
-            'branch_id'      => $this->form['branch_id'] ?? null,
+            'start_date'     => $this->form['start_date'],
+            'end_date'       => $this->form['end_date'],
+            'distributor_id' => $this->form['distributor_id'],
+            'branch_id'      => $this->form['branch_id'],
         ];
     
-      
-       $this->redirect(route('box-office-report.render-result' , $params));  
-      
+        $this->redirect(route('box-office-report.render-result', $params));
     }
     
     

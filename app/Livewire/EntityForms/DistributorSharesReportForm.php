@@ -22,8 +22,8 @@ class DistributorSharesReportForm extends Component
     {
 
    
-        $this->form['start_date'] = null;
-        $this->form['end_date'] = null;
+        $this->form['date'] = null;
+
         $this->form['distributor_id'] = null;
         $this->form['branch_id'] = null;
 
@@ -32,9 +32,18 @@ class DistributorSharesReportForm extends Component
 
     public function applyFilters()
     {
+
+
+        $this->validate([
+            'form.date' => 'required',
+            'form.distributor_id' => 'required',
+        ], [
+            'form.distributor_id.required' => 'Distributor is required.',
+            'form.date.required' => 'Date is required.',
+           
+        ]);
         $params = [
-            'start_date'     => $this->form['start_date'] ?? null,
-            'end_date'       => $this->form['end_date'] ?? null,
+            'date'     => $this->form['date'] ?? null,
             'distributor_id'  => $this->form['distributor_id'] ?? null, 
             'branch_id'      => $this->form['branch_id'] ?? null,
         ];

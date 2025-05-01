@@ -20,11 +20,12 @@ class DistributorSharesController extends Controller
     {
 
         $branchId = $request->input('branch_id');
-        $date = $request->input('filter_datefi');
+        $date = $request->input('date');
         $distributorId = $request->input('distributor_id');
 
         $dateRange = get_range_date($date);
 
+        // dd($dateRange);
         $branchLabel = 'ALL BRANCHES';
         if ($branchId) {
             $branch = Branch::where('id', $branchId)->whereNull('deleted_at')->first();
