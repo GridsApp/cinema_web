@@ -40,7 +40,7 @@ class BoxOfficeReportController extends Controller
 
         $dist = Distributor::where('id', $distributorId)->whereNull('deleted_at')->first();
 
-        $title = 'BOR_' .$branchLabel . '_'. ($dist->name??'Unknown Distributor').'_'.$start_date. '_'. $end_date;
+        $title = 'BOR_' .$branchLabel . '_'. ($dist->label??'Unknown Distributor').'_'.$start_date. '_'. $end_date;
 
         $totals = [
             'movie_name' => 'TOTALS',
