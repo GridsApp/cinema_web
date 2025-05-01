@@ -155,7 +155,7 @@ class MovieController extends Controller
                 try {
                     $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
                 } catch (\Throwable $th) {
-                    dd($th);
+                    $price = 12000;      
                 }
 
                 return [
@@ -174,7 +174,7 @@ class MovieController extends Controller
                         'percentage' => round($reserved_seats / $nb_seats, 2)
                     ],
                     'duration' => $show->duration,
-                    'price' => currency_format(10000)
+                    'price' => currency_format($price)
                 ];
             });
 

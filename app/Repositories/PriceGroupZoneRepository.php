@@ -21,7 +21,7 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 
             $period = $time <= get_setting('time_period') ? 'before' : 'after';
 
-            if(is_numeric($zone_id)){
+            if(!is_numeric($zone_id)){
                 $price_group_zone =  $zone_id;
             }else{
                 $price_group_zone =  PriceGroupZone::where('id', $zone_id)->whereNull('deleted_at')->firstOrFail();
