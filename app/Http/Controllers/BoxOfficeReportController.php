@@ -19,11 +19,10 @@ class BoxOfficeReportController extends Controller
     public function result(Request $request)
     {
 
-
-
         $branchId = $request->input('branch_id');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
+        $distributorId = $request->input('distributor_id');
 
 
         $branchLabel = 'ALL BRANCHES';
@@ -41,8 +40,6 @@ class BoxOfficeReportController extends Controller
             'net' => 0
         ];
 
-
-
         $baseQuery = DB::table('movie_shows')
             ->select(
                 'movies.name as movie_name',
@@ -57,8 +54,16 @@ class BoxOfficeReportController extends Controller
                 $join->on('order_seats.movie_show_id', '=', 'movie_shows.id');
                 $join->whereNull('order_seats.refunded_at');
             })
+            ->leftJoin('orders', 'orders.id', '=', 'order_seats.order_id') 
             ->groupBy('movies.id')
+            
             ->whereNull('movie_shows.deleted_at')
+            ->when($distributorId, fn($q) => $q->where('movies.distributor_id', $distributorId))
+            ->when($branchId, fn($q) => $q->where('orders.branch_id', $branchId))
+            ->when($start_date, fn($q) => $q->whereDate('order_seats.date', '>=', $start_date))
+            ->when($end_date, fn($q) => $q->whereDate('order_seats.date', '<=', $end_date))
+            ->groupBy('movies.id')
+   
             ->get()->map(function ($item) use (&$totals) {
 
                 $totals['sessions'] += $item->sessions;
@@ -66,7 +71,6 @@ class BoxOfficeReportController extends Controller
                 $totals['gross'] += $item->gross;
                 $totals['tax'] += $item->tax;
                 $totals['net'] += $item->net;
-
 
 
                 return [
@@ -85,7 +89,6 @@ class BoxOfficeReportController extends Controller
         $baseQuery2 = DB::table('movie_shows')
             ->select(
                 'movie_shows.date as show_date',
-
                 'movie_shows.id as show_id',
                 'order_seats.label as ticket',
                 'order_seats.price as unit_price',
@@ -107,18 +110,21 @@ class BoxOfficeReportController extends Controller
                 $join->on('order_seats.movie_show_id', '=', 'movie_shows.id');
                 $join->whereNull('order_seats.refunded_at');
             })
+            ->leftJoin('orders', 'orders.id', '=', 'order_seats.order_id')
             ->leftJoin('screen_types', 'movie_shows.screen_type_id', 'screen_types.id')
             ->leftJoin('times', 'movie_shows.time_id', 'times.id')
             ->leftJoin('distributors', 'movies.distributor_id', 'distributors.id')
             ->whereNull('movie_shows.deleted_at')
-
+            ->when($distributorId, fn($q) => $q->where('movies.distributor_id', $distributorId))
+            ->when($branchId, fn($q) => $q->where('orders.branch_id', $branchId))
+            ->when($start_date, fn($q) => $q->whereDate('order_seats.date', '>=', $start_date))
+            ->when($end_date, fn($q) => $q->whereDate('order_seats.date', '<=', $end_date))
             ->groupBy('identifier')
             ->get();
-
-        // dd($baseQuery2);
+           
+   
 
         $baseQuery2 = $baseQuery2->groupBy('movie_id');
-
 
         $result = [];
         // dd($baseQuery2);
