@@ -83,7 +83,7 @@ class MovieController extends Controller
             $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
         }
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id' , 'orders')
             ->whereNull('deleted_at')
             ->whereHas('movieShows', function ($q) use ($date, $theaters_ids , $times , $strict) {
                 $q->whereNull('deleted_at');
