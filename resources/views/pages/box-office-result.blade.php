@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {{-- <title>{{$title ?? ""}}</title> --}}
+     <title>{{$title ?? ""}}</title>
 </head>
 
 <body>
@@ -67,7 +67,7 @@
                     <tfoot>
                         <tr>
                             <td>Total</td>
-                            
+
                             <td>{{ number_format($totals['sessions']) }}</td>
                             <td>{{ number_format($totals['admits']) }}  </td>
                             <td>{{ number_format($totals['gross']) }} IQD</td>
@@ -117,7 +117,7 @@
 
                     <tfoot>
                         <tr>
-                          
+
                             {{-- @dd(number_format($movie['movie_totals']['gross'])); --}}
                             <td colspan="3">Total</td>
                             <td>{{ number_format($movie['movie_totals']['admits']) }}</td>
@@ -126,13 +126,13 @@
                             <td>{{ number_format($movie['movie_totals']['gross']) }} IQD</td>
                             <td>{{ number_format($movie['movie_totals']['tax']) }} IQD</td>
                             <td>{{ number_format($movie['movie_totals']['net']) }} IQD</td>
-                            
+
                         </tr>
                     </tfoot>
                 </table>
                 <br><br>
             @endforeach
-            
+
 
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Distributor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use twa\uikit\Traits\ToastTrait;
@@ -21,6 +22,8 @@ class BoxOfficeReportController extends Controller
     public function result(Request $request)
     {
 
+
+
         $branchId = $request->input('branch_id');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
@@ -33,6 +36,11 @@ class BoxOfficeReportController extends Controller
             $branch = Branch::where('id', $branchId)->whereNull('deleted_at')->first();
             $branchLabel = $branch?->label ?? 'Unknown Branch';
         }
+
+
+        $dist = Distributor::where('id', $distributorId)->whereNull('deleted_at')->first();
+
+        $title = 'BOR_' .$branchLabel . '_'. ($dist->name??'Unknown Distributor').'_'.$start_date. '_'. $end_date;
 
         $totals = [
             'movie_name' => 'TOTALS',
@@ -57,16 +65,16 @@ class BoxOfficeReportController extends Controller
                 $join->on('order_seats.movie_show_id', '=', 'movie_shows.id');
                 $join->whereNull('order_seats.refunded_at');
             })
-            ->leftJoin('orders', 'orders.id', '=', 'order_seats.order_id') 
+            ->leftJoin('orders', 'orders.id', '=', 'order_seats.order_id')
             ->groupBy('movies.id')
-            
+
             ->whereNull('movie_shows.deleted_at')
             ->when($distributorId, fn($q) => $q->where('movies.distributor_id', $distributorId))
             ->when($branchId, fn($q) => $q->where('orders.branch_id', $branchId))
             ->when($start_date, fn($q) => $q->whereDate('order_seats.date', '>=', $start_date))
             ->when($end_date, fn($q) => $q->whereDate('order_seats.date', '<=', $end_date))
             ->groupBy('movies.id')
-   
+
             ->get()->map(function ($item) use (&$totals) {
 
                 $totals['sessions'] += $item->sessions;
@@ -124,8 +132,8 @@ class BoxOfficeReportController extends Controller
             ->when($end_date, fn($q) => $q->whereDate('order_seats.date', '<=', $end_date))
             ->groupBy('identifier')
             ->get();
-           
-   
+
+
 
         $baseQuery2 = $baseQuery2->groupBy('movie_id');
 
@@ -186,6 +194,7 @@ class BoxOfficeReportController extends Controller
             'branchLabel' => $branchLabel,
             'startDate' => $start_date,
             'endDate' => $end_date,
+            'title' => $title
         ]);
     }
 
@@ -216,7 +225,7 @@ class BoxOfficeReportController extends Controller
             $branchModel = Branch::find($branchId);
             $branch = $branchModel?->label ?? 'Unknown Branch';
         }
-    
+
         $query = DB::table('order_seats')
             ->join('movies', 'order_seats.movie_id', '=', 'movies.id')
             ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
@@ -230,31 +239,31 @@ class BoxOfficeReportController extends Controller
                 DB::raw('SUM(order_seats.price) * 0.05 as tax'),
                 DB::raw('SUM(order_seats.price) - SUM(order_seats.price) * 0.05 as net')
             );
-    
+
         if ($start_date) {
             $query->whereDate('order_seats.date', '>=', $start_date);
         }
-    
+
         if ($end_date) {
             $query->whereDate('order_seats.date', '<=', $end_date);
         }
-    
+
         if ($distributorId) {
     $query->where('movies.distributor_id', $distributorId);
 }
         // if ($branchId) {
         //     $query->where('order_seats.branch_id', $branchId);
         // }
-    
+
         $movies = $query
             ->groupBy('movies.id', 'distributors.id')
             ->get();
-    
- 
+
+
         $grouped = $movies->groupBy('distributor_name');
-    
+
         $results = [];
-    
+
         foreach ($grouped as $distributor => $items) {
             $data = [];
             $totals = [
@@ -267,19 +276,19 @@ class BoxOfficeReportController extends Controller
                 'gbo_tax_amount' => 0,
                 'gbo_net_amount' => 0,
             ];
-    
+
             foreach ($items as $item) {
                 $data[] = [
                     'movie' => $item->movie_name,
                     'admits_excluding_comps' => number_format($item->admits),
                     'gbo_excluding_comps' => number_format($item->gross),
-                    'comps' => '0', 
+                    'comps' => '0',
                     'admits_including_comps' => number_format($item->admits),
                     'gbo_including_comps' => number_format($item->gross),
                     'gbo_tax_amount' => number_format($item->tax),
                     'gbo_net_amount' => number_format($item->net),
                 ];
-    
+
                 $totals['admits_excluding_comps'] += $item->admits;
                 $totals['gbo_excluding_comps'] += $item->gross;
                 $totals['admits_including_comps'] += $item->admits;
@@ -287,15 +296,15 @@ class BoxOfficeReportController extends Controller
                 $totals['gbo_tax_amount'] += $item->tax;
                 $totals['gbo_net_amount'] += $item->net;
             }
-    
-   
+
+
             $totals = array_map(function ($value) {
                 return is_numeric($value) ? number_format($value) : $value;
             }, $totals);
-    
+
             $results[$distributor ?? 'Unknown Distributor'] = [$data, $totals];
         }
-    
+
         return view('pages.box-office-summary-result', [
             'results' => $results,
             'start_date' => $start_date,
@@ -303,5 +312,5 @@ class BoxOfficeReportController extends Controller
             'branch' => $branch,
         ]);
     }
-    
+
 }
