@@ -150,9 +150,9 @@ class MovieController extends Controller
               
                 $priceGroup = $show->theater->priceGroup;
 
-                $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
+                // $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
 
-                $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
+                // $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
 
                 return [
                     'id' => $show->id,
@@ -170,7 +170,7 @@ class MovieController extends Controller
                         'percentage' => round($reserved_seats / $nb_seats, 2)
                     ],
                     'duration' => $show->duration,
-                    'price' => currency_format($price)
+                    'price' => currency_format(10000)
                 ];
             });
 
