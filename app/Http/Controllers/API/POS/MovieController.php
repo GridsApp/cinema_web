@@ -114,11 +114,12 @@ class MovieController extends Controller
 
             }])
            
+            ->orderBy('orders' , 'ASC')
             ->get()
 
-            ->sortBy(function ($movie) {
-                return $movie->orders + (optional($movie->movieShows->first())->time_id/100);
-            })
+            // ->sortBy(function ($movie) {
+            //     return $movie->orders + (optional($movie->movieShows->first())->time_id/100);
+            // })
             ->values();
 
 
