@@ -19,7 +19,7 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 
           
 
-            $period = $time <= get_setting('time_period') ? 'before' : 'after';
+            $period = $time < get_setting('time_period') ? 'before' : 'after';
 
             if(!is_numeric($zone_id)){
                 $price_group_zone =  $zone_id;
