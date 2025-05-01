@@ -114,7 +114,7 @@ class MovieController extends Controller
 
             }])
            
-            ->orderBy('orders' , 'ASC')
+            // ->orderBy('orders' , 'ASC')
             ->get()
 
             // ->sortBy(function ($movie) {
@@ -192,9 +192,10 @@ class MovieController extends Controller
                     'available' => $total_available_seats,
                     'percentage' => $total_seats == 0 ? 0 : round($total_reserved_seats / $total_seats, 2)
                 ],
-                'movieShows' => $movieShows
+                'movieShows' => $movieShows,
+                'orders' => $movie->orders + ($movieShows[0]->time_id ?? 0)
             ];
-        });
+        })->sort();
         return $this->responseData($customMovies);
     }
 }
