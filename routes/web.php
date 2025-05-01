@@ -103,7 +103,6 @@ Route::get('/set/language/{lang}', function ($lang) {
 Route::middleware(\App\Http\Middleware\CinemaDefaultMiddleware::class)->get('/', function () {});
 
 
-Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
 
 Route::group([
   'prefix'     => '/{cinema_prefix}/{language_prefix}/',
@@ -229,3 +228,4 @@ Route::get('reports/reports/reports', function () {
 
 
 Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']);
+Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
