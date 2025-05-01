@@ -43,6 +43,9 @@ class AuthController extends Controller
             'phone' => 'phone'
         ]);
 
+
+        // Here
+
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => [
@@ -65,11 +68,11 @@ class AuthController extends Controller
 
 
         $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
-       
+
         if($user){
             return $this->response(notification()->error('Already registered' , 'This account is already registered'));
         }
-        
+
         $user = $this->userRepository->createVerifiedUser($phone_number, $form_data["password"]);
 
         $this->cardRepository->createCard($user);
@@ -106,9 +109,9 @@ class AuthController extends Controller
         $phone = phone($form_data['phone']);
         $phone_number = $phone->formatE164();
 
-  
+
         $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
-        
+
         if(!$user){
             return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
