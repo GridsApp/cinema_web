@@ -20,7 +20,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 
+Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
 
+// dd("hereee");
 
 Route::group([
   'prefix' => '/migrations',
@@ -31,10 +33,6 @@ Route::group([
   Route::get('/users', [MigrationsController::class, 'migrateUsers']);
 
 });
-
-
-
-
 
 
 Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
@@ -228,4 +226,3 @@ Route::get('reports/reports/reports', function () {
 
 
 Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']);
-Route::get('/pages/privacy/policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');

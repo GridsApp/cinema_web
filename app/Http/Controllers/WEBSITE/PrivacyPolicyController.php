@@ -10,13 +10,15 @@ class PrivacyPolicyController extends Controller
 {
     public function render(){
 
+        // dd("here");
 
        $page = InformativePages::where('slug' , 'privacy-policy')->whereNull('deleted_at')->firstOrFail();
 
 
        
+    //    dd($page);
 
-        return view('website.pages.privacy-policy' , compact('page'));
+        return view('website.pages.privacy-policy' , ['page'=>$page]);
 
     }
 }

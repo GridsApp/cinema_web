@@ -1,21 +1,24 @@
-@extends('website.layouts.main')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{$page->label}}</title>
+</head>
+<body>
+    
+   
 
-@section('content')
-    <div class="main-container main-spacing  contact-us">
+        <div class="container px-4 mx-auto max-w-lg">
 
-        <div class="mt-10 flex justify-center items-center">
-            @include('website.components.title', ['title' => $page->label ])
-
-        </div>
-
-
-        <div>
+            <h1>{{$page->label}}</h1>
 
             {!! $page->content !!}
 
         </div>
+</body>
+</html>
 
 
-      
-    </div>
-@endsection
+
