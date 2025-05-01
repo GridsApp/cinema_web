@@ -141,7 +141,7 @@ class DailyAdmitsReport extends DefaultReport
             ->pluck('count', 'identifier');
 
         $footer = [
-            'movie' =>  '-',
+            'movie' =>  'Total',
             'distributor' => '-',
             'type' => '-',
             'week' => '-',
