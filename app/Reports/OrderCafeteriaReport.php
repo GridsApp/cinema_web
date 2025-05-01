@@ -88,12 +88,6 @@ class OrderCafeteriaReport extends DefaultReport
             ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-            // ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
-            // ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
-            // ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
-            // ->leftJoin('pos_users as refunded_by_user', 'order_seats.refunded_cashier_id', '=', 'refunded_by_user.id')
-            // ->leftJoin('pos_users as refunded_manager_user', 'order_seats.refunded_manager_id', '=', 'refunded_manager_user.id')
-            // ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
             ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
             ->select([
                 'orders.id as order_id',

@@ -243,7 +243,8 @@ class OrderTicketsReport extends DefaultReport
             'payment_method' => '-',
         ];
 
-        
+
+
 
         $baseQuery = DB::table('order_seats')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
@@ -306,8 +307,11 @@ class OrderTicketsReport extends DefaultReport
             ->when($this->filterResults['pos_user_id'] ?? null, fn($q, $value) => $q->where('orders.pos_user_id', $value))
             ->when(
                 $this->filterResults['phone'] ?? null,
-                fn($q, $value) =>
-                $q->whereHas('customer', fn($sq) => $sq->where('phone', 'like', "%$value%"))
+                fn($q, $phone) =>
+
+                $q->where('customers.phone',  $phone)
+
+
             )
             ->when(
                 $this->filterResults['amount_min'] ?? null,
