@@ -193,7 +193,7 @@ class MovieController extends Controller
                     'percentage' => $total_seats == 0 ? 0 : round($total_reserved_seats / $total_seats, 2)
                 ],
                 'movieShows' => $movieShows,
-                'orders' => $movie->orders + ($movieShows[0]->time_id ?? 0)
+                'orders' => $movie->orders + (($movieShows[0]->time_id ?? 0) / 100)
             ];
         })->sortBy('orders')->values();
         return $this->responseData($customMovies);
