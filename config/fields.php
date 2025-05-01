@@ -3490,7 +3490,7 @@ return [
 
         ],
 
-        'container' => 'col-span-6',
+        'container' => 'col-span-12',
     ],
 
     'filter_date' => [

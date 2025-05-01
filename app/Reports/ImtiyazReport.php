@@ -60,11 +60,12 @@ class ImtiyazReport extends DefaultReport
 
         $start_date = $this->filterResults['start_date'] ?? null;
         $end_date = $this->filterResults['end_date'] ?? null;
+        $branch = $this->filterResults['branch_id'] ?? null;
+        $posUser = $this->filterResults['pos_user_id'] ?? null;
 
         $dateRange = ($start_date && $end_date)
-            ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
-            : null;
-
+    ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
+    : null;
 
         $footer = collect([
             'created_at' => '-',
@@ -85,7 +86,7 @@ class ImtiyazReport extends DefaultReport
 
         ]);
 
-        $results = DB::table('order_seats')
+        $query = DB::table('order_seats')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
            
             ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
@@ -119,10 +120,21 @@ class ImtiyazReport extends DefaultReport
                 'systems.label as system',
             ])
             ->whereNull('order_seats.deleted_at')
-            ->whereNotNull('order_seats.imtiyaz_phone')
-          
-            ->get();
+            ->whereNotNull('order_seats.imtiyaz_phone');
 
+            if ($dateRange) {
+                $query->whereBetween('order_seats.created_at', $dateRange);
+            }
+            
+            if ($branch) {
+                $query->where('orders.branch_id', $branch);
+            }
+            
+            if ($posUser) {
+                $query->where('orders.pos_user_id', $posUser);
+            }
+          
+            $results = $query->get();
 
 
         $rows = $results->map(function ($row) use (&$footer) {
