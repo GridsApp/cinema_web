@@ -243,6 +243,7 @@ class OrderTicketsReport extends DefaultReport
             'payment_method' => '-',
         ];
 
+        
 
         $baseQuery = DB::table('order_seats')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
@@ -362,7 +363,7 @@ class OrderTicketsReport extends DefaultReport
                 'theater' => $row->theater ?? '-',
                 'booked_by' => $row->booked_by ?? '-',
                 'refunded_by' => $row->refunded_by ?? '-',
-                'refunded_by_manager' => $row->refunded_by_manager,
+                'refunded_by_manager' => $row->refunded_by_manager ?? '-',
                 'status' => $isRefunded ? 'Refunded Tickets' : 'Sold Tickets',
                 'system' => $row->system ?? '-',
                 'payment_method' => $row->payment_method ?? '-',
