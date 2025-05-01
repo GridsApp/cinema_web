@@ -2079,6 +2079,23 @@ return [
     ],
 
 
+    'coupon_order_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => twa\uikit\FieldTypes\Hidden::class,
+
+        'label' => 'Order Id',
+        'placeholder' => 'Enter order id',
+        'name' => 'order_id',
+        'container' => 'col-span-6',
+    ],
+
+
+
+    
     
     'cart_id' => [
         'id' => uniqid(),
@@ -2182,6 +2199,20 @@ return [
             'wire:model' => 'form.{name}',
         ],
         'type' => twa\uikit\FieldTypes\Datetime::class,
+
+        'label' => 'Used At',
+        'placeholder' => 'Enter Used At',
+        'name' => 'used_at',
+        'container' => 'col-span-6',
+    ],
+
+
+    'coupon_used_at' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Hidden::class,
 
         'label' => 'Used At',
         'placeholder' => 'Enter Used At',

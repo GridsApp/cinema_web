@@ -289,6 +289,36 @@ class OrderTicketsReport extends DefaultReport
             ])
             ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
             ->whereNull('order_seats.deleted_at')
+            ->when($this->filterResults['branch_id'] ?? null, fn($q, $value) => $q->where('orders.branch_id', $value))
+            ->when($this->filterResults['movie_id'] ?? null, fn($q, $value) => $q->where('order_seats.movie_id', $value))
+            ->when($this->filterResults['time_id'] ?? null, fn($q, $value) => $q->where('order_seats.time_id', $value))
+            ->when($this->filterResults['system_id'] ?? null, fn($q, $value) => $q->where('orders.system_id', $value))
+            ->when($this->filterResults['payment_method_id'] ?? null, fn($q, $value) => $q->where('orders.payment_method_id', $value))
+            ->when($this->filterResults['reference'] ?? null, fn($q, $value) => $q->where('orders.reference', 'like', "%$value%"))
+            ->when($this->filterResults['ticket_status'] ?? null, function ($q, $value) {
+                if ($value === 'refunded_tickets') {
+                    $q->whereNotNull('order_seats.refunded_at');
+                } elseif ($value === 'sold_tickets') {
+                    $q->whereNull('order_seats.refunded_at');
+                }
+            })
+            ->when($this->filterResults['pos_user_id'] ?? null, fn($q, $value) => $q->where('orders.pos_user_id', $value))
+            ->when(
+                $this->filterResults['phone'] ?? null,
+                fn($q, $value) =>
+                $q->whereHas('customer', fn($sq) => $sq->where('phone', 'like', "%$value%"))
+            )
+            ->when(
+                $this->filterResults['amount_min'] ?? null,
+                fn($q, $value) =>
+                $q->havingRaw('unit_price * seats_count >= ?', [(float)$value])
+            )
+            ->when(
+                $this->filterResults['amount_max'] ?? null,
+                fn($q, $value) =>
+                $q->havingRaw('unit_price * seats_count <= ?', [(float)$value])
+            )
+
             ->orderBy('id', 'ASC')
             ->groupBy('computed_identifier');
 
@@ -299,7 +329,7 @@ class OrderTicketsReport extends DefaultReport
         $results = $notRefunded->union($refunded)->get()->sortBy('order_id');
         $rows = $results->map(function ($row) use (&$footer) {
 
-           
+
 
             $isRefunded = $row->refunded == '1';
             $unit_price = $row->unit_price;
@@ -327,15 +357,15 @@ class OrderTicketsReport extends DefaultReport
                 'refund_amount' => number_format(abs($refund_amount)),
                 'movie' => $row->movie,
                 'date' => $row->date,
-                'time' => $row->time ?? '',
-                'branch' => $row->branch ?? '',
-                'theater' => $row->theater ?? '',
-                'booked_by' => $row->booked_by,
-                'refunded_by' => $row->refunded_by,
+                'time' => $row->time ?? '-',
+                'branch' => $row->branch ?? '-',
+                'theater' => $row->theater ?? '-',
+                'booked_by' => $row->booked_by ?? '-',
+                'refunded_by' => $row->refunded_by ?? '-',
                 'refunded_by_manager' => $row->refunded_by_manager,
                 'status' => $isRefunded ? 'Refunded Tickets' : 'Sold Tickets',
-                'system' => $row->system ?? '',
-                'payment_method' => $row->payment_method ?? '',
+                'system' => $row->system ?? '-',
+                'payment_method' => $row->payment_method ?? '-',
             ];
 
 
