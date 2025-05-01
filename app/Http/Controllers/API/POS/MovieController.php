@@ -195,7 +195,7 @@ class MovieController extends Controller
                 'movieShows' => $movieShows,
                 'orders' => $movie->orders + ($movieShows[0]->time_id ?? 0)
             ];
-        })->sort();
+        })->sort()->values();
         return $this->responseData($customMovies);
     }
 }
