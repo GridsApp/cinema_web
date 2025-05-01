@@ -228,4 +228,4 @@ Route::get('reports/reports/reports', function () {
 
 
 Route::get("/get/week/range/{date}", [WeekController::class, 'getWeekRange']);
-Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
+Route::get('/pages/privacy/policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
