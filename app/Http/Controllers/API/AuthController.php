@@ -98,8 +98,13 @@ class AuthController extends Controller
         ]);
 
         $validator = Validator::make($form_data, [
+            // 'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
+            // 'password' => 'required'
+
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
-            'password' => 'required'
+            'password' => [
+                'required',
+            ],
         ]);
 
         if ($validator->errors()->count() > 0) {
@@ -113,7 +118,7 @@ class AuthController extends Controller
         $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
 
         if(!$user){
-            return $this->response(notification()->error("You have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
+            return $this->response(notification()->error("Yoou have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
 
         if (md5($form_data['password']) != $user->password) {
