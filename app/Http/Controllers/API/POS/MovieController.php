@@ -113,7 +113,7 @@ class MovieController extends Controller
                     // }
 
             }])
-            ->orderBy('orders' , 'ASC')
+           
             ->get()
 
             ->sortBy(function ($movie) {
