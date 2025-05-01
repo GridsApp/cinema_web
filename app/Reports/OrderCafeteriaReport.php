@@ -108,24 +108,52 @@ class OrderCafeteriaReport extends DefaultReport
                 'order_items.created_at',
                 'systems.label as system',
             ])
-        
+
             ->whereNull('order_items.deleted_at')
             ->groupBy('computed_identifier');
+        $baseQuery
+            ->when($dateRange, function ($query) use ($dateRange) {
+                $query->whereBetween('order_items.created_at', $dateRange);
+            })
+            ->when(!empty($this->filterResults['branch_id']), function ($query) {
+                $query->where('orders.branch_id', $this->filterResults['branch_id']);
+            })
+            ->when(!empty($this->filterResults['pos_user_id']), function ($query) {
+                $query->where('orders.pos_user_id', $this->filterResults['pos_user_id']);
+            })
+            ->when(!empty($this->filterResults['phone']), function ($query) {
+                $query->where('customers.phone' , $this->filterResults['phone']);
+            })
+            ->when(!empty($this->filterResults['system_id']), function ($query) {
+                $query->where('orders.system_id', $this->filterResults['filtesystem_idr_system']);
+            })
+            ->when(!empty($this->filterResults['payment_method_id']), function ($query) {
+                $query->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
+            })
+            ->when(!empty($this->filterResults['reference']), function ($query) {
+                $query->where('orders.reference', $this->filterResults['reference']);
+            })
+            ->when(!empty($this->filterResults['amount_min']), function ($query) {
+                $query->havingRaw('items_count * order_items.price >= ?', [$this->filterResults['amount_min']]);
+            })
+            ->when(!empty($this->filterResults['amount_max']), function ($query) {
+                $query->havingRaw('items_count * order_items.price <= ?', [$this->filterResults['amount_max']]);
+            });
 
 
         $results = $baseQuery->get();
 
-    
+
         $rows = $results->map(function ($row) use (&$footer) {
 
             $unit_price = $row->unit_price;
             $items_count = $row->items_count;
             $total_price = $unit_price * $items_count;
 
-         
+
             $data = [
                 'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
-                'customer_name' => $row->customer_name ?? '',
+                'customer_name' => $row->customer_name ?? '-',
                 'reference' => $row->reference,
                 'unit_price' => number_format($unit_price),
                 'nb_items' => $items_count,
@@ -133,10 +161,10 @@ class OrderCafeteriaReport extends DefaultReport
                 'extra' => $row->extra,
                 'branch' => $row->branch ?? '-',
                 'theater' => $row->theater ?? '-',
-                'booked_by' => $row->booked_by?? '-',
+                'booked_by' => $row->booked_by ?? '-',
                 'system' => $row->system ?? '-',
                 'payment_method' => $row->payment_method ?? '-',
-            ];        
+            ];
             $footer['nb_items'] += $items_count;
             $footer['total_price'] += $total_price;
 
@@ -146,7 +174,7 @@ class OrderCafeteriaReport extends DefaultReport
 
         $footer['nb_items'] = $footer['nb_items'];
         $footer['total_price'] = number_format($footer['total_price']);
-   
+
 
         $this->setFooter($footer);
 

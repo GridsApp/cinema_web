@@ -3521,6 +3521,8 @@ return [
         'placeholder' => 'Select Start Date',
         'name' => 'start_date',
         'container' => 'col-span-6',
+        'required'=>true
+
     ],
 
 
@@ -3534,6 +3536,7 @@ return [
         'placeholder' => 'Select End Date',
         'name' => 'end_date',
         'container' => 'col-span-6',
+        'required'=>true
     ],
 
 
