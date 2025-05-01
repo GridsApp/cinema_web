@@ -199,7 +199,8 @@ class BoxOfficeReportController extends Controller
         $branchId = $request->input('branch_id');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
-    
+        $distributorId = $request->input('distributor_id');
+
         $branch = 'ALL BRANCHES';
         if ($branchId) {
             $branchModel = Branch::find($branchId);
@@ -209,6 +210,7 @@ class BoxOfficeReportController extends Controller
         $query = DB::table('order_seats')
             ->join('movies', 'order_seats.movie_id', '=', 'movies.id')
             ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
             ->whereNull('order_seats.refunded_at')
             ->select(
                 'distributors.label as distributor_name',
@@ -220,13 +222,19 @@ class BoxOfficeReportController extends Controller
             );
     
         if ($start_date) {
-            $query->whereDate('order_seats.created_at', '>=', $start_date);
+            $query->whereDate('order_seats.date', '>=', $start_date);
         }
     
         if ($end_date) {
-            $query->whereDate('order_seats.created_at', '<=', $end_date);
+            $query->whereDate('order_seats.date', '<=', $end_date);
         }
     
+        if ($distributorId) {
+            $query->where('movies.distributor_id', $distributorId);
+        }
+        if ($branchId) {
+    $query->where('orders.branch_id', $branchId);
+}
         // if ($branchId) {
         //     $query->where('order_seats.branch_id', $branchId);
         // }
