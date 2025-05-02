@@ -21,16 +21,30 @@
 
     <div class="">
 
+        <div class="flex gap-4 items-center">
+
+
         <div class="underline text-xs cursor-pointer py-3" x-on:click="addCondition">
             <i class="fa-regular fa-plus"></i> Add Condition
+        </div>
 
+        <div class="underline text-xs cursor-pointer py-3" x-on:click="addMoviePrice">
+            <i class="fa-regular fa-plus"></i> Add Movie Price
+        </div>
+
+        <div class="underline text-xs cursor-pointer py-3" x-on:click="addMoviePriceCondition">
+            <i class="fa-regular fa-plus"></i> Add Move Price Per Day
+        </div>
 
         </div>
+
+
+
+
         <div>
 
             <template x-for="(condition,index) in conditions">
                 <div class="flex gap-3 items-center mb-2" wire:key="index">
-                    {{--                    <input x-model="conditions[index].day" /> --}}
                     <div class="twa-form-label min-w-[120px]">
 
                         <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
@@ -50,13 +64,13 @@
                     </div>
 
                     <div class="twa-form-label min-w-[120px]">
-    
+
                         <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
                             x-model="conditions[index].period" :key="'select' + index">
                             <option value=""> Choose Period</option>
                             <option value="before" >Before {{$timePeriod}}</option>
                             <option value="after" >After {{$timePeriod}}</option>
-                
+
 
                         </select>
                     </div>
@@ -69,6 +83,88 @@
 
                     <button type="button" class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50"
                         x-on:click="deleteCondition(index)">
+                        <i class="fa-regular fa-trash"></i>
+                    </button>
+
+                </div>
+            </template>
+
+        </div>
+
+        <div class="py-5" x-show="moviePrices.length > 0" > Movie Price </div>
+        <div>
+
+            <template x-for="(condition,index) in moviePrices">
+                <div class="flex gap-3 items-center mb-2" wire:key="index">
+
+                    <div class="twa-form-input-container twa-form-input-ring flex-1">
+                        <input class="twa-form-input" placeholder="Movie ID" type="text" x-model="moviePrices[index].movie_id">
+                    </div>
+
+                    <div class="twa-form-input-container twa-form-input-ring flex-1">
+                        <input class="twa-form-input " type="text" x-model="moviePrices[index].price">
+                    </div>
+                    <button type="button" class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50"
+                            x-on:click="deleteMoviePrice(index)">
+                        <i class="fa-regular fa-trash"></i>
+                    </button>
+
+                </div>
+            </template>
+
+        </div>
+
+        <div>
+
+
+            <div class="py-5" x-show="moviePriceConditions.length > 0" > Movie Price per Day </div>
+
+            <template x-for="(condition,index) in moviePriceConditions">
+                <div class="flex gap-3 items-center mb-2" wire:key="index">
+
+
+                    <div class="twa-form-input-container twa-form-input-ring flex-1">
+                        <input class="twa-form-input" placeholder="Movie ID" type="text" x-model="moviePriceConditions[index].movie_id">
+                    </div>
+
+                    <div class="twa-form-label min-w-[120px]">
+
+                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
+                                x-model="moviePriceConditions[index].day" :key="'select' + index">
+
+                            <option value=""> Choose day</option>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+
+
+                        </select>
+                    </div>
+
+                    <div class="twa-form-label min-w-[120px]">
+
+                        <select class="twa-form-input-container twa-form-input-ring border-0 text-[12px] w-full"
+                                x-model="moviePriceConditions[index].period" :key="'select' + index">
+                            <option value=""> Choose Period</option>
+                            <option value="before" >Before {{$timePeriod}}</option>
+                            <option value="after" >After {{$timePeriod}}</option>
+
+
+                        </select>
+                    </div>
+
+
+                    <div class="twa-form-input-container twa-form-input-ring flex-1">
+
+                        <input class="twa-form-input " type="text" x-model="moviePriceConditions[index].price">
+                    </div>
+
+                    <button type="button" class="border-0 rounded w-[36px] h-[36px] hover:bg-primary-50"
+                            x-on:click="deleteMoviePriceCondition(index)">
                         <i class="fa-regular fa-trash"></i>
                     </button>
 

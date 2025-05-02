@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 
+
+
 Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
 
 // dd("hereee");

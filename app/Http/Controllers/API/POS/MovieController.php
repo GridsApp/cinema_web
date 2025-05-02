@@ -65,7 +65,7 @@ class MovieController extends Controller
         //     ->get();
 
 
-   
+
 
         $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
 
@@ -74,7 +74,7 @@ class MovieController extends Controller
 
         $round_time = round_time($current_time);
 
-        
+
         $times = [];
         if($strict){
             $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
@@ -102,7 +102,7 @@ class MovieController extends Controller
                     ->orderBy('time_id', 'asc');
 
                     if($strict){
-                        $query->whereIn('time_id' , $times);     
+                        $query->whereIn('time_id' , $times);
                     }
 
                     // if(abs(now()->diffInDays($date)) < 1){
@@ -110,7 +110,7 @@ class MovieController extends Controller
                     // }
 
             }])
-           
+
             // ->orderBy('orders' , 'ASC')
             ->get()
 
@@ -147,15 +147,15 @@ class MovieController extends Controller
                 $total_available_seats += $nb_seats - $reserved_seats;
                 $total_reserved_seats += $reserved_seats;
 
-              
+
                 $priceGroup = $show->theater->priceGroup;
 
                 $default_zone = PriceGroupZone::where('default' , 1)->where('price_group_id' , $priceGroup->id)->first();
 
                 try {
-                    $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->date , $show->time->iso ?? '');
+                    $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($default_zone , $show->movie_id ,$show->date , $show->time->iso ?? '');
                 } catch (\Throwable $th) {
-                    $price = 12000;      
+                    $price = 12000;
                 }
 
                 return [

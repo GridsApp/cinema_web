@@ -89,7 +89,7 @@ class CartRepository implements CartRepositoryInterface
 
 
             $field = get_user_field_from_type($user_type);
-           
+
 
             $cart = new Cart();
             $cart->{$field} = $user_id;
@@ -122,7 +122,7 @@ class CartRepository implements CartRepositoryInterface
 
         try {
 
-            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->date , $movie_show->time->iso);
+            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->movie_id , $movie_show->date , $movie_show->time->iso);
 
             $cart_seat = new CartSeat();
             $cart_seat->seat = $seat;
@@ -138,11 +138,11 @@ class CartRepository implements CartRepositoryInterface
             $cart_seat->price = $price;
             $cart_seat->save();
 
-     
+
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-    
+
         return $cart_seat;
     }
     public function removeSeatFromCart($cart_id, $seat, $movie_show_id)
@@ -245,7 +245,7 @@ class CartRepository implements CartRepositoryInterface
 
             // $reward = Reward::findOrFail($user_reward->reward_id);
 
-            
+
             // $cart_seats = CartSeat::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
             // $cart_items = CartItem::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
 
@@ -257,15 +257,15 @@ class CartRepository implements CartRepositoryInterface
             // }
 
             // foreach($cart_seats as $cart_seat){
-                
+
             // }
 
-           
-            
+
+
             // foreach($items as $item){
 
             // }
-            
+
 
 
         //     $cart->user_reward_id = $user_reward->id;
@@ -288,7 +288,7 @@ class CartRepository implements CartRepositoryInterface
         // return $cart;
     }
 
-    
+
     public function removeCardNumberFromCart($cart_id)
     {
         try {
@@ -304,7 +304,7 @@ class CartRepository implements CartRepositoryInterface
     public function getReservedSeats($movie_show_id)
     {
 
-    
+
         $cart_seats = CartSeat::whereNull('cart_seats.deleted_at')
             ->where('cart_seats.movie_show_id', $movie_show_id)
             ->join('carts', function($q){
@@ -425,7 +425,7 @@ class CartRepository implements CartRepositoryInterface
     {
         try {
 
-          
+
 
             $cart_imtiyaz =  CartImtiyaz::query()
                 ->where('cart_id', $cart_id)
@@ -469,9 +469,9 @@ class CartRepository implements CartRepositoryInterface
                         // $cart_imtiyaz = $cart_imtiyaz->values();
 
                     }else{
-                        $cart_seat->imtiyaz_phone = null; 
+                        $cart_seat->imtiyaz_phone = null;
                     }
-                    
+
                     $cart_seat->save();
 
                 }
@@ -481,7 +481,7 @@ class CartRepository implements CartRepositoryInterface
                 DB::commit();
 
             } else {
-               
+
                 throw new Exception("No records found");
             }
         } catch (Exception $e) {
@@ -540,9 +540,9 @@ class CartRepository implements CartRepositoryInterface
             ->join('coupons' , 'cart_coupons.coupon_id' , 'coupons.id')
             ->where('coupons.code' , $coupon_code)
             ->firstOrFail();
-        
+
             CartCoupon::where('id' , $cart_coupon->id)->delete();
-    
+
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         } catch (Exception $e) {
@@ -566,13 +566,13 @@ class CartRepository implements CartRepositoryInterface
 
             $cart_seats = $this->getCartSeats($cart_id,true);
             // $cart_seats2 = $this->getCartSeats($cart_id);
-            
+
             // dd($cart_seats , $cart_seats2);
 
             $zone_ids = $cart_seats->pluck('zone_id');
-            
+
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
-          
+
             $total_discount = 0;
 
             $cart_seats = $cart_seats->map(function ($cart_seat) use ($zones, &$total_discount) {
@@ -589,7 +589,7 @@ class CartRepository implements CartRepositoryInterface
                 if (!($cart_seat['quantity'] ?? null)) {
                     $cart_seat['quantity'] = 1;
                 }
-               
+
                 // NOTE Hovig add the movie show id hereee
                 return [
                     'id' => $cart_seat['id'] ?? 0,
@@ -685,14 +685,14 @@ class CartRepository implements CartRepositoryInterface
 
             $cart_imtiyaz=$this->getCartImtiyaz($cart_id);
             $cart_imtiyaz = $cart_imtiyaz->map(function ($cart_imtiyaz) {
-              
-              
+
+
 
                 return [
                     'id' => $cart_imtiyaz['id'],
                     'type' => "Imtiyaz",
                     'label' => "Applied Imtiyaz ",
-                 
+
                     'phone' => $cart_imtiyaz['phone'],
                 ];
             });
@@ -751,5 +751,5 @@ class CartRepository implements CartRepositoryInterface
     }
 
 
- 
+
 }

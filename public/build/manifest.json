@@ -56,7 +56,7 @@
     "src": "public/images/cinema_bg.jpeg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-D01Tp8lD.js",
+    "file": "assets/app-C5k9N4qy.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -65,7 +65,7 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-O1OQg06c.css",
+    "file": "assets/app-DQPkDwt0.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   },

@@ -17,6 +17,8 @@ class PriceSettings extends Component
     public function render()
     {
 
+
+
         return view('components.form.price-settings');
     }
 }

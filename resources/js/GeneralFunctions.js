@@ -54,11 +54,11 @@ export default class GeneralFunctions {
         return {
             disabled: false,
             weekRange: '',
-            date: '',  
+            date: '',
             init() {
-                this.fetchWeekRange(this.date); 
+                this.fetchWeekRange(this.date);
                 this.$watch('date', (value) => {
-                    this.fetchWeekRange(value);  
+                    this.fetchWeekRange(value);
                 });
             },
 
@@ -67,19 +67,19 @@ export default class GeneralFunctions {
                 fetch(`/get/week/range/${date}`)
                     .then(res => res.text())
                     .then(html => {
-                        this.weekRange = html;  
+                        this.weekRange = html;
                     });
             },
 
-          
+
             dateChanged(event) {
-           
+
                 const selectedDate = event.target.value;
-     
-              
+
+
                 this.date = selectedDate;
 
-              
+
                 this.fetchWeekRange(selectedDate);
             }
         };
@@ -89,6 +89,10 @@ export default class GeneralFunctions {
         return {
             conditions: [{ day: "", price: "0" }],
             defaultPrice: "",
+
+            moviePrices : [],
+            moviePriceConditions : [],
+
             days: [
                 { key: "monday", label: "Monday", used: 0 },
                 { key: "tuesday", label: "Tuesday", used: 0 },
@@ -101,9 +105,15 @@ export default class GeneralFunctions {
 
             updateValueState() {
                 let conditions = collect(this.conditions).filter().toArray();
+
+                let moviePrices = collect(this.moviePrices).filter().toArray();
+                let moviePriceConditions = collect(this.moviePriceConditions).filter().toArray();
+
                 this.$wire.value = {
                     defaultPrice: this.defaultPrice,
                     conditions: conditions,
+                    moviePrices : moviePrices,
+                    moviePriceConditions : moviePriceConditions
                 };
             },
 
@@ -112,8 +122,16 @@ export default class GeneralFunctions {
 
                 this.defaultPrice = initalValue.defaultPrice;
                 this.conditions = initalValue.conditions;
+                this.moviePrices = initalValue.moviePrices;
+                this.moviePriceConditions = initalValue.moviePriceConditions;
 
-                console.log(this.conditions);
+                this.$watch("moviePrices", (value) => {
+                    this.updateValueState();
+                });
+
+                this.$watch("moviePriceConditions", (value) => {
+                    this.updateValueState();
+                });
 
                 this.$watch("conditions", (value) => {
                     this.updateValueState();
@@ -127,6 +145,26 @@ export default class GeneralFunctions {
             addCondition() {
                 this.conditions.push({ day: "", price: "0" , period : "" });
             },
+
+            addMoviePrice() {
+                this.moviePrices.push({ movie_id : "" , price: "0" });
+            },
+
+            addMoviePriceCondition() {
+                this.moviePriceConditions.push({ day: "", movie_id : "" , price: "0" , period : "" });
+            },
+
+
+            deleteMoviePrice(index) {
+                this.moviePrices.splice(index, 1);
+                this.updateValueState();
+            },
+
+            deleteMoviePriceCondition(index) {
+                this.moviePriceConditions.splice(index, 1);
+                this.updateValueState();
+            },
+
 
             deleteCondition(index) {
                 this.conditions.splice(index, 1);
@@ -545,7 +583,7 @@ export default class GeneralFunctions {
             handleValueChanged(event) {
 
 
-            
+
                 var oldSelectedType = this.selectedType;
 
                 this.selectedType = event.detail.selected;

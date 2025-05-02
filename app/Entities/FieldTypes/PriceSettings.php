@@ -25,16 +25,29 @@ class PriceSettings extends FieldType
         if(!isset($data->{$this->field['name']}) || (isset($data->{$this->field['name']}) && !$data->{$this->field['name']})){
             return [
                 "defaultPrice" => "",
-                "conditions" => []
+                "conditions" => [],
+                'moviePrices' => [],
+                'moviePriceConditions' => []
             ];
         }
 
-        return json_decode($data->{$this->field['name']} ?? '
+        $decoded =  json_decode($data->{$this->field['name']} ?? '
                     {
-                      defaultPrice : "",
-                      conditions : []
+                      "defaultPrice" : "",
+                      "conditions" : [],
+                      "moviePrices" : [],
+                      "moviePriceConditions" : []
                     }
         ');
+
+
+        return json_decode(json_encode([
+            "defaultPrice" => $decoded->defaultPrice ?? "",
+            "conditions" => $decoded->conditions ?? [],
+            'moviePrices' => $decoded->moviePrices ?? [],
+            'moviePriceConditions' => $decoded->moviePriceConditions ?? []
+        ]));
+
     }
 
     public function value($form)

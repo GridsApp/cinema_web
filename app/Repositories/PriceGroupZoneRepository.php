@@ -14,10 +14,10 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 {
 
 
-    public function getPriceByZonePerDate($zone_id , $date , $time = null){
+    public function getPriceByZonePerDate($zone_id,$movie_id,$date,$time = null){
         try {
 
-          
+
 
             $period = $time < get_setting('time_period') ? 'before' : 'after';
 
@@ -31,7 +31,26 @@ class PriceGroupZoneRepository implements PriceGroupZoneRepositoryInterface
 
             $day = strtolower(now()->parse($date)->format('l'));
 
-            $condition = collect($price_settings['conditions'])
+
+            $movie_condition = collect($price_settings['moviePriceConditions']??[])
+                ->where('day' , $day)
+                ->where('period' , $period)
+                ->where('movie_id' , $movie_id)
+                ->first();
+
+            if($movie_condition){
+                return $movie_condition['price'];
+            }
+
+            $movie_price = collect($price_settings['moviePrices'] ?? [])
+                ->where('movie_id' , $movie_id)
+                ->first();
+
+            if($movie_price){
+                return $movie_price['price'];
+            }
+
+            $condition = collect($price_settings['conditions'] ?? [])
             ->where('day' , $day)
             ->where('period' , $period)
             ->first();

@@ -2,8 +2,8 @@
 
 namespace App\Interfaces;
 
-interface PriceGroupZoneRepositoryInterface 
+interface PriceGroupZoneRepositoryInterface
 {
     // public function getPriceGroupZoneById($zone);
-    public function getPriceByZonePerDate($zone_id , $date , $time = null);
+    public function getPriceByZonePerDate($zone_id , $movie_id ,  $date , $time = null);
 }
