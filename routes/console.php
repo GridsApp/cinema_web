@@ -51,13 +51,13 @@ Artisan::command('twa:entities', function () {
     Artisan::command('twa:migrate', function () {
 
         $this->comment("Started");
-    
+
         (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
-    
+
         $this->comment("Finished");
     })->purpose('Migrating tables');
 
-    
+
 
 
 
@@ -81,7 +81,7 @@ Artisan::command('twa:EnableTodayMovieShows', function () {
     $today = now()->format('Y-m-d');
 
     $count = MovieShow::whereDate('date', $today)
-        ->where('visibility', 0) 
+        ->where('visibility', 0)
         ->update(['visibility' => 1]);
 
 
@@ -90,8 +90,8 @@ Artisan::command('twa:EnableTodayMovieShows', function () {
 
 
 Artisan::command('twa:updateVite', function () {
-   
-   
+
+
 
     $assets = get_assets();
 
@@ -105,7 +105,7 @@ Artisan::command('twa:updateVite', function () {
 
     $content = preg_replace('/\s*,?\s*"vendor\/twa\/uikit\/dist\/.*?"\s*/', '', $content);
     $content = preg_replace('/,\s*([\]\}])/', '$1', $content);
-   
+
     $pattern = "/input:\s*\[([^\]]*)\]/";
 
     foreach($assets as $asset){
@@ -116,25 +116,29 @@ Artisan::command('twa:updateVite', function () {
             $existingInputs = trim($matches[1]);
             $updatedInputs = $existingInputs ? "$existingInputs, $newInput1" : $newInput1;
             $content = preg_replace($pattern, "input: [$updatedInputs]", $content);
-          
+
         } else {
-      
+
         }
     }
 
-    file_put_contents($viteConfigPath, $content); 
+    file_put_contents($viteConfigPath, $content);
 
 });
 
 
-Artisan::command('twa:dataTransfer {limit}', function ($limit) {
+Artisan::command('twa:dataTransfer', function () {
 
     $this->comment("Started");
 
-    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+
+    (new \App\Http\Controllers\MigrationsController)->migrateCoupons();
+
+
 
     $this->comment("Finished");
-  
+
 
 })->purpose('Transfering tables');
 

@@ -38,11 +38,11 @@ class MigrationsController extends Controller
     //        $new_theater = new Theater;
     //        $new_theater->label = $theater->label;
     //        $new_theater->branch_id = $branch_mapping[$theater->cinema_id];
-    //        $new_theater->hall_number = $matches[0] ?? null; 
+    //        $new_theater->hall_number = $matches[0] ?? null;
 
-    //        $new_theater->price_group_id = 
-    //        $new_theater->theater_map = 
-    //        $new_theater->nb_seats = 
+    //        $new_theater->price_group_id =
+    //        $new_theater->theater_map =
+    //        $new_theater->nb_seats =
     //        $new_theater->save();
 
 
@@ -109,6 +109,32 @@ class MigrationsController extends Controller
     // }
 
 
+    public function migrateCoupons(){
+
+        $coupons = DB::connection('iraqi_cinema_old')->table('coupons')
+            ->whereNotIn('id', function ($query) {
+                $query->select(DB::raw('DISTINCT coupon_id'))
+                    ->from('purchases')
+                    ->whereNotNull('coupon_id');
+            })
+            ->where('cancelled', 0)
+            ->where('archived', '!=', 1)
+            ->get()->map(function ($item) {
+                return [
+                    'label' => $item->name,
+                    'code' => $item->code,
+                    'discount_flat' => $item->discount_flat,
+                    'expires_at' => $item->expires_at,
+                ];
+            })->toArray();
+
+
+        DB::table('coupons')->insert($coupons);
+
+        echo "DONE";
+
+    }
+
 
     public function migrateUsers($limit , $consoleThis)
     {
@@ -167,9 +193,9 @@ class MigrationsController extends Controller
 
 
             try {
-           
+
             DB::beginTransaction();
-    
+
             // Check for transactions for this user id
 
             $card = DB::connection('iraqi_cinema_old')->table('user_loyalty_cards')
@@ -178,7 +204,7 @@ class MigrationsController extends Controller
             ->where('user_id' , $user->id)
             ->orderBy('id' , 'DESC')
             ->first();
-            
+
 
             $new_user_id = DB::table('users')->insertGetId($info);
 
@@ -205,20 +231,20 @@ class MigrationsController extends Controller
                 ->value('balance');
 
                 $card_number = $card->card_number;
-                $card_type = strlen($card_number) == 16 ? 'physical' : 'digital'; 
+                $card_type = strlen($card_number) == 16 ? 'physical' : 'digital';
 
             }else{
-       
+
                 do {
                     $card_number = (string) rand(10000000000000000, 99999999999999999);
                 } while (UserCard::where('barcode', $card_number)->whereNull('deleted_at')->first());
-        
-                $card_type = 'digital'; 
+
+                $card_type = 'digital';
 
             }
 
 
-         
+
             $card_id = DB::table('user_cards')->insertGetId([
                 'user_id' => $new_user_id,
                 'barcode' => $card_number,
@@ -226,7 +252,7 @@ class MigrationsController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-           
+
 
 
             if($total_wallet_balance > 0){
@@ -270,7 +296,7 @@ class MigrationsController extends Controller
                 ]);
             }
 
-         
+
             $redeem_rewards = DB::connection('iraqi_cinema_old')
             ->table('redeem_rewards')
             ->where('cancelled', 0)
@@ -288,7 +314,7 @@ class MigrationsController extends Controller
 
 
             DB::table('user_rewards')->insert($redeem_rewards);
-                
+
 
 
             DB::connection('iraqi_cinema_old')
@@ -301,12 +327,12 @@ class MigrationsController extends Controller
                 ]);
 
                 $consoleThis->comment('DONE :'. count($users).' / '.$index + 1 . ' | ID:' .$user->id);
-                
+
                 DB::commit();
-                
-            
+
+
             } catch (\Throwable $th) {
-                  
+
                     DB::rollBack();
 
                     $consoleThis->comment('ERROR :'. count($users).' / '.$index + 1 . 'ID:' .$user->id);
@@ -326,7 +352,7 @@ class MigrationsController extends Controller
 
 
 
-        // 
+        //
 
 
         // I want to move all users
