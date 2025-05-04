@@ -121,7 +121,7 @@ class MigrationsController extends Controller
             ->where('archived', '!=', 1)
             ->get()->map(function ($item) {
                 return [
-                    'label' => $item->name,
+                    'label' => $item->label,
                     'code' => $item->code,
                     'discount_flat' => $item->discount_flat,
                     'expires_at' => $item->expires_at,
