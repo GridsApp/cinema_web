@@ -58,7 +58,7 @@ class BoxOfficeReportController extends Controller
                 DB::raw('COUNT(DISTINCT order_seats.id) as admits'),
                 DB::raw('SUM(order_seats.price) as gross'),
                 DB::raw('SUM(order_seats.price)  * 0.05 as tax'),
-                DB::raw('SUM(order_seats.price) + SUM(order_seats.price)  * 0.05 as net')
+                DB::raw('SUM(order_seats.price) - SUM(order_seats.price)  * 0.05 as net')
             )
             ->join('movies', 'movies.id', 'movie_shows.movie_id')
             ->leftJoin('order_seats', function ($join) {
@@ -112,7 +112,7 @@ class BoxOfficeReportController extends Controller
                 DB::raw('COUNT(DISTINCT order_seats.id) as admits'),
                 DB::raw('SUM(order_seats.price) as gross'),
                 DB::raw('SUM(order_seats.price)  * 0.05 as tax'),
-                DB::raw('SUM(order_seats.price) + SUM(order_seats.price)  * 0.05 as net'),
+                DB::raw('SUM(order_seats.price) - SUM(order_seats.price)  * 0.05 as net'),
                 DB::raw("CONCAT(movie_shows.id,'_' , movie_shows.date) as identifier")
 
             )
