@@ -112,7 +112,7 @@ class MigrationsController extends Controller
     public function migrateCoupons(){
 
 
-        $used = DB::table('coupons')->query()->pluck('code')->toArray();
+        $used = DB::table('coupons')->get()->pluck('code')->toArray();
 
         $coupons = DB::connection('iraqi_cinema_old')->table('coupons')
             ->whereNotIn('id', function ($query) {
