@@ -111,6 +111,9 @@ class MigrationsController extends Controller
 
     public function migrateCoupons(){
 
+
+        $used = DB::table('coupons')->query()->pluck('code')->toArray();
+
         $coupons = DB::connection('iraqi_cinema_old')->table('coupons')
             ->whereNotIn('id', function ($query) {
                 $query->select(DB::raw('DISTINCT coupon_id'))
@@ -118,6 +121,7 @@ class MigrationsController extends Controller
                     ->whereNotNull('coupon_id');
             })
             ->where('cancelled', 0)
+            ->whereNotIn('code', $used)
             ->where('archived', '!=', 1)
             ->get()->map(function ($item) {
                 return [
