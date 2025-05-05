@@ -60,7 +60,7 @@ class OrderRepository implements OrderRepositoryInterface
         $this->couponRepository = $couponRepository;
     }
 
- 
+
 
 
     public function createOrderFromCart($payment_attempt, $branch_id = null)
@@ -80,10 +80,16 @@ class OrderRepository implements OrderRepositoryInterface
         if ($user_id == null) {
 
             try {
-                $user_card = $this->cardRepository->getCardByBarcode($cart->card_number);
-                $user_id =  $user_card->user_id ?? null;
+                if($cart->card_number) {
+                    $user_card = $this->cardRepository->getCardByBarcode($cart->card_number);
+                    $user_id =  $user_card->user_id ?? null;
+                }else{
+                    $user_card = null;
+                    $user_id = null;
+                }
+
             } catch (\Throwable $th) {
-                
+
                 $user_id = null;
                 // dd($th);
             }
@@ -345,7 +351,7 @@ class OrderRepository implements OrderRepositoryInterface
                 })
                 ->get();
 
- 
+
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -555,7 +561,7 @@ class OrderRepository implements OrderRepositoryInterface
         if(!empty($priceGroupLabel)){
             $label =  $priceGroupLabel.' '. $label;
         }
-       
+
         return $label ;
     }
 }
