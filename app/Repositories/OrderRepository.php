@@ -291,15 +291,17 @@ class OrderRepository implements OrderRepositoryInterface
     {
 
         try {
-            $card = Order::query()->where(function ($query) use ($barcode) {
+
+            $order = Order::query()->where(function ($query) use ($barcode) {
                 $query->orWhere('barcode', $barcode);
                 $query->orWhere('reference', $barcode);
             })->whereNull('deleted_at')->firstOrFail();
+
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Order with Barcode {$barcode} not found .");
         }
 
-        return $card;
+        return $order;
     }
     public function getOrderById($order_id)
     {
