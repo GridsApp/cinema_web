@@ -3443,7 +3443,7 @@ return [
             'field' => 'label',
 
         ],
-        'container' => 'col-span-4',
+        'container' => 'col-span-12',
 
     ],
 
