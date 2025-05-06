@@ -3378,7 +3378,7 @@ return [
 
         ],
 
-        'container' => 'col-span-4',
+        'container' => 'col-span-12',
     ],
 
     'filter_payment_method' => [
