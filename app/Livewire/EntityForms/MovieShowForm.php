@@ -113,6 +113,7 @@ class MovieShowForm extends Component
       
        
         $slots = ceil($movie->duration / 15);;
+
         
         if(!$first_show_date){
             $first_show_date = $period->first() ?? null;
