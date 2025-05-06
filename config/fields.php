@@ -3563,7 +3563,7 @@ return [
         'label' => 'Reference',
         'placeholder' => 'Enter Reference',
         'name' => 'reference',
-        'container' => 'col-span-4',
+        'container' => 'col-span-12',
     ],
 
     'filter_card_number' => [
