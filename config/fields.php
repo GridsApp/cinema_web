@@ -3679,8 +3679,6 @@ return [
         ]
     ],
 
-
-
     'filter_date_type' => [
         'id' => uniqid(),
         'livewire' => [
