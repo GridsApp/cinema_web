@@ -567,6 +567,8 @@ if (!function_exists('validate_movie_show')) {
             $currentHead = $targetTimeId;
             $currentTail = $targetTimeId + $slots - 1;
 
+            $existing_movie_show->end_time_id = $existing_movie_show->time_id + ceil($existing_movie_show->duration / 15) - 1;
+
             if ($currentHead >= $existing_movie_show->time_id && $currentHead  <= $existing_movie_show->end_time_id) {
 
                 return false;

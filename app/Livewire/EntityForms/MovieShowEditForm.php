@@ -59,15 +59,10 @@ class MovieShowEditForm extends Component
 
         foreach ($fields as $field) {
             $info = config('fields.' . $field);
-
-
             if (!isset($info['name'])) {
                 continue;
             }
-
             $this->form[$info['name']] = field_init($info, $data);
-
-
         }
 
 
