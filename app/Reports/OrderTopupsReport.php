@@ -60,11 +60,11 @@ class OrderTopupsReport extends DefaultReport
             return [];
         }
 
-        $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-            : null;
+      
 
-
+            $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
+    ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
+    : null;
         $footer = [
             'created_at' => 'Total',
             'customer_name' => '-',
@@ -115,11 +115,46 @@ class OrderTopupsReport extends DefaultReport
                 'systems.label as system',
             ])
 
-            ->whereNull('order_topups.deleted_at')
-            ->groupBy('computed_identifier');
+            ->whereNull('order_topups.deleted_at');
 
+            if ($dateRange) {
+                $baseQuery->whereBetween('order_topups.created_at', $dateRange);
+            }
+            
+            if (!empty($this->filterResults['branch_id'])) {
+                $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
+            }
+            
+            if (!empty($this->filterResults['pos_user_id'])) {
+                $baseQuery->where('orders.pos_user_id', $this->filterResults['pos_user']);
+            }
+            
+            if (!empty($this->filterResults['phone'])) {
+                $baseQuery->where('customers.phone',  $this->filterResults['phone']);
+            }
+            
+            if (!empty($this->filterResults['system_id'])) {
+                $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
+            }
+            
+            if (!empty($this->filterResults['payment_method_id'])) {
+                $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
+            }
+            
+            if (!empty($this->filterResults['reference'])) {
+                $baseQuery->where('orders.reference',$this->filterResults['reference']);
+            }
+            
+            if (!empty($this->filterResults['amount_min'])) {
+                $baseQuery->havingRaw('SUM(order_topups.price) >= ?', [$this->filterResults['amount_min']]);
+            }
+            
+            if (!empty($this->filterResults['amount_max'])) {
+                $baseQuery->havingRaw('SUM(order_topups.price) <= ?', [$this->filterResults['amount_max']]);
+            }
+            $baseQuery->groupBy('computed_identifier');
 
-        $results = $baseQuery->get();
+            $results = $baseQuery->get();
 
 
         // dd($results);
