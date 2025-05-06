@@ -218,40 +218,6 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 });
 
 
-Route::get('/reports/export/{slug}', function ($slug, Request $request) {
-  $cmsUserId = session('cms_user')->id;
-  $files = Storage::disk('local')->allFiles("reports/$slug/$cmsUserId");
-
-  if (empty($files)) {
-    abort(404, 'No report found');
-  }
-
-  $latestFile = collect($files)->sortDesc()->first();
-  $json = json_decode(Storage::disk('local')->get($latestFile), true);
-
-  $rows = collect($json['rows'])->map(function ($row) use ($json) {
-    return array_map(function ($col) use ($row) {
-      return $row[$col['name']] ?? '';
-    }, $json['columns']);
-  })->toArray();
-
-
-  $filterParts = [];
-
-  foreach (['start_date', 'end_date', 'date'] as $key) {
-    if ($request->has($key)) {
-      $value = preg_replace('/[^a-zA-Z0-9_-]/', '', $request->query($key)); // sanitize
-      $filterParts[] = "{$key}_{$value}";
-    }
-  }
-
-  $filterText = $filterParts ? implode('_', $filterParts) : 'all';
-
-  $fileName = "{$slug}_{$filterText}.xlsx";
-
-  return Excel::download(new ReportExport($rows, $json['columns']), $fileName);
-});
-
 Route::get('reports/reports/reports', function () {
 
   $report = (new \App\Reports\DailyAdmitsReport());
