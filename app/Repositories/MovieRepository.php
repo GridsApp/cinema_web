@@ -156,14 +156,27 @@ class MovieRepository implements MovieRepositoryInterface
 
 
         $today = now();
+
+        $strict = $today == $date;
+
+        $times = [];
+        if($strict){
+            $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
+            $round_time = round_time($current_time);
+            $times = Time::whereNull('deleted_at')->where('iso' , '>=' , $round_time)->pluck('id')->toArray();
+        }
+
         $oneMonthAgo = now()->subMonths(1);
         $comingSoonOffset = now()->addMonths(8);
         $recentShowtimeCutoff = now()->subDays(1);
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug')->whereNull('deleted_at')
-            ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids) {
-                $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids) {
+            ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids , $times , $strict) {
+                $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids , $times , $strict) {
                     $q->whereNull('deleted_at')
+                        ->when($strict, function ($q1) use ($times) {
+                            $q1->whereIn('time_id', $times);
+                        })
                         ->whereDate('date', $date) // Now Showing
                         ->whereIn('theater_id', $theaters_ids);
                 })
