@@ -56,11 +56,17 @@ class LoyaltyTransactionsReport extends DefaultReport
             return [];
         }
 
+
         $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-            : null;
+        ? [
+            Carbon::parse($this->filterResults['start_date'])->startOfDay(),
+            Carbon::parse($this->filterResults['end_date'])->endOfDay()
+        ]
+        : null;
 
 
+
+   
         $footer = [
             'long_id' => 'Total',
             // 'reference' => '-',
@@ -101,6 +107,22 @@ class LoyaltyTransactionsReport extends DefaultReport
 
             ])
             ->whereNull('user_cards.deleted_at');
+
+            if ($dateRange) {
+                $baseQuery->whereBetween('user_loyalty_transactions.created_at', $dateRange);
+            }
+        
+            if (!empty($this->filterResults['phone'])) {
+                $baseQuery->where('customers.phone',$this->filterResults['phone']);
+            }
+        
+            if (!empty($this->filterResults['email'])) {
+                $baseQuery->where('customers.email', $this->filterResults['email']);
+            }
+        
+            if (!empty($this->filterResults['card_number'])) {
+                $baseQuery->where('user_cards.barcode',$this->filterResults['card_number']);
+            }
 
         $results = $baseQuery->get();
 
