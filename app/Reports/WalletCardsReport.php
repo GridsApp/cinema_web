@@ -57,6 +57,9 @@ class WalletCardsReport extends DefaultReport
             ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
             : null;
 
+        $walletStatus = $this->filterResults['status'] ?? null;
+
+
 
 
 
@@ -114,6 +117,19 @@ class WalletCardsReport extends DefaultReport
             ->whereNull('user_cards.deleted_at')
             ->groupBy('user_cards.id', 'user_cards.barcode', 'customers.name', 'wallets.topup_amount', 'wallets.paid_amount', 'loyalties.earned_points', 'loyalties.deducted_points', 'user_cards.created_at');
 
+
+        if ($dateRange) {
+            // Add date range filter if both start and end dates are provided
+            $baseQuery->whereBetween('user_cards.created_at', $dateRange);
+        }
+
+        if ($walletStatus) {
+            if ($walletStatus == 'valid') {
+                $baseQuery->whereNull('user_cards.disabled_at'); // Only valid cards (disabled_at is null)
+            } elseif ($walletStatus == 'expired') {
+                $baseQuery->whereNotNull('user_cards.disabled_at'); // Only expired cards (disabled_at is not null)
+            }
+        }
         $results = $baseQuery->get();
 
         $rows = $results->map(function ($row) use (&$footer) {

@@ -54,10 +54,14 @@ class PriceCardSummaryReport extends DefaultReport
 
         $start_date = $this->filterResults['start_date'] ?? null;
         $end_date = $this->filterResults['end_date'] ?? null;
+        $branch = $this->filterResults['branch_id'] ?? null;
+        $payment_method = $this->filterResults['payment_method_id'] ?? null;
+        $distributor = $this->filterResults['distributor_id'] ?? null;
+        $movie = $this->filterResults['movie_id'] ?? null;
 
-        $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-            : null;
+        $dateRange = ($start_date && $end_date)
+    ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
+    : null;
 
 
         $footer = [
@@ -79,6 +83,7 @@ class PriceCardSummaryReport extends DefaultReport
          
             ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
             ->leftJoin('screen_types', 'order_seats.screen_type_id', '=', 'screen_types.id')
+            ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id') 
 
             ->select([
                 'orders.id as order_id',
@@ -96,7 +101,11 @@ class PriceCardSummaryReport extends DefaultReport
 ,
 
             ])
-            // ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
+            ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
+            ->when($branch, fn($q) => $q->where('orders.branch_id', $branch))
+            ->when($payment_method, fn($q) => $q->where('orders.payment_method_id', $payment_method))
+            ->when($distributor, fn($q) => $q->where('movies.distributor_id', $distributor))
+            ->when($movie, fn($q) => $q->where('order_seats.movie_id', $movie))
             ->whereNull('order_seats.deleted_at')
             ->orderBy('id', 'ASC')
             ->groupBy('computed_identifier');

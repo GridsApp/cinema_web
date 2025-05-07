@@ -34,7 +34,7 @@ class WalletTransactionsReport extends DefaultReport
             return;
         }
         $this->addColumn("long_id", "Transaction ID");
-        // $this->addColumn("reference" , "Reference");
+
         $this->addColumn("description", "Description");
         $this->addColumn("type", "Type");
         $this->addColumn("amount", "Amount");
