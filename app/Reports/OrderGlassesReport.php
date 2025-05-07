@@ -79,6 +79,8 @@ class OrderGlassesReport extends DefaultReport
 
         $baseQuery = DB::table('order_items')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
+
             ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
@@ -105,6 +107,31 @@ class OrderGlassesReport extends DefaultReport
             ->whereNull('order_items.deleted_at')
             ->where('items.category','=','glasses')
             ->groupBy('computed_identifier');
+
+            if ($dateRange) {
+                $baseQuery->whereBetween('order_items.created_at', $dateRange);
+            }
+            
+            if (!empty($this->filterResults['branch_id'])) {
+                $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
+            }
+            
+            if (!empty($this->filterResults['phone'])) {
+                $baseQuery->where('customers.phone',  $this->filterResults['phone']);
+            }
+    
+            
+            if (!empty($this->filterResults['system_id'])) {
+                $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
+            }
+            
+            if (!empty($this->filterResults['payment_method_id'])) {
+                $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
+            }
+            
+            if (!empty($this->filterResults['reference'])) {
+                $baseQuery->where('orders.reference',$this->filterResults['reference']);
+            }
 
 
         $results = $baseQuery->get();

@@ -3378,7 +3378,7 @@ return [
 
         ],
 
-        'container' => 'col-span-12',
+        'container' => 'col-span-6',
     ],
 
     'filter_payment_method' => [
@@ -3422,7 +3422,7 @@ return [
 
         ],
 
-        'container' => 'col-span-4',
+        'container' => 'col-span-6',
     ],
 
     'filter_system' => [
@@ -3490,7 +3490,7 @@ return [
 
         ],
 
-        'container' => 'col-span-12',
+        'container' => 'col-span-4',
     ],
 
     'filter_date' => [
@@ -3615,7 +3615,7 @@ return [
         'label' => 'Phone',
         'placeholder' => 'Enter Phone',
         'name' => 'phone',
-        'container' => 'col-span-6',
+        'container' => 'col-span-12',
     ],
 
 

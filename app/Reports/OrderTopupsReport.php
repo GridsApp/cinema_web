@@ -22,10 +22,11 @@ class OrderTopupsReport extends DefaultReport
         $this->addFilter('filter_start_date');
         $this->addFilter('filter_end_date');
         $this->addFilter('filter_branch');
-        $this->addFilter('filter_pos_user');
+
         $this->addFilter('filter_user_phone');
         $this->addFilter('filter_system');
         $this->addFilter('filter_payment_method');
+        $this->addFilter('filter_pos_user');
         $this->addFilter('filter_reference');
 
         $this->addFilter('filter_amount_min');
@@ -60,11 +61,11 @@ class OrderTopupsReport extends DefaultReport
             return [];
         }
 
-      
 
-            $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-    ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-    : null;
+
+        $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
+            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
+            : null;
         $footer = [
             'created_at' => 'Total',
             'customer_name' => '-',
@@ -79,7 +80,7 @@ class OrderTopupsReport extends DefaultReport
             'payment_method' => '-',
         ];
 
-        
+
 
 
         $baseQuery = DB::table('order_topups')
@@ -88,12 +89,6 @@ class OrderTopupsReport extends DefaultReport
             ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-            // ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
-            // ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
-            // ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
-            // ->leftJoin('pos_users as refunded_by_user', 'order_seats.refunded_cashier_id', '=', 'refunded_by_user.id')
-            // ->leftJoin('pos_users as refunded_manager_user', 'order_seats.refunded_manager_id', '=', 'refunded_manager_user.id')
-            // ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
             ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
             ->select([
                 'orders.id as order_id',
@@ -117,44 +112,44 @@ class OrderTopupsReport extends DefaultReport
 
             ->whereNull('order_topups.deleted_at');
 
-            if ($dateRange) {
-                $baseQuery->whereBetween('order_topups.created_at', $dateRange);
-            }
-            
-            if (!empty($this->filterResults['branch_id'])) {
-                $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
-            }
-            
-            if (!empty($this->filterResults['pos_user_id'])) {
-                $baseQuery->where('orders.pos_user_id', $this->filterResults['pos_user']);
-            }
-            
-            if (!empty($this->filterResults['phone'])) {
-                $baseQuery->where('customers.phone',  $this->filterResults['phone']);
-            }
-            
-            if (!empty($this->filterResults['system_id'])) {
-                $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
-            }
-            
-            if (!empty($this->filterResults['payment_method_id'])) {
-                $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
-            }
-            
-            if (!empty($this->filterResults['reference'])) {
-                $baseQuery->where('orders.reference',$this->filterResults['reference']);
-            }
-            
-            if (!empty($this->filterResults['amount_min'])) {
-                $baseQuery->havingRaw('SUM(order_topups.price) >= ?', [$this->filterResults['amount_min']]);
-            }
-            
-            if (!empty($this->filterResults['amount_max'])) {
-                $baseQuery->havingRaw('SUM(order_topups.price) <= ?', [$this->filterResults['amount_max']]);
-            }
-            $baseQuery->groupBy('computed_identifier');
+        if ($dateRange) {
+            $baseQuery->whereBetween('order_topups.created_at', $dateRange);
+        }
 
-            $results = $baseQuery->get();
+        if (!empty($this->filterResults['branch_id'])) {
+            $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
+        }
+
+        if (!empty($this->filterResults['pos_user_id'])) {
+            $baseQuery->where('orders.pos_user_id', $this->filterResults['pos_user_id']);
+        }
+
+        if (!empty($this->filterResults['phone'])) {
+            $baseQuery->where('customers.phone',  $this->filterResults['phone']);
+        }
+
+        if (!empty($this->filterResults['system_id'])) {
+            $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
+        }
+
+        if (!empty($this->filterResults['payment_method_id'])) {
+            $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
+        }
+
+        if (!empty($this->filterResults['reference'])) {
+            $baseQuery->where('orders.reference', $this->filterResults['reference']);
+        }
+
+        if (!empty($this->filterResults['amount_min'])) {
+            $baseQuery->havingRaw('SUM(order_topups.price) >= ?', [$this->filterResults['amount_min']]);
+        }
+
+        if (!empty($this->filterResults['amount_max'])) {
+            $baseQuery->havingRaw('SUM(order_topups.price) <= ?', [$this->filterResults['amount_max']]);
+        }
+        $baseQuery->groupBy('computed_identifier');
+
+        $results = $baseQuery->get();
 
 
         // dd($results);

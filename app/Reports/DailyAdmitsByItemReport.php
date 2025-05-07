@@ -59,16 +59,6 @@ class DailyAdmitsByItemReport extends DefaultReport
         $date = $this->getFilter('date');
     }
 
-    public function getRangeDate($date)
-    {
-
-        $date = Carbon::parse($date);
-        $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);
-
-        $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
-
-        return [$startOfWeek, $endOfWeek];
-    }
 
 
     public function rows()
@@ -77,18 +67,16 @@ class DailyAdmitsByItemReport extends DefaultReport
             return;
         }
 
-
-
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
-        $dateRange = $this->getRangeDate($date);
+        $dateRange = get_range_date($date);
 
 
-        $lastWeekDateRange = $this->getRangeDate(now()->parse($date)->subWeek());
+        $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
-        // dd($lastWeekDateRange);
+ 
         $last_week_booked_seats_admits = OrderItem::query()
             ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
@@ -97,7 +85,6 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
-        // dd($last_week_booked_seats_admits);
 
         $last_week_booked_seats_income = OrderItem::query()
             ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
@@ -112,7 +99,7 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
             ->whereNull('deleted_at')
-            ->whereDate('created_at', '<=', $dateRange[1])
+            ->whereDate('created_at', '<=', $dateRange['start'])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
@@ -120,7 +107,7 @@ class DailyAdmitsByItemReport extends DefaultReport
             ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
 
             ->whereNull('deleted_at')
-            ->whereDate('created_at', '<=', $dateRange[1])
+            ->whereDate('created_at', '<=', $dateRange['start'])
             ->groupBy('identifier')
             ->pluck('count', 'identifier');
 
@@ -169,7 +156,7 @@ class DailyAdmitsByItemReport extends DefaultReport
 
         $booked_items = $booked_items->get()
             ->groupBy('identifier')
-            // dd($booked_items);
+         
 
             ->map(function ($order_items) use ($last_week_booked_seats_admits, $last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income, &$footer) {
 
