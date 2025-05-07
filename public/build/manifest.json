@@ -69,15 +69,15 @@
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
+  "vendor/twa/uikit/dist/app-CHaSB4WH.css": {
+    "file": "assets/app-CHaSB4WH-CHaSB4WH.css",
+    "src": "vendor/twa/uikit/dist/app-CHaSB4WH.css",
+    "isEntry": true
+  },
   "vendor/twa/uikit/dist/app-CtC0RKbr.js": {
     "file": "assets/app-CtC0RKbr-9midqcvc.js",
     "name": "app-CtC0RKbr",
     "src": "vendor/twa/uikit/dist/app-CtC0RKbr.js",
-    "isEntry": true
-  },
-  "vendor/twa/uikit/dist/app-wZphN37q.css": {
-    "file": "assets/app-wZphN37q-wZphN37q.css",
-    "src": "vendor/twa/uikit/dist/app-wZphN37q.css",
     "isEntry": true
   }
 }
