@@ -436,18 +436,22 @@ class MigrationsController extends Controller
         ];
 
 
-        $wed = now()->parse('07-05-2025');
+        $wed = now()->parse('08-05-2025');
 
         foreach($movie_weeks as $movie_id => $week){
 
-            DB::table('order_seats')->where('movie_id' , $movie_id)->update([
-                'week' => $week,
+            DB::table('order_seats')
+            ->whereDate('date' , '>=' , $wed)
+            ->where('movie_id' , $movie_id)->update([
+                'week' => $week + 1,
                 'dist_share_percentage' => null,
                 'dist_share_amount' => null
             ]);
 
-            DB::table('movie_shows')->whereDate('date' , '<=' , $wed)->where('movie_id' , $movie_id)->update([
-                'week' => $week
+            DB::table('movie_shows')
+            ->whereDate('date' , '>=' , $wed)
+            ->where('movie_id' , $movie_id)->update([
+                'week' => $week + 1
             ]);
 
         }
