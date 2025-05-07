@@ -55,11 +55,9 @@ class WalletTransactionsReport extends DefaultReport
         if (!$this->filterResults) {
             return [];
         }
-
         $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-            : null;
-
+        ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
+        : null;
 
         $footer = [
             'long_id' => 'Total',
@@ -101,6 +99,29 @@ class WalletTransactionsReport extends DefaultReport
 
             ])
             ->whereNull('user_cards.deleted_at');
+
+            if ($dateRange) {
+                $baseQuery->whereBetween('user_wallet_transactions.created_at', $dateRange);
+            }
+
+            if (!empty($this->filterResults['phone'])) {
+                $baseQuery->where('customers.phone',$this->filterResults['phone']);
+            }
+            
+           
+            if (!empty($this->filterResults['email'])) {
+                $baseQuery->where('customers.email',$this->filterResults['email']);
+            }
+            
+          
+            if (!empty($this->filterResults['card_number'])) {
+                $baseQuery->where('user_cards.barcode',$this->filterResults['card_number']);
+            }
+            
+           
+            if (!empty($this->filterResults['reference'])) {
+                $baseQuery->where('user_wallet_transactions.reference', $this->filterResults['reference']);
+            }
 
         $results = $baseQuery->get();
 
