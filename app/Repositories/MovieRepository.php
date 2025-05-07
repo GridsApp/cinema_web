@@ -91,9 +91,9 @@ class MovieRepository implements MovieRepositoryInterface
                 ->where('orders.user_id' , $user->id)
                 ->first();
 
-                // dd($seats_found);
+            // dd($seats_found);
 
-                // dd($order_seat);
+            // dd($order_seat);
 
             $can_review = $seats_found ? true : false;
 
@@ -157,7 +157,7 @@ class MovieRepository implements MovieRepositoryInterface
 
         $today = now();
 
-        $strict = $today == $date;
+        $strict = $today->format('d-m-Y') == $date->format('d-m-Y');
 
         $times = [];
         if($strict){
@@ -170,6 +170,8 @@ class MovieRepository implements MovieRepositoryInterface
         $comingSoonOffset = now()->addMonths(8);
         $recentShowtimeCutoff = now()->subDays(1);
 
+
+
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids , $times , $strict) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids , $times , $strict) {
@@ -181,25 +183,28 @@ class MovieRepository implements MovieRepositoryInterface
                         ->whereIn('theater_id', $theaters_ids);
                 })
 
-                ->orWhere(function ($q) use ($oneMonthAgo, $today, $theaters_ids) {
-                    $q->whereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
-                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
-                          $subQ->whereIn('theater_id', $theaters_ids);
-                      });
-                })
-                ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids) {
+                    ->orWhere(function ($q) use ($oneMonthAgo, $today, $theaters_ids) {
+                        $q->whereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
+                        ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
+                            $subQ->whereIn('theater_id', $theaters_ids);
+                        });
+                    })
+                    ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids) {
 
-                    $q->where('coming_soon', 1); // Coming Soon
+                        $q->where('coming_soon', 1); // Coming Soon
 
 //                    $q->whereBetween('release_date', [$today, $comingSoonOffset])
 //                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
 //                          $subQ->whereIn('theater_id', $theaters_ids);
 //                      });
-                });
+                    });
 
             })
-            ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today) {
-                $query->whereBetween('date', [$recentShowtimeCutoff, $today]);
+            ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today , $times , $strict) {
+                $query->whereBetween('date', [$recentShowtimeCutoff, $today])
+                    ->when($strict, function ($q1) use ($times) {
+                        $q1->whereIn('time_id', $times);
+                    });
             }]) // Can be removed. only for optimization
             ->get();
 
@@ -208,6 +213,7 @@ class MovieRepository implements MovieRepositoryInterface
         $genres = MovieGenre::select("id", "label_".app()->getLocale().' as label')->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
         return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset) {
+
 
             $categories = [];
             $release_date = now()->parse($movie->release_date);
