@@ -836,12 +836,7 @@ if (!function_exists('minutes_to_human')) {
     
             return ['start' => $startOfWeek, 'end' => $endOfWeek];
     
-            // $date = Carbon::parse($date);
-            // $startOfWeek = $date->startOfWeek(Carbon::THURSDAY);
-    
-            // $endOfWeek = $startOfWeek->copy()->endOfWeek(Carbon::WEDNESDAY);
-    
-            // return [$startOfWeek, $endOfWeek];
+         
         }
     }
 }
