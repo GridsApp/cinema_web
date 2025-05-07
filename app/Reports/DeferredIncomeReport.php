@@ -48,6 +48,7 @@ class DeferredIncomeReport extends DefaultReport
         }
 
         $this->addColumn("current_week_sales" , "Current Wk");
+        $this->addColumn("current_week_sales_nbo" , "Current Wk NBO");
 
 
         $date = $this->getFilter('date');
@@ -72,12 +73,11 @@ class DeferredIncomeReport extends DefaultReport
         }
 
 
-
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
-        $dateRange = $this->getRangeDate($date);
+        $dateRange = get_range_date($date);
 
 
 
@@ -100,6 +100,8 @@ class DeferredIncomeReport extends DefaultReport
             'monday_nbo' => 0,
             'tuesday_nbo' => 0,
             'wednesday_nbo' => 0,
+            'current_week_sales'=>0,
+            'current_week_sales_nbo'=>0,
            
         ];
 
@@ -115,9 +117,9 @@ class DeferredIncomeReport extends DefaultReport
 
 
         if ($dateRange) {
-            // dd($dateRange[1]);
+          
             $booked_seats->where('order_seats.date', '>', $dateRange);
-            // $booked_seats->whereBetween('order_seats.date', $dateRange);
+            
         }
         if ($branch_id) {
             $booked_seats->where('orders.branch_id', $branch_id);
@@ -193,6 +195,8 @@ class DeferredIncomeReport extends DefaultReport
                     'tuesday_nbo' => $dayIncomes['tuesday'],
                     'wednesday_nbo' => $dayIncomes['wednesday'],
 
+                    'current_week_sales' => collect($dayCounts)->values()->sum(),
+                    'current_week_sales_nbo' => collect($dayIncomes)->values()->sum(),
                 ];
 
                 $footer['thursday'] += $data['thursday'];
@@ -209,6 +213,8 @@ class DeferredIncomeReport extends DefaultReport
                 $footer['monday_nbo'] += $data['monday_nbo'];
                 $footer['tuesday_nbo'] += $data['tuesday_nbo'];
                 $footer['wednesday_nbo'] += $data['wednesday_nbo'];
+                $footer['current_week_sales'] += $data['current_week_sales'];
+                $footer['current_week_sales_nbo'] += $data['current_week_sales_nbo'];
 
              
                 $data['thursday'] = number_format($data['thursday']);
@@ -226,7 +232,8 @@ class DeferredIncomeReport extends DefaultReport
                 $data['monday_nbo'] = number_format($data['monday_nbo']);
                 $data['tuesday_nbo'] = number_format($data['tuesday_nbo']);
                 $data['wednesday_nbo'] = number_format($data['wednesday_nbo']);
-
+                $data['current_week_sales'] = number_format($data['current_week_sales']);
+                $data['current_week_sales_nbo'] = number_format($data['current_week_sales_nbo']);
              
                 return $data;
             })->filter()->values();
@@ -247,7 +254,8 @@ class DeferredIncomeReport extends DefaultReport
         $footer['monday_nbo'] = number_format($footer['monday_nbo']);
         $footer['tuesday_nbo'] = number_format($footer['tuesday_nbo']);
         $footer['wednesday_nbo'] = number_format($footer['wednesday_nbo']);
-
+        $footer['current_week_sales'] = number_format($footer['current_week_sales']);
+        $footer['current_week_sales_nbo'] = number_format($footer['current_week_sales_nbo']);
      
         $this->setFooter($footer);
 
