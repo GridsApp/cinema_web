@@ -421,4 +421,37 @@ class MigrationsController extends Controller
         // ];
 
     }
+
+
+    public function week(){
+
+        $movie_weeks = [
+            5 => 6,
+            11 => 3,
+            14 => 3,
+            17 => 2,
+            18 => 2,
+            19 => 2,
+            20 =>2,
+        ];
+
+
+        $wed = now()->parse('07-05-2025');
+
+        foreach($movie_weeks as $movie_id => $week){
+
+            DB::table('order_seats')->where('movie_id' , $movie_id)->update([
+                'week' => $week,
+                'dist_share_percentage' => null,
+                'dist_share_amount' => null
+            ]);
+
+            DB::table('movie_shows')->whereDate('date' , '<=' , $wed)->where('movie_id' , $movie_id)->update([
+                'week' => $week
+            ]);
+
+        }
+
+
+    }
 }
