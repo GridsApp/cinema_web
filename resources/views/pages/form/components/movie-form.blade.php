@@ -46,6 +46,7 @@
                             {!! field('movie_description', 'col-span-12') !!}
                             {!! field('duration', 'col-span-12') !!}
                             {!! field('release_date', 'col-span-12') !!}
+                            {!! field('coming_soon', 'col-span-12') !!}
                         </div>
                     @endcomponent
                 </div>

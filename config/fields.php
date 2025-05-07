@@ -177,6 +177,17 @@ return [
 
     ],
 
+    "coming_soon" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Toggle::class,
+        'label' => 'Coming Soon',
+        'placeholder' => 'Coming Soon',
+        'name' => 'coming_soon'
+
+    ],
 
     "display" => [
         'id' => uniqid(),
@@ -2066,7 +2077,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    
+
 
     'item_id' => [
         'id' => uniqid(),
@@ -2112,8 +2123,8 @@ return [
 
 
 
-    
-    
+
+
     'cart_id' => [
         'id' => uniqid(),
         'livewire' => [

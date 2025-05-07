@@ -20,10 +20,10 @@ class MoviesEntity extends Entity
         'form' => 'admin.forms.movie-form',
 
     ];
-    
+
 
     public function fields(){
-    
+
         $channel = "channel".uniqid();
         $languages =config('languages');
         $firstLanguage = $languages[0]['prefix'] ?? '';
@@ -31,7 +31,7 @@ class MoviesEntity extends Entity
 
         $this->addField("movie_key" , ["container" => 'col-span-7', 'required' => true]);
         $this->addField("movie_name" , ["container" => 'col-span-7', 'required' => true]);
-        $this->addField("label", ["container" => 'col-span-7', ]); 
+        $this->addField("label", ["container" => 'col-span-7', ]);
         $this->addField("slug", ["container" => 'col-span-7']); // sma3e ma3loumet menel label
         $this->addField("condensed_name" , ["container" => 'col-span-7']);
         $this->addField("description" , ["container" => 'col-span-7', 'required' => true,'translatable'=>true]);
@@ -46,6 +46,7 @@ class MoviesEntity extends Entity
         $this->addField("cover_image" , ["container" => 'col-span-7']);
         $this->addField("youtube_video" , ["container" => 'col-span-7']);
         $this->addField("release_date" , ["container" => 'col-span-7']);
+        $this->addField("coming_soon" , ["container" => 'col-span-7']);
         $this->addField("imdb_rating" , ["container" => 'col-span-7']);
         $this->addField("imdb_vote" , ["container" => 'col-span-7']);
 
@@ -59,7 +60,7 @@ class MoviesEntity extends Entity
     }
 
     public function columns(){
-      
+
         $this->addColumn("main_image" );
         $this->addColumn("cover_image" );
         $this->addColumn('movie_key' ,[], true);
@@ -69,13 +70,13 @@ class MoviesEntity extends Entity
         $this->addColumn("cast" ,[], true);
         $this->addColumn("director" ,[], true);
 
-  
+
 
         return $this->columns;
 
 
     }
-   
+
 
 
 

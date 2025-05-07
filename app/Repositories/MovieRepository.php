@@ -26,7 +26,7 @@ class MovieRepository implements MovieRepositoryInterface
     {
         $movie = Movie::whereNull('deleted_at')->where('id', $id)->first();
 
-        
+
         if (!$movie) {
             return null;
         }
@@ -75,7 +75,7 @@ class MovieRepository implements MovieRepositoryInterface
         $can_review = false;
         if ($user) {
             // dd("e");
-           
+
             $now_time = now()->subHours(3)->format('h:i');
             $times = Time::where('label' , '<=' , $now_time)->pluck('id');
 
@@ -98,7 +98,7 @@ class MovieRepository implements MovieRepositoryInterface
             $can_review = $seats_found ? true : false;
 
 
-        
+
         }
 
         $movie = [
@@ -175,13 +175,15 @@ class MovieRepository implements MovieRepositoryInterface
                       });
                 })
                 ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids) {
-                    $q->whereBetween('release_date', [$today, $comingSoonOffset]) // Coming Soon
-                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
-                          $subQ->whereIn('theater_id', $theaters_ids);
-                      });
+
+                    $q->where('coming_soon', 1); // Coming Soon
+
+//                    $q->whereBetween('release_date', [$today, $comingSoonOffset])
+//                      ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
+//                          $subQ->whereIn('theater_id', $theaters_ids);
+//                      });
                 });
-                    // ->orWhereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
-                    // ->orWhereBetween('release_date', [$today, $comingSoonOffset]); // Coming Soon
+
             })
             ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today) {
                 $query->whereBetween('date', [$recentShowtimeCutoff, $today]);
@@ -223,7 +225,7 @@ class MovieRepository implements MovieRepositoryInterface
     public function searchMovies($search)
     {
 
-       
+
         $words = explode(" ", $search);
 
         return Movie::whereNull('deleted_at')->where(function ($q) use ($words) {
@@ -236,7 +238,7 @@ class MovieRepository implements MovieRepositoryInterface
                 $q->orWhere('name', 'LIKE', '% ' . $word);
                 $q->orWhere('name', 'LIKE', $word . ' %');
             }
-       
+
         })
             ->limit(10)
             ->get()->map(function ($movie) {
@@ -251,7 +253,7 @@ class MovieRepository implements MovieRepositoryInterface
             });
     }
 
- 
+
 
 
 
