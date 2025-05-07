@@ -35,6 +35,8 @@ class PaymentController extends Controller
         $user = request()->user;
         $user_type = request()->user_type;
 
+
+ 
         $location = request()->location;
         try {
             $system_id = get_system_from_type($user_type);
@@ -66,16 +68,27 @@ class PaymentController extends Controller
             break;
 
 
+
+            case 'TOPUP_4':
+                $ids = [8];
+            break;
+
+
+            case 'CHECKOUT_4':
+                $ids = [8];
+            break;
+
+
             default:
 
-            $ids = [1,2,3,4,5,6,7];
+            $ids = [1,2,3,4,5,6,7,8];
 
             break;
 
         }
 
     
-       
+    //    dd(s);
 
 // dd($user);
       $balance=  $this->cardRepository->getWalletBalance($user);

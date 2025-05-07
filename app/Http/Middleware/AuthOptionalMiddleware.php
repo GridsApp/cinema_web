@@ -28,11 +28,10 @@ class AuthOptionalMiddleware
 
 
     public function __construct(
-        TokenRepositoryInterface $tokenRepository, 
+        TokenRepositoryInterface $tokenRepository,
         UserRepositoryInterface $userRepository,
         PosUserRepositoryInterface $posUserRepository
-        )
-    {
+    ) {
         $this->tokenRepository = $tokenRepository;
         $this->userRepository = $userRepository;
         $this->posUserRepository = $posUserRepository;
@@ -45,7 +44,7 @@ class AuthOptionalMiddleware
 
 
         if (!$access_token) {
-          return $next($request);
+            return $next($request);
         }
 
         $access_token = $this->tokenRepository->getActiveAccessToken($access_token);
@@ -56,31 +55,40 @@ class AuthOptionalMiddleware
 
 
         try {
-            switch($access_token->type){
-                case "USER" : 
+            switch ($access_token->type) {
+                case "USER":
                     $user = $this->userRepository->getUserById($access_token->user_id);
                     request()->merge([
                         'user_type' => 'USER',
                         'user' => $user
                     ]);
                     break;
-                case "POS" :
+                case "POS":
                     $user = $this->posUserRepository->getUserById($access_token->user_id);
                     request()->merge([
                         'user_type' => 'POS',
                         'user' => $user
                     ]);
                     break;
-    
+
+                case "KIOSK":
+                    $user = $this->posUserRepository->getUserById($access_token->user_id);
+
+                    // dd($user);
+                    request()->merge([
+                        'user_type' => 'KIOSK',
+                        'user' => $user
+                    ]);
+                    break;
             }
         } catch (\Throwable $th) {
             return $this->response(notification()->error("Not found", "Not found"));
         }
-      
 
-       
 
-     
+
+
+
 
         return $next($request);
     }

@@ -70,11 +70,15 @@ if (!function_exists('get_setting')) {
 if (!function_exists('get_user_field_from_type')) {
     function get_user_field_from_type($type)
     {
+
+        // dd($type);
         switch ($type) {
             case 'USER':
                 return "user_id";
-            case "POS":
-                return "pos_user_id";
+                case "POS":
+                    return "pos_user_id";
+                    case "KIOSK":
+                        return "kiosk_user_id";
         }
 
         throw new Exception("Error Processing Field From User Type");
@@ -90,6 +94,8 @@ if (!function_exists('get_system_from_type')) {
                 return 1;
             case "POS":
                 return 2;
+            case "KIOSK":
+                return 4;
         }
 
         throw new Exception("Error Processing Field From User Type");

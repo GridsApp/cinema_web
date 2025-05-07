@@ -42,7 +42,7 @@ Route::group([
   // Route::get('/pos-users', [MigrationsController::class, 'posUsers']);
   // Route::get('/users', [MigrationsController::class, 'migrateUsers']);
 
-    Route::get('/week', [MigrationsController::class, 'week']);
+    // Route::get('/week', [MigrationsController::class, 'week']);
 
 
 

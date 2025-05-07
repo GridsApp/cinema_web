@@ -72,7 +72,7 @@ class  OrderController extends Controller
             });
 
 
-            if ($has_topup && ($payment_method->key === 'WP' || $payment_method->key === 'WP-POS')) {
+            if ($has_topup && ($payment_method->key === 'WP' || $payment_method->key === 'WP-POS' || $payment_method->key === 'WP-KIOSK')) {
                 return $this->response(notification()->error('Cannot proceed with wallet payment', 'There is a top-up amount in the cart, and wallet payment is not allowed.'));
             }
 

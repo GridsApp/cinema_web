@@ -81,10 +81,12 @@ class AuthMandatoryMiddleware
 
                 case "KIOSK" :
                         $user = $this->kioskUserRepository->getUserById($access_token->user_id);
+
+                       
                         request()->merge([
                             'user_type' => 'KIOSK',
                             'user' => $user,
-                            'system_id' => 3,
+                            'system_id' => 4,
                             'branch_id' => $user->branch_id,
                         ]);
                         break;

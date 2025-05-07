@@ -2051,6 +2051,23 @@ return [
         'container' => 'col-span-6',
     ],
 
+
+    'kiosk_user_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => twa\uikit\FieldTypes\Select::class,
+
+        'label' => 'Kiosk Id',
+        'placeholder' => 'Enter Kiosk id',
+        'name' => 'kiosk_user_id',
+        'container' => 'col-span-6',
+    ],
+
+    
+
     'item_id' => [
         'id' => uniqid(),
         'livewire' => [
