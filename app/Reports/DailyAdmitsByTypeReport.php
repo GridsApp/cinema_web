@@ -10,27 +10,11 @@ use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Reports\DefaultReport;
 
 
-class DailyAdmitsReport extends DefaultReport
+class DailyAdmitsByTypeReport extends DefaultReport
 {
 
-    public $label = "Daily Admits and Income";
+    public $label = "Daily Admits And Income By Type";
 
-    // $this->addFilter('filter_start_date');
-    // $this->addFilter('filter_end_date');
-    // $this->addFilter('filter_branch');
-    // $this->addFilter('filter_movie');
-
-    // $this->addFilter('filter_time');
-
-    // $this->addFilter('filter_system');
-    // $this->addFilter('filter_payment_method');
-    // $this->addFilter('filter_reference');
-    // $this->addFilter('filter_ticket_status');
-
-    // $this->addFilter('filter_pos_user');
-    // $this->addFilter('filter_user_phone');
-    // $this->addFilter('filter_amount_min');
-    // $this->addFilter('filter_amount_max');
 
     public function filters()
     {
@@ -44,18 +28,16 @@ class DailyAdmitsReport extends DefaultReport
 
 
         if (!$this->filterResults) {
+
+
+
             return;
         }
 
-        $this->addColumn("movie", "Movie");
-        $this->addColumn("distributor", "Distributor");
+
         $this->addColumn("type", "Type");
-        $this->addColumn("week", "Wk");
 
-
-
-
-
+        $this->addColumn("percentage", "Perc. %");
         $week_info = get_date_range($this->filterResults['date']);
         $dates =  CarbonPeriod::create($week_info['range'][0], $week_info['range'][1]);
 
@@ -76,6 +58,9 @@ class DailyAdmitsReport extends DefaultReport
 
 
 
+
+
+
         $date = $this->getFilter('date');
     }
 
@@ -87,18 +72,18 @@ class DailyAdmitsReport extends DefaultReport
             return;
         }
 
+
+
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
-
         $dateRange = get_range_date($date);
-
-
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
-        $last_week_booked_seats_admits = OrderSeat::with('movie.distributor', 'zone')
+        $last_week_booked_seats_admits = OrderSeat::with('zone')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-            ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("COUNT(*) as count"))
+            ->select(DB::raw('order_seats.zone_id as identifier'), DB::raw('COUNT(*) as count'))
+
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereBetween('order_seats.date', $lastWeekDateRange);
@@ -106,54 +91,56 @@ class DailyAdmitsReport extends DefaultReport
             $last_week_booked_seats_admits->where('orders.branch_id', $branch_id);
         }
 
-
         $last_week_booked_seats_admits = $last_week_booked_seats_admits->groupBy('identifier')
             ->pluck('count', 'identifier');
 
 
-        $last_week_booked_seats_income = OrderSeat::with('movie.distributor', 'zone')
+        $last_week_booked_seats_income = OrderSeat::with('zone')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->select(DB::raw('order_seats.zone_id as identifier'), DB::raw('SUM(order_seats.price) as count'))
 
-            ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("SUM(price) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereBetween('order_seats.date', $lastWeekDateRange);
         if ($branch_id) {
             $last_week_booked_seats_income->where('orders.branch_id', $branch_id);
         }
+
         $last_week_booked_seats_income = $last_week_booked_seats_income->groupBy('identifier')
             ->pluck('count', 'identifier');
 
-        $all_time_booked_seats_admits = OrderSeat::with('movie.distributor', 'zone')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
 
-            ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("COUNT(*) as count"))
+        $all_time_booked_seats_admits = OrderSeat::with('zone')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+
+            ->select(DB::raw('order_seats.zone_id as identifier'), DB::raw('COUNT(*) as count'))
+
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
-            ->whereDate('order_seats.date', '<=', $dateRange['start']);
-            if ($branch_id) {
-                $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_admits=$all_time_booked_seats_admits->groupBy('identifier')
+            ->whereDate('order_seats.date', '<=', $dateRange['end']);
+        if ($branch_id) {
+            $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_seats_admits = $all_time_booked_seats_admits->groupBy('identifier')
             ->pluck('count', 'identifier');
 
+        // dd($all_time_booked_seats_admits);
 
-        $all_time_booked_seats_income = OrderSeat::with('movie.distributor', 'zone')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+        $all_time_booked_seats_income = OrderSeat::with('zone')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
 
-            ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("SUM(price) as count"))
+            ->select(DB::raw('order_seats.zone_id as identifier'), DB::raw('SUM(order_seats.price) as count'))
+
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
-            ->whereDate('order_seats.date', '<=', $dateRange['start']);
-            if ($branch_id) {
-                $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_income=$all_time_booked_seats_income->groupBy('identifier')
+            ->whereDate('order_seats.date', '<=', $dateRange['end']);
+        if ($branch_id) {
+            $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_seats_income = $all_time_booked_seats_income->groupBy('identifier')
             ->pluck('count', 'identifier');
 
         $footer = [
-            'movie' =>  'Total',
-            'distributor' => '-',
             'type' => '-',
             'week' => '-',
             'thursday' => 0,
@@ -175,28 +162,21 @@ class DailyAdmitsReport extends DefaultReport
             'last_week_admits' => 0,
             'last_week_income' => 0,
             'last_life_admits' => 0,
-            'last_life_income' => 0
+            'last_life_income' => 0,
+            'percentage' => 0,
+
         ];
 
-        $booked_seats = OrderSeat::with('movie.distributor', 'zone')
+        $booked_seats = OrderSeat::with('zone')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-            ->select(
-                'order_seats.*',
-                'orders.branch_id',
-                DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier")
-            )
+            ->select("order_seats.*", "order_seats.zone_id as identifier")
             ->whereNull('order_seats.deleted_at')
-            ->whereNull('order_seats.refunded_at');
-
-
-        if ($dateRange) {
-            $booked_seats->whereBetween('order_seats.date', $dateRange);
-        }
-        if ($branch_id) {
-            $booked_seats->where('orders.branch_id', $branch_id);
-        }
-
-        $booked_seats = $booked_seats->get()
+            ->whereNull('order_seats.refunded_at')
+            ->whereBetween('order_seats.date', $dateRange);
+            if ($branch_id) {
+                $booked_seats->where('orders.branch_id', $branch_id);
+            }
+            $booked_seats=$booked_seats ->get()
             ->groupBy('identifier')
 
             ->map(function ($order_seats) use ($last_week_booked_seats_admits, $last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income, &$footer) {
@@ -208,11 +188,9 @@ class DailyAdmitsReport extends DefaultReport
                 }
 
 
-                $movie = $first_order_seat->movie ?? '';
-                $distributor = $movie->distributor->condensed_label ?? '';
-                $zone = $first_order_seat->zone ?? '';
+
+                $zone = $first_order_seat->zone;
                 $zone = ($zone->priceGroup->label ?? '') . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label ?? '');
-                $week = $first_order_seat->week ?? '';
 
                 $dayCounts = [
                     'thursday' => 0,
@@ -222,7 +200,6 @@ class DailyAdmitsReport extends DefaultReport
                     'monday' => 0,
                     'tuesday' => 0,
                     'wednesday' => 0,
-
                 ];
 
                 $dayIncomes = [
@@ -236,19 +213,13 @@ class DailyAdmitsReport extends DefaultReport
                 ];
 
                 foreach ($order_seats as $order_seat) {
-
                     $dayName = strtolower(Carbon::parse($order_seat->date)->format('l'));
                     $dayCounts[$dayName] += 1;
                     $dayIncomes[$dayName] += $order_seat->price;
                 }
 
-                // dd($last_week_booked_seats_admits[$first_order_seat->identifier]);
-
                 $data = [
-                    'movie' => $movie?->name ?? '',
-                    'distributor' => $distributor,
                     'type' => $zone,
-                    'week' => $week,
                     'thursday' => $dayCounts['thursday'],
                     'friday' => $dayCounts['friday'],
                     'saturday' => $dayCounts['saturday'],
@@ -270,7 +241,8 @@ class DailyAdmitsReport extends DefaultReport
                     'last_week_admits' => $last_week_booked_seats_admits[$first_order_seat->identifier] ?? 0,
                     'last_week_income' => $last_week_booked_seats_income[$first_order_seat->identifier] ?? 0,
                     'last_life_admits' => $all_time_booked_seats_admits[$first_order_seat->identifier] ?? 0,
-                    'last_life_income' => $all_time_booked_seats_income[$first_order_seat->identifier] ?? 0
+                    'last_life_income' => $all_time_booked_seats_income[$first_order_seat->identifier] ?? 0,
+                    'percentage' => 0,
                 ];
 
                 $footer['thursday'] += $data['thursday'];
@@ -318,9 +290,17 @@ class DailyAdmitsReport extends DefaultReport
                 $data['last_life_admits'] = number_format($data['last_life_admits']);
                 $data['last_life_income'] = number_format($data['last_life_income']);
 
-
                 return $data;
             })->filter()->values();
+
+
+        $total = $booked_seats->sum('current_admits');
+
+        $booked_seats = $booked_seats->map(function ($item) use ($total) {
+            $item['percentage'] = $total != 0 ? round(($item['current_admits'] / $total) * 100, 0) : 0;
+            return $item;
+        });
+
 
 
         $footer['thursday'] = number_format($footer['thursday']);
@@ -345,6 +325,8 @@ class DailyAdmitsReport extends DefaultReport
         $footer['last_week_income'] = number_format($footer['last_week_income']);
         $footer['last_life_admits'] = number_format($footer['last_life_admits']);
         $footer['last_life_income'] = number_format($footer['last_life_income']);
+
+        $footer['percentage'] = 100;
 
         $this->setFooter($footer);
 

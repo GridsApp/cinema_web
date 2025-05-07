@@ -76,40 +76,56 @@ class DailyAdmitsByItemReport extends DefaultReport
 
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
- 
-        $last_week_booked_seats_admits = OrderItem::query()
-            ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', $lastWeekDateRange)
-            ->groupBy('identifier')
+        $last_week_booked_items_admits = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select(DB::raw('order_items.item_id as identifier'), DB::raw('COUNT(*) as count'))
+
+            ->whereNull('order_items.deleted_at')
+            ->whereBetween('order_items.created_at', $lastWeekDateRange);
+        if ($branch_id) {
+            $last_week_booked_items_admits->where('orders.branch_id', $branch_id);
+        }
+        $last_week_booked_items_admits = $last_week_booked_items_admits->groupBy('identifier')
             ->pluck('count', 'identifier');
 
 
-        $last_week_booked_seats_income = OrderItem::query()
-            ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
+        $last_week_booked_items_income = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select(DB::raw('order_items.item_id as identifier'), DB::raw('SUM(order_items.price) as count'))
 
-            ->whereNull('deleted_at')
-            ->whereBetween('created_at', $lastWeekDateRange)
-            ->groupBy('identifier')
+            ->whereNull('order_items.deleted_at')
+            ->whereBetween('order_items.created_at', $lastWeekDateRange);
+        if ($branch_id) {
+            $last_week_booked_items_income->where('orders.branch_id', $branch_id);
+        }
+        $last_week_booked_items_income = $last_week_booked_items_income->groupBy('identifier')
             ->pluck('count', 'identifier');
 
 
-        $all_time_booked_seats_admits = OrderItem::query()
-            ->select(DB::raw('item_id as identifier'), DB::raw('COUNT(*) as count'))
 
-            ->whereNull('deleted_at')
-            ->whereDate('created_at', '<=', $dateRange['start'])
-            ->groupBy('identifier')
-            ->pluck('count', 'identifier');
+        $all_time_booked_items_admits = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select(DB::raw('order_items.item_id as identifier'), DB::raw('COUNT(*) as count'))
 
-        $all_time_booked_seats_income = OrderItem::query()
-            ->select(DB::raw('item_id as identifier'), DB::raw('SUM(price) as count'))
+            ->whereNull('order_items.deleted_at')
+            ->whereDate('order_items.created_at', '<=', $dateRange['end']);
+        if ($branch_id) {
+            $all_time_booked_items_admits->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_items_admits = $all_time_booked_items_admits->groupBy('identifier')->pluck('count', 'identifier');
 
-            ->whereNull('deleted_at')
-            ->whereDate('created_at', '<=', $dateRange['start'])
-            ->groupBy('identifier')
-            ->pluck('count', 'identifier');
+
+        $all_time_booked_items_income = OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select(DB::raw('order_items.item_id as identifier'), DB::raw('SUM(price) as count'))
+
+            ->whereNull('order_items.deleted_at')
+            ->whereDate('order_items.created_at', '<=', $dateRange['end']);
+        if ($branch_id) {
+            $all_time_booked_items_income->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_items_income = $all_time_booked_items_income->groupBy('identifier')->pluck('count', 'identifier');
 
         $footer = [
             'extra' => '-',
@@ -141,24 +157,27 @@ class DailyAdmitsByItemReport extends DefaultReport
         ];
 
         $booked_items = OrderItem::query()
-        ->join('orders', 'order_items.order_id', '=', 'orders.id')
-        ->join('branch_items', 'branch_items.id', '=', 'order_items.item_id')
-        
-            ->select("order_items.*", 'orders.branch_id', "branch_items.item_id as identifier")
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('branch_items', 'branch_items.id', '=', 'order_items.item_id')
+
+            ->select("order_items.*", 'orders.branch_id', "order_items.item_id as identifier")
             ->whereNull('order_items.deleted_at');
 
         if ($dateRange) {
+
             $booked_items->whereBetween('order_items.created_at', $dateRange);
         }
         if ($branch_id) {
             $booked_items->where('orders.branch_id', $branch_id);
         }
 
+        // dd($booked_items->get());
+
         $booked_items = $booked_items->get()
             ->groupBy('identifier')
-         
 
-            ->map(function ($order_items) use ($last_week_booked_seats_admits, $last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income, &$footer) {
+
+            ->map(function ($order_items) use ($last_week_booked_items_admits, $last_week_booked_items_income, $all_time_booked_items_admits, $all_time_booked_items_income, &$footer) {
 
 
                 $first_order_item = $order_items->first();
@@ -207,8 +226,6 @@ class DailyAdmitsByItemReport extends DefaultReport
                     'tuesday' => $dayCounts['tuesday'],
                     'wednesday' => $dayCounts['wednesday'],
 
-
-
                     'thursday_income' => $dayIncomes['thursday'],
                     'friday_income' => $dayIncomes['friday'],
                     'saturday_income' => $dayIncomes['saturday'],
@@ -218,13 +235,13 @@ class DailyAdmitsByItemReport extends DefaultReport
                     'wednesday_income' => $dayIncomes['wednesday'],
 
                     'current_admits' => collect($dayCounts)->values()->sum(),
-                    'last_week_admits' => $last_week_booked_seats_admits[$first_order_item->identifier] ?? 0,
-                    'last_life_admits' => $all_time_booked_seats_admits[$first_order_item->identifier] ?? 0,
+                    'last_week_admits' => $last_week_booked_items_admits[$first_order_item->identifier] ?? 0,
+                    'last_life_admits' => $all_time_booked_items_admits[$first_order_item->identifier] ?? 0,
 
 
                     'current_income' => collect($dayIncomes)->values()->sum(),
-                    'last_week_income' => $last_week_booked_seats_income[$first_order_item->identifier] ?? 0,
-                    'last_life_income' => $all_time_booked_seats_income[$first_order_item->identifier] ?? 0,
+                    'last_week_income' => $last_week_booked_items_income[$first_order_item->identifier] ?? 0,
+                    'last_life_income' => $all_time_booked_items_income[$first_order_item->identifier] ?? 0,
                     'percentage' => 0,
                 ];
 
