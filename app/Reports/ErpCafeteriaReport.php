@@ -58,12 +58,25 @@ class ErpCafeteriaReport extends DefaultReport
             return;
         }
 
-        $start_date = $this->filterResults['start_date'] ?? null;
-        $end_date = $this->filterResults['end_date'] ?? null;
+        $date = $this->filterResults['date'] ?? null;
+        $date_type = $this->filterResults['date_type'] ?? 'range';
+        $branch_id = $this->filterResults['branch_id'] ?? null;
+        
 
-        $dateRange = ($start_date && $end_date)
-            ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
-            : null;
+        $dateRange = null;
+        
+        if ($date) {
+            if ($date_type === 'single') {
+                $start = Carbon::parse($date)->startOfDay();
+                $end = Carbon::parse($date)->endOfDay();
+            } else {
+                $range = get_range_date($date);
+                $start = $range['start']->startOfDay();
+                $end = $range['end']->endOfDay();
+            }
+            $dateRange = [$start, $end];
+        }
+        
 
         $footer = collect([
             'item_code' => '-',
@@ -115,7 +128,8 @@ class ErpCafeteriaReport extends DefaultReport
         
                 'systems.label as system',
             ])
-            ->when($dateRange, fn($q) => $q->whereBetween('order_item.created_at', $dateRange))
+            ->when($dateRange, fn($q) => $q->whereBetween('order_items.created_at', $dateRange))
+            ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id))
             ->whereNull('order_items.deleted_at')
 
             ->groupBy('computed_identifier')
