@@ -9,7 +9,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class KIOSKUserMiddleware
+class KIOSKPOSUserMiddleware
 {
     use APITrait;
     /**
@@ -21,8 +21,9 @@ class KIOSKUserMiddleware
  
     public function handle(Request $request, Closure $next): Response
     {
+       
 
-        if(request()->input("user_type") == "KIOSK"){
+        if(request()->input("user_type") == "KIOSK" || request()->input("user_type") == "POS" ){
             return $next($request);
         }
 

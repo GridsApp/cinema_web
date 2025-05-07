@@ -4,6 +4,8 @@ use App\Http\Middleware\AuthMandatoryMiddleware;
 use App\Http\Middleware\POSUserMiddleware;
 use twa\cmsv2\Http\Middleware\LanguageMiddleware;
 use App\Http\Middleware\AuthOptionalMiddleware;
+use App\Http\Middleware\KIOSKPOSUserMiddleware;
+use App\Http\Middleware\KIOSKUserMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -147,7 +149,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post("/",  [\App\Http\Controllers\API\OrderController::class, 'get']);
         Route::post("/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt']);
         Route::post("/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(POSUserMiddleware::class);
-        Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([POSUserMiddleware::class, AuthMandatoryMiddleware::class]);
+        Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([KIOSKPOSUserMiddleware::class,AuthMandatoryMiddleware::class,]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
         Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
         Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([POSUserMiddleware::class, AuthMandatoryMiddleware::class]);

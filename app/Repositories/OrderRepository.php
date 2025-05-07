@@ -107,6 +107,7 @@ class OrderRepository implements OrderRepositoryInterface
         $order->user_id =  $user_id;
         // $order->long_id =  $this->generateLongId($order->id);
         $order->pos_user_id =  $cart->pos_user_id;
+        $order->kiosk_user_id =  $cart->kiosk_user_id;
         $order->payment_method_id = $payment_method_id;
         $order->payment_reference = $payment_attempt->payment_reference;
 

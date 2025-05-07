@@ -21,6 +21,8 @@ class CartsEntity extends Entity
         $this->addField("user_id" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("pos_user_id" , ["container" => 'col-span-6', 'required' => false]);
         $this->addField("user_reward_id" , ["container" => 'col-span-6', 'required' => false]);
+        $this->addField("kiosk_user_id" , ["container" => 'col-span-6', 'required' => false]);
+
         // $this->addField("coupon_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("system_id" , ["container" => 'col-span-6', 'required' => true]);
         $this->addField("expires_at" , ["container" => 'col-span-6', 'required' => true]);
