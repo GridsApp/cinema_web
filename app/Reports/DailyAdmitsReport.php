@@ -90,6 +90,7 @@ class DailyAdmitsReport extends DefaultReport
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
+        
 
         $dateRange = get_range_date($date);
 

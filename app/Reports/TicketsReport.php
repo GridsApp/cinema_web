@@ -2,18 +2,15 @@
 
 namespace App\Reports;
 
-use App\Models\Distributor;
-use App\Models\OrderSeat;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\DB;
 use twa\cmsv2\Reports\DefaultReport;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
-
-class OrderTicketsReport extends DefaultReport
+class TicketsReport extends DefaultReport
 {
 
-    public $label = "Order Tickets";
+
+    public $label = "Order Ticketsss";
 
 
 
@@ -33,7 +30,6 @@ class OrderTicketsReport extends DefaultReport
         $this->addFilter('filter_amount_min');
         $this->addFilter('filter_amount_max');
     }
-
 
     public function header()
     {
@@ -246,9 +242,4 @@ class OrderTicketsReport extends DefaultReport
     }
 
 
-    public function footer()
-    {
-        $this->setFooter("id", 2);
-        $this->setFooter("id", 2);
-    }
 }
