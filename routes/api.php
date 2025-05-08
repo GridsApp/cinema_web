@@ -134,7 +134,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
         //ONLY for POS
         Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart'])->middleware(KIOSKPOSUserMiddleware::class);
-        Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart'])->middleware(POSUserMiddleware::class);
+        Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart'])->middleware(KIOSKPOSUserMiddleware::class);
 
         //ONLY for POS
         Route::post('/topup/add', [App\Http\Controllers\API\CartController::class, 'addTopupToCart'])->middleware(POSUserMiddleware::class);
