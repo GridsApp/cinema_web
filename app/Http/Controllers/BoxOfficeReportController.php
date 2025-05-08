@@ -161,7 +161,7 @@ class BoxOfficeReportController extends Controller
                 $movie_totals['net'] += $show->net;
 
 
-                $show->show_date = $show->show_date . ' | ' . $show->show_id;
+                $show->show_date = $show->show_date;
 
                 return [
                     'show_date' => $show->show_date,
@@ -190,7 +190,6 @@ class BoxOfficeReportController extends Controller
             'mainResult' => $baseQuery,
             'detailedResult' => $result,
             'totals' => $totals,
-            // 'movie_totals' => $movie_totals,
             'branchLabel' => $branchLabel,
             'startDate' => $start_date,
             'endDate' => $end_date,

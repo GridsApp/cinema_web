@@ -63,7 +63,7 @@
                                 <td>{{ $movie['net'] }} IQD</td>
                             </tr>
                         @endforeach
-                        <tr>
+                        <tr style="background-color:#eeeeee">
                             <td>Total</td>
 
                             <td>{{ number_format($totals['sessions']) }}</td>
@@ -114,7 +114,7 @@
                             <td>{{ $row['net'] }}</td>
                         </tr>
                     @endforeach
-                    <tr>
+                    <tr style="background-color:#eeeeee">
 
                         {{-- @dd(number_format($movie['movie_totals']['gross'])); --}}
                         <td colspan="3">Total</td>

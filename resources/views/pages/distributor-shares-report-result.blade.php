@@ -25,8 +25,8 @@
         <tr>
             <td> Distributor: {{$distributor}}</td>
             <td> Branch: {{$branch}}</td>
-            {{-- <td> From: {{ $start_date }} </td>
-            <td> Until:  {{ $end_date }} </td> --}}
+   <td> From:   {{ $start_date ?? '-' }} </td>
+            <td> Until:  {{ $end_date  ?? '-' }} </td> 
         </tr>
     </table>
 
