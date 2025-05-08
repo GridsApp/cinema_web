@@ -133,7 +133,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/reward/add', [App\Http\Controllers\API\CartController::class, 'addRewardToCart']);
 
         //ONLY for POS
-        Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart'])->middleware(POSUserMiddleware::class);
+        Route::post('/card-number/add', [App\Http\Controllers\API\CartController::class, 'addCardNumberToCart'])->middleware(KIOSKPOSUserMiddleware::class);
         Route::post('/card-number/remove', [App\Http\Controllers\API\CartController::class, 'removeCardNumberFromCart'])->middleware(POSUserMiddleware::class);
 
         //ONLY for POS
