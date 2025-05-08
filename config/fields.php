@@ -3723,7 +3723,7 @@ return [
             'type' => 'static',
             'list' => [
                 ['value' => 'single', 'label' => 'Single'],
-                ['value' => 'singlee', 'label' => 'Single'],
+              
             ]
 
         ],

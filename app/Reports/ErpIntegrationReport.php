@@ -86,10 +86,7 @@ class ErpIntegrationReport extends DefaultReport
             $dateRange = [$start, $end];
         }
         
-        // $dateRange = ($start_date && $end_date)
-        //     ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
-        //     : null;
-
+       
         $footer = collect([
             'movie_key' => '-',
             'movie' => '-',
@@ -212,7 +209,7 @@ class ErpIntegrationReport extends DefaultReport
                 'unit_cost' => $unit_cost,
             ];
 
-            // Add to footer before formatting
+        
             $footer['unit_price'] += $unit_price;
             $footer['total_price'] += $total_price;
             $footer['tax_amount'] += $tax_amount;
@@ -220,7 +217,7 @@ class ErpIntegrationReport extends DefaultReport
             $footer['unit_cost'] += $unit_cost;
             $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
 
-            // Format for display
+         
             foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
                 $data[$field] = number_format($data[$field]);
             }
@@ -228,7 +225,7 @@ class ErpIntegrationReport extends DefaultReport
             return $data;
         })->filter()->values();
 
-        // Format footer
+      
         foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
             $footer[$field] = number_format($footer[$field]);
         }
