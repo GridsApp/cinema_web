@@ -120,7 +120,7 @@
                         <td colspan="3">Total</td>
                         <td>{{ number_format($movie['movie_totals']['admits']) }}</td>
                         <td>-</td>
-                        <td>{{ number_format($movie['movie_totals']['unit_price']) }}</td>
+                        <td>-</td>
                         <td>{{ number_format($movie['movie_totals']['gross']) }} IQD</td>
                         <td>{{ number_format($movie['movie_totals']['tax']) }} IQD</td>
                         <td>{{ number_format($movie['movie_totals']['net']) }} IQD</td>
