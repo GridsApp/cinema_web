@@ -168,7 +168,7 @@ class MovieRepository implements MovieRepositoryInterface
 
         $oneMonthAgo = now()->subMonths(1);
         $comingSoonOffset = now()->addMonths(8);
-        $recentShowtimeCutoff = now()->subDays(1);
+        $recentShowtimeCutoff = now();
 
 
 
@@ -200,11 +200,13 @@ class MovieRepository implements MovieRepositoryInterface
                     });
 
             })
-            ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today , $times , $strict) {
-                $query->whereBetween('date', [$recentShowtimeCutoff, $today])
+            ->with(['movieShows' => function ($query) use ($recentShowtimeCutoff, $today , $times , $strict , $date , $theaters_ids) {
+                $query->whereDate('date', $date)
                     ->when($strict, function ($q1) use ($times) {
                         $q1->whereIn('time_id', $times);
-                    });
+                    })
+                    ->whereIn('theater_id', $theaters_ids);
+                ;
             }]) // Can be removed. only for optimization
             ->get();
 
@@ -217,6 +219,10 @@ class MovieRepository implements MovieRepositoryInterface
 
             $categories = [];
             $release_date = now()->parse($movie->release_date);
+
+            // if(request()->has('debug') && $movie->id == 30){
+            //     dd($movie->movieShows);
+            // }
 
             if ($movie->movieShows->isNotEmpty()) {
                 $categories[] = 'now-showing';
