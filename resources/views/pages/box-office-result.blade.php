@@ -63,8 +63,6 @@
                                 <td>{{ $movie['net'] }} IQD</td>
                             </tr>
                         @endforeach
-                    </tbody>
-                    <tfoot>
                         <tr>
                             <td>Total</td>
 
@@ -74,7 +72,10 @@
                             <td>{{ number_format($totals['tax']) }} IQD</td>
                             <td>{{ number_format($totals['net']) }} IQD</td>
                         </tr>
-                    </tfoot>
+                    </tbody>
+                    {{-- <tfoot>
+                      
+                    </tfoot> --}}
                 </table>
 
 
@@ -113,22 +114,23 @@
                             <td>{{ $row['net'] }}</td>
                         </tr>
                     @endforeach
+                    <tr>
+
+                        {{-- @dd(number_format($movie['movie_totals']['gross'])); --}}
+                        <td colspan="3">Total</td>
+                        <td>{{ number_format($movie['movie_totals']['admits']) }}</td>
+                        <td>-</td>
+                        <td>{{ number_format($movie['movie_totals']['unit_price']) }}</td>
+                        <td>{{ number_format($movie['movie_totals']['gross']) }} IQD</td>
+                        <td>{{ number_format($movie['movie_totals']['tax']) }} IQD</td>
+                        <td>{{ number_format($movie['movie_totals']['net']) }} IQD</td>
+
+                    </tr>
                     </tbody>
 
-                    <tfoot>
-                        <tr>
-
-                            {{-- @dd(number_format($movie['movie_totals']['gross'])); --}}
-                            <td colspan="3">Total</td>
-                            <td>{{ number_format($movie['movie_totals']['admits']) }}</td>
-                            <td>-</td>
-                            <td>{{ number_format($movie['movie_totals']['unit_price']) }}</td>
-                            <td>{{ number_format($movie['movie_totals']['gross']) }} IQD</td>
-                            <td>{{ number_format($movie['movie_totals']['tax']) }} IQD</td>
-                            <td>{{ number_format($movie['movie_totals']['net']) }} IQD</td>
-
-                        </tr>
-                    </tfoot>
+                    {{-- <tfoot>
+                       
+                    </tfoot> --}}
                 </table>
                 <br><br>
             @endforeach
