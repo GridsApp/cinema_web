@@ -201,6 +201,7 @@ class BoxOfficeReportController extends Controller
     public function renderSummary()
     {
 
+        
 
         return view('pages.box-office-report-summary-filter');
     }
