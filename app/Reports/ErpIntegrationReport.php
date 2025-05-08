@@ -62,262 +62,119 @@ class ErpIntegrationReport extends DefaultReport
 
 
 
-    // public function rows()
-    // {
-    //     if (!$this->filterResults) {
-    //         return;
-    //     }
-    //     $date = $this->filterResults['date'] ?? null;
-    //     $date_type = $this->filterResults['date_type'] ?? 'range';
-    //     $branch_id = $this->filterResults['branch_id'] ?? null;
-        
-    //     // Determine date range
-    //     $dateRange = null;
-        
-    //     if ($date) {
-    //         if ($date_type === 'single') {
-    //             $start = Carbon::parse($date)->startOfDay();
-    //             $end = Carbon::parse($date)->endOfDay();
-    //         } else {
-    //             $range = get_range_date($date);
-    //             $start = $range['start']->startOfDay();
-    //             $end = $range['end']->endOfDay();
-    //         }
-    //         $dateRange = [$start, $end];
-    //     }
-        
-       
-    //     $footer = collect([
-    //         'movie_key' => '-',
-    //         'movie' => '-',
-    //         'distributor_name' => '-',
-    //         'branch' => '-',
-    //         'reference' => '-',
-    //         'theater' => '-',
-    //         'type' => '-',
-    //         'seats' => '-',
-    //         'nb_seats' => '-',
-    //         'Week #' => '-',
-    //         'movie_show_date' => '-',
-    //         'movie_show_time' => '-',
-    //         'booking_date' => '-',
-    //         'booking_time' => '-',
-    //         'unit_price' => 0,
-    //         'total_price' => 0,
-    //         'imtiyaz_discount' => 0,
-    //         'customer_name' => '-',
-    //         'cashier' => '-',
-    //         'booked_via' => '-',
-    //         'payment_method' => '-',
-    //         'tax_amount' => 0,
-    //         'dist_perc' => 0,
-    //         'cost_of_sale' => 0,
-    //         'unit_cost' => 0,
-    //     ]);
-
-    //     $results = DB::table('order_seats')
-    //         ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-    //         ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
-    //         ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
-    //         ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-    //         ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-    //         ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
-    //         ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
-    //         ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
-    //         ->leftJoin('pos_users as refunded_by_user', 'order_seats.refunded_cashier_id', '=', 'refunded_by_user.id')
-    //         ->leftJoin('pos_users as refunded_manager_user', 'order_seats.refunded_manager_id', '=', 'refunded_manager_user.id')
-    //         ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
-    //         ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
-    //         ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
-    //         ->select([
-    //             'orders.id as order_id',
-    //             'orders.reference',
-    //             'order_seats.id',
-    //             'orders.user_id',
-    //             'customers.name as customer_name',
-    //             'orders.pos_user_id',
-    //             'pos_users.name as booked_by',
-    //             'orders.branch_id',
-    //             'branches.label_en as branch',
-    //             'orders.payment_method_id',
-    //             'payment_methods.label as payment_method',
-    //             'order_seats.price as unit_price',
-    //             'distributors.label as distributor_label',
-    //             'order_seats.imtiyaz_phone',
-    //             DB::raw('COUNT(order_seats.id) as seats_count'),
-    //             DB::raw("GROUP_CONCAT(seat) as seats"),
-    //             DB::raw("SUM(CASE WHEN order_seats.imtiyaz_phone IS NOT NULL THEN 1 ELSE 0 END) as imtiyaz_seat_count"),
-    //             DB::raw("CONCAT(order_seats.zone_id,'_',orders.reference) as computed_identifier"),
-    //             'order_seats.label as type',
-    //             'movies.name as movie',
-    //             'movies.movie_key as movie_key',
-    //             'zones.label as zone_label',
-    //             'order_seats.date',
-    //             'times.label as time',
-    //             'theaters.label as theater',
-    //             'order_seats.created_at',
-    //             'order_seats.dist_share_percentage as dist_perc',
-    //             'order_seats.refunded_at',
-    //             'order_seats.week',
-    //             'systems.label as system',
-    //         ])
-    //         ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
-    //         ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id))
-    //         ->whereNull('order_seats.deleted_at')
-    //         ->whereNull('order_seats.refunded_at')
-    //         ->orderBy('order_seats.id', 'ASC')
-    //         ->groupBy('computed_identifier')
-    //         ->get();
-
-    //     $rows = $results->map(function ($row) use (&$footer) {
-    //         $unit_price = $row->unit_price;
-    //         $seats_count = $row->seats_count;
-    //         $total_price = $unit_price * $seats_count;
-    //         $tax_amount = $seats_count ? taxCalculation($total_price) : 0;
-
-    //         $share_percentage = floatval($row->dist_perc ?? 0);
-    //         $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
-    //         $unit_cost = $seats_count ? $cost / $seats_count : 0;
-
-    //         $createdAt = Carbon::parse($row->created_at);
-
-    //         $data = [
-    //             'movie_key' => $row->movie_key,
-    //             'movie' => $row->movie,
-    //             'distributor_name' => $row->distributor_label,
-    //             'branch' => $row->branch ?? '',
-    //             'reference' => $row->reference,
-    //             'theater' => $row->theater ?? '',
-    //             'type' => $row->type,
-    //             'seats' => $row->seats,
-    //             'nb_seats' => $seats_count,
-    //             'Week #' => $row->week,
-    //             'movie_show_date' => $row->date,
-    //             'movie_show_time' => $row->time ?? '',
-    //             'booking_date' => $createdAt->format('d-m-Y'),
-    //             'booking_time' => $createdAt->format('H:i:s'),
-    //             'unit_price' => $unit_price,
-    //             'total_price' => $total_price,
-    //             'imtiyaz_discount' => $row->imtiyaz_seat_count,
-    //             'customer_name' => $row->customer_name ?? '',
-    //             'cashier' => $row->booked_by,
-    //             'booked_via' => $row->system ?? '',
-    //             'payment_method' => $row->payment_method ?? '',
-    //             'tax_amount' => $tax_amount,
-    //             'dist_perc' => $row->dist_perc,
-    //             'cost_of_sale' => $cost,
-    //             'unit_cost' => $unit_cost,
-    //         ];
-
-        
-    //         $footer['unit_price'] += $unit_price;
-    //         $footer['total_price'] += $total_price;
-    //         $footer['tax_amount'] += $tax_amount;
-    //         $footer['cost_of_sale'] += $cost;
-    //         $footer['unit_cost'] += $unit_cost;
-    //         $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
-
-         
-    //         foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
-    //             $data[$field] = number_format($data[$field]);
-    //         }
-
-    //         return $data;
-    //     })->filter()->values();
-
-      
-    //     foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
-    //         $footer[$field] = number_format($footer[$field]);
-    //     }
-
-    //     $this->setFooter($footer->toArray());
-
-    //     return $rows;
-    // }
-
     public function rows()
-{
-    if (!$this->filterResults) {
-        return;
-    }
+    {
 
-    // Extract filter parameters
-    $date = $this->filterResults['date'] ?? null;
-    $date_type = $this->filterResults['date_type'] ?? 'range';
-    $branch_id = $this->filterResults['branch_id'] ?? null;
     
-    // Initialize footer with zeros instead of placeholders
-    $footer = [
-        'unit_price' => 0,
-        'total_price' => 0,
-        'imtiyaz_discount' => 0,
-        'tax_amount' => 0,
-        'dist_perc' => 0,
-        'cost_of_sale' => 0,
-        'unit_cost' => 0,
-    ];
-
-    // Process data in chunks
-    $rows = collect();
-    
-    $query = DB::table('order_seats')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-        ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
-        ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
-        ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-        ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-        ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
-        ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
-        ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
-        ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
-        ->select([
-            'orders.reference',
-            'branches.label_en as branch',
-            'theaters.label as theater',
-            'order_seats.label as type',
-            'movies.name as movie',
-            'movies.movie_key as movie_key',
-            'distributors.label as distributor_label',
-            'times.label as time',
-            'order_seats.date',
-            'order_seats.week',
-            'order_seats.price as unit_price',
-            'order_seats.dist_share_percentage as dist_perc',
-            'pos_users.name as booked_by',
-            'customers.name as customer_name',
-            'payment_methods.label as payment_method',
-            'systems.label as system',
-            DB::raw('COUNT(order_seats.id) as seats_count'),
-            DB::raw("GROUP_CONCAT(seat) as seats"),
-            DB::raw("SUM(CASE WHEN order_seats.imtiyaz_phone IS NOT NULL THEN 1 ELSE 0 END) as imtiyaz_seat_count"),
-            DB::raw("CONCAT(order_seats.zone_id,'_',orders.reference) as computed_identifier"),
-        ])
-        ->whereNull('order_seats.deleted_at')
-        ->whereNull('order_seats.refunded_at')
-        ->groupBy('computed_identifier');
-
-    // Apply date filters if present
-    if ($date) {
-        if ($date_type === 'single') {
-            $start = Carbon::parse($date)->startOfDay();
-            $end = Carbon::parse($date)->endOfDay();
-        } else {
-            $range = get_range_date($date);
-            $start = $range['start']->startOfDay();
-            $end = $range['end']->endOfDay();
+        if (!$this->filterResults) {
+            return;
         }
-        $query->whereBetween('order_seats.date', [$start, $end]);
-    }
+        $date = $this->filterResults['date'] ?? null;
+        $date_type = $this->filterResults['date_type'] ?? 'range';
+        $branch_id = $this->filterResults['branch_id'] ?? null;
+        
 
-    // Apply branch filter if present
-    if ($branch_id) {
-        $query->where('orders.branch_id', $branch_id);
-    }
+        $dateRange = null;
+        
+        if ($date) {
+            if ($date_type === 'single') {
+                $start = Carbon::parse($date)->startOfDay();
+                $end = Carbon::parse($date)->endOfDay();
+            } else {
+                $range = get_range_date($date);
+                $start = $range['start']->startOfDay();
+                $end = $range['end']->endOfDay();
+            }
+            $dateRange = [$start, $end];
+        }
+        
+        // $dateRange = ($start_date && $end_date)
+        //     ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
+        //     : null;
 
-    // Process in chunks of 1000 records
-    $query->chunk(1000, function ($chunk) use (&$rows, &$footer) {
-        foreach ($chunk as $row) {
+        $footer = collect([
+            'movie_key' => '-',
+            'movie' => '-',
+            'distributor_name' => '-',
+            'branch' => '-',
+            'reference' => '-',
+            'theater' => '-',
+            'type' => '-',
+            'seats' => '-',
+            'nb_seats' => '-',
+            'Week #' => '-',
+            'movie_show_date' => '-',
+            'movie_show_time' => '-',
+            'booking_date' => '-',
+            'booking_time' => '-',
+            'unit_price' => 0,
+            'total_price' => 0,
+            'imtiyaz_discount' => 0,
+            'customer_name' => '-',
+            'cashier' => '-',
+            'booked_via' => '-',
+            'payment_method' => '-',
+            'tax_amount' => 0,
+            'dist_perc' => 0,
+            'cost_of_sale' => 0,
+            'unit_cost' => 0,
+        ]);
+
+        $results = DB::table('order_seats')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
+            ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
+            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
+            ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
+            ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
+            ->leftJoin('price_group_zones as zones', 'order_seats.zone_id', '=', 'zones.id')
+            ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
+            ->leftJoin('pos_users as refunded_by_user', 'order_seats.refunded_cashier_id', '=', 'refunded_by_user.id')
+            ->leftJoin('pos_users as refunded_manager_user', 'order_seats.refunded_manager_id', '=', 'refunded_manager_user.id')
+            ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
+            ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
+            ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
+            ->select([
+                'orders.id as order_id',
+                'orders.reference',
+                'order_seats.id',
+                'orders.user_id',
+                'customers.name as customer_name',
+                'orders.pos_user_id',
+                'pos_users.name as booked_by',
+                'orders.branch_id',
+                'branches.label_en as branch',
+                'orders.payment_method_id',
+                'payment_methods.label as payment_method',
+                'order_seats.price as unit_price',
+                'distributors.label as distributor_label',
+                'order_seats.imtiyaz_phone',
+                DB::raw('COUNT(order_seats.id) as seats_count'),
+                DB::raw("GROUP_CONCAT(seat) as seats"),
+                DB::raw("SUM(CASE WHEN order_seats.imtiyaz_phone IS NOT NULL THEN 1 ELSE 0 END) as imtiyaz_seat_count"),
+                DB::raw("CONCAT(order_seats.zone_id,'_',orders.reference) as computed_identifier"),
+                'order_seats.label as type',
+                'movies.name as movie',
+                'movies.movie_key as movie_key',
+                'zones.label as zone_label',
+                'order_seats.date',
+                'times.label as time',
+                'theaters.label as theater',
+                'order_seats.created_at',
+                'order_seats.dist_share_percentage as dist_perc',
+                'order_seats.refunded_at',
+                'order_seats.week',
+                'systems.label as system',
+            ])
+            ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
+            ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id))
+            ->whereNull('order_seats.deleted_at')
+            ->whereNull('order_seats.refunded_at')
+            ->orderBy('order_seats.id', 'ASC')
+            ->groupBy('computed_identifier')
+            ->get();
+
+        $rows = $results->map(function ($row) use (&$footer) {
             $unit_price = $row->unit_price;
             $seats_count = $row->seats_count;
             $total_price = $unit_price * $seats_count;
@@ -327,9 +184,9 @@ class ErpIntegrationReport extends DefaultReport
             $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
             $unit_cost = $seats_count ? $cost / $seats_count : 0;
 
-            $createdAt = Carbon::parse($row->created_at ?? now());
+            $createdAt = Carbon::parse($row->created_at);
 
-            $rows->push([
+            $data = [
                 'movie_key' => $row->movie_key,
                 'movie' => $row->movie,
                 'distributor_name' => $row->distributor_label,
@@ -344,60 +201,45 @@ class ErpIntegrationReport extends DefaultReport
                 'movie_show_time' => $row->time ?? '',
                 'booking_date' => $createdAt->format('d-m-Y'),
                 'booking_time' => $createdAt->format('H:i:s'),
-                'unit_price' => number_format($unit_price),
-                'total_price' => number_format($total_price),
-                'imtiyaz_discount' => number_format($row->imtiyaz_seat_count),
+                'unit_price' => $unit_price,
+                'total_price' => $total_price,
+                'imtiyaz_discount' => $row->imtiyaz_seat_count,
                 'customer_name' => $row->customer_name ?? '',
                 'cashier' => $row->booked_by,
                 'booked_via' => $row->system ?? '',
                 'payment_method' => $row->payment_method ?? '',
-                'tax_amount' => number_format($tax_amount),
+                'tax_amount' => $tax_amount,
                 'dist_perc' => $row->dist_perc,
-                'cost_of_sale' => number_format($cost),
-                'unit_cost' => number_format($unit_cost),
-            ]);
+                'cost_of_sale' => $cost,
+                'unit_cost' => $unit_cost,
+            ];
 
-            // Update footer totals
+            // Add to footer before formatting
             $footer['unit_price'] += $unit_price;
             $footer['total_price'] += $total_price;
             $footer['tax_amount'] += $tax_amount;
             $footer['cost_of_sale'] += $cost;
             $footer['unit_cost'] += $unit_cost;
             $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
-        }
-    });
 
-    // Format footer values
-    foreach ($footer as $key => $value) {
-        $footer[$key] = number_format($value);
+            // Format for display
+            foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
+                $data[$field] = number_format($data[$field]);
+            }
+
+            return $data;
+        })->filter()->values();
+
+        // Format footer
+        foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
+            $footer[$field] = number_format($footer[$field]);
+        }
+
+        $this->setFooter($footer->toArray());
+
+        return $rows;
     }
 
-    // Add static footer fields
-    $footer += [
-        'movie_key' => '-',
-        'movie' => '-',
-        'distributor_name' => '-',
-        'branch' => '-',
-        'reference' => '-',
-        'theater' => '-',
-        'type' => '-',
-        'seats' => '-',
-        'nb_seats' => '-',
-        'Week #' => '-',
-        'movie_show_date' => '-',
-        'movie_show_time' => '-',
-        'booking_date' => '-',
-        'booking_time' => '-',
-        'customer_name' => '-',
-        'cashier' => '-',
-        'booked_via' => '-',
-        'payment_method' => '-',
-    ];
-
-    $this->setFooter($footer);
-
-    return $rows;
-}
 
 
     public function footer()
