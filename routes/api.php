@@ -152,7 +152,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([KIOSKPOSUserMiddleware::class,AuthMandatoryMiddleware::class,]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
         Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
-        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([POSUserMiddleware::class, AuthMandatoryMiddleware::class]);
+        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([KIOSKPOSUserMiddleware::class, AuthMandatoryMiddleware::class]);
     });
 
     Route::prefix('movies')->group(function () {
