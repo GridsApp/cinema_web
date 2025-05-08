@@ -65,17 +65,17 @@ class ErpIntegrationReport extends DefaultReport
     public function rows()
     {
 
-    
+
         if (!$this->filterResults) {
             return;
         }
         $date = $this->filterResults['date'] ?? null;
         $date_type = $this->filterResults['date_type'] ?? 'range';
         $branch_id = $this->filterResults['branch_id'] ?? null;
-        
+
 
         $dateRange = null;
-        
+
         if ($date) {
             if ($date_type === 'single') {
                 $start = Carbon::parse($date)->startOfDay();
@@ -87,7 +87,7 @@ class ErpIntegrationReport extends DefaultReport
             }
             $dateRange = [$start, $end];
         }
-        
+
         // $dateRange = ($start_date && $end_date)
         //     ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
         //     : null;
@@ -178,7 +178,7 @@ class ErpIntegrationReport extends DefaultReport
             $unit_price = $row->unit_price;
             $seats_count = $row->seats_count;
             $total_price = $unit_price * $seats_count;
-            $tax_amount = $seats_count ? taxCalculation($total_price) : 0;
+            $tax_amount = $seats_count ? ($total_price * (5 / 100)) : 0;
 
             $share_percentage = floatval($row->dist_perc ?? 0);
             $cost = ($total_price - $tax_amount) * ($share_percentage / 100);

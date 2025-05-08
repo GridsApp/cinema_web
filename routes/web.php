@@ -24,9 +24,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 
-Route::get('test/test/test' , function(){
+Route::get('test/test/test', function () {
   dump(now()->parse("06-05-2025"));
-  dd(validate_movie_show(8, now()->parse("06-05-2025") , 37 , 7 , []));
+  dd(validate_movie_show(8, now()->parse("06-05-2025"), 37, 7, []));
 });
 
 
@@ -42,11 +42,14 @@ Route::group([
   // Route::get('/pos-users', [MigrationsController::class, 'posUsers']);
   // Route::get('/users', [MigrationsController::class, 'migrateUsers']);
 
-    // Route::get('/week', [MigrationsController::class, 'week']);
+  // Route::get('/week', [MigrationsController::class, 'week']);
 
 
 
 });
+
+
+
 
 
 Route::get('/survey/{order_id}/{user_id}/{token}', [App\Http\Controllers\SurveyController::class, 'showSurvey'])
@@ -190,6 +193,8 @@ Route::group([
 Route::post('/cart/add-seats', [\App\Http\Controllers\WEBSITE\CartController::class, 'addSeatsToCart']);
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
+
+
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
 
@@ -219,6 +224,8 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
     Route::get('/distributor-film-hire', [\App\Http\Controllers\DistributorSharesController::class, 'render'])->name('distributor-film-hire.render');
     Route::get('/distributor-film-hire/result', [\App\Http\Controllers\DistributorSharesController::class, 'result'])->name('distributor-film-hire.render-result');
+
+   
   });
 });
 

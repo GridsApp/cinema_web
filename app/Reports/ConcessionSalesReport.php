@@ -31,6 +31,8 @@ class ConcessionSalesReport extends DefaultReport
 
     public function header()
     {
+
+        // dd("hereee");
         if (!$this->filterResults) {
             return;
         }
@@ -52,9 +54,14 @@ class ConcessionSalesReport extends DefaultReport
 
 
     public function rows()
-    {if (!$this->filterResults) {
+    {
+    
+       
+        
+    if (!$this->filterResults) {
         return;
     }
+
     
     $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
         ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]

@@ -17,6 +17,8 @@ return [
 
         ]
     ],
+
+ 
     [
         'display' => true,
         'label' => 'Movie Settings',
@@ -370,7 +372,7 @@ return [
 
         
     ],
-
+  
     [
         'key' => 'reports',
         'label' => 'Reports',
