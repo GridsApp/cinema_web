@@ -185,8 +185,8 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                 }
 
 
-                $movie = $first_order_seat->movie;
-                $distributor = $movie->distributor->condensed_label ?? '';
+                $movie = $first_order_seat->movie ?? '';
+                $distributor = $movie->distributor->condensed_label ?? $movie->distributor?->label ?? '-';
 
                 $dayCounts = [
                     'thursday' => 0,

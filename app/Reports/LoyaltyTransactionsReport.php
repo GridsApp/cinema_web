@@ -69,7 +69,6 @@ class LoyaltyTransactionsReport extends DefaultReport
    
         $footer = [
             'long_id' => 'Total',
-            // 'reference' => '-',
             'description' => '-',
             'card_number' => '-',
             'type' => '-',
@@ -140,7 +139,6 @@ class LoyaltyTransactionsReport extends DefaultReport
 
 
                 'long_id' => $row->long_id,
-                // 'reference' =>  $row->reference ?? '-',
                 'description' => $row->description ?? '-',
                 'card_number' => $row->card_number ?? '-',
 

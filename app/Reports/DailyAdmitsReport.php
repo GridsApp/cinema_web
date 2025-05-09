@@ -90,7 +90,7 @@ class DailyAdmitsReport extends DefaultReport
         $date = $this->filterResults['date'] ?? null;
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
-        
+
 
         $dateRange = get_range_date($date);
 
@@ -126,30 +126,30 @@ class DailyAdmitsReport extends DefaultReport
             ->pluck('count', 'identifier');
 
         $all_time_booked_seats_admits = OrderSeat::with('movie.distributor', 'zone')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
 
             ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("COUNT(*) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereDate('order_seats.date', '<=', $dateRange['start']);
-            if ($branch_id) {
-                $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_admits=$all_time_booked_seats_admits->groupBy('identifier')
+        if ($branch_id) {
+            $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_seats_admits = $all_time_booked_seats_admits->groupBy('identifier')
             ->pluck('count', 'identifier');
 
 
         $all_time_booked_seats_income = OrderSeat::with('movie.distributor', 'zone')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
 
             ->select(DB::raw("CONCAT(order_seats.movie_id,'_' , order_seats.zone_id) as identifier"), DB::raw("SUM(price) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereDate('order_seats.date', '<=', $dateRange['start']);
-            if ($branch_id) {
-                $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_income=$all_time_booked_seats_income->groupBy('identifier')
+        if ($branch_id) {
+            $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
+        }
+        $all_time_booked_seats_income = $all_time_booked_seats_income->groupBy('identifier')
             ->pluck('count', 'identifier');
 
         $footer = [
@@ -208,12 +208,11 @@ class DailyAdmitsReport extends DefaultReport
                     return null;
                 }
 
-
                 $movie = $first_order_seat->movie ?? '';
-                $distributor = $movie->distributor->condensed_label ?? '';
+                $distributor = $movie->distributor->condensed_label ?? $movie->distributor?->label ?? '-';
                 $zone = $first_order_seat->zone ?? '';
-                $zone = ($zone->priceGroup->label ?? '') . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label ?? '');
-                $week = $first_order_seat->week ?? '';
+                $zone = ($zone->priceGroup->label ?? '-') . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label ?? '');
+                $week = $first_order_seat->week ?? '-';
 
                 $dayCounts = [
                     'thursday' => 0,
@@ -243,10 +242,9 @@ class DailyAdmitsReport extends DefaultReport
                     $dayIncomes[$dayName] += $order_seat->price;
                 }
 
-                // dd($last_week_booked_seats_admits[$first_order_seat->identifier]);
-
+           
                 $data = [
-                    'movie' => $movie?->name ?? '',
+                    'movie' => $movie?->condensed_name ?? $movie?->name ?? '-',
                     'distributor' => $distributor,
                     'type' => $zone,
                     'week' => $week,

@@ -66,13 +66,13 @@ class CouponDiscountsReport extends DefaultReport
         $paymentMethod = $this->filterResults['payment_method_id'] ?? null;
         $system = $this->filterResults['system_id'] ?? null;
         $posUser = $this->filterResults['pos_user_id'] ?? null;
-        
+
         $dateRange = ($start_date && $end_date)
             ? [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()]
             : null;
 
         $footer = collect([
-            'created_at' => '-',
+            'created_at' => 'Total',
             'reference' => '-',
             'movie' => '-',
             'branch' => '-',
@@ -102,11 +102,13 @@ class CouponDiscountsReport extends DefaultReport
                 'orders.id as order_id',
                 'orders.reference',
                 'movies.name as movie',
+                'movies.condensed_name as condensed_movie',
                 'order_seats.label as type',
                 'pos_users.name as booked_by',
                 'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
                 'payment_methods.label as payment_method',
-              
+
                 DB::raw('SUM(order_coupons.amount) as coupon_discount'),
                 DB::raw("GROUP_CONCAT(DISTINCT coupons.label SEPARATOR ', ') as coupon_labels"),
                 DB::raw("GROUP_CONCAT(DISTINCT coupons.code SEPARATOR ', ') as coupon_codes"),
@@ -120,35 +122,35 @@ class CouponDiscountsReport extends DefaultReport
             ])
             ->whereNull('order_coupons.deleted_at');
 
-            if ($dateRange) {
-                $query->whereBetween('order_coupons.created_at', $dateRange);
-            }
-            
-            if ($branch) {
-                $query->where('orders.branch_id', $branch);
-            }
-            
-            if ($movie) {
-                $query->where('order_seats.movie_id', $movie);
-            }
-            
-            if ($paymentMethod) {
-                $query->where('orders.payment_method_id', $paymentMethod);
-            }
-            
-            if ($system) {
-                $query->where('orders.system_id', $system);
-            }
-            
-            if ($posUser) {
-                $query->where('orders.pos_user_id', $posUser);
-            }
-            $results = $query->groupBy('computed_identifier')->get();
+        if ($dateRange) {
+            $query->whereBetween('order_coupons.created_at', $dateRange);
+        }
+
+        if ($branch) {
+            $query->where('orders.branch_id', $branch);
+        }
+
+        if ($movie) {
+            $query->where('order_seats.movie_id', $movie);
+        }
+
+        if ($paymentMethod) {
+            $query->where('orders.payment_method_id', $paymentMethod);
+        }
+
+        if ($system) {
+            $query->where('orders.system_id', $system);
+        }
+
+        if ($posUser) {
+            $query->where('orders.pos_user_id', $posUser);
+        }
+        $results = $query->groupBy('computed_identifier')->get();
 
 
         $rows = $results->map(function ($row) use (&$footer) {
             // $unit_price = $row->unit_price;
-            $seats_count = $row->seats_count;
+            // $seats_count = $row->seats_count;
             // $total_price = $unit_price * $items_count;
 
             $createdAt = Carbon::parse($row->created_at);
@@ -157,10 +159,10 @@ class CouponDiscountsReport extends DefaultReport
 
                 'created_at' => $createdAt->format('d-m-Y'),
                 'reference' => $row->reference,
-                'movie' => $row->movie ?? '-',
-                'branch' => $row->branch ?? '',
+                'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
+                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
                 'payment_method' => $row->payment_method ?? '',
-                'system' => $row->system ?? '',
+                'system' => $row->system ?? '-',
                 'booked_by' => $row->booked_by ?? '-',
                 'coupon_label' => $row->coupon_labels,
                 'coupon_code' => $row->coupon_codes,
@@ -168,9 +170,8 @@ class CouponDiscountsReport extends DefaultReport
                 'seats' => $row->seats ?? '-',
                 'seats_count' => $row->seats_count ?? 0,
                 'type' => $row->types ?? '-',
-            
-            ];
 
+            ];
 
             $footer['coupon_discount'] += $data['coupon_discount'];
 

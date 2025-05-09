@@ -142,3 +142,25 @@ Artisan::command('twa:dataTransfer', function () {
 
 })->purpose('Transfering tables');
 
+
+
+
+Artisan::command('twa:calculateDistShare {limit}', function ($limit) {
+
+    $this->comment("Started");
+
+//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+
+    (new \App\Http\Controllers\MigrationsController)->calculateDistShare($limit , $this);
+
+
+
+    $this->comment("Finished");
+
+
+})->purpose('Transfering tables');
+
+
+
+
+   

@@ -128,7 +128,7 @@ class DailyAdmitsByItemReport extends DefaultReport
         $all_time_booked_items_income = $all_time_booked_items_income->groupBy('identifier')->pluck('count', 'identifier');
 
         $footer = [
-            'extra' => '-',
+            'extra' => 'Total',
             'thursday' => 0,
             'friday' => 0,
             'saturday' => 0,

@@ -141,7 +141,7 @@ class DailyAdmitsByTypeReport extends DefaultReport
             ->pluck('count', 'identifier');
 
         $footer = [
-            'type' => '-',
+            'type' => 'Total',
             'week' => '-',
             'thursday' => 0,
             'friday' => 0,

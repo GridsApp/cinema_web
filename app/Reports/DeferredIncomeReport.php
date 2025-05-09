@@ -138,7 +138,7 @@ class DeferredIncomeReport extends DefaultReport
 
 
                 $movie = $first_order_seat->movie ?? '';
-                $distributor = $movie->distributor->condensed_label ?? '';
+                $distributor = $movie->distributor->condensed_label ?? $movie->distributor?->label ?? '-';
                 $zone = $first_order_seat->zone ?? '';
                 $zone = ($zone->priceGroup->label ?? '') . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label ?? '');
                 $week = $first_order_seat->week ?? '';
@@ -175,7 +175,7 @@ class DeferredIncomeReport extends DefaultReport
 
 
                 $data = [
-                    'movie' => $movie?->name ?? '',
+                    'movie' => $movie?->condensed_name ?? $movie?->name ?? '-',
                     'distributor' => $distributor,
                     'type' => $zone,
                     'week' => $week,

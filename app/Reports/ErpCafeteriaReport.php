@@ -114,6 +114,7 @@ class ErpCafeteriaReport extends DefaultReport
                 'pos_users.name as booked_by',
                 'orders.branch_id',
                 'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
                 'orders.payment_method_id',
                 'payment_methods.label as payment_method',
                 'order_items.price as unit_price',
@@ -136,7 +137,7 @@ class ErpCafeteriaReport extends DefaultReport
             ->get();
 
 
-            
+
 
         $rows = $results->map(function ($row) use (&$footer) {
             $unit_price = $row->unit_price;
@@ -150,7 +151,7 @@ class ErpCafeteriaReport extends DefaultReport
 
                 'item_code' => $row->item_code,
                 'item_name' => $row->item_name,
-                'branch' => $row->branch ?? '',
+                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
                 'reference' => $row->reference,
                 'booking_date' => $createdAt->format('d-m-Y'),
                 'booking_time' => $createdAt->format('H:i:s'),
