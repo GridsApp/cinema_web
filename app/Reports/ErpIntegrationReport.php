@@ -144,6 +144,7 @@ class ErpIntegrationReport extends DefaultReport
                 'pos_users.name as booked_by',
                 'orders.branch_id',
                 'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
                 'orders.payment_method_id',
                 'payment_methods.label as payment_method',
                 'order_seats.price as unit_price',
@@ -155,6 +156,7 @@ class ErpIntegrationReport extends DefaultReport
                 DB::raw("CONCAT(order_seats.zone_id,'_',orders.reference) as computed_identifier"),
                 'order_seats.label as type',
                 'movies.name as movie',
+                'movies.condensed_name as movie_condensed',
                 'movies.commission_settings as commission_settings',
                 'movies.movie_key as movie_key',
                 'zones.label as zone_label',
@@ -181,15 +183,10 @@ class ErpIntegrationReport extends DefaultReport
             $total_price = $unit_price * $seats_count;
             $tax_amount = $seats_count ? ($total_price * (5 / 100)) : 0;
 
-
             $createdAt = Carbon::parse($row->created_at);
-
-
-
             $dist_share_percentage = 0;
 
             $settings = json_decode($row->commission_settings, true);
-
             $week = $row->week;
             $conditions = $settings['conditions'] ?? [];
             $defaultPercentage = $settings['defaultPercentage'] ?? 0;
@@ -206,14 +203,14 @@ class ErpIntegrationReport extends DefaultReport
             $share_percentage = floatval($dist_share_percentage ?? 0);
             $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
 
-            $unit_cost = $seats_count !=0 ? $cost / $seats_count : 0;
+            $unit_cost = $seats_count != 0 ? $cost / $seats_count : 0;
 
 
             $data = [
                 'movie_key' => $row->movie_key,
-                'movie' => $row->movie,
+                'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
                 'distributor_name' => $row->distributor_label,
-                'branch' => $row->branch ?? '',
+                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
                 'reference' => $row->reference,
                 'theater' => $row->theater ?? '',
                 'type' => $row->type,
