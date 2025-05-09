@@ -135,6 +135,9 @@ class ErpCafeteriaReport extends DefaultReport
             ->groupBy('computed_identifier')
             ->get();
 
+
+            
+
         $rows = $results->map(function ($row) use (&$footer) {
             $unit_price = $row->unit_price;
             $items_count = $row->items_count;

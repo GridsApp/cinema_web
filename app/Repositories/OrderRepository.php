@@ -160,25 +160,25 @@ class OrderRepository implements OrderRepositoryInterface
             $points_conversion = 1000;
             $total_points += $price / $points_conversion;
 
-            $movie = Movie::find($cart_seat['movie_id']);
+            // $movie = Movie::find($cart_seat['movie_id']);
 
-            $dist_share_percentage = 0;
-            if ($movie && $movie->commission_settings) {
-                $settings = json_decode($movie->commission_settings, true);
+            // $dist_share_percentage = 0;
+            // if ($movie && $movie->commission_settings) {
+            //     $settings = json_decode($movie->commission_settings, true);
 
-                $week = $cart_seat['week'];
-                $conditions = $settings['conditions'] ?? [];
-                $defaultPercentage = $settings['defaultPercentage'] ?? 0;
+            //     $week = $cart_seat['week'];
+            //     $conditions = $settings['conditions'] ?? [];
+            //     $defaultPercentage = $settings['defaultPercentage'] ?? 0;
 
 
-                $index = $week - 1;
+            //     $index = $week - 1;
 
-                if (isset($conditions[$index])) {
-                    $dist_share_percentage = $conditions[$index];
-                } else {
-                    $dist_share_percentage = $defaultPercentage;
-                }
-            }
+            //     if (isset($conditions[$index])) {
+            //         $dist_share_percentage = $conditions[$index];
+            //     } else {
+            //         $dist_share_percentage = $defaultPercentage;
+            //     }
+            // }
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
@@ -195,9 +195,9 @@ class OrderRepository implements OrderRepositoryInterface
             $orderSeat->time_id = $cart_seat['time_id'];
             $orderSeat->week = $cart_seat['week'];
             $orderSeat->zone_id = $cart_seat['zone_id'];
-            $orderSeat->dist_share_percentage = $dist_share_percentage;
+            // $orderSeat->dist_share_percentage = $dist_share_percentage;
             // $orderSeat->dist_share_amount = $price * ($dist_share_percentage / 100);
-            $orderSeat->dist_share_amount = calculate_share_amount($price,$dist_share_percentage,5);
+            // $orderSeat->dist_share_amount = calculate_share_amount($price,$dist_share_percentage,5);
 
 
             $orderSeat->save();

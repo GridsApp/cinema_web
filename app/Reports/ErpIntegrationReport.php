@@ -155,6 +155,7 @@ class ErpIntegrationReport extends DefaultReport
                 DB::raw("CONCAT(order_seats.zone_id,'_',orders.reference) as computed_identifier"),
                 'order_seats.label as type',
                 'movies.name as movie',
+                'movies.commission_settings as commission_settings',
                 'movies.movie_key as movie_key',
                 'zones.label as zone_label',
                 'order_seats.date',
@@ -180,11 +181,33 @@ class ErpIntegrationReport extends DefaultReport
             $total_price = $unit_price * $seats_count;
             $tax_amount = $seats_count ? ($total_price * (5 / 100)) : 0;
 
-            $share_percentage = floatval($row->dist_perc ?? 0);
-            $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
-            $unit_cost = $seats_count ? $cost / $seats_count : 0;
 
             $createdAt = Carbon::parse($row->created_at);
+
+
+
+            $dist_share_percentage = 0;
+
+            $settings = json_decode($row->commission_settings, true);
+
+            $week = $row->week;
+            $conditions = $settings['conditions'] ?? [];
+            $defaultPercentage = $settings['defaultPercentage'] ?? 0;
+
+
+            $index = $week - 1;
+
+            if (isset($conditions[$index])) {
+                $dist_share_percentage = $conditions[$index];
+            } else {
+                $dist_share_percentage = $defaultPercentage;
+            }
+
+            $share_percentage = floatval($dist_share_percentage ?? 0);
+            $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
+
+            $unit_cost = $seats_count !=0 ? $cost / $seats_count : 0;
+
 
             $data = [
                 'movie_key' => $row->movie_key,
@@ -209,12 +232,11 @@ class ErpIntegrationReport extends DefaultReport
                 'booked_via' => $row->system ?? '',
                 'payment_method' => $row->payment_method ?? '',
                 'tax_amount' => $tax_amount,
-                'dist_perc' => $row->dist_perc,
+                'dist_perc' => $share_percentage,
                 'cost_of_sale' => $cost,
                 'unit_cost' => $unit_cost,
             ];
 
-            // Add to footer before formatting
             $footer['unit_price'] += $unit_price;
             $footer['total_price'] += $total_price;
             $footer['tax_amount'] += $tax_amount;
@@ -222,7 +244,7 @@ class ErpIntegrationReport extends DefaultReport
             $footer['unit_cost'] += $unit_cost;
             $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
 
-            // Format for display
+
             foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
                 $data[$field] = number_format($data[$field]);
             }
@@ -230,7 +252,7 @@ class ErpIntegrationReport extends DefaultReport
             return $data;
         })->filter()->values();
 
-        // Format footer
+
         foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
             $footer[$field] = number_format($footer[$field]);
         }
