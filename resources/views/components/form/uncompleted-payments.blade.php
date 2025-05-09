@@ -26,7 +26,26 @@
                         <td> {{ $row->amount }} </td>
                         <td> {{ $row->payment_reference }} </td>
                         <td> {{ $row->message }} </td>
-                        <td> <button class="btn btn-primary" wire:click="treatPayment('{{$row->id}}')"> Treat</button> </td>
+                        <td> 
+                            <div x-data="{ showModal: false, handleOpen() { this.showModal = true } }">
+                            <button type="button" class="btn btn-primary" @click="handleOpen" > Treat</button>
+                        
+                            @component('UIKitView::components.modal', [
+                                'title' => 'Treat',
+                                'variable' => 'showModal',
+                                'action' => [
+                                    'label' => "'Treat'",
+                                    'type' => 'success',
+                                    'handler' => "treatPayment('".$row->id."')",
+                                ],
+                            ])
+                                <div class="text-[13px] font-medium text-left text-gray-800 p-5">
+                                    Are you sure you want to treat this payment?
+                                </div>
+                            @endcomponent
+                            </div>
+
+                        </td>
                     </tr>
 
                 @empty
