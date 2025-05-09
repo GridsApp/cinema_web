@@ -4,6 +4,7 @@ namespace App\Livewire\Components;
 
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
 
@@ -12,6 +13,8 @@ class ManageWallets extends Component
 
     use ToastTrait;
 
+
+    #[Url]
     public $form = [];
     public $transactions = [];
     public $balance = 0;
@@ -32,7 +35,9 @@ class ManageWallets extends Component
 
        
 
-        $this->form['card_number'] = null;
+        if(!isset($this->form['card_number'])){
+            $this->form['card_number'] = '';
+        }
 
         $this->form['transaction_type'] = null;
         $this->form['amount'] = null;
@@ -139,9 +144,16 @@ class ManageWallets extends Component
         $this->searchByCard();
     }
 
+    public function handleClear(){
+        $this->form['card_number'] = null;
+    }
 
     public function render()
     {
+
+        if(isset($this->form['card_number']) && !empty($this->form['card_number'])){
+            $this->searchByCard();
+        }
 
         return view('components.form.manage-wallets');
     }

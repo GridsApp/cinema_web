@@ -15,8 +15,15 @@
                         {!! field('card_number') !!}
                     </div>
 
-                    <button type="submit" class="btn btn-primary"> Search </button>
+                    <div class="flex gap-4 items-center justify-start">
+                        <button type="submit" class="btn btn-primary"> Search </button>
+
+                        <button type="button" class="btn btn-secondary" wire:click="handleClear">  Clear</button>
+    
+                    </div>
+                  
                 </form>
+
             @endcomponent
 
 

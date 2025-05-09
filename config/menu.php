@@ -149,6 +149,13 @@ return [
                 'link' => routeObject('entity', ['slug' => 'users'])
             ],
             [
+                'key' => 'manage-users',
+                'label' => 'Manage Users',
+                'link' => "/cms/manage/users",
+               
+            ],
+
+            [
                 'key' => 'manage-wallets',
                 'label' => 'Manage Wallets',
                 'link' => "/cms/manage/wallets",

@@ -204,6 +204,7 @@ class CardRepository implements CardRepositoryInterface
                 'amount' => $transaction->amount,
                 'type' => $transaction->type,
                 'description' => $transaction->description,
+                'balance' => $transaction->balance,
             ];
         }
 

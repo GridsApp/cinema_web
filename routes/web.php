@@ -19,6 +19,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\ReportExport;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -197,6 +198,11 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
+
+
+  Route::get("manage/users", [UserController::class, 'render'])->name('get-user');
+  Route::get("uncompleted/payments", [UserController::class, 'renderUncompletedPayments'])->name('uncompleted-payments');
+
 
   Route::get("/items/list", [ItemsController::class, 'render'])->name('items');
   Route::get('/items/family/create', [ItemsController::class, 'createItem'])->name('items.create');

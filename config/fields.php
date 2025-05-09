@@ -1855,6 +1855,20 @@ return [
         'container' => 'col-span-6',
     ],
 
+    'phone_email_card_number' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Search by Phone/ Card Number/ Email',
+        'placeholder' => 'Enter Phone/ Card Number / Email',
+        'name' => 'phone_email_card_number',
+        'container' => 'col-span-6',
+    ],
+
+    
+
 
     'profile_picture' => [
         'id' => uniqid(),
