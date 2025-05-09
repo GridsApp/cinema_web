@@ -110,7 +110,8 @@ class MigrationsController extends Controller
     // }
 
 
-    public function migrateCoupons(){
+    public function migrateCoupons()
+    {
 
 
         $used = DB::table('coupons')->get()->pluck('code')->toArray();
@@ -137,11 +138,10 @@ class MigrationsController extends Controller
         DB::table('coupons')->insert($coupons);
 
         echo "DONE";
-
     }
 
 
-    public function migrateUsers($limit , $consoleThis)
+    public function migrateUsers($limit, $consoleThis)
     {
 
         // $limit = 10000;
@@ -166,10 +166,10 @@ class MigrationsController extends Controller
 
         $users = DB::connection('iraqi_cinema_old')
             ->table('users')
-            ->where('treated' , 0)
+            ->where('treated', 0)
             ->where('cancelled', 0)
             // ->where('id' , 95905)
-            ->where('segment' , 'B')
+            ->where('segment', 'B')
             ->limit($limit)
             ->get();
 
@@ -199,153 +199,147 @@ class MigrationsController extends Controller
 
             try {
 
-            DB::beginTransaction();
+                DB::beginTransaction();
 
-            // Check for transactions for this user id
+                // Check for transactions for this user id
 
-            $card = DB::connection('iraqi_cinema_old')->table('user_loyalty_cards')
-            ->where('expired' , '!=' , 1)
-            ->where('cancelled' , 0)
-            ->where('user_id' , $user->id)
-            ->orderBy('id' , 'DESC')
-            ->first();
+                $card = DB::connection('iraqi_cinema_old')->table('user_loyalty_cards')
+                    ->where('expired', '!=', 1)
+                    ->where('cancelled', 0)
+                    ->where('user_id', $user->id)
+                    ->orderBy('id', 'DESC')
+                    ->first();
 
 
-            $new_user_id = DB::table('users')->insertGetId($info);
+                $new_user_id = DB::table('users')->insertGetId($info);
 
-            $total_wallet_balance = 0;
-            $total_loyalty_balance  = 0;
+                $total_wallet_balance = 0;
+                $total_loyalty_balance  = 0;
 
-            if($card){
-                $total_wallet_balance = DB::connection('iraqi_cinema_old')->table('user_wallet_transactions')
-                ->selectRaw("
+                if ($card) {
+                    $total_wallet_balance = DB::connection('iraqi_cinema_old')->table('user_wallet_transactions')
+                        ->selectRaw("
                         SUM(CASE WHEN type = 'topup' THEN amount ELSE 0 END) -
                         SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
                 ")
-                ->where('user_id', $user->id)
-                ->where('cancelled', 0)
-                ->value('balance');
+                        ->where('user_id', $user->id)
+                        ->where('cancelled', 0)
+                        ->value('balance');
 
-                $total_loyalty_balance = DB::connection('iraqi_cinema_old')->table('user_loyalty_point_transactions')
-                ->selectRaw("
+                    $total_loyalty_balance = DB::connection('iraqi_cinema_old')->table('user_loyalty_point_transactions')
+                        ->selectRaw("
                         SUM(CASE WHEN type = 'add' THEN amount ELSE 0 END) -
                         SUM(CASE WHEN type = 'deduct' THEN amount ELSE 0 END) as balance
                 ")
-                ->where('user_id', $user->id)
-                ->where('cancelled', 0)
-                ->value('balance');
+                        ->where('user_id', $user->id)
+                        ->where('cancelled', 0)
+                        ->value('balance');
 
-                $card_number = $card->card_number;
-                $card_type = strlen($card_number) == 16 ? 'physical' : 'digital';
+                    $card_number = $card->card_number;
+                    $card_type = strlen($card_number) == 16 ? 'physical' : 'digital';
+                } else {
 
-            }else{
+                    do {
+                        $card_number = (string) rand(10000000000000000, 99999999999999999);
+                    } while (UserCard::where('barcode', $card_number)->whereNull('deleted_at')->first());
 
-                do {
-                    $card_number = (string) rand(10000000000000000, 99999999999999999);
-                } while (UserCard::where('barcode', $card_number)->whereNull('deleted_at')->first());
-
-                $card_type = 'digital';
-
-            }
+                    $card_type = 'digital';
+                }
 
 
 
-            $card_id = DB::table('user_cards')->insertGetId([
-                'user_id' => $new_user_id,
-                'barcode' => $card_number,
-                'type' => $card_type,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-
-
-
-            if($total_wallet_balance > 0){
-              $user_wallet_transactions_id =   DB::table('user_wallet_transactions')->insertGetId([
-                    'user_card_id' => $card_id,
-                    'type' => 'in',
-                    'amount' => $total_wallet_balance,
-                    'balance' =>  $total_wallet_balance,
-                    'description' => 'System Migration',
+                $card_id = DB::table('user_cards')->insertGetId([
                     'user_id' => $new_user_id,
-                    'reference' => 'SYS',
-
-                    'system_id' => 5,
-                    'transactionable_id' => 1,
-                    'transactionable_type' => 'twa\cmsv2\Models\CmsUser',
-
+                    'barcode' => $card_number,
+                    'type' => $card_type,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
 
-                DB::table('user_wallet_transactions')->where('id' , $user_wallet_transactions_id)->update([
-                    'long_id' => generateLongId($user_wallet_transactions_id)
-                ]);
-            }
-
-            if($total_loyalty_balance > 0){
-                $user_loyalty_transactions_id = DB::table('user_loyalty_transactions')->insertGetId([
-                    'user_card_id' => $card_id,
-                    'type' => 'in',
-                    'amount' => $total_loyalty_balance,
-                    'balance' =>  $total_loyalty_balance,
-                    'description' => 'System Migration',
-                    'user_id' => $new_user_id,
-                    'reference' => 'SYS',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-
-                DB::table('user_loyalty_transactions')->where('id' , $user_loyalty_transactions_id)->update([
-                    'long_id' => generateLongId($user_loyalty_transactions_id)
-                ]);
-            }
 
 
-            $redeem_rewards = DB::connection('iraqi_cinema_old')
-            ->table('redeem_rewards')
-            ->where('cancelled', 0)
-            ->where('used' , '!=' , 1)
-            ->where('user_id' , $user->id)
-            ->get()->map(function($reward) use ($new_user_id , $reward_mapping){
-                return [
-                    'user_id' => $new_user_id,
-                    'reward_id' => $reward_mapping[$reward->reward_id] ,
-                    'code' => $reward->code,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-            })->toArray();
+                if ($total_wallet_balance > 0) {
+                    $user_wallet_transactions_id =   DB::table('user_wallet_transactions')->insertGetId([
+                        'user_card_id' => $card_id,
+                        'type' => 'in',
+                        'amount' => $total_wallet_balance,
+                        'balance' =>  $total_wallet_balance,
+                        'description' => 'System Migration',
+                        'user_id' => $new_user_id,
+                        'reference' => 'SYS',
+
+                        'system_id' => 5,
+                        'transactionable_id' => 1,
+                        'transactionable_type' => 'twa\cmsv2\Models\CmsUser',
+
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+
+                    DB::table('user_wallet_transactions')->where('id', $user_wallet_transactions_id)->update([
+                        'long_id' => generateLongId($user_wallet_transactions_id)
+                    ]);
+                }
+
+                if ($total_loyalty_balance > 0) {
+                    $user_loyalty_transactions_id = DB::table('user_loyalty_transactions')->insertGetId([
+                        'user_card_id' => $card_id,
+                        'type' => 'in',
+                        'amount' => $total_loyalty_balance,
+                        'balance' =>  $total_loyalty_balance,
+                        'description' => 'System Migration',
+                        'user_id' => $new_user_id,
+                        'reference' => 'SYS',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+
+                    DB::table('user_loyalty_transactions')->where('id', $user_loyalty_transactions_id)->update([
+                        'long_id' => generateLongId($user_loyalty_transactions_id)
+                    ]);
+                }
 
 
-            DB::table('user_rewards')->insert($redeem_rewards);
+                $redeem_rewards = DB::connection('iraqi_cinema_old')
+                    ->table('redeem_rewards')
+                    ->where('cancelled', 0)
+                    ->where('used', '!=', 1)
+                    ->where('user_id', $user->id)
+                    ->get()->map(function ($reward) use ($new_user_id, $reward_mapping) {
+                        return [
+                            'user_id' => $new_user_id,
+                            'reward_id' => $reward_mapping[$reward->reward_id],
+                            'code' => $reward->code,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    })->toArray();
+
+
+                DB::table('user_rewards')->insert($redeem_rewards);
 
 
 
-            DB::connection('iraqi_cinema_old')
+                DB::connection('iraqi_cinema_old')
 
 
-                ->table('users')
-                ->where('id' , $user->id)
-                ->update([
-                    'treated' => 1
-                ]);
+                    ->table('users')
+                    ->where('id', $user->id)
+                    ->update([
+                        'treated' => 1
+                    ]);
 
-                $consoleThis->comment('DONE :'. count($users).' / '.$index + 1 . ' | ID:' .$user->id);
+                $consoleThis->comment('DONE :' . count($users) . ' / ' . $index + 1 . ' | ID:' . $user->id);
 
                 DB::commit();
-
-
             } catch (\Throwable $th) {
 
-                    DB::rollBack();
+                DB::rollBack();
 
-                    $consoleThis->comment('ERROR :'. count($users).' / '.$index + 1 . 'ID:' .$user->id);
+                $consoleThis->comment('ERROR :' . count($users) . ' / ' . $index + 1 . 'ID:' . $user->id);
 
-                    dd($th);
-
+                dd($th);
             }
-
         }
 
 
@@ -424,7 +418,8 @@ class MigrationsController extends Controller
     }
 
 
-    public function week(){
+    public function week()
+    {
 
         $movie_weeks = [
             5 => 6,
@@ -433,54 +428,52 @@ class MigrationsController extends Controller
             17 => 2,
             18 => 2,
             19 => 2,
-            20 =>2,
+            20 => 2,
         ];
 
 
         $wed = now()->parse('08-05-2025');
 
-        foreach($movie_weeks as $movie_id => $week){
+        foreach ($movie_weeks as $movie_id => $week) {
 
             DB::table('order_seats')
-            ->whereDate('date' , '>=' , $wed)
-            ->where('movie_id' , $movie_id)->update([
-                'week' => $week + 1,
-                'dist_share_percentage' => null,
-                'dist_share_amount' => null
-            ]);
+                ->whereDate('date', '>=', $wed)
+                ->where('movie_id', $movie_id)->update([
+                    'week' => $week + 1,
+                    'dist_share_percentage' => null,
+                    'dist_share_amount' => null
+                ]);
 
             DB::table('movie_shows')
-            ->whereDate('date' , '>=' , $wed)
-            ->where('movie_id' , $movie_id)->update([
-                'week' => $week + 1
-            ]);
-
+                ->whereDate('date', '>=', $wed)
+                ->where('movie_id', $movie_id)->update([
+                    'week' => $week + 1
+                ]);
         }
-
-
     }
 
 
-    public function calculateDistShare($limit = 1000 , $thisParent){
+    public function calculateDistShare($limit = 1000, $thisParent)
+    {
 
 
-        $order_seats= OrderSeat::select(
+        $order_seats = OrderSeat::select(
             'order_seats.id',
             'order_seats.week',
             'order_seats.price',
             'order_seats.dist_share_percentage',
             'order_seats.dist_share_amount',
             'movies.commission_settings'
-        )->where(function($q){
+        )->where(function ($q) {
             $q->orWhereNull('order_seats.dist_share_percentage');
             $q->orWhereNull('order_seats.dist_share_amount');
         })
-        ->join('movies', 'order_seats.movie_id','movies.id')
-        ->limit($limit)->get();
+            ->join('movies', 'order_seats.movie_id', 'movies.id')
+            ->limit($limit)->get();
 
 
         $count = count($order_seats);
-        foreach($order_seats as $i => $order_seat){
+        foreach ($order_seats as $i => $order_seat) {
 
 
             $settings = json_decode($order_seat->commission_settings, true);
@@ -499,13 +492,50 @@ class MigrationsController extends Controller
             }
 
             $order_seat->dist_share_percentage = $dist_share_percentage;
-            $order_seat->dist_share_amount = calculate_share_amount($order_seat->price,$dist_share_percentage,5);
+            $order_seat->dist_share_amount = calculate_share_amount($order_seat->price, $dist_share_percentage, 5);
             $order_seat->save();
 
 
-            $thisParent->comment("Completed :". ($i+1) ."/" . $count);
-
+            $thisParent->comment("Completed :" . ($i + 1) . "/" . $count);
         }
+    }
+
+    public function addCoupons() {
+
+        // $path = storage_path('app/data.csv');
+        $path = public_path('coupons/batch_09_05_2025.csv');
+
+        if (!file_exists($path) || !is_readable($path)) {
+            return response()->json(['error' => 'CSV file not found or not readable.'], 400);
+        }
+ 
+        $header = null;
+        $data = [];
+ 
+        if (($handle = fopen($path, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!$header) {
+                    $header = $row;
+                } else {
+                    $data[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+ 
+        foreach ($data as $row) {
+
+            $found = DB::table('coupons')->where('code' , $row['code'])->first();
+        
+            $row['created_at'] = now();
+            $row['updated_at'] = now();
+
+            if(!$found){
+                DB::table('coupons')->insert($row);
+            }
+        }
+ 
+        return response()->json(['message' => 'CSV imported successfully.']);
 
     }
 }

@@ -163,4 +163,23 @@ Artisan::command('twa:calculateDistShare {limit}', function ($limit) {
 
 
 
+
+Artisan::command('twa:addCoupons', function () {
+
+    $this->comment("Started");
+
+//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+
+    (new \App\Http\Controllers\MigrationsController)->addCoupons();
+
+
+
+    $this->comment("Finished");
+
+
+})->purpose('Transfering tables');
+
+
+
+
    
