@@ -14,7 +14,7 @@ class ErpIntegrationReport extends DefaultReport
 {
 
     public $label = "ERP Excel";
-
+    public $pagination = 100;
 
 
     public function filters()
@@ -178,81 +178,93 @@ class ErpIntegrationReport extends DefaultReport
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->orderBy('order_seats.id', 'ASC')
-            ->groupBy('computed_identifier')
-            ->get();
+            ->groupBy('computed_identifier');
 
-        $rows = $results->map(function ($row) use (&$footer) {
-            $unit_price = $row->unit_price;
-            $seats_count = $row->seats_count;
-            $total_price = $unit_price * $seats_count;
-            $tax_amount = $seats_count ? ($total_price * (5 / 100)) : 0;
+            if($this->pagination){
+                $results = $results->paginate($this->pagination);
+            }else{
 
-            $createdAt = Carbon::parse($row->created_at);
-            $dist_share_percentage = 0;
-
-            $settings = json_decode($row->commission_settings, true);
-            $week = $row->week;
-            $conditions = $settings['conditions'] ?? [];
-            $defaultPercentage = $settings['defaultPercentage'] ?? 0;
-
-
-            $index = $week - 1;
-
-            if (isset($conditions[$index])) {
-                $dist_share_percentage = $conditions[$index];
-            } else {
-                $dist_share_percentage = $defaultPercentage;
+                $results = $results->get();
             }
 
-            $share_percentage = floatval($dist_share_percentage ?? 0);
-            $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
 
-            $unit_cost = $seats_count != 0 ? $cost / $seats_count : 0;
+            $fn = function ($row) use (&$footer) {
+                $unit_price = $row->unit_price;
+                $seats_count = $row->seats_count;
+                $total_price = $unit_price * $seats_count;
+                $tax_amount = $seats_count ? ($total_price * (5 / 100)) : 0;
+    
+                $createdAt = Carbon::parse($row->created_at);
+                $dist_share_percentage = 0;
+    
+                $settings = json_decode($row->commission_settings, true);
+                $week = $row->week;
+                $conditions = $settings['conditions'] ?? [];
+                $defaultPercentage = $settings['defaultPercentage'] ?? 0;
+    
+    
+                $index = $week - 1;
+    
+                if (isset($conditions[$index])) {
+                    $dist_share_percentage = $conditions[$index];
+                } else {
+                    $dist_share_percentage = $defaultPercentage;
+                }
+    
+                $share_percentage = floatval($dist_share_percentage ?? 0);
+                $cost = ($total_price - $tax_amount) * ($share_percentage / 100);
+    
+                $unit_cost = $seats_count != 0 ? $cost / $seats_count : 0;
+    
+    
+                $data = [
+                    'movie_key' => $row->movie_key,
+                    'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
+                    'distributor_name' => !empty($row->distributor_condensed) ? $row->distributor_condensed : $row->distributor_label,
+                    'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
+                    'reference' => $row->reference,
+                    'theater' => $row->theater ?? '-',
+                    'type' => $row->type,
+                    'seats' => $row->seats,
+                    'nb_seats' => $seats_count,
+                    'Week #' => $row->week,
+                    'movie_show_date' => $row->date,
+                    'movie_show_time' => $row->time ?? '-',
+                    'booking_date' => $createdAt->format('d-m-Y'),
+                    'booking_time' => $createdAt->format('H:i:s'),
+                    'unit_price' => $unit_price,
+                    'total_price' => $total_price,
+                    'imtiyaz_discount' => $row->imtiyaz_seat_count,
+                    'customer_name' => $row->customer_name ?? '-',
+                    'cashier' => $row->booked_by,
+                    'booked_via' => $row->system ?? '-',
+                    'payment_method' => $row->payment_method ?? '-',
+                    'tax_amount' => $tax_amount,
+                    'dist_perc' => $share_percentage,
+                    'cost_of_sale' => $cost,
+                    'unit_cost' => $unit_cost,
+                ];
+    
+                $footer['unit_price'] += $unit_price;
+                $footer['total_price'] += $total_price;
+                $footer['tax_amount'] += $tax_amount;
+                $footer['cost_of_sale'] += $cost;
+                $footer['unit_cost'] += $unit_cost;
+                $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
+    
+    
+                foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
+                    $data[$field] = number_format($data[$field]);
+                }
+    
+                return $data;
+            };
 
-
-            $data = [
-                'movie_key' => $row->movie_key,
-                'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
-                'distributor_name' => !empty($row->distributor_condensed) ? $row->distributor_condensed : $row->distributor_label,
-                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
-                'reference' => $row->reference,
-                'theater' => $row->theater ?? '-',
-                'type' => $row->type,
-                'seats' => $row->seats,
-                'nb_seats' => $seats_count,
-                'Week #' => $row->week,
-                'movie_show_date' => $row->date,
-                'movie_show_time' => $row->time ?? '-',
-                'booking_date' => $createdAt->format('d-m-Y'),
-                'booking_time' => $createdAt->format('H:i:s'),
-                'unit_price' => $unit_price,
-                'total_price' => $total_price,
-                'imtiyaz_discount' => $row->imtiyaz_seat_count,
-                'customer_name' => $row->customer_name ?? '-',
-                'cashier' => $row->booked_by,
-                'booked_via' => $row->system ?? '-',
-                'payment_method' => $row->payment_method ?? '-',
-                'tax_amount' => $tax_amount,
-                'dist_perc' => $share_percentage,
-                'cost_of_sale' => $cost,
-                'unit_cost' => $unit_cost,
-            ];
-
-            $footer['unit_price'] += $unit_price;
-            $footer['total_price'] += $total_price;
-            $footer['tax_amount'] += $tax_amount;
-            $footer['cost_of_sale'] += $cost;
-            $footer['unit_cost'] += $unit_cost;
-            $footer['imtiyaz_discount'] += $row->imtiyaz_seat_count;
-
-
-            foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
-                $data[$field] = number_format($data[$field]);
+            if($this->pagination){
+                $rows = $results->through($fn);
+            }else{
+                $rows = $results->map($fn);
             }
-
-            return $data;
-        })->filter()->values();
-
 
         foreach (['unit_price', 'total_price', 'tax_amount', 'cost_of_sale', 'unit_cost', 'imtiyaz_discount'] as $field) {
             $footer[$field] = number_format($footer[$field]);

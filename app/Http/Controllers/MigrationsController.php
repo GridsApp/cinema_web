@@ -342,23 +342,6 @@ class MigrationsController extends Controller
             }
         }
 
-
-
-
-
-
-
-
-
-
-        //
-
-
-        // I want to move all users
-        // wallet balance
-        // loyalty balance
-        // redeemed
-
     }
 
 
