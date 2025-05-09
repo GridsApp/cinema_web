@@ -40,7 +40,7 @@ class UncompletedPayments extends Component
             ->join('payment_attempts',  'payment_attempt_logs.payment_attempt_id' , 'payment_attempts.id' )
             ->join('payment_methods', 'payment_attempts.payment_method_id', 'payment_methods.id')
             ->join('users', 'payment_attempts.user_id', 'users.id')
-            ->select('payment_attempts.id', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference'.'payment_attempt_logs.message')
+            ->select('payment_attempts.id', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference','payment_attempt_logs.message')
           
             ->where('payment_attempt_logs.type', 'response')
             ->where('payment_attempt_logs.message', 'LIKE' , '%(FINAL RESPONSE)%')
