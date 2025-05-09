@@ -13,6 +13,7 @@ use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Jobs\CalculateDistShare;
 use App\Models\BranchItem;
+use App\Models\Cart;
 use App\Models\CartCoupon;
 
 use App\Models\Item;
@@ -64,14 +65,19 @@ class OrderRepository implements OrderRepositoryInterface
 
 
 
-    public function createOrderFromCart($payment_attempt, $branch_id = null)
+    public function createOrderFromCart($payment_attempt, $branch_id = null , $force = false)
     {
 
         $cart_id = $payment_attempt->reference;
         $payment_method_id = $payment_attempt->payment_method_id;
 
         try {
-            $cart = $this->cartRepository->getCartById($cart_id);
+            if($force){
+                $cart = Cart::where('id' , $cart_id)->firstOrFail();
+            }else{
+                $cart = $this->cartRepository->getCartById($cart_id);
+            }
+           
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage());
         }

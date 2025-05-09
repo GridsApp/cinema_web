@@ -56,7 +56,7 @@ class UncompletedPayments extends Component
             $attempt->completed_at = now();
             $attempt->save();
 
-            $this->orderepository->createOrderFromCart($attempt);
+            $this->orderepository->createOrderFromCart($attempt , null , true);
             
             DB::commit();
         } catch (\Throwable $th) {
