@@ -15,7 +15,7 @@ class DailyAdmitsReport extends DefaultReport
 
     public $label = "Daily Admits and Income";
 
-    /
+    
 
     public function filters()
     {
