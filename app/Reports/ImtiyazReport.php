@@ -72,7 +72,7 @@ class ImtiyazReport extends DefaultReport
             'customer_name' => '-',
             'reference' => '-',
             'type' => '-',
-            'unit_price' => 0,
+            'unit_price' => '-',
             'seat' => '-',
             'imtiyaz_phone' => '-',
             'movie' => '-',
@@ -86,9 +86,22 @@ class ImtiyazReport extends DefaultReport
 
         ]);
 
+
+        // DB::table('orders' , )
+
+        $ordersWithFreeSeats = DB::table('orders')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                ->from('order_seats')
+                ->whereColumn('order_seats.order_id', 'orders.id')
+                ->whereNotNull('order_seats.imtiyaz_phone');
+            })
+        ->pluck('id');
+
+
         $query = DB::table('order_seats')
             ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-           
+            
             ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
 
             ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
@@ -119,9 +132,9 @@ class ImtiyazReport extends DefaultReport
                 'order_seats.created_at',
                 'systems.label as system',
             ])
-            ->whereNull('order_seats.deleted_at')
-            ->whereNotNull('order_seats.imtiyaz_phone');
-
+            ->whereIn('orders.id' , $ordersWithFreeSeats)
+            ->whereNull('order_seats.deleted_at');
+         
             if ($dateRange) {
                 $query->whereBetween('order_seats.created_at', $dateRange);
             }
@@ -142,6 +155,10 @@ class ImtiyazReport extends DefaultReport
         
             $createdAt = Carbon::parse($row->created_at);
 
+
+           
+
+
             $data = [
 
 
@@ -149,7 +166,7 @@ class ImtiyazReport extends DefaultReport
                 'customer_name' => $row->customer_name ?? '-',
                 'reference' => $row->reference,
                 'type' => $row->type ?? '-',
-                'unit_price' => $unit_price ,
+                'unit_price' => '-' ,
                 'seat' => $row->seat ?? '-',
                 'imtiyaz_phone' => $row->imtiyaz_phone ?? '-',
                 'movie' => $row->movie ?? '-',
@@ -165,14 +182,26 @@ class ImtiyazReport extends DefaultReport
             ];
 
 
-            $footer['unit_price'] += $data['unit_price'];
+            // $footer['unit_price'] += $data['unit_price'];
 
-            $data['unit_price'] = number_format($data['unit_price']);
+            // $data['unit_price'] = number_format($data['unit_price']);
 
             return $data;
         })->filter()->values();
 
-        $footer['unit_price'] = number_format($footer['unit_price']);
+        // $footer['unit_price'] = number_format($footer['unit_price']);
+
+
+        $rows = $rows
+    ->groupBy('reference')
+    ->map(function ($group) {
+        if($group->count() % 2 === 0){
+            return $group; 
+        }else{
+            return $group->slice(0, -1)->values();
+        }
+    })
+    ->flatten(1);
 
 
         $this->setFooter($footer);
