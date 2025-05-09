@@ -62,13 +62,11 @@ class WalletTopupsReport extends DefaultReport
             'payment_method' => '-',
             'reference' => '-',
             'branch' => '-',
-            'cashier' => 0,
-            'card_number' => 0,
+            'cashier' => '-',
+            'card_number' => '-',
             'customer_name' => '-',
             'amount' => 0,
         ];
-
-
 
         $baseQuery = DB::table('order_topups')
             ->join('orders', 'order_topups.order_id', '=', 'orders.id')

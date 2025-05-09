@@ -176,7 +176,7 @@ class ImtiyazReport extends DefaultReport
                 'theater' => $row->theater ?? '-',
                 'booked_by' => $row->booked_by ?? '-',
                 'system' => $row->system ?? '-',
-                'payment_method' => $row->payment_method ?? '-',
+                'payment_method' => $row->imtiyaz_phone ? 'Imtiyaz' : ($row->payment_method ?? '-'),
 
 
             ];
