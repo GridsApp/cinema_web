@@ -13,7 +13,7 @@ class UserController extends Controller
     }
 
     public function renderUncompletedPayments(){
-        
+        return view('pages.uncompleted-payments');
     }
 
 }

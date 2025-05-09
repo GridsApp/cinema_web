@@ -156,6 +156,15 @@ return [
             ],
 
             [
+                'key' => 'uncompleted-payments',
+                'label' => 'Uncompleted Payments',
+                'link' => "/cms/uncompleted/payments",
+               
+            ],
+
+
+
+            [
                 'key' => 'manage-wallets',
                 'label' => 'Manage Wallets',
                 'link' => "/cms/manage/wallets",
