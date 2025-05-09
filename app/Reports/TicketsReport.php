@@ -25,7 +25,7 @@ class TicketsReport extends DefaultReport
         $this->addFilter('filter_payment_method');
         $this->addFilter('filter_ticket_status');
         $this->addFilter('filter_pos_user');
-        $this->addFilter('filter_reference');
+        // $this->addFilter('filter_reference');
         $this->addFilter('filter_user_phone');
         $this->addFilter('filter_amount_min');
         $this->addFilter('filter_amount_max');

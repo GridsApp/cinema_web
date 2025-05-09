@@ -15,22 +15,7 @@ class DailyAdmitsReport extends DefaultReport
 
     public $label = "Daily Admits and Income";
 
-    // $this->addFilter('filter_start_date');
-    // $this->addFilter('filter_end_date');
-    // $this->addFilter('filter_branch');
-    // $this->addFilter('filter_movie');
-
-    // $this->addFilter('filter_time');
-
-    // $this->addFilter('filter_system');
-    // $this->addFilter('filter_payment_method');
-    // $this->addFilter('filter_reference');
-    // $this->addFilter('filter_ticket_status');
-
-    // $this->addFilter('filter_pos_user');
-    // $this->addFilter('filter_user_phone');
-    // $this->addFilter('filter_amount_min');
-    // $this->addFilter('filter_amount_max');
+    /
 
     public function filters()
     {
