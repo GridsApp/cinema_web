@@ -11,6 +11,7 @@ use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Jobs\CalculateDistShare;
 use App\Models\BranchItem;
 use App\Models\CartCoupon;
 
@@ -268,6 +269,9 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         $this->cartRepository->expireCart($cart_id);
+
+
+        dispatch(new CalculateDistShare($order->id));
 
         return [
             'order_id' => $order->id,
