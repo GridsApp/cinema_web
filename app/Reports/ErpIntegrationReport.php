@@ -149,6 +149,10 @@ class ErpIntegrationReport extends DefaultReport
                 'payment_methods.label as payment_method',
                 'order_seats.price as unit_price',
                 'distributors.label as distributor_label',
+                'distributors.condensed_label as distributor_condensed',
+
+
+                
                 'order_seats.imtiyaz_phone',
                 DB::raw('COUNT(order_seats.id) as seats_count'),
                 DB::raw("GROUP_CONCAT(seat) as seats"),
@@ -157,6 +161,7 @@ class ErpIntegrationReport extends DefaultReport
                 'order_seats.label as type',
                 'movies.name as movie',
                 'movies.condensed_name as movie_condensed',
+                
                 'movies.commission_settings as commission_settings',
                 'movies.movie_key as movie_key',
                 'zones.label as zone_label',
@@ -209,7 +214,7 @@ class ErpIntegrationReport extends DefaultReport
             $data = [
                 'movie_key' => $row->movie_key,
                 'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
-                'distributor_name' => $row->distributor_label,
+                'distributor_name' => !empty($row->distributor_condensed) ? $row->distributor_condensed : $row->distributor_label,
                 'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
                 'reference' => $row->reference,
                 'theater' => $row->theater ?? '',
