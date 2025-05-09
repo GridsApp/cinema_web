@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th> Card Number </th>
+                    <th> User Id </th>
                     <th> Amount </th>
                     <th> Payment Reference </th>
                     <th> Message </th>
@@ -23,6 +24,7 @@
                 @forelse($rows as $row)
                     <tr>
                         <td> {{ $row->barcode }} </td>
+                        <td> {{ $row->user_id }} </td>
                         <td> {{ $row->amount }} </td>
                         <td> {{ $row->payment_reference }} </td>
                         <td> {{ $row->message }} </td>
@@ -50,7 +52,7 @@
 
                 @empty
                     <tr>
-                        <td colspan="5"> No Data </td>
+                        <td colspan="6"> No Data </td>
 
                     </tr>
                 @endforelse
