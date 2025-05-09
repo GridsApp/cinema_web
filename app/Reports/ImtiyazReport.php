@@ -117,12 +117,14 @@ class ImtiyazReport extends DefaultReport
                 'orders.id as order_id',
                 'orders.reference',
                 'movies.name as movie',
+                'movies.condensed_name as movie_condensed',
                 'order_seats.label as type',
                 'order_seats.seat as seat',
                 'order_seats.imtiyaz_phone as imtiyaz_phone',
                 'order_seats.date as date',
                 'pos_users.name as booked_by',
                 'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
                 'payment_methods.label as payment_method',
                 'customers.name as customer_name',
                 'times.label as time',
@@ -169,10 +171,10 @@ class ImtiyazReport extends DefaultReport
                 'unit_price' => '-' ,
                 'seat' => $row->seat ?? '-',
                 'imtiyaz_phone' => $row->imtiyaz_phone ?? '-',
-                'movie' => $row->movie ?? '-',
+                'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
                 'date' => $row->date,
                 'time' => $row->time ?? '-',
-                'branch' => $row->branch ?? '-',
+                'branch' =>!empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
                 'theater' => $row->theater ?? '-',
                 'booked_by' => $row->booked_by ?? '-',
                 'system' => $row->system ?? '-',
@@ -184,7 +186,7 @@ class ImtiyazReport extends DefaultReport
 
             // $footer['unit_price'] += $data['unit_price'];
 
-            // $data['unit_price'] = number_format($data['unit_price']);
+            $data['unit_price'] = number_format($data['unit_price']);
 
             return $data;
         })->filter()->values();
