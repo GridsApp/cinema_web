@@ -34,35 +34,43 @@ class UncompletedPayments extends Component
 
     public function mount() {}
 
+
+    public function treatPayment($id){
+
+        //
+        
+
+    }
+
     public function get()
     {
-        $uncompleted = DB::table('payment_attempt_logs')
-            ->join('payment_attempts',  'payment_attempt_logs.payment_attempt_id' , 'payment_attempts.id' )
+        return  DB::table('payment_attempt_logs')
+            ->join('payment_attempts',  'payment_attempt_logs.payment_attempt_id', 'payment_attempts.id')
             ->join('payment_methods', 'payment_attempts.payment_method_id', 'payment_methods.id')
             ->join('users', 'payment_attempts.user_id', 'users.id')
-            ->join('user_cards',function($join){
-                $join->on('user_cards.user_id' , 'payment_attempts.user_id')
-                ->whereNull('user_cards.disabled_at');
+            ->join('user_cards', function ($join) {
+                $join->on('user_cards.user_id', 'payment_attempts.user_id')
+                    ->whereNull('user_cards.disabled_at');
             })
-          
 
-            ->select('payment_attempts.id', 'user_cards.barcode'  ,'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference','payment_attempt_logs.message')
-          
+
+            ->select('payment_attempts.id', 'user_cards.barcode', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference', 'payment_attempt_logs.message')
+
             ->where('payment_attempt_logs.type', 'response')
-            ->where('payment_attempt_logs.message', 'LIKE' , '%(FINAL RESPONSE)%')
+            ->where('payment_attempt_logs.message', 'LIKE', '%(FINAL RESPONSE)%')
             ->whereNotNull('payment_attempts.converted_at')
             ->whereNull('payment_attempts.completed_at')
             ->whereNotNull('payment_attempts.user_id')
             ->get();
 
-            dd($uncompleted);
+
     }
 
 
     public function render()
     {
-        $this->get();
+       $rows =  $this->get();
 
-        return view('components.form.uncompleted-payments');
+        return view('components.form.uncompleted-payments' , ['rows' => $rows]);
     }
 }
