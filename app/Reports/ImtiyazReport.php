@@ -168,7 +168,7 @@ class ImtiyazReport extends DefaultReport
                 'customer_name' => $row->customer_name ?? '-',
                 'reference' => $row->reference,
                 'type' => $row->type ?? '-',
-                'unit_price' => '-' ,
+                'unit_price' => $unit_price ,
                 'seat' => $row->seat ?? '-',
                 'imtiyaz_phone' => $row->imtiyaz_phone ?? '-',
                 'movie' => !empty($row->movie_condensed) ? $row->movie_condensed : $row->movie,
