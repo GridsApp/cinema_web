@@ -125,6 +125,7 @@ class SoaReport extends DefaultReport
                 'movies.name as movie',
                 'movies.movie_key as imdb',
                 'distributors.label as distributor',
+                'distributors.condensed_label as distributor_condensed',
                 'order_seats.week',
                 'order_seats.dist_share_percentage',
                 DB::raw('SUM(order_seats.dist_share_amount) as dist_share_amount'),
@@ -170,7 +171,7 @@ class SoaReport extends DefaultReport
 
             $data = [
                 'imdb' => $row->imdb,
-                'distributor' => $row->distributor,
+                'distributor' => !empty($row->distributor_condensed) ? $row->distributor_condensed : $row->distributor,
                 'movie' => $row->movie,
                 'wk' => $row->week,
                 'tickets_sold' => $row->tickets_sold,

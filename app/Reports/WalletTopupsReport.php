@@ -87,6 +87,7 @@ class WalletTopupsReport extends DefaultReport
                 'pos_users.name as booked_by',
                 'orders.branch_id',
                 'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
                 'orders.payment_method_id',
                 'payment_methods.label as payment_method',
                 'order_topups.price as unit_price',
@@ -104,7 +105,7 @@ class WalletTopupsReport extends DefaultReport
             $baseQuery->whereBetween('order_topups.created_at', $dateRange);
         }
 
-    
+
         if (!empty($this->filterResults['system_id'])) {
             $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
         }
@@ -134,7 +135,7 @@ class WalletTopupsReport extends DefaultReport
                 'date' =>  $createdAt->format('d-m-Y'),
                 'payment_method' => $row->payment_method ?? '-',
                 'reference' => $row->reference,
-                'branch' => $row->branch ?? '-',
+                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch ?? '-',
                 'cashier' => $row->booked_by ?? '-',
                 'card_number' => $row->barcode ?? '',
                 'customer_name' => $row->customer_name,

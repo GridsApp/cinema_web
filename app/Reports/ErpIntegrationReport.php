@@ -161,7 +161,6 @@ class ErpIntegrationReport extends DefaultReport
                 'order_seats.label as type',
                 'movies.name as movie',
                 'movies.condensed_name as movie_condensed',
-                
                 'movies.commission_settings as commission_settings',
                 'movies.movie_key as movie_key',
                 'zones.label as zone_label',
