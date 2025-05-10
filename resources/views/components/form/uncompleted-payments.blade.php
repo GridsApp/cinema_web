@@ -24,7 +24,7 @@
             <tbody>
 
                 @forelse($rows as $row)
-                @dd($row);
+                {{-- @dd($row); --}}
                     <tr>
                         <td> {{ $row->barcode }} </td>
                         <td> {{ $row->user_id }} </td>
