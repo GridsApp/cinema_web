@@ -27,7 +27,10 @@
             @if($user)
 
 
-            @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'User Info'])
+            @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'User Info',
+            
+            'actions' => $this->barcode ? '<div> <a target="_blank"  href="'.url('/cms/users/update/' . $user->id).'" class="btn btn-primary"> Edit User</a> </div>' : ''
+            ])
                 <table class="twa-table table-auto">
                     <tbody>
                         <tr>

@@ -1861,7 +1861,7 @@ return [
             'wire:model' => 'form.{name}',
         ],
         'type' => twa\uikit\FieldTypes\Textfield::class,
-        'label' => 'Search by Phone/ Card Number/ Email',
+        'label' => 'Search by Phone/ Card Number/ Email / User id',
         'placeholder' => 'Enter Phone/ Card Number / Email',
         'name' => 'phone_email_card_number',
         'container' => 'col-span-6',
@@ -2016,7 +2016,7 @@ return [
         'livewire' => [
             'wire:model' => 'form.{name}',
         ],
-        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'type' => twa\uikit\FieldTypes\Hidden::class,
         'label' => 'Token',
         'placeholder' => 'Enter token',
         'name' => 'token',

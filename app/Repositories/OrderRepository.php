@@ -73,6 +73,7 @@ class OrderRepository implements OrderRepositoryInterface
 
         try {
             if($force){
+                
                 $cart = Cart::where('id' , $cart_id)->firstOrFail();
             }else{
                 $cart = $this->cartRepository->getCartById($cart_id);

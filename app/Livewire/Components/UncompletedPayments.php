@@ -29,6 +29,7 @@ class UncompletedPayments extends Component
     private UserRepositoryInterface $userRepository;
     private OrderRepositoryInterface $orderepository;
 
+
     public function __construct()
     {
         $this->cardRepository = app(CardRepositoryInterface::class);;
@@ -36,6 +37,11 @@ class UncompletedPayments extends Component
         $this->orderepository = app(OrderRepositoryInterface::class);
     }
 
+
+
+    
+
+  
 
     public function mount() {}
 
@@ -65,7 +71,8 @@ class UncompletedPayments extends Component
 
             DB::rollBack();
 
-            $this->sendError("Error", "Unable to treat");
+            $this->sendError("Error", $th->getMessage());
+
             return;
         }
 

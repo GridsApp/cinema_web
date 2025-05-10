@@ -43,19 +43,22 @@ class GetUser extends Component
 
         $this->validate([
             'form.phone_email_card_number' => 'required',
-           
+
         ], [
             'form.phone_email_card_number' => 'Field is required',
-          
+
         ]);
 
 
-
-        if (str($this->form['phone_email_card_number'])->contains('@')) {
+        $input = $this->form['phone_email_card_number'];
+        if (str($input)->contains('@')) {
             $type = "email";
-        } elseif (str($this->form['phone_email_card_number'])->contains('+')) {
+        } elseif (str($input)->contains('+')) {
             $type = "phone";
-        } else {
+        }elseif (is_numeric($input) && strlen($input) < 10) {
+            $type = "id";
+        } 
+         else {
             $type = "card";
         }
 
@@ -64,21 +67,22 @@ class GetUser extends Component
                 case "email":
                     $user = $this->userRepository->getUserByEmail($this->form['phone_email_card_number']);
                     break;
-    
+
                 case "phone":
                     $user = $this->userRepository->getUserByPhone($this->form['phone_email_card_number']);
                     break;
-    
+                case "id":
+                    $user = $this->userRepository->getUserById($input);
+                    break;
                 case "card":
                     $user = $this->userRepository->getUserByCardNumber($this->form['phone_email_card_number']);
                     break;
             }
-    
         } catch (\Throwable $th) {
             $this->sendError("Error", "Please enter card number, phone, or email.");
             return;
         }
-      
+
         if (!$user) {
             $this->sendError("Error", "Please enter card number, phone, or email.");
             return;
@@ -88,7 +92,7 @@ class GetUser extends Component
         $card_number = $this->cardRepository->getCardByUserId($user->id);
 
         $this->barcode = $card_number['barcode'] ?? null;
- 
+
 
         $this->transactions = $this->cardRepository->getWalletTransactions($user);
         $this->balance = collect($this->transactions)->last()['balance'] ?? 0;

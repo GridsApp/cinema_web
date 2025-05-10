@@ -11,6 +11,8 @@
                     <th> Card Number </th>
                     <th> User Id </th>
                     <th> Amount </th>
+                    <th> Payment Method </th>
+
                     <th> Payment Reference </th>
                     <th> Message </th>
 
@@ -26,12 +28,13 @@
                         <td> {{ $row->barcode }} </td>
                         <td> {{ $row->user_id }} </td>
                         <td> {{ $row->amount }} </td>
+                        <td> {{ $row->payment_method }} </td>
                         <td> {{ $row->payment_reference }} </td>
                         <td> {{ $row->message }} </td>
                         <td> 
 
 
-                            <button type="button" class="btn btn-primary" wire:click="treatPayment('{{$row->id}}')" > Treat</button>
+                            {{-- <button type="button" class="btn btn-primary" wire:click="treatPayment('{{$row->id}}')" > Treat</button> --}}
 
                             {{-- <div x-data="{ showModal: false, handleOpen() { this.showModal = true } }">
                             <button type="button" class="btn btn-primary" @click="handleOpen" > Treat</button>
