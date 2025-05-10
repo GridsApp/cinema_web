@@ -93,7 +93,7 @@ class UncompletedPayments extends Component
             })
 
 
-            ->select('payment_attempts.id', 'user_cards.barcode', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference', 'payment_attempt_logs.message','payment_methods.label as payment_methods')
+            ->select('payment_attempts.id', 'user_cards.barcode', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference', 'payment_attempt_logs.message','payment_methods.label')
 
             ->where('payment_attempt_logs.type', 'response')
             ->where('payment_attempt_logs.message', 'LIKE', '%(FINAL RESPONSE)%')

@@ -29,7 +29,7 @@
                         <td> {{ $row->barcode }} </td>
                         <td> {{ $row->user_id }} </td>
                         <td> {{ $row->amount }} </td>
-                        <td> {{ $row->payment_method }} </td>
+                        <td> {{ $row->label }} </td>
                         <td> {{ $row->payment_reference }} </td>
                         <td> {{ $row->message }} </td>
                         <td> 
