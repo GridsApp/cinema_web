@@ -9,7 +9,7 @@ background-color: transparent !important;
 }
 
 .twa-table tbody tr td:last-child{
-    position:none !important;
+    position:unset !important;
 }
     </style>
     @component('CMSView::components.panels.default', [
