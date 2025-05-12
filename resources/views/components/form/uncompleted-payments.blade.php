@@ -57,7 +57,7 @@ background-color: transparent !important;
                                     'action' => [
                                         'label' => "'Treat'",
                                         'type' => 'primary',
-                                        'handler' => "treatPayment('" . $row->id . "')",
+                                        'handler' => '$wire.treatPayment(' . $row->id . ')',
                                     ],
                                 ])
                                     <div class="text-[13px] font-medium text-left text-gray-800 p-5">
