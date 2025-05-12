@@ -487,22 +487,25 @@ class CartController extends Controller
         }
 
 
-
         $phone_exists_in_same_cart = CartImtiyaz::query()
-            // ->where('cart_id', $form_data['cart_id'])
-            ->where('phone', $form_data['phone'])
-            ->whereNull('deleted_at')
+            ->join('carts' , function($join){
+                $join->on('cart_imtiyaz.cart_id','carts.id');
+                $join->where('expires_at' , '>=' , now());
+            })
+            ->where('cart_imtiyaz.cart_id', $form_data['cart_id'])
+            ->where('cart_imtiyaz.phone', $form_data['phone'])
+            ->whereNull('cart_imtiyaz.deleted_at')
             ->exists();
 
             // where cart not expired.
 
 
         if ($phone_exists_in_same_cart) {
-            return $this->response(notification()->error('Phone number already used in this cart', 'Phone number already used in this cart'));
+            return $this->response(notification()->error('Phone number already used', 'Phone number already used'));
         }
 
         $phone_reserved_today = OrderSeat::where('imtiyaz_phone', $form_data['phone'])
-            ->whereDate('date', now())
+            ->whereDate('created_at', now())
             ->exists();
 
         if ($phone_reserved_today) {
