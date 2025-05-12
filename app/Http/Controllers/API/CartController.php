@@ -92,10 +92,14 @@ class CartController extends Controller
         //     'timezone' => config('app.timezone'),
         //     'expires_at' => $cart->expires_at
         // ]);
+
+        $minutes = (int) get_setting('timer_reset_card') ?? 1;
+
         return $this->responseData([
             'cart_id' => $cart->id,
             'timezone' => config('app.timezone'),
-            'expires_at' => $cart->expires_at
+            'expires_at' => $cart->expires_at,
+            'expiry_seconds' => (int) $minutes * 60,
         ], notification()->success('Cart created', 'Cart created'));
     }
 
