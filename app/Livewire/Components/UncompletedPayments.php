@@ -77,7 +77,7 @@ class UncompletedPayments extends Component
             return;
         }
 
-        $this->dispatchBrowserEvent('close');
+
         $this->sendSuccess("Success", "Payment Treat");
 
     }
