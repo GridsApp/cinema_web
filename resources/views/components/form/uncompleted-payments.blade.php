@@ -55,8 +55,8 @@ background-color: transparent !important;
                                     'title' => 'Treat',
                                     'variable' => 'showModal',
                                     'action' => [
-                                        'label' => "'Treat'",
-                                        'type' => 'primary',
+                                        'label' => "Treat",
+                                        'type' => 'success',
                                         'handler' => '$wire.treatPayment(' . $row->id . ')',
                                     ],
                                 ])
