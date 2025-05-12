@@ -51,7 +51,7 @@ background-color: transparent !important;
                             <div x-data="{ showModal: false, handleOpen() { this.showModal = true } }">
                                 <button type="button" class="btn btn-primary" @click="handleOpen"> Treat</button>
 
-                                @component('UIKitView::components.modal', [
+                                {{-- @component('UIKitView::components.modal', [
                                     'title' => 'Treat',
                                     'variable' => 'showModal',
                                     'action' => [
@@ -63,6 +63,22 @@ background-color: transparent !important;
                                     <div class="text-[13px] font-medium text-left text-gray-800 p-5">
                                         Are you sure you want to treat this payment?
                                     </div>
+                                @endcomponent --}}
+
+
+                                @component('UIKitView::components.modal', [
+                                    'title' => 'Treat',
+                                    'variable' => 'showModal',
+                                    'action' => false, 
+                                ])
+                                    <div class="text-[13px] font-medium text-left text-gray-800 p-5">
+                                        Are you sure you want to treat this payment?
+                                    </div>
+                            
+                                    <form method="POST" action="{{ route('treat.payment', $row->id) }}" class="flex justify-end px-5 pb-5">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">Treat</button>
+                                    </form>
                                 @endcomponent
                             </div>
 

@@ -49,6 +49,7 @@ class UncompletedPayments extends Component
     public function treatPayment($id){
 
         
+        dd("hereee");
        $attempt =  PaymentAttempt::find($id);
        
        if(!$attempt){
