@@ -48,7 +48,12 @@ background-color: transparent !important;
                             <button type="button" class="btn btn-primary" wire:click="treatPayment('{{ $row->id }}')">
                                 Treat</button> --}}
 
-                            <div x-data="{ showModal: false, handleOpen() { this.showModal = true } }">
+                            <div   x-data="{ 
+                                showModal: false, 
+                                handleOpen() { this.showModal = true }, 
+                                handleClose() { this.showModal = false }
+                            }" 
+                            x-on:close.window="handleClose()">
                                 <button type="button" class="btn btn-primary" @click="handleOpen"> Treat</button>
 
                                 @component('UIKitView::components.modal', [
