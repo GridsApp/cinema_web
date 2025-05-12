@@ -58,7 +58,7 @@
                                     'title' => 'Treat',
                                     'variable' => 'showModal',
                                     'action' => [
-                                        'label' => 'Treat',
+                                        'label' => '"Treat"',
                                         'type' => 'primary',
                                         'handler' => '$wire.treatPayment(' . $row->id . ')',
                                     ],
