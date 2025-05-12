@@ -1,6 +1,17 @@
 <div>
 
 
+    <style>
+
+.twa-table tbody tr td:first-child{
+background-color: transparent !important;
+
+}
+
+.twa-table tbody tr td:last-child{
+    position:none !important;
+}
+    </style>
     @component('CMSView::components.panels.default', [
         'classes' => 'manage-wallet-panel',
         'title' => 'Uncompleted Payments',
