@@ -54,7 +54,7 @@ class KioskUserController extends Controller
         }
 
 
-        if ($form_data['passcode'] != $user->passcode) {
+        if (md5($form_data['passcode']) != $user->passcode) {
             return $this->response(notification()->error("You have entered invalid username/password or branch", 'You have entered invalid username/password or branch'));
         }
 
