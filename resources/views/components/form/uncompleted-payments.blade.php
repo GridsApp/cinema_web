@@ -2,15 +2,14 @@
 
 
     <style>
+        .twa-table tbody tr td:first-child {
+            background-color: transparent !important;
 
-.twa-table tbody tr td:first-child{
-background-color: transparent !important;
+        }
 
-}
-
-.twa-table tbody tr td:last-child{
-    position:unset !important;
-}
+        .twa-table tbody tr td:last-child {
+            position: unset !important;
+        }
     </style>
     @component('CMSView::components.panels.default', [
         'classes' => 'manage-wallet-panel',
@@ -44,19 +43,23 @@ background-color: transparent !important;
                         <td> {{ $row->message }} </td>
                         <td>
 
-{{-- 
+                            {{-- 
                             <button type="button" class="btn btn-primary" wire:click="treatPayment('{{ $row->id }}')">
                                 Treat</button> --}}
 
-                            <div x-data="{ showModal: false, handleOpen() { this.showModal = true } }">
-                                <button type="button" class="btn btn-primary" @click="handleOpen"> Treat</button>
+                            <div x-data="{
+                                showModal: false,
+                                handleOpen() { this.showModal = true },
+                                handleClose() { this.showModal = false }
+                            }" x-on:payment-treated.window="handleClose()"><button type="button"
+                                    class="btn btn-primary" @click="handleOpen"> Treat</button>
 
                                 @component('UIKitView::components.modal', [
                                     'title' => 'Treat',
                                     'variable' => 'showModal',
                                     'action' => [
-                                        'label' => "Treat",
-                                        'type' => 'success',
+                                        'label' => 'Treat',
+                                        'type' => 'primary',
                                         'handler' => '$wire.treatPayment(' . $row->id . ')',
                                     ],
                                 ])
@@ -66,7 +69,7 @@ background-color: transparent !important;
                                 @endcomponent
 
 
-                              
+
                             </div>
 
                         </td>

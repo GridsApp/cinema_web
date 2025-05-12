@@ -39,23 +39,24 @@ class UncompletedPayments extends Component
 
 
 
-    
 
-  
+
+
 
     public function mount() {}
 
 
-    public function treatPayment($id){
+    public function treatPayment($id)
+    {
 
-        
+
         // dd("hereee");
-       $attempt =  PaymentAttempt::find($id);
-       
-       if(!$attempt){
+        $attempt =  PaymentAttempt::find($id);
+
+        if (!$attempt) {
             $this->sendError("Error", "Unable to treat");
             return;
-       }
+        }
 
         try {
             DB::beginTransaction();
@@ -63,11 +64,11 @@ class UncompletedPayments extends Component
             $attempt->completed_at = now();
             $attempt->save();
 
-            $this->orderepository->createOrderFromCart($attempt , null , true);
-            
+            $this->orderepository->createOrderFromCart($attempt, null, true);
+
             DB::commit();
         } catch (\Throwable $th) {
-            
+
 
 
             DB::rollBack();
@@ -76,10 +77,9 @@ class UncompletedPayments extends Component
 
             return;
         }
-
+        $this->dispatch('payment-treated');
 
         $this->sendSuccess("Success", "Payment Treat");
-
     }
 
     public function get()
@@ -94,7 +94,7 @@ class UncompletedPayments extends Component
             })
 
 
-            ->select('payment_attempts.id', 'user_cards.barcode', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference', 'payment_attempt_logs.message','payment_methods.label')
+            ->select('payment_attempts.id', 'user_cards.barcode', 'payment_attempts.user_id', 'payment_attempts.amount', 'payment_attempts.payment_reference', 'payment_attempt_logs.message', 'payment_methods.label')
 
             ->where('payment_attempt_logs.type', 'response')
             ->where('payment_attempt_logs.message', 'LIKE', '%(FINAL RESPONSE)%')
@@ -102,15 +102,13 @@ class UncompletedPayments extends Component
             ->whereNull('payment_attempts.completed_at')
             ->whereNotNull('payment_attempts.user_id')
             ->get();
-
-
     }
 
 
     public function render()
     {
-       $rows =  $this->get();
+        $rows =  $this->get();
 
-        return view('components.form.uncompleted-payments' , ['rows' => $rows]);
+        return view('components.form.uncompleted-payments', ['rows' => $rows]);
     }
 }
