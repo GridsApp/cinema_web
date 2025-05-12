@@ -72,12 +72,10 @@ class OrderRepository implements OrderRepositoryInterface
         $payment_method_id = $payment_attempt->payment_method_id;
 
         try {
-            if($force){
-                
-                $cart = Cart::where('id' , $cart_id)->firstOrFail();
-            }else{
-                $cart = $this->cartRepository->getCartById($cart_id);
-            }
+            
+  
+            $cart = $this->cartRepository->getCartById($cart_id , $force);
+        
            
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage());

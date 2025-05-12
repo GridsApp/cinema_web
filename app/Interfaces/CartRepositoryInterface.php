@@ -5,7 +5,7 @@ namespace App\Interfaces;
 interface CartRepositoryInterface 
 {
     public function checkCart($cart_id , $user_id , $user_type);
-    public function getCartById($cart_id);
+    public function getCartById($cart_id , $force = false);
     public function createCart($user_id, $user_type , $system_id);
     public function expireCart($cart_id);
     public function addSeatToCart($cart_id, $seat,$movie_show_id , $zone_id);

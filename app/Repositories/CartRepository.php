@@ -63,20 +63,23 @@ class CartRepository implements CartRepositoryInterface
 
         return $user_cart;
     }
-    public function getCartById($cart_id)
+    public function getCartById($cart_id , $force = false)
     {
 
-    // dd($cart_id);
 
         try {
-            $user_cart = Cart::where('id', $cart_id)
-                ->where('expires_at', '>', now())->whereNull('deleted_at')->firstOrFail();
 
-                // dd($user_cart);
+            $user_cart = Cart::where('id', $cart_id)
+                ->when(!$force , function($q){
+                    $q->where('expires_at', '>', now())->whereNull('deleted_at');
+                })
+            ->firstOrFail();
+
+       
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Cart with ID {$cart_id} not found or expired.");
         }
-        // dd($user_cart);
+       
         return $user_cart;
     }
     public function createCart($user_id, $user_type, $system_id)
@@ -105,7 +108,7 @@ class CartRepository implements CartRepositoryInterface
     {
         try {
             DB::beginTransaction();
-            $cart =   $this->getCartById($cart_id);
+            $cart =   $this->getCartById($cart_id , true);
             CartSeat::where('cart_id', $cart_id)->delete();
             CartItem::where('cart_id', $cart_id)->delete();
             CartTopup::where('cart_id', $cart_id)->delete();
