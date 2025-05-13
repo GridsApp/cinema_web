@@ -1,7 +1,7 @@
 <?php
 
 return [
-  
+
     [
         'key' => 'dashbord',
         'display' => true,
@@ -18,7 +18,7 @@ return [
         ]
     ],
 
- 
+
     [
         'display' => true,
         'label' => 'Movie Settings',
@@ -129,7 +129,7 @@ return [
                         'label' => 'Delete Zone',
                         'key' => 'delete-zone'
                     ],
-                 
+
                 ]
 
             ]
@@ -152,18 +152,22 @@ return [
                 'key' => 'manage-users',
                 'label' => 'Manage Users',
                 'link' => "/cms/manage/users",
-               
+
             ],
 
             [
                 'key' => 'uncompleted-payments',
                 'label' => 'Uncompleted Payments',
                 'link' => "/cms/uncompleted/payments",
-               
+
             ],
 
-
-
+            [
+                'key' => 'payment-lookup',
+                'label' => 'Payment Lookup',
+                'link' => "/cms/payment/lookup",
+            ],
+            
             [
                 'key' => 'manage-wallets',
                 'label' => 'Manage Wallets',
@@ -225,7 +229,7 @@ return [
                 'label' => 'POS users',
                 'link' => routeObject('entity', ['slug' => 'pos-users'])
 
-            
+
             ],
 
             [
@@ -381,14 +385,14 @@ return [
                 'label' => 'CMS Sent Push Notifications',
                 'link' => routeObject('entity', ['slug' => 'cms-sent-push-notifications'])
             ],
-          
+
 
 
         ]
 
-        
+
     ],
-  
+
     [
         'key' => 'reports',
         'label' => 'Reports',
