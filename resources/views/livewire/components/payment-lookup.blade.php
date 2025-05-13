@@ -158,7 +158,7 @@
                     <td> {{$log->id}} </td>
                     <td> {{$log->type}} </td>
                     <td> {{$log->message}} </td>
-                    <td> {{$log->payload}} </td>
+                    <td style="max-width: 200px" {!!  nl2br($log->payload) !!} </td>
                     <td> {{ now()->parse($log->created_at)->format('d-m-Y h:i')}} </td>
 
                 </tr>
