@@ -36,47 +36,140 @@
 
     @endcomponent
 
+
         @if($payment)
-    @component('CMSView::components.panels.default', [
-        'classes' => 'manage-wallet-panel',
-        'title' => 'Payments',
-    ])
-        <table class="twa-table table-auto">
+            @component('CMSView::components.panels.default', [
+                'classes' => 'manage-wallet-panel',
+                'title' => 'Conversion',
+            ])
+                <table class="twa-table table-auto">
 
-            <tbody>
+                    <tbody>
 
 
-            <tr>
-                <td> Payment Reference </td>
-                <td> {{ $form["payment_ref"] }} </td>
-            </tr>
+                    <tr>
+                        <td> Payment Reference </td>
+                        <td> {{ $form["payment_ref"] }} </td>
+                    </tr>
 
+                    <tr>
+                        <td> Description </td>
+                        <td> {{ $payment->topup_desc }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Amount </td>
+                        <td> {{ $payment->price }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Payment Method </td>
+                        <td> {{ $payment->payment_method }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Customer </td>
+                        <td> {{ $payment->user }} </td>
+                    </tr>
+
+
+                    <tr>
+                        <td> Created at </td>
+                        <td> {{ now()->parse($payment->created_at)->format('d-m-Y h:i')}} </td>
+                    </tr>
+
+
+
+                    </tbody>
+                </table>
+            @endcomponent
+
+        @endif
+
+        @if($transaction)
+
+            @component('CMSView::components.panels.default', [
+      'classes' => 'manage-wallet-panel',
+      'title' => 'Transaction',
+  ])
+                <table class="twa-table table-auto">
+
+                    <tbody>
+
+
+                    <tr>
+                        <td> Amount </td>
+                        <td> {{ $transaction->amount }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Payment Method </td>
+                        <td> {{ $transaction->payment_method }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Customer </td>
+                        <td> {{ $transaction->user }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Created at </td>
+                        <td> {{ now()->parse($transaction->created_at)->format('d-m-Y h:i')}} </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            @endcomponent
+
+
+
+        @endif
+
+
+
+
+
+        @component('CMSView::components.panels.default', [
+   'classes' => 'manage-wallet-panel',
+   'title' => 'Transaction',
+])
+            <table class="twa-table table-auto">
+
+                <thead>
                 <tr>
-                    <td> Description </td>
-                    <td> {{ $payment->topup_desc }} </td>
+                    <th> ID </th>
+                    <th> Type </th>
+                    <th> Message </th>
+                    <th> Payload </th>
+                    <th> Created at </th>
+
+
                 </tr>
 
-                <tr>
-                    <td> Amount </td>
-                    <td> {{ $payment->price }} </td>
-                </tr>
+                </thead>
+                <tbody>
+
+                @foreach($transaction_logs as $log)
 
                 <tr>
-                    <td> Payment Method </td>
-                    <td> {{ $payment->payment_method }} </td>
+
+                    <td> {{$log->id}} </td>
+                    <td> {{$log->type}} </td>
+                    <td> {{$log->message}} </td>
+                    <td> {{$log->payload}} </td>
+                    <td> {{ now()->parse($log->created_at)->format('d-m-Y h:i')}} </td>
+
                 </tr>
 
-                <tr>
-                    <td> Customer </td>
-                    <td> {{ $payment->user }} </td>
-                </tr>
+
+                    @endforeach
+
+                </tbody>
+            </table>
+        @endcomponent
 
 
-            </tbody>
-        </table>
-    @endcomponent
-
-            @endif
 
     </div>
 
