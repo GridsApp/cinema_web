@@ -160,7 +160,7 @@
                     <td> {{$log->message}} </td>
                     <td >
                         <div
-                            style="position: relative ;max-width: 300px ; overflow: hidden ; cursor: pointer" @click="navigator.clipboard.writeText('{{$log->payload}};">
+                            style="position: relative ;max-width: 300px ; overflow: hidden ; cursor: pointer" @click="navigator.clipboard.writeText('{{$log->payload}}')">
                             {!!  nl2br($log->payload) !!}
                         </div>
                     </td>
