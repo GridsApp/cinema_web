@@ -16,4 +16,8 @@ class UserController extends Controller
         return view('pages.uncompleted-payments');
     }
 
+    public function renderPaymentLookup(){
+        return view('pages.payment-lookup');
+    }
+
 }

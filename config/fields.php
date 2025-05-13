@@ -297,6 +297,22 @@ return [
         'placeholder' => 'Enter movie key',
         'name' => 'movie_key'
     ],
+
+
+    'payment_ref' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Payment Reference',
+        'placeholder' => 'Enter Payment Reference',
+        'name' => 'payment_ref'
+    ],
+
+
+
+
     'key' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1867,7 +1883,7 @@ return [
         'container' => 'col-span-6',
     ],
 
-    
+
 
 
     'profile_picture' => [
@@ -3737,7 +3753,7 @@ return [
             'type' => 'static',
             'list' => [
                 ['value' => 'single', 'label' => 'Single'],
-              
+
             ]
 
         ],

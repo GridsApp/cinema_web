@@ -202,6 +202,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::get("manage/users", [UserController::class, 'render'])->name('get-user');
   Route::get("uncompleted/payments", [UserController::class, 'renderUncompletedPayments'])->name('uncompleted-payments');
+    Route::get("payment/lookup", [UserController::class, 'renderPaymentLookup'])->name('payment-lookups');
 
 
   Route::get("/items/list", [ItemsController::class, 'render'])->name('items');
@@ -231,7 +232,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
     Route::get('/distributor-film-hire', [\App\Http\Controllers\DistributorSharesController::class, 'render'])->name('distributor-film-hire.render');
     Route::get('/distributor-film-hire/result', [\App\Http\Controllers\DistributorSharesController::class, 'result'])->name('distributor-film-hire.render-result');
 
-   
+
   });
 });
 
