@@ -65,11 +65,7 @@
     ]
   },
   "resources/scss/app.scss": {
-<<<<<<< Updated upstream
-    "file": "assets/app-DVIKKGzE.css",
-=======
     "file": "assets/app-BEB9HLFs.css",
->>>>>>> Stashed changes
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
