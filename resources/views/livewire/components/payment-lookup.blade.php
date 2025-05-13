@@ -129,6 +129,7 @@
 
 
 
+        @if(count($transaction_logs) > 0)
 
         @component('CMSView::components.panels.default', [
    'classes' => 'manage-wallet-panel',
@@ -169,6 +170,8 @@
             </table>
         @endcomponent
 
+
+            @endif
 
 
     </div>

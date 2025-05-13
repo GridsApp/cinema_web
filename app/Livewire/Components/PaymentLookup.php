@@ -47,7 +47,7 @@ class PaymentLookup extends Component
 
         if(isset($this->transaction->id)) {
             $this->transaction_logs = DB::table('payment_attempt_logs')
-                ->where('order_attempt_id', $this->transaction->id)
+                ->where('payment_attempt_id', $this->transaction->id)
                 ->orderBy('id', 'ASC')
                 ->get();
         }
