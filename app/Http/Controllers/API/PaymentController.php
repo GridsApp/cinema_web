@@ -36,14 +36,14 @@ class PaymentController extends Controller
         $user_type = request()->user_type;
 
 
- 
+
         $location = request()->location;
         try {
             $system_id = get_system_from_type($user_type);
         } catch (\Throwable $th) {
             return  $this->response(notification()->error("Error", $th->getMessage()));
         }
-       
+
 
         $location = $location . '_' . $system_id;
 
@@ -87,12 +87,12 @@ class PaymentController extends Controller
 
         }
 
-    
+
     //    dd(s);
 
 // dd($user);
       $balance=  $this->cardRepository->getWalletBalance($user);
-        
+
 
     //   dd($balance);
 
@@ -142,7 +142,7 @@ class PaymentController extends Controller
             return abort(404);
         }
 
-    
+
 
         $return_url = $this->omniPayRepository->createPayment($payment_attempt);
 
@@ -173,7 +173,7 @@ class PaymentController extends Controller
                 'message' => 'Payment has been failed to be completed'
             ]);
         }
-    
+
         return $this->callback($payment_attempt);
     }
 
@@ -190,7 +190,7 @@ class PaymentController extends Controller
 
 
             if(is_numeric($payment_attempt_id)){
-                $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->first(); 
+                $payment_attempt = PaymentAttempt::where('id', $payment_attempt_id)->first();
             }else{
                 $payment_attempt = $payment_attempt_id;
             }
@@ -212,6 +212,8 @@ class PaymentController extends Controller
             if (!$callback) {
 
                 $payment_attempt->save();
+
+                DB::commit();
 
                 return redirect()->route('payment.response.status', [
                     'type' => 'error',
