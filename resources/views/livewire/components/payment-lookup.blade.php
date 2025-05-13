@@ -159,8 +159,20 @@
                     <td> {{$log->type}} </td>
                     <td> {{$log->message}} </td>
                     <td >
-                        <div style="max-width: 300px ; overflow: hidden ; cursor: pointer" @click="navigator.clipboard.writeText('{{$log->payload}}')">
+                        <div
+
+
+                            x-data="{copied : false; init(){ setTimeout(()=>{
+
+                            this.copied=false;
+                            } , 3000) }}"
+
+                            style="position: relative ;max-width: 300px ; overflow: hidden ; cursor: pointer" @click="copied=true;navigator.clipboard.writeText('{{$log->payload}}')">
                             {!!  nl2br($log->payload) !!}
+
+                            <div x-show="copied" class="py-1 px-3 bg-green-500 text-white text-base absolute z-10 left-0">
+                                Copied
+                            </div>
                         </div>
                     </td>
                     <td> {{ now()->parse($log->created_at)->format('d-m-Y h:i')}} </td>
