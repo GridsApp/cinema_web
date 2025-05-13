@@ -224,7 +224,7 @@ class PaymentController extends Controller
                 ]);
             }
 
-            
+
             $payment_attempt->converted_at = now();
             $payment_attempt->save();
 
