@@ -119,7 +119,7 @@
 
                     <tr>
                         <td> Customer ID </td>
-                        <td> {{ $payment->user_id }} </td>
+                        <td> {{ $transaction->user_id }} </td>
                     </tr>
 
                     <tr>
