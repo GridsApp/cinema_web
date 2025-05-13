@@ -133,7 +133,7 @@
 
         @component('CMSView::components.panels.default', [
    'classes' => 'manage-wallet-panel',
-   'title' => 'Transaction',
+   'title' => 'Transaction Logs',
 ])
             <table class="twa-table table-auto">
 

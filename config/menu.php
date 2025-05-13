@@ -167,7 +167,7 @@ return [
                 'label' => 'Payment Lookup',
                 'link' => "/cms/payment/lookup",
             ],
-            
+
             [
                 'key' => 'manage-wallets',
                 'label' => 'Manage Wallets',
