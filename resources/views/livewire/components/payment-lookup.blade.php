@@ -180,7 +180,7 @@
 
                     @endforeach
 
-                    @if($log->message == '' && !$payment)
+                    @if(str($log->message)->contains('PAID SUCCESSFULLY') && !$payment)
 
                         <tr>
                             <td colspan="5" >
