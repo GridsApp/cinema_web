@@ -203,27 +203,28 @@ class PaymentController extends Controller
                 ]);
             }
 
-            $payment_attempt->completed_at = now();
+
 
             $service = app(\App\Services\OmnipayCallbackService::class);
             $callback = $service->callback($payment_attempt);
 
+            $payment_attempt->completed_at = now();
 
             if (!$callback) {
 
+                $payment_attempt->completed_at = null;
                 $payment_attempt->save();
 
                 DB::commit();
 
                 return redirect()->route('payment.response.status', [
                     'type' => 'error',
-
                     'title' => 'Payment Successfull but something went wrong',
                     'message' => 'Payment was successfull but something went wrong after it. Please contact our customer support'
                 ]);
             }
 
-
+            
             $payment_attempt->converted_at = now();
             $payment_attempt->save();
 

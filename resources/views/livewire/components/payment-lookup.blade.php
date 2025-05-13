@@ -95,7 +95,7 @@
 
             @component('CMSView::components.panels.default', [
       'classes' => 'manage-wallet-panel',
-      'title' => 'Transaction',
+      'title' => 'Transaction'
   ])
                 <table class="twa-table table-auto">
 
@@ -178,8 +178,10 @@
 
                 </tr>
 
-
                     @endforeach
+
+                    @if($log->type == '')
+
 
                 </tbody>
             </table>
