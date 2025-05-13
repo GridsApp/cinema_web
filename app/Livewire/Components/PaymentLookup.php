@@ -28,7 +28,7 @@ class PaymentLookup extends Component
 
 
         $this->payment = DB::table('order_topups')
-            ->select('order_topups.label as topup_desc' , 'order_topups.price' , 'payment_methods.label as payment_method' , 'users.name as user' , 'orders.created_at')
+            ->select('order_topups.label as topup_desc' , 'orders.user_id' , 'order_topups.price' , 'payment_methods.label as payment_method' , 'users.name as user' , 'orders.created_at')
             ->join('orders', 'orders.id', '=', 'order_topups.order_id')
             ->join('payment_methods', 'payment_methods.id', '=', 'orders.payment_method_id')
             ->leftJoin('users', 'users.id', '=', 'orders.user_id')
@@ -37,7 +37,7 @@ class PaymentLookup extends Component
 
 
         $this->transaction = DB::table('payment_attempts')
-            ->select('payment_attempts.id' , 'payment_attempts.amount' , 'payment_methods.label as payment_method' , 'users.name as user' , 'payment_attempts.created_at')
+            ->select('payment_attempts.id' , 'payment_attempts.amount' , 'payment_methods.label as payment_method' , 'users.name as user' ,  'payment_attempts.user_id'  ,'payment_attempts.created_at')
             ->where('payment_reference', $this->form['payment_ref'])
             ->join('payment_methods', 'payment_methods.id', '=', 'payment_attempts.payment_method_id')
 

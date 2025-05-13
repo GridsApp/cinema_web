@@ -72,6 +72,11 @@
                         <td> {{ $payment->user }} </td>
                     </tr>
 
+                    <tr>
+                        <td> Customer ID </td>
+                        <td> {{ $payment->user_id }} </td>
+                    </tr>
+
 
                     <tr>
                         <td> Created at </td>
@@ -110,6 +115,11 @@
                     <tr>
                         <td> Customer </td>
                         <td> {{ $transaction->user }} </td>
+                    </tr>
+
+                    <tr>
+                        <td> Customer ID </td>
+                        <td> {{ $payment->user_id }} </td>
                     </tr>
 
                     <tr>
