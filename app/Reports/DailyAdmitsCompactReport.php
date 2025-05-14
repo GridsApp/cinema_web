@@ -48,7 +48,7 @@ class DailyAdmitsCompactReport extends DefaultReport
 
 
         $this->addColumn("current_admits", "Current <br> Admits");
-        $this->addColumn("current_income", "Current <br> Income");
+
         $this->addColumn("last_week_admits", "Last Wk <br> Admits");
   
         $date = $this->getFilter('date');
