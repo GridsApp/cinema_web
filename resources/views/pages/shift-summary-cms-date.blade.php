@@ -5,10 +5,10 @@
 <div class="manage-wallet flex flex-col gap-5">
 
 
-    @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Manage Wallets'])
+    @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Cashier: '.$pos_user->name])
         <form target="_blank"  method="GET" >
 
-
+            
             <div class="mb-5">
 
                 <div>

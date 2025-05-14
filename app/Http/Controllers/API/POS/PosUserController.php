@@ -124,15 +124,17 @@ class PosUserController extends Controller
   public function shiftSummaryCMS($id){
 
 
-      if(!request()->input('date')){
-          return view('pages.shift-summary-cms-date');
-      }
+
 
 
       $pos_user = PosUser::find($id);
 
       if(!$pos_user){
           abort(404);
+      }
+
+      if(!request()->input('date')){
+          return view('pages.shift-summary-cms-date' , ['pos_user' => $pos_user]);
       }
 
       request()->merge(['user' => $pos_user]);
