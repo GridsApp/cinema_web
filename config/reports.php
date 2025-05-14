@@ -26,7 +26,8 @@ return [
         "tickets-report" => App\Reports\TicketsReport::class,
         "wallet-cards-report" => App\Reports\WalletCardsReport::class,
         "wallet-topups-report" => App\Reports\WalletTopupsReport::class,
-        "wallet-transactions-report" => App\Reports\WalletTransactionsReport::class
+        "wallet-transactions-report" => App\Reports\WalletTransactionsReport::class,
+        "daily-admits-compact" => App\Reports\DailyAdmitsCompactReport::class
     ]
 
 ];
