@@ -195,6 +195,8 @@ Route::post('/cart/add-seats', [\App\Http\Controllers\WEBSITE\CartController::cl
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
 
+    Route::get('/cashier-shift-summary/{id}' , [\App\Http\Controllers\API\POS\PosUserController::class , 'shiftSummaryCMS'])->name('cashier-shift-summary');
+
 
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');

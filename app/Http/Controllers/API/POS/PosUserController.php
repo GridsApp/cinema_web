@@ -13,6 +13,7 @@ use App\Models\OrderItem;
 use App\Models\OrderSeat;
 use App\Models\OrderTopup;
 use App\Models\PaymentMethod;
+use App\Models\PosUser;
 use App\Models\UserSession;
 use Carbon\Carbon;
 use Faker\Provider\ar_EG\Payment;
@@ -117,6 +118,31 @@ class PosUserController extends Controller
       ],
       'access_token' => $access_token
     ]);
+  }
+
+
+  public function shiftSummaryCMS($id){
+
+
+      if(!request()->input('date')){
+          return view('pages.shift-summary-cms-date');
+      }
+
+
+      $pos_user = PosUser::find($id);
+
+      if(!$pos_user){
+          abort(404);
+      }
+
+      request()->merge(['user' => $pos_user]);
+
+
+      $shiftSummary = $this->shiftSummary();
+
+
+      return view('pages.shift-summary-cms', ['result' => $shiftSummary]);
+
   }
 
   public function logout()
@@ -346,12 +372,12 @@ class PosUserController extends Controller
         ->select(
           DB::raw("
                     CONCAT(
-                        COALESCE(price_groups.label, ''), 
-                        ' ', 
+                        COALESCE(price_groups.label, ''),
+                        ' ',
                         COALESCE(
-                            CASE 
-                                WHEN price_group_zones.default = 1 THEN NULL 
-                                ELSE price_group_zones.condensed_label 
+                            CASE
+                                WHEN price_group_zones.default = 1 THEN NULL
+                                ELSE price_group_zones.condensed_label
                             END, ''
                         )
                     ) AS full_description
@@ -400,12 +426,12 @@ class PosUserController extends Controller
         ->select(
           DB::raw("
                 CONCAT(
-                    COALESCE(price_groups.label, ''), 
-                    ' ', 
+                    COALESCE(price_groups.label, ''),
+                    ' ',
                     COALESCE(
-                        CASE 
-                            WHEN price_group_zones.default = 1 THEN NULL 
-                            ELSE price_group_zones.condensed_label 
+                        CASE
+                            WHEN price_group_zones.default = 1 THEN NULL
+                            ELSE price_group_zones.condensed_label
                         END, ''
                     )
                 ) AS full_description

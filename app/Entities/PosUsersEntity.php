@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Facades\Route;
 use twa\cmsv2\Entities\Entity;
 
 class PosUsersEntity extends Entity
@@ -15,7 +16,7 @@ class PosUsersEntity extends Entity
         'pagination' => 20,
     ];
 
-
+    public $row_operations = [];
 
     public $conditions = [
         [
@@ -25,6 +26,30 @@ class PosUsersEntity extends Entity
             'value' => '{branch_id}'
         ]
     ];
+
+
+
+
+    public function setRowOperations()
+    {
+        if (cms_check_permission("edit-" . $this->slug)) {
+
+            $edit_route = "/" . Route::getRoutes()->getByName('entity.update')->uri();
+
+            $this->setRowOperation("Edit",  str_replace('{slug}', $this->slug, $edit_route),  '<i class="fa-solid fa-edit"></i>');
+        }
+
+
+
+        $route = "/" . Route::getRoutes()->getByName('cashier-shift-summary')->uri();
+//        dd($route);
+
+        $this->setRowOperation("Shift Summary",  $route,  '<i class="fa-solid fa-rectangle-list"></i>');
+
+
+
+    }
+
     public function fields()
     {
 
