@@ -43,13 +43,13 @@ class DailyAdmitsCompactReport extends DefaultReport
 
 
         foreach ($dates as $date) {
-            $this->addColumn(strtolower($date->format('l')), $date->isoFormat('ddd') . " " . $date->format('d-M') . '<br> Admits');
+            $this->addColumn(strtolower($date->format('l')), $date->isoFormat('ddd') . " " . $date->format('d-M'));
       }
 
 
-        $this->addColumn("current_admits", "Current <br> Admits");
+        $this->addColumn("current_admits", "Current");
 
-        $this->addColumn("last_week_admits", "Last Wk <br> Admits");
+        $this->addColumn("last_week_admits", "Last Wk");
   
         $date = $this->getFilter('date');
     }
