@@ -6,7 +6,7 @@
 
 
     @component('CMSView::components.panels.default', ['classes' => '', 'title' => 'Manage Wallets'])
-        <form  method="GET" >
+        <form target="_blank"  method="GET" >
 
 
             <div class="mb-5">
@@ -20,12 +20,12 @@
                             <input name="date" type="date" value="{{request()->input('date')}}" class="twa-form-input date">
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
 
             <div class="flex gap-4 items-center justify-start">
-                <button type="submit" class="btn btn-primary"> Search </button>
+                <button type="submit"  class="btn btn-primary"> Search </button>
 
             </div>
 
