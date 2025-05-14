@@ -20,7 +20,7 @@ class Hyperpay
     }
 
     public function createPayment($attempt , PaymentData $payment_data){
-      
+
 
         $merchantRefID = (int) $payment_data->reference_prefix.$payment_data->reference;
 
@@ -35,32 +35,32 @@ class Hyperpay
             'Authorization' => 'Bearer '.$this->data['token'],
         ])->post($this->data['url'].'/checkouts?'.$query, []);
 
-  
+
         if ($response->status() != '200' && $response->status() != '201') {
             create_payment_log("API REQUEST FAILURE" , $response->json() , $attempt->id);
             dd("API REQUEST FAILURE");
         }
-     
+
         $response = json_decode($response->body());
 
-        
+
         if (!isset($response->result->code) || (isset($response->result->code) && $response->result->code != "000.200.100")) {
-        
+
             create_payment_log("API INVALID RESPONSE" , $response , $attempt->id);
             dd("API INVALID RESPONSE");
         }
 
         $log = create_payment_log("API REQUEST CREATED" , $response , $attempt->id , "init");
-   
+
         $link = route('hyperpay-redirect-link' , [
             'provider_key' => $this->provider_key,
             'attempt_id' => $attempt->id,
             'token' => md5($response->id.$attempt->id.$this->provider_key.$response->integrity),
             'log_id' => $log->id
 
-            
+
         ]);
-       
+
         // dd($link);
         return [
             "completed" => false ,
@@ -75,11 +75,11 @@ class Hyperpay
 
     public function checkPayment($attempt , $parameters){
 
-      
+
 
         $gateway_log = PaymentAttemptLog::where('payment_attempt_id' , $attempt->id)->where('type' , 'init')->orderBy('id' , 'DESC')->first();
         $gateway_init = $gateway_log->payload;
-  
+
         if(!isset($gateway_init["id"])){
             create_payment_log("MISSING QUERY SOME PARAMS" , $parameters , $attempt->id);
 
@@ -102,7 +102,7 @@ class Hyperpay
         $response = json_decode($response->body());
 
         if(!isset($response->result->code) || (isset($response->result->code) && preg_match('/^(000\.000\.|000\.100\.1|000\.[36])/', $response->result->code) != 1)){
-        
+
             create_payment_log("PAYMENT FAILURE (FINAL RESPONSE)" , $response , $attempt->id);
 
             return response(["title" => "Payment was not successfull"  , "message" => "Payment was not successfull" ] , 400);

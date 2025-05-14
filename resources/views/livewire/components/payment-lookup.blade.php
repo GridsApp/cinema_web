@@ -95,7 +95,7 @@
 
             @component('CMSView::components.panels.default', [
       'classes' => 'manage-wallet-panel',
-      'title' => 'Transaction',
+      'title' => 'Transaction'
   ])
                 <table class="twa-table table-auto">
 
@@ -119,7 +119,7 @@
 
                     <tr>
                         <td> Customer ID </td>
-                        <td> {{ $payment->user_id }} </td>
+                        <td> {{ $transaction->user_id }} </td>
                     </tr>
 
                     <tr>
@@ -178,8 +178,43 @@
 
                 </tr>
 
-
                     @endforeach
+
+                    @if(str($log->message)->contains('PAID SUCCESSFULLY') && !$payment)
+
+                        <tr>
+                            <td colspan="5" >
+
+
+                                <div x-data="{
+                                showModal: false,
+                                handleOpen() { this.showModal = true },
+                                handleClose() { this.showModal = false }
+                            }" x-on:payment-treated.window="handleClose()"><button type="button"
+                                                                                   class="btn btn-primary" @click="handleOpen"> Treat</button>
+
+                                    @component('UIKitView::components.modal', [
+                                        'title' => 'Treat',
+                                        'variable' => 'showModal',
+                                        'action' => [
+                                            'label' => '"Treat"',
+                                            'type' => 'primary',
+                                            'handler' => '$wire.treatPayment(' . $transaction->id . ')',
+                                        ],
+                                    ])
+                                        <div class="text-[13px] font-medium text-left text-gray-800 p-5">
+                                            Are you sure you want to treat this payment?
+                                        </div>
+                                    @endcomponent
+
+
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    @endif
 
                 </tbody>
             </table>

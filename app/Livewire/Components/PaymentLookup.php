@@ -2,6 +2,10 @@
 
 namespace App\Livewire\Components;
 
+use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\OrderRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
+use App\Models\PaymentAttempt;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
@@ -17,6 +21,18 @@ class PaymentLookup extends Component
     public $payment;
     public $transaction;
     public $transaction_logs = [];
+
+
+
+    private OrderRepositoryInterface $orderepository;
+
+
+    public function __construct()
+    {
+
+        $this->orderepository = app(OrderRepositoryInterface::class);
+    }
+
     public function render()
     {
         return view('livewire.components.payment-lookup');
@@ -61,6 +77,42 @@ class PaymentLookup extends Component
 
 
     }
+
+    public function treatPayment($id)
+    {
+
+        $attempt =  PaymentAttempt::find($id);
+
+        if (!$attempt) {
+            $this->sendError("Error", "Unable to treat");
+            return;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $attempt->completed_at = now();
+            $attempt->save();
+
+            $this->orderepository->createOrderFromCart($attempt, null, true);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+
+
+
+            DB::rollBack();
+
+            $this->sendError("Error", $th->getMessage());
+
+            return;
+        }
+        $this->dispatch('payment-treated');
+
+        $this->sendSuccess("Success", "Payment Treat");
+    }
+
+
 
     public function handleClear(){
         $this->payment = null;

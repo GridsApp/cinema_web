@@ -19,12 +19,12 @@ class Zaincash
         $this->provider_key = $provider_key;
         $this->data = $data;
 
-       
+
     }
 
     public function createPayment($attempt , $payment_data){
 
-      
+
 
         $data = [
                 'amount'  => $payment_data->amount,
@@ -38,10 +38,10 @@ class Zaincash
         ];
 
 
-       
+
 
         $newtoken = JWT::encode($data, $this->data["merchantSecret"] ,'HS256');
-       
+
         $data_to_post = array();
         $data_to_post['token'] = urlencode($newtoken);
         $data_to_post['merchantId'] = $this->data["merchantId"];
@@ -56,20 +56,20 @@ class Zaincash
         $response = file_get_contents($this->data["gatewayUrl"]."/init", false, $context);
 
 
-       
+
 
         try{
             $array = json_decode($response, true);
-           
+
             if(!isset($array['id'])){
                 create_payment_log("INVALID SESSION RESPONSE" , $array , $attempt->id);
                 dd($attempt->message);
             }
 
             $transaction_id = $array['id'];
-           
+
             create_payment_log("SESSION CREATED" , $array , $attempt->id,"init");
-            
+
             $link = $this->data["gatewayUrl"]."/pay?id=".$transaction_id;
 
             return [
@@ -95,10 +95,10 @@ class Zaincash
         if(isset($parameters["token"])){
             $result= JWT::decode($parameters["token"], new Key($this->data["merchantSecret"], 'HS256'));
             $result= (array) $result;
-  
+
 
             if(isset($result['status']) && $result['status'] == 'success'){
-              
+
                 create_payment_log("PAID SUCCESSFULLY" , $result , $attempt->id);
 
                 $attempt->converted_at = now();
@@ -113,7 +113,7 @@ class Zaincash
         $gateway_log = PaymentAttemptLog::where('payment_attempt_id' , $attempt->id)->where('type' , 'init')->orderBy('id' , 'DESC')->first();
         $gateway_init = $gateway_log->payload;
 
-        if(!isset($gateway_init["id"])){     
+        if(!isset($gateway_init["id"])){
             create_payment_log("MISSING QUERY SOME PARAMS" , $parameters , $attempt->id);
             return response(["title" => "Unexpected error!"  , "message" => "An unexpected error occured" ] , 400);
         }
@@ -143,15 +143,15 @@ class Zaincash
 
         $result = json_decode($response, true);
 
- 
+
         if(!isset($result['status']) || (isset($result['status']) && $result['status'] != 'success' && $result['status'] != 'completed')){
-    
+
             create_payment_log("PAYMENT FAILURE (FINAL RESPONSE)" , $result , $attempt->id);
 
             return response(["title" => "Payment was not successfull"  , "message" => "Payment was not successfull" ] , 400);
         }
 
-        create_payment_log("PAID SUCCESSFULLY" , $result , $attempt->id);
+        create_payment_log("PAID SUCCESSFULLY" , $result , $attempt->id  , 'response');
 
         $attempt->converted_at = now();
         $attempt->payment_reference = $result["operationid"] ?? "?";
