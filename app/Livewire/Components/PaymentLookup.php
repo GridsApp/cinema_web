@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Components;
 
+use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\OrderRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\PaymentAttempt;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -18,6 +21,18 @@ class PaymentLookup extends Component
     public $payment;
     public $transaction;
     public $transaction_logs = [];
+
+
+
+    private OrderRepositoryInterface $orderepository;
+
+
+    public function __construct()
+    {
+
+        $this->orderepository = app(OrderRepositoryInterface::class);
+    }
+
     public function render()
     {
         return view('livewire.components.payment-lookup');
