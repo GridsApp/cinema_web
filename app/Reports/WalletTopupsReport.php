@@ -157,7 +157,7 @@ class WalletTopupsReport extends DefaultReport
         }
 
 
-        $rows = $results->map($fn)->filter()->values();
+        // $rows = $results->map($fn)->filter()->values();
 
 
         $footer['amount'] = number_format($footer['amount']);
