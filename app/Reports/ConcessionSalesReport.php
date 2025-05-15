@@ -136,9 +136,16 @@ class ConcessionSalesReport extends DefaultReport
     
     $baseQuery->groupBy('computed_identifier');
     
-    $results = $baseQuery->get();
-    
-    $rows = $results->map(function ($row) use (&$footer) {
+
+    if($this->pagination){
+        $results = $baseQuery->paginate($this->pagination);
+    }else{
+
+        $results = $baseQuery->get();
+    }
+
+  
+    $fn = function ($row) use (&$footer) {
         $unit_price = $row->unit_price;
         $items_count = $row->items_count;
         $total_price = $unit_price * $items_count;
@@ -161,8 +168,14 @@ class ConcessionSalesReport extends DefaultReport
         $footer['total_price'] += $total_price;
     
         return $data;
-    })->filter()->values();
-    
+    };
+
+    if($this->pagination){
+        $rows = $results->through($fn)->filter()->values();
+    }else{
+        $rows = $results->map($fn)->filter()->values();
+    }
+     
     $footer['total_price'] = number_format($footer['total_price']);
     
     $this->setFooter($footer);

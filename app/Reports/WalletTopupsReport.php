@@ -120,12 +120,15 @@ class WalletTopupsReport extends DefaultReport
             $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
         }
 
+        if($this->pagination){
+            $results = $baseQuery->paginate($this->pagination);
+        }else{
+    
+            $results = $baseQuery->get();
+        }
 
-        $results = $baseQuery->get();
 
-
-
-        $rows = $results->map(function ($row) use (&$footer) {
+        $fn=function ($row) use (&$footer) {
             $createdAt = Carbon::parse($row->created_at);
 
             $data = [
@@ -145,7 +148,16 @@ class WalletTopupsReport extends DefaultReport
 
 
             return $data;
-        })->filter()->values();
+        };
+
+        if($this->pagination){
+            $rows = $results->through($fn)->filter()->values();
+        }else{
+            $rows = $results->map($fn)->filter()->values();
+        }
+
+
+        $rows = $results->map($fn)->filter()->values();
 
 
         $footer['amount'] = number_format($footer['amount']);
