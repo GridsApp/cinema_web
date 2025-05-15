@@ -142,10 +142,15 @@ class OrderCafeteriaReport extends DefaultReport
             });
 
 
-        $results = $baseQuery->get();
+        // $results = $baseQuery->get();
+        if($this->pagination){
+            $results = $baseQuery->paginate($this->pagination);
+        }else{
 
+            $results = $baseQuery->get();
+        }
 
-        $rows = $results->map(function ($row) use (&$footer) {
+        $fn=function ($row) use (&$footer) {
 
             $unit_price = $row->unit_price;
             $items_count = $row->items_count;
@@ -171,7 +176,14 @@ class OrderCafeteriaReport extends DefaultReport
 
 
             return $data;
-        })->filter()->values();
+        };
+
+        if($this->pagination){
+            $rows = $results->through($fn);
+        }else{
+            $rows = $results->map($fn);
+        }
+     
 
         $footer['nb_items'] = $footer['nb_items'];
         $footer['total_price'] = number_format($footer['total_price']);

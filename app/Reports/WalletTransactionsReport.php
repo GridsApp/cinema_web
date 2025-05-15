@@ -123,48 +123,61 @@ class WalletTransactionsReport extends DefaultReport
                 $baseQuery->where('user_wallet_transactions.reference', $this->filterResults['reference']);
             }
 
-        $results = $baseQuery->get();
-
-        $rows = $results->map(function ($row) use (&$footer) {
-            $createdAt = Carbon::parse($row->created_at);
-
-            $rawAmount = $row->amount;
-            if ($row->type === 'out') {
-                $rawAmount *= -1;
-                // dd($rawAmount);
-
+            if($this->pagination){
+                $results = $baseQuery->paginate($this->pagination);
+            }else{
+        
+                $results = $baseQuery->get();
             }
 
-            $data = [
 
-
-                'long_id' => $row->long_id,
-                // 'reference' =>  $row->reference ?? '-',
-                'description' => $row->description ?? '-',
-                'card_number' => $row->card_number ?? '-',
-
-                'type' => $row->type ?? '-',
-                'amount' => $rawAmount,
-                'client_name' => $row->customer_name ?? '-',
-                'client_email' => $row->customer_email ?? '-',
-                'client_phone' => $row->customer_phone ?? '-',
-                'transaction_date' => $createdAt->format('d-m-Y'),
-                'transaction_time' => $createdAt->format('H:i:s'),
-                'system' => $row->system ?? '-',
-                'payment_method' => $row->payment_method ?? '-',
-            ];
-
-            $footer['amount'] += $data['amount'];
-
-
-
-            $data['amount'] = number_format($data['amount']);
-
-
-
-
-            return $data;
-        })->filter()->values();
+            $fn=function ($row) use (&$footer) {
+                $createdAt = Carbon::parse($row->created_at);
+    
+                $rawAmount = $row->amount;
+                if ($row->type === 'out') {
+                    $rawAmount *= -1;
+                    // dd($rawAmount);
+    
+                }
+    
+                $data = [
+    
+    
+                    'long_id' => $row->long_id,
+                    // 'reference' =>  $row->reference ?? '-',
+                    'description' => $row->description ?? '-',
+                    'card_number' => $row->card_number ?? '-',
+    
+                    'type' => $row->type ?? '-',
+                    'amount' => $rawAmount,
+                    'client_name' => $row->customer_name ?? '-',
+                    'client_email' => $row->customer_email ?? '-',
+                    'client_phone' => $row->customer_phone ?? '-',
+                    'transaction_date' => $createdAt->format('d-m-Y'),
+                    'transaction_time' => $createdAt->format('H:i:s'),
+                    'system' => $row->system ?? '-',
+                    'payment_method' => $row->payment_method ?? '-',
+                ];
+    
+                $footer['amount'] += $data['amount'];
+    
+    
+    
+                $data['amount'] = number_format($data['amount']);
+    
+    
+    
+    
+                return $data;
+            };
+            if($this->pagination){
+                $rows = $results->through($fn);
+            }else{
+                $rows = $results->map($fn)->filter()->values();
+            }
+    
+    
 
 
         $footer['amount'] = number_format($footer['amount']);

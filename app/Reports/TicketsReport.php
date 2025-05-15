@@ -11,7 +11,7 @@ class TicketsReport extends DefaultReport
 
 
     public $label = "Order Ticketsss";
-    public $pagination = 100;
+
 
 
     public function filters()

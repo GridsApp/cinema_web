@@ -171,7 +171,7 @@ class ConcessionSalesReport extends DefaultReport
     };
 
     if($this->pagination){
-        $rows = $results->through($fn)->filter()->values();
+        $rows = $results->through($fn);
     }else{
         $rows = $results->map($fn)->filter()->values();
     }

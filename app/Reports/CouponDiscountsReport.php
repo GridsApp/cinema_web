@@ -145,10 +145,17 @@ class CouponDiscountsReport extends DefaultReport
         if ($posUser) {
             $query->where('orders.pos_user_id', $posUser);
         }
-        $results = $query->groupBy('computed_identifier')->get();
+        $results = $query->groupBy('computed_identifier');
 
 
-        $rows = $results->map(function ($row) use (&$footer) {
+        if ($this->pagination) {
+            $results = $query->paginate($this->pagination);
+        } else {
+
+            $results = $query->get();
+        }
+
+        $fn = function ($row) use (&$footer) {
             // $unit_price = $row->unit_price;
             // $seats_count = $row->seats_count;
             // $total_price = $unit_price * $items_count;
@@ -178,7 +185,13 @@ class CouponDiscountsReport extends DefaultReport
             $data['coupon_discount'] = number_format($data['coupon_discount']);
 
             return $data;
-        })->filter()->values();
+        };
+
+        if ($this->pagination) {
+            $rows = $results->through($fn);
+        } else {
+            $rows = $results->map($fn)->filter()->values();
+        }
 
         $footer['coupon_discount'] = number_format($footer['coupon_discount']);
 

@@ -133,46 +133,59 @@ class ErpCafeteriaReport extends DefaultReport
             ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id))
             ->whereNull('order_items.deleted_at')
 
-            ->groupBy('computed_identifier')
-            ->get();
+            ->groupBy('computed_identifier');
+
+
+            if($this->pagination){
+                $results = $results->paginate($this->pagination);
+            }else{
+
+                $results = $results->get();
+            }
+
+         
 
 
 
-
-        $rows = $results->map(function ($row) use (&$footer) {
-            $unit_price = $row->unit_price;
-            $items_count = $row->items_count;
-            $total_price = $unit_price * $items_count;
-           
-            $createdAt = Carbon::parse($row->created_at);
-
-            $data = [
-
-
-                'item_code' => $row->item_code,
-                'item_name' => $row->item_name,
-                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
-                'reference' => $row->reference,
-                'booking_date' => $createdAt->format('d-m-Y'),
-                'booking_time' => $createdAt->format('H:i:s'),
-                'unit_price' => $unit_price,
-                'quantity' => $items_count,
-                'total_price' => $total_price,
-                'customer' => $row->customer_phone ?? '',
-                'cashier' => $row->booked_by,
-                'booked_via' => $row->system ?? '',
-                'payment_method' => $row->payment_method ?? '',
-
+            $fn=function ($row) use (&$footer) {
+                $unit_price = $row->unit_price;
+                $items_count = $row->items_count;
+                $total_price = $unit_price * $items_count;
                
-            ];
-
-
-            $footer['total_price'] += $data['total_price'];
-       
-            $data['total_price'] = number_format($data['total_price']);
-       
-            return $data;
-        })->filter()->values();
+                $createdAt = Carbon::parse($row->created_at);
+    
+                $data = [
+    
+    
+                    'item_code' => $row->item_code,
+                    'item_name' => $row->item_name,
+                    'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
+                    'reference' => $row->reference,
+                    'booking_date' => $createdAt->format('d-m-Y'),
+                    'booking_time' => $createdAt->format('H:i:s'),
+                    'unit_price' => $unit_price,
+                    'quantity' => $items_count,
+                    'total_price' => $total_price,
+                    'customer' => $row->customer_phone ?? '',
+                    'cashier' => $row->booked_by,
+                    'booked_via' => $row->system ?? '',
+                    'payment_method' => $row->payment_method ?? '',
+    
+                   
+                ];
+    
+    
+                $footer['total_price'] += $data['total_price'];
+           
+                $data['total_price'] = number_format($data['total_price']);
+           
+                return $data;
+            };
+            if($this->pagination){
+                $rows = $results->through($fn);
+            }else{
+                $rows = $results->map($fn);
+            }
 
         $footer['total_price'] = number_format($footer['total_price']);
      

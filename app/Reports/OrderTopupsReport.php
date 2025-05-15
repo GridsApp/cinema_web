@@ -150,11 +150,19 @@ class OrderTopupsReport extends DefaultReport
         }
         $baseQuery->groupBy('computed_identifier');
 
-        $results = $baseQuery->get();
 
 
-        // dd($results);
-        $rows = $results->map(function ($row) use (&$footer) {
+
+        if($this->pagination){
+            $results = $baseQuery->paginate($this->pagination);
+        }else{
+
+            $results = $baseQuery->get();
+        }
+
+
+
+        $fn=function ($row) use (&$footer) {
 
             $unit_price = $row->unit_price;
             $topups_count = $row->topups_count;
@@ -180,7 +188,14 @@ class OrderTopupsReport extends DefaultReport
 
 
             return $data;
-        })->filter()->values();
+        };
+        // dd($results);
+        if($this->pagination){
+            $rows = $results->through($fn);
+        }else{
+            $rows = $results->map($fn);
+        }
+
 
         $footer['nb_topups'] = $footer['nb_topups'];
         $footer['total_price'] = number_format($footer['total_price']);
