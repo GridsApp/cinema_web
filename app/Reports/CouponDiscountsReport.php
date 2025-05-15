@@ -14,7 +14,7 @@ class CouponDiscountsReport extends DefaultReport
 {
 
     public $label = "Coupon Discounts";
-
+    public $pagination = 100;
 
 
     public function filters()

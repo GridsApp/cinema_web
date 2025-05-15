@@ -14,7 +14,7 @@ class OrderTopupsReport extends DefaultReport
 {
 
     public $label = "Order Topups";
-
+    public $pagination = 100;
 
 
     public function filters()

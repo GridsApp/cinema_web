@@ -14,7 +14,7 @@ class ImtiyazReport extends DefaultReport
 {
 
     public $label = "Imtiyaz Report";
-
+    public $pagination = 100;
 
 
     public function filters()

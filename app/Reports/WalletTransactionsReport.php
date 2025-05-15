@@ -14,7 +14,7 @@ class WalletTransactionsReport extends DefaultReport
 {
 
     public $label = "Wallet Transactions";
-
+    public $pagination = 100;
 
 
     public function filters()

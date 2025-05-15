@@ -14,7 +14,7 @@ class OrderCafeteriaReport extends DefaultReport
 {
 
     public $label = "Order Cafeteria";
-
+    public $pagination = 100;
 
 
     public function filters()

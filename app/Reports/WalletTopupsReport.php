@@ -14,7 +14,7 @@ class WalletTopupsReport extends DefaultReport
 {
 
     public $label = "Wallet Topups";
-
+    public $pagination = 100;
 
 
     public function filters()

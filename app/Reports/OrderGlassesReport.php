@@ -14,7 +14,7 @@ class OrderGlassesReport extends DefaultReport
 {
 
     public $label = "Order Glasses";
-
+    public $pagination = 100;
 
 
     public function filters()

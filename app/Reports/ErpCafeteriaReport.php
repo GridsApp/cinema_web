@@ -14,7 +14,7 @@ class ErpCafeteriaReport extends DefaultReport
 {
 
     public $label = "ERP Cafeteria Excel";
-
+    public $pagination = 100;
 
 
     public function filters()
