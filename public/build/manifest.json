@@ -69,15 +69,15 @@
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
+  "vendor/twa/uikit/dist/app-DSGB8meh.js": {
+    "file": "assets/app-DSGB8meh-ByPg8-Yn.js",
+    "name": "app-DSGB8meh",
+    "src": "vendor/twa/uikit/dist/app-DSGB8meh.js",
+    "isEntry": true
+  },
   "vendor/twa/uikit/dist/app-d18U7yhb.css": {
     "file": "assets/app-d18U7yhb-2jjSzNe3.css",
     "src": "vendor/twa/uikit/dist/app-d18U7yhb.css",
-    "isEntry": true
-  },
-  "vendor/twa/uikit/dist/app-t7hqmD3O.js": {
-    "file": "assets/app-t7hqmD3O-rRSYFF8w.js",
-    "name": "app-t7hqmD3O",
-    "src": "vendor/twa/uikit/dist/app-t7hqmD3O.js",
     "isEntry": true
   }
 }
