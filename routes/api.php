@@ -48,7 +48,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
             Route::get('/purchase-history', [App\Http\Controllers\API\OrderController::class, 'purchaseHistory'])->middleware([AuthMandatoryMiddleware::class, UserMiddleware::class]);
 
             Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
-            Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'logi2n']);
+            Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
 
             Route::post('forget-password', [App\Http\Controllers\API\UserController::class, 'forgetPassword'])->middleware([UserMiddleware::class]);
             Route::post('/reset-password', [App\Http\Controllers\API\UserController::class, 'resetPassword']);
