@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\ItemRepositoryInterface;
+use App\Interfaces\KioskUserRepositoryInterface;
 use App\Interfaces\MovieShowRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\PosUserRepositoryInterface;
@@ -37,7 +38,6 @@ class  OrderController extends Controller
 
     private OrderRepositoryInterface $orderRepository;
     private PosUserRepositoryInterface $posUserRepository;
-
     private MovieShowRepositoryInterface $movieShowRepository;
     private TheaterRepositoryInterface $theaterRepository;
     private CartRepositoryInterface $cartRepository;
@@ -45,9 +45,10 @@ class  OrderController extends Controller
     private ZoneRepositoryInterface $zoneRepository;
     private ItemRepositoryInterface $itemRepository;
     private UserRepositoryInterface $userRepository;
+    private KioskUserRepositoryInterface $kioskUserRepository;
 
 
-    public function __construct(OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository, UserRepositoryInterface $userRepository)
+    public function __construct(KioskUserRepositoryInterface $kioskUserRepository, OrderRepositoryInterface $orderRepository, MovieShowRepository $movieShowRepository, TheaterRepositoryInterface $theaterRepository, CartRepositoryInterface $cartRepository, PosUserRepositoryInterface $posUserRepository, CardRepositoryInterface $cardRepository, ZoneRepositoryInterface $zoneRepository, ItemRepositoryInterface $itemRepository, UserRepositoryInterface $userRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->movieShowRepository = $movieShowRepository;
@@ -58,6 +59,7 @@ class  OrderController extends Controller
         $this->zoneRepository = $zoneRepository;
         $this->itemRepository = $itemRepository;
         $this->userRepository = $userRepository;
+        $this->kioskUserRepository = $kioskUserRepository;
     }
 
     public function createOrder($cart_id, $payment_method, $payment_reference = null)
@@ -103,7 +105,7 @@ class  OrderController extends Controller
         switch ($payment_method->payment_type) {
             case 'cash':
             case 'cc_dc':
-           
+
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
                 } catch (\Throwable $th) {
@@ -123,9 +125,9 @@ class  OrderController extends Controller
                 break;
 
             case 'op':
-        
-              
-              
+
+
+
                 return $this->responseData([
                     'redirect' => route(
                         "payment.initialize",
@@ -329,7 +331,6 @@ class  OrderController extends Controller
 
                     $this->theaterRepository->removeFromReservedSeats($order_seat['movie_show_id'], $order_seat['seat']);
                 } catch (\Throwable $th) {
-        
                 }
 
                 if ($payment_method->key != 'CASH') {
@@ -348,8 +349,6 @@ class  OrderController extends Controller
 
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
                         $loyaltyTransaction =    $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
-
-                     
                     }
                 }
             }
@@ -476,15 +475,15 @@ class  OrderController extends Controller
 
 
 
-         
-            
+
+
             $zone_ids = $order_seats->pluck('zone_id');
             $zones = $this->zoneRepository->getZones($zone_ids)->keyBy('id');
             $total_discounts = 0;
             $subtotal = 0;
             // $imtiyaz_discounts = collect();
 
-            $seat_lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts,&$imtiyaz_discounts) {
+            $seat_lines = $order_seats->map(function ($order_seat) use ($zones, &$total_discounts, &$imtiyaz_discounts) {
 
                 $zone = $zones[$order_seat['zone_id']];
                 if (!$zone) {
@@ -497,7 +496,7 @@ class  OrderController extends Controller
 
                 // dump($order_seat);
                 // if (!empty($order_seat['imtiyaz_phone'])) {
-                  
+
                 //     $imtiyaz_discounts->push([
                 //         'label' => 'Imtiyaz Discount - ' . $order_seat['label'],
                 //         'price' => currency_format($unit_price),
@@ -536,7 +535,7 @@ class  OrderController extends Controller
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
             $item_lines = $order_items->map(function ($order_item) use ($items) {
-               
+
                 $unit_price = $order_item->price;
 
                 return [
@@ -575,17 +574,17 @@ class  OrderController extends Controller
                 return [
                     'label' => $item->label ?? '',
                     'price' => currency_format($item->amount),
-    
+
                 ];
             });
- 
-    
+
+
             // $order_discounts = $order_discounts->merge($imtiyaz_discounts);
 
 
             $discount = $order_discounts->sum('price.value');
-    
-    
+
+
             $discount =  collect($order_discounts)->sum('price.value');
 
             // dd($discount);
@@ -726,10 +725,7 @@ class  OrderController extends Controller
         });
 
 
-
         $order_seats = $order_seats->map(function ($seats) use ($order) {
-
-
 
             $type =  $seats->theater->PriceGroup->label ?? '';
 
@@ -776,12 +772,32 @@ class  OrderController extends Controller
             ];
         });
 
-        $pos_user_id = $order->pos_user_id;
-        try {
-            $pos_user_id = $this->posUserRepository->getUserById($pos_user_id);
-        } catch (\Throwable $th) {
-            $pos_user = null;
+        $pos_user = null;
+        $kiosk_user = null;
+
+        if ($order->pos_user_id) {
+            try {
+                $pos_user = $this->posUserRepository->getUserById($order->pos_user_id);
+            } catch (\Throwable $th) {
+                $pos_user = null;
+            }
         }
+
+        if ($order->kiosk_user_id) {
+
+       
+            try {
+               
+                $kiosk_user = $this->kioskUserRepository->getUserById($order->kiosk_user_id);
+  
+            } catch (\Throwable $th) {
+                $kiosk_user = null;
+            }
+        }
+
+
+        $branch_user = $pos_user ?? $kiosk_user;
+
 
         $order_discounts = $order_discounts->map(function ($item) {
             return [
@@ -821,10 +837,10 @@ class  OrderController extends Controller
                 'system' => $order->system->label ?? '',
                 'payment_method' => $order->paymentMethod->label ?? '',
                 'customer' => $order->user?->only(['id', 'full_name', 'phone', 'email']),
-                'cashier' => $pos_user_id->name ?? null,
+                'cashier' => $branch_user?->name ?? null,
                 'branch' => [
-                    'label_en' => $pos_user_id->branch->label_en ?? null,
-                    'label_ar' => $pos_user_id->branch->label_ar ?? null
+                    'label_en' => $branch_user?->branch->label_en ?? null,
+                    'label_ar' => $branch_user?->branch->label_ar ?? null
                 ],
                 'card_number' => $user_card_number->barcode ?? null,
                 'printed_at' => $order->printed_at,

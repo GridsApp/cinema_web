@@ -14,6 +14,8 @@ Artisan::command('twa:entities', function () {
     $this->comment("Started");
 
     $files = File::files(app_path('Entities'));
+
+
     $other_files = File::files(base_path('vendor/twa/cmsv2/src/Entities'));
 
 
