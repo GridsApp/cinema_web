@@ -172,7 +172,7 @@ class MovieRepository implements MovieRepositoryInterface
 
 
 
-        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug')->whereNull('deleted_at')
+        $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug' , 'orders')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids , $times , $strict) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids , $times , $strict) {
                     $q->whereNull('deleted_at')
@@ -208,6 +208,7 @@ class MovieRepository implements MovieRepositoryInterface
                     ->whereIn('theater_id', $theaters_ids);
                 ;
             }]) // Can be removed. only for optimization
+            ->orderBy('orders' , 'ASC')
             ->get();
 
 
@@ -245,6 +246,11 @@ class MovieRepository implements MovieRepositoryInterface
                 'categories' =>  $categories,
             ];
         });
+
+
+
+
+
     }
 
     public function searchMovies($search)
