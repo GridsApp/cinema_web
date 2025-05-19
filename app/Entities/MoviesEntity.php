@@ -14,6 +14,8 @@ class MoviesEntity extends Entity
 
     public $form = "pages.form.movie";
 
+    public $enableSorting = true;
+    public $sortingCardLabel = "condensed_name";
 
     public $params = [
         'pagination' => 50,
