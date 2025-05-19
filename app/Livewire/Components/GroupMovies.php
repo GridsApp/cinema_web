@@ -30,14 +30,21 @@ class GroupMovies extends Component
     public function loadMovies()
     {
 
-        $this->grouped_movies = GroupMovie::whereNull('deleted_at')->get()->map(function ($item) {
+        $this->grouped_movies = GroupMovie::select([
+            'group_movies.id',
+            'movies.condensed_name as movie_name',
+            'groups.label as group_name' 
+        ])->whereNull('group_movies.deleted_at')
+        ->join('movies' , 'group_movies.movie_id' , 'movies.id')
+        ->join('groups' , 'group_movies.group_id' , 'groups.id')
+        ->orderBy('movies.orders' , 'ASC')
+        ->get()
+        ->groupBy('group_name')->toArray();
 
-            return [
-                'group' => $item->group->label ?? '',
-                'movie' => $item->movie->condensed_name ?? '',
-                'id' => $item->id
-            ];
-        })->groupBy('group');
+ 
+        
+
+        
     }
 
     public function deleteMovie($id)
@@ -63,6 +70,6 @@ class GroupMovies extends Component
 
 
 
-        return view('components.form.group-movies', []);
+        return view('components.form.group-movies');
     }
 }

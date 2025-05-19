@@ -11,23 +11,20 @@ class GroupMovie extends Model
     use HasFactory;
 
    
-    protected $casts = [
-        'cast_id' => 'array',
-       
-    ];
+    
 
 
-    public function group()
-    {
+    // public function group()
+    // {
         
-        return $this->belongsTo(Group::class, 'group_id')->whereNull('deleted_at');
-    }
+    //     return $this->belongsTo(Group::class, 'group_id')->whereNull('deleted_at');
+    // }
 
-    public function movie()
-    {
+    // public function movie()
+    // {
         
-        return $this->belongsTo(Movie::class, 'movie_id')->whereNull('deleted_at');
-    }
+    //     return $this->belongsTo(Movie::class, 'movie_id')->whereNull('deleted_at');
+    // }
     
     
 }

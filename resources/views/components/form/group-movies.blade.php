@@ -12,7 +12,7 @@
                         @foreach ($grouped_movies_list as $movie)
                             <div class="bg-gray-50 p-3 my-3 rounded-md text-[12px] flex flex-row">
                             <div class="flex-1">
-                                {{ $movie["movie"] }} : {{ $movie["id"] }}
+                                {{ $movie["movie_name"] }} 
                             </div>
 
                             <div>
