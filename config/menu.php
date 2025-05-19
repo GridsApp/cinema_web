@@ -65,6 +65,13 @@ return [
                 'link' => "/cms/movie/groups",
 
             ],
+            [
+
+                'key' => 'review-week-numbers',
+                'label' => 'Review Week Numbers',
+                'link' => "/cms/review/week-numbers",
+
+            ],
             
             // [
 

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\ReportExport;
 use App\Http\Controllers\GroupMoviesController;
+use App\Http\Controllers\ReviewWeekNumbersController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -221,6 +222,9 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
 
   Route::get('/movie/groups', [GroupMoviesController::class, 'groupMovies'])->name('group-movies');
+
+
+  Route::get('/review/week-numbers', [ReviewWeekNumbersController::class, 'render'])->name('review-week-numbers');
 
 
 
