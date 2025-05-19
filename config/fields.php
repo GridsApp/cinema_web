@@ -1083,7 +1083,7 @@ return [
     'movies' => [
         'id' => uniqid(),
         'livewire' => [
-            'wire:model.live' => 'form.{name}',
+            'wire:model' => 'form.{name}',
         ],
         'type' => twa\uikit\FieldTypes\Select::class,
         'label' => 'Select Movies',
