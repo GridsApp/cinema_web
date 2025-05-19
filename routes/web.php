@@ -208,6 +208,8 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
 
   Route::get("manage/users", [UserController::class, 'render'])->name('get-user');
+  Route::post('/cms/manage/users/recover/{id}', [UserController::class, 'recover'])->name('recover-user');
+
   Route::get("uncompleted/payments", [UserController::class, 'renderUncompletedPayments'])->name('uncompleted-payments');
   Route::get("payment/lookup", [UserController::class, 'renderPaymentLookup'])->name('payment-lookups');
 

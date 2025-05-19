@@ -8,12 +8,13 @@ interface UserRepositoryInterface
     public function createUser($phone_number, $password = null);
     public function createVerifiedUser($phone_number, $password = null);
     public function changePassword($user, $password);
-    public function getUserByPhone($phone_number);
-    public function getUserByEmail($email);
-    public function getUserByCardNumber($card_number);
+    public function getUserByPhone($phone_number, $includeDeleted = false);
+    public function getUserByEmail($email, $includeDeleted = false);
+
+    public function getUserByCardNumber($card_number, $includeDeleted = false);
     // public function getPosUserByUsername($username);
     public function getUserByToken($token);
-    public function getUserById($user_id);
+    public function getUserById($user_id, $includeDeleted = false);
     public function deleteAccount($user);
 
     public function getVerifiedUserByPhone($phone_number);

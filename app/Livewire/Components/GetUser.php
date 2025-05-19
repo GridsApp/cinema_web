@@ -65,17 +65,17 @@ class GetUser extends Component
         try {
             switch ($type) {
                 case "email":
-                    $user = $this->userRepository->getUserByEmail($this->form['phone_email_card_number']);
+                    $user = $this->userRepository->getUserByEmail($this->form['phone_email_card_number'],true);
                     break;
 
                 case "phone":
-                    $user = $this->userRepository->getUserByPhone($this->form['phone_email_card_number']);
+                    $user = $this->userRepository->getUserByPhone($this->form['phone_email_card_number'],true);
                     break;
                 case "id":
-                    $user = $this->userRepository->getUserById($input);
+                    $user = $this->userRepository->getUserById($input,true);
                     break;
                 case "card":
-                    $user = $this->userRepository->getUserByCardNumber($this->form['phone_email_card_number']);
+                    $user = $this->userRepository->getUserByCardNumber($this->form['phone_email_card_number'],true);
                     break;
             }
         } catch (\Throwable $th) {

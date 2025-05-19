@@ -66,7 +66,7 @@ class UserRepository implements UserRepositoryInterface
 
 
 
-    
+
 
     public function createCustomer($phone_number, $password, $full_name, $email, $gender = null, $dom = null, $dob = null)
     {
@@ -90,50 +90,56 @@ class UserRepository implements UserRepositoryInterface
     }
 
 
-    public function getUserByPhone($phone_number)
+    public function getUserByPhone($phone_number, $includeDeleted = false)
     {
-        // dd($phone_number);
-
         try {
-            $user = User::where('phone', $phone_number)
-                ->whereNull('deleted_at')
-
-
-
-                ->firstOrFail();
+            $query = User::where('phone', $phone_number);
+    
+            if (!$includeDeleted) {
+                $query->whereNull('deleted_at');
+            }
+    
+            return $query->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         }
-        return $user;
     }
+    
 
 
     public function getVerifiedUserByPhone($phone_number)
     {
-       
+
         $user = User::where('phone', $phone_number)
-                ->whereNull('deleted_at')
-                ->whereNotNull('phone_verified_at')
-                ->first();
-       
+            ->whereNull('deleted_at')
+            ->whereNotNull('phone_verified_at')
+            ->first();
+
         return $user;
     }
 
 
-    public function getUserByCardNumber($card_number)
+    public function getUserByCardNumber($card_number,$includeDeleted=false)
     {
 
 
         try {
             $user_card = UserCard::where('barcode', $card_number)
+
+            
                 ->whereNull('deleted_at')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
 
         try {
-            $user = User::where('id', $user_card->user_id)
-                ->whereNull('deleted_at')->firstOrFail();
+            $user = User::where('id', $user_card->user_id);
+
+            if (!$includeDeleted) {
+                $user->whereNull('deleted_at');
+            }
+                // ->whereNull('deleted_at')
+                $user= $user->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
@@ -142,17 +148,32 @@ class UserRepository implements UserRepositoryInterface
     }
 
 
-    public function getUserByEmail($email)
+    // public function getUserByEmail($email)
+    // {
+    //     try {
+    //         return User::whereNull('deleted_at')
+    //             ->where('email', $email)
+
+    //             ->firstOrFail();
+    //     } catch (ModelNotFoundException $e) {
+    //         throw new ModelNotFoundException($e->getMessage());
+    //     }
+    // }
+    public function getUserByEmail($email, $includeDeleted = false)
     {
         try {
-            return User::whereNull('deleted_at')
-                ->where('email', $email)
+            $query = User::query();
 
-                ->firstOrFail();
+            if (!$includeDeleted) {
+                $query->whereNull('deleted_at');
+            }
+
+            return $query->where('email', $email)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException($e->getMessage());
         }
     }
+
 
     public function getVerifiedUserByEmail($email)
     {
@@ -176,19 +197,22 @@ class UserRepository implements UserRepositoryInterface
             throw new ModelNotFoundException($e->getMessage());
         }
     }
-
-    public function getUserById($user_id)
+    
+    public function getUserById($user_id, $includeDeleted = false)
     {
-
         try {
-            $user = User::where('id', $user_id)
-                ->whereNull('deleted_at')->firstOrFail();
+            $query = User::where('id', $user_id);
+    
+            if (!$includeDeleted) {
+                $query->whereNull('deleted_at');
+            }
+    
+            return $query->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("User with ID {$user_id} not found.");
         }
-
-        return $user;
     }
+    
 
     public function changePassword($user, $password)
     {
