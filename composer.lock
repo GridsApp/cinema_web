@@ -7530,12 +7530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewebaddicts/twacmsv2.git",
-                "reference": "c5b1bd1bbeac5e0dac3b98975bfa93120c7025d7"
+                "reference": "86814d60826400d4130c699ee29dc37c7c526bd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/c5b1bd1bbeac5e0dac3b98975bfa93120c7025d7",
-                "reference": "c5b1bd1bbeac5e0dac3b98975bfa93120c7025d7",
+                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/86814d60826400d4130c699ee29dc37c7c526bd7",
+                "reference": "86814d60826400d4130c699ee29dc37c7c526bd7",
                 "shasum": ""
             },
             "default-branch": true,
@@ -7567,7 +7567,7 @@
                 "issues": "https://github.com/thewebaddicts/twacmsv2/issues",
                 "source": "https://github.com/thewebaddicts/twacmsv2/tree/main"
             },
-            "time": "2025-05-19T10:43:53+00:00"
+            "time": "2025-05-19T11:04:21+00:00"
         },
         {
             "name": "twa/omni-push",
