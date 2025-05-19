@@ -56,4 +56,7 @@ class MovieController extends Controller
             'language_prefix' => $language_prefix,
         ]);
     }
+
+
+   
 }

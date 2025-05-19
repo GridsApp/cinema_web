@@ -38,9 +38,16 @@
                     {!! field('apply_color', 'col-span-2 toggle-custom') !!}
                 @endif
  
-
+                @if($this->type == "single")
                 {!! field('week', 'col-span-12') !!}
 
+
+                
+                @else
+                {!! field('week', 'col-span-10') !!}
+                {!! field('apply_week', 'col-span-2 toggle-custom') !!}
+
+                @endif
             </div>
 
         </div>

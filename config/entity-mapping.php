@@ -25,6 +25,8 @@ return array (
   'distributors' => 'App\\Entities\\DistributorsEntity',
   'faqs' => 'App\\Entities\\FaqsEntity',
   'genders' => 'App\\Entities\\GendersEntity',
+  'group-movies' => 'App\\Entities\\GroupMoviesEntity',
+  'groups' => 'App\\Entities\\GroupsEntity',
   'home-paragraph-banners' => 'App\\Entities\\HomeParagraphBannersEntity',
   'informative-pages' => 'App\\Entities\\InformativePagesEntity',
   'items' => 'App\\Entities\\ItemsEntity',

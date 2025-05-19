@@ -19,6 +19,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\ReportExport;
+use App\Http\Controllers\GroupMoviesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -131,6 +132,7 @@ Route::group([
   Route::get('/contact-us', [App\Http\Controllers\WEBSITE\ContactController::class, 'contact'])->name('contact');
   Route::get('/movies/listing', [\App\Http\Controllers\WEBSITE\MovieController::class, 'listing'])->name('movie-listing');
 
+ 
 
   Route::get('/movie-details/{slug}', [\App\Http\Controllers\WEBSITE\MovieController::class, 'details'])->name('details');
 
@@ -195,16 +197,18 @@ Route::post('/cart/add-seats', [\App\Http\Controllers\WEBSITE\CartController::cl
 
 Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsAuthMiddleware::class], function () {
 
-    Route::get('/cashier-shift-summary/{id}' , [\App\Http\Controllers\API\POS\PosUserController::class , 'shiftSummaryCMS'])->name('cashier-shift-summary');
+  Route::get('/cashier-shift-summary/{id}', [\App\Http\Controllers\API\POS\PosUserController::class, 'shiftSummaryCMS'])->name('cashier-shift-summary');
 
 
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
 
 
+
+
   Route::get("manage/users", [UserController::class, 'render'])->name('get-user');
   Route::get("uncompleted/payments", [UserController::class, 'renderUncompletedPayments'])->name('uncompleted-payments');
-    Route::get("payment/lookup", [UserController::class, 'renderPaymentLookup'])->name('payment-lookups');
+  Route::get("payment/lookup", [UserController::class, 'renderPaymentLookup'])->name('payment-lookups');
 
 
   Route::get("/items/list", [ItemsController::class, 'render'])->name('items');
@@ -214,6 +218,9 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/price-groups/{id}/zones", [PriceGroupZonesController::class, 'render'])->name('price-group-zones');
   Route::get("/price-groups/{id}/zones/create", [PriceGroupZonesController::class, 'createZone'])->name('price-group-zones.create');
   Route::get("/price-groups/{id}/zones/{zone_id}/update", [PriceGroupZonesController::class, 'editZone'])->name('price-group-zones.update');
+
+
+  Route::get('/movie/groups', [GroupMoviesController::class, 'groupMovies'])->name('group-movies');
 
 
 
@@ -233,8 +240,6 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
     Route::get('/distributor-film-hire', [\App\Http\Controllers\DistributorSharesController::class, 'render'])->name('distributor-film-hire.render');
     Route::get('/distributor-film-hire/result', [\App\Http\Controllers\DistributorSharesController::class, 'result'])->name('distributor-film-hire.render-result');
-
-
   });
 });
 

@@ -111,6 +111,8 @@ class MovieShowEditForm extends Component
                 'form.time_id' => [ new TimeConflictRule($existing_movie_show->theater_id , [now()->parse($this->form['date'])]  , $this->form['time_id'] , $existing_movie_show->duration , [$this->id]) ],
             ];
 
+
+            // dd(($this->form['week']));
             $this->validate($required_array);
 
             MovieShow::where('id', $this->id)->update([
@@ -147,6 +149,12 @@ class MovieShowEditForm extends Component
             }
             if (!empty($this->form['apply_color'])) {
                 $updateData['color'] = $this->form['color'];
+                $no_apply = $no_apply && false;
+            }
+
+
+            if (!empty($this->form['apply_week'])) {
+                $updateData['week'] = $this->form['week'];
                 $no_apply = $no_apply && false;
             }
 

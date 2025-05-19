@@ -32,6 +32,8 @@ return [
                 'link' => routeObject('entity', ['slug' => 'movies']),
 
             ],
+
+         
             [
                 'key' => 'movie-shows',
                 'label' => 'Movie Shows',
@@ -56,6 +58,21 @@ return [
 
                 ]
             ],
+            [
+
+                'key' => 'group-movies',
+                'label' => 'Group Movies',
+                'link' => "/cms/movie/groups",
+
+            ],
+            
+            // [
+
+            //     'key' => 'groups',
+            //     'label' => 'Groups',
+            //     'link' => routeObject('entity', ['slug' => 'groups']),
+
+            // ],
             [
                 // 'display' => false,
                 'key' => 'distributors',

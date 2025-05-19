@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.343.12",
+            "version": "3.343.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d4b21990410d023e9c5303487d3248e8d7c8c2b6"
+                "reference": "eb50d111a09ef39675358e74801260ac129ee346"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d4b21990410d023e9c5303487d3248e8d7c8c2b6",
-                "reference": "d4b21990410d023e9c5303487d3248e8d7c8c2b6",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/eb50d111a09ef39675358e74801260ac129ee346",
+                "reference": "eb50d111a09ef39675358e74801260ac129ee346",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.12"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.343.13"
             },
-            "time": "2025-05-15T18:14:32+00:00"
+            "time": "2025-05-16T18:24:39+00:00"
         },
         {
             "name": "brick/math",
@@ -7530,12 +7530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewebaddicts/twacmsv2.git",
-                "reference": "c6bd1182f699270758abd06327641d76f3e9ffa8"
+                "reference": "0710dce3ead1ac2f4a432e79457371d27a5604e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/c6bd1182f699270758abd06327641d76f3e9ffa8",
-                "reference": "c6bd1182f699270758abd06327641d76f3e9ffa8",
+                "url": "https://api.github.com/repos/thewebaddicts/twacmsv2/zipball/0710dce3ead1ac2f4a432e79457371d27a5604e4",
+                "reference": "0710dce3ead1ac2f4a432e79457371d27a5604e4",
                 "shasum": ""
             },
             "default-branch": true,
@@ -7567,7 +7567,7 @@
                 "issues": "https://github.com/thewebaddicts/twacmsv2/issues",
                 "source": "https://github.com/thewebaddicts/twacmsv2/tree/main"
             },
-            "time": "2025-05-16T07:19:52+00:00"
+            "time": "2025-05-17T14:47:49+00:00"
         },
         {
             "name": "twa/omni-push",

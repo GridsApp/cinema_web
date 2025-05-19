@@ -33,8 +33,7 @@ class CmsSentPushNotificationsEntity extends Entity
 
     public function columns()
     {
-        $this->addColumn("title");
-        $this->addColumn("message");
+       
         $this->addColumn("image");
 
         return $this->columns;

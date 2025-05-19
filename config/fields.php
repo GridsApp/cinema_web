@@ -902,6 +902,10 @@ return [
     ],
 
 
+
+ 
+
+
     'theater' => [
         'id' => uniqid(),
         'livewire' => [
@@ -989,6 +993,30 @@ return [
 
     ],
 
+
+
+    'group_id' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Group',
+        'placeholder' => 'Select Group',
+        'name' => 'group_id',
+        'multiple' => false,
+        'visible_selections' => 5,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'groups',
+            'field' => 'label'
+        ]
+
+    ],
+
+    
+
     'reward_code' => [
         'id' => uniqid(),
         'livewire' => [
@@ -1011,11 +1039,6 @@ return [
         'placeholder' => 'Select Payload',
         'name' => 'payload',
     ],
-
-
-
-
-
 
     'items' => [
         'id' => uniqid(),
@@ -1052,6 +1075,27 @@ return [
         'options' => [
             'type' => 'query',
             'table' => 'movie_casts',
+            'field' => 'name'
+        ]
+    ],
+
+
+    'movies' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model.live' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Select Movies',
+        'placeholder' => 'Select Movies',
+        'name' => 'movie_ids',
+        'multiple' => true,
+        'visible_selections' => 2,
+        'query_limit' => 50,
+        // 'quick_add' => 'movie-casts',
+        'options' => [
+            'type' => 'query',
+            'table' => 'movies',
             'field' => 'name'
         ]
     ],
@@ -1494,6 +1538,20 @@ return [
         'name' => 'apply_color',
         'value' => true,
     ],
+
+    'apply_week' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Toggle::class,
+        'label' => 'Apply',
+        'placeholder' => 'Apply week',
+        'name' => 'apply_week',
+        'value' => true,
+    ],
+
+    
 
 
     "first_name" => [
