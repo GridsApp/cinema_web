@@ -39,6 +39,7 @@ return array (
   'movie-genres' => 'App\\Entities\\MovieGenresEntity',
   'movie-languages' => 'App\\Entities\\MovieLanguagesEntity',
   'movie-reviews' => 'App\\Entities\\MovieReviewsEntity',
+  'movie-show-creation-logs' => 'App\\Entities\\MovieShowCreationLogsEntity',
   'movie-shows' => 'App\\Entities\\MovieShowsEntity',
   'movies' => 'App\\Entities\\MoviesEntity',
   'order-coupons' => 'App\\Entities\\OrderCouponsEntity',

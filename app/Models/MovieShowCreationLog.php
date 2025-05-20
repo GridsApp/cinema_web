@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class MovieShowCreationLog extends Model
+{
+    use HasFactory;
+
+   
+
+    public function movie(){
+        return $this->belongsTo(Movie::class , 'movie_id' , 'id');
+    }
+
+    public function time(){
+        return $this->belongsTo(Time::class , 'time_id' , 'id');
+    }
+
+    public function theater(){
+        return $this->belongsTo(Theater::class , 'theater_id' , 'id');
+    }
+    public function screenType(){
+        return $this->belongsTo(ScreenType::class , 'screen_type_id' , 'id');
+    }
+
+
+    public function priceGroup(){
+        return $this->belongsTo(PriceGroup::class , 'price_group_id' , 'id');
+    }
+
+    public function seats(){
+        return $this->belongsTo(ScreenType::class , 'screen_type_id' , 'id');
+    }
+
+    public function reserved()
+    {
+        return $this->hasMany(ReservedSeat::class , 'movie_show_id');
+    }
+
+}
+

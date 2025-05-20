@@ -47,6 +47,12 @@ return [
                 ]
             ],
             [
+                'key' => 'movie-shows-create',
+                'label' => 'Create Shows',
+                'link' => "/cms/movie-shows/logs",
+             
+            ],
+            [
                 'key' => 'manage-shows',
                 'label' => 'Manage Shows',
                 'link' => "/cms/manage/bookings",

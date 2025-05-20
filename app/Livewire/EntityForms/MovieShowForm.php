@@ -109,9 +109,9 @@ class MovieShowForm extends Component
         $this->validate($required_array);
         
       
-        $group = uniqid();;
+        $group = uniqid();
       
-       
+
         $slots = ceil($movie->duration / 15);;
 
         
@@ -171,16 +171,8 @@ class MovieShowForm extends Component
         $period = CarbonPeriod::create($first_show_date , $current_date)->count();
 
 
-        // return intdiv($period , 8) + 1;
         return intdiv($period - 1, 7) + 1;
 
-    //     $nb_mondays = 0;
-    //     foreach($period as $date){
-    //         if($date->isMonday()){
-    //             $nb_mondays++;
-    //         }
-    //     }
-
-    //    return $nb_mondays+1;
+    
     }
 }

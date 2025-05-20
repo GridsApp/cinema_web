@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\ReportExport;
 use App\Http\Controllers\GroupMoviesController;
+use App\Http\Controllers\MovieShowsLogsController;
 use App\Http\Controllers\ReviewWeekNumbersController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Storage;
@@ -224,6 +225,12 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
 
   Route::get('/movie/groups', [GroupMoviesController::class, 'groupMovies'])->name('group-movies');
+
+
+
+  Route::get('/movie-shows/logs', [MovieShowsLogsController::class, 'render'])->name('movie-shows-logs');
+
+  Route::get('/movie-shows/test', [MovieShowsLogsController::class, 'test'])->name('movie-shows-test');
 
 
   Route::get('/review/week-numbers', [ReviewWeekNumbersController::class, 'render'])->name('review-week-numbers');

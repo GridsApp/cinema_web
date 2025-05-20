@@ -561,6 +561,7 @@ if (!function_exists('validate_movie_show')) {
     function validate_movie_show($theater, $targetDate, $targetTimeId, $slots, $except = [])
     {
 
+    
         $existing_movie_shows =  \App\Models\MovieShow::query()
             ->where('theater_id', $theater)
             ->where('date', $targetDate)

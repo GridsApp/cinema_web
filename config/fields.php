@@ -1434,6 +1434,61 @@ return [
         ]
     ],
 
+
+    'show_times' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+
+        'label' => 'Show Times',
+        'placeholder' => 'Select Show Times',
+        'name' => 'time_ids',
+        'multiple' => true,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'times',
+            'field' => 'iso'
+        ]
+    ],
+
+    'theaters' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Theatres',
+        'placeholder' => 'Select Theatres',
+        'name' => 'theater_ids',
+        'multiple' => true,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'theaters',
+            'field' => 'label',
+            'parent' => [
+                'table' => 'branches',
+                'key' => 'branch_id',
+                'field' => 'label_en',
+            ],
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => '{branch_id}',
+                ],
+            ]
+
+        ],
+
+    ],
+    
     // BigNumber
 
     'screen_type' => [
@@ -2046,6 +2101,25 @@ return [
             'type' => 'query',
             'table' => 'marital_status',
             'field' => 'label'
+        ]
+    ],
+
+    'cms_user' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Select::class,
+        'label' => 'Cms User',
+        'placeholder' => 'Select Cms user',
+        'name' => 'cms_user_id',
+        'multiple' => false,
+        'visible_selections' => 3,
+        'query_limit' => 50,
+        'options' => [
+            'type' => 'query',
+            'table' => 'cms_users',
+            'field' => 'name'
         ]
     ],
 
@@ -3903,5 +3977,16 @@ return [
         'name' => 'contact_email'
     ],
 
+
+    "status" => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Status',
+        'placeholder' => 'Status',
+        'name' => 'status'
+    ],
 
 ];
