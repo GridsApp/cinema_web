@@ -284,6 +284,7 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                 $data['tuesday_income'] = number_format($data['tuesday_income']);
                 $data['wednesday_income'] = number_format($data['wednesday_income']);
 
+                $data['current_admits_number'] = $data['current_admits'];
                 $data['current_admits'] = number_format($data['current_admits']);
                 $data['current_income'] = number_format($data['current_income']);
                 $data['last_week_admits'] = number_format($data['last_week_admits']);
@@ -295,10 +296,10 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                 return $data;
             })->filter()->values();
 
-            $total = $booked_seats->sum('current_admits');
+            $total = $booked_seats->sum('current_admits_number');
 
             $booked_seats = $booked_seats->map(function ($item) use ($total) {
-                $item['percentage'] = $total != 0 ? round(($item['current_admits'] / $total) * 100, 0) : 0;
+                $item['percentage'] = $total != 0 ? round(($item['current_admits_number'] / $total) * 100, 0) : 0;
                 return $item;
             });
     
