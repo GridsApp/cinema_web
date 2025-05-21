@@ -80,14 +80,26 @@
                                     <td>{{ $item['time']['label'] }}</td>
                                     <td>
 
-                                        <select
+                                        {{-- <select
                                             style="min-width:80px; border:1px solid gray; padding:3px 9px !important;font-size:12px"
                                             name="" id=""
                                             wire:model="json.{{ $index }}.screen_type_id">
                                             <option value="1"> 2D </option>
                                             <option value="2"> 3D </option>
-                                        </select>
+                                        </select> --}}
 
+                                        <select  
+                                        style="min-width:80px; border:1px solid rgba(0, 0, 0, 0.1); border-radius:7px;padding:3px 9px !important;font-size:12px"
+                                        wire:model="json.{{ $index }}.screen_type_id">
+                                        <option value="">Select</option>
+                                        @foreach ($screenTypes as $type)
+                         
+                                            <option value="{{ $type->id }}">{{ $type->label }}</option>
+                                        @endforeach
+                                    </select>
+
+
+                                        
                                     </td>
                                 </tr>
                             @endforeach

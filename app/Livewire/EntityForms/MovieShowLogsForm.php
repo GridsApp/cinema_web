@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Models\MovieShow;
 use App\Models\Movie;
 use App\Models\MovieShowCreationLog;
+use App\Models\ScreenType;
 use App\Models\Theater;
 use App\Models\Time;
 use App\Rules\TimeConflictRule;
@@ -33,6 +34,7 @@ class MovieShowLogsForm extends Component
 
     public $uniqeid;
     public $logs = [];
+    public $screenTypes = [];
 
     public function resetForm()
     {
@@ -48,6 +50,9 @@ class MovieShowLogsForm extends Component
 
     public function mount()
     {
+        $this->screenTypes = ScreenType::all();
+
+
        $this->resetForm();
     }
     public $already_not_done = [];
