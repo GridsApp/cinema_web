@@ -83,7 +83,7 @@ class ProcessMovieShowCreationLogs implements ShouldQueue
             $movie_show->date = $log->date;
             $movie_show->visibility = 0;
             $movie_show->group = uniqid();
-            $movie_show->color = $log->color;
+            $movie_show->color = "#000000";
             $movie_show->week = $week;
             $movie_show->save();
 
