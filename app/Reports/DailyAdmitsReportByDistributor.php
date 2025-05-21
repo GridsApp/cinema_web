@@ -69,70 +69,77 @@ class DailyAdmitsReportByDistributor extends DefaultReport
         if (!$this->filterResults) {
             return;
         }
-
-
-
+        
         $date = $this->filterResults['date'];
-
         $branch_id = $this->filterResults['branch_id'] ?? null;
         $dateRange = get_range_date($date);
-
-
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
-
+        
+        // Fetch last week booked seats income grouped by distributor_id
         $last_week_booked_seats_income = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
             ->select(DB::raw("movies.distributor_id as identifier"), DB::raw("SUM(order_seats.price) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereBetween('order_seats.date', $lastWeekDateRange);
-
-            if ($branch_id) {
-                $last_week_booked_seats_income->where('orders.branch_id', $branch_id);
-            }
-            $last_week_booked_seats_income=$last_week_booked_seats_income->groupBy('movies.distributor_id')
+        
+        if ($branch_id) {
+            $last_week_booked_seats_income->where('orders.branch_id', $branch_id);
+        }
+        
+        $last_week_booked_seats_income = $last_week_booked_seats_income
+            ->groupBy('movies.distributor_id')
             ->pluck('count', 'identifier');
-
+        
+        // Fetch last week booked seats admits grouped by distributor_id
         $last_week_booked_seats_admits = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
             ->select(DB::raw("movies.distributor_id as identifier"), DB::raw("COUNT(order_seats.id) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereBetween('order_seats.date', $lastWeekDateRange);
-            if ($branch_id) {
-                $last_week_booked_seats_admits->where('orders.branch_id', $branch_id);
-            }
-            $last_week_booked_seats_admits= $last_week_booked_seats_admits->groupBy('movies.distributor_id')
+        
+        if ($branch_id) {
+            $last_week_booked_seats_admits->where('orders.branch_id', $branch_id);
+        }
+        
+        $last_week_booked_seats_admits = $last_week_booked_seats_admits
+            ->groupBy('movies.distributor_id')
             ->pluck('count', 'identifier');
-
-            $all_time_booked_seats_admits = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-
+        
+        // Fetch all-time booked seats admits grouped by distributor_id
+        $all_time_booked_seats_admits = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
             ->select(DB::raw("movies.distributor_id as identifier"), DB::raw("COUNT(*) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereDate('order_seats.date', '<=', $dateRange['end']);
-            if ($branch_id) {
-                $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_admits=$all_time_booked_seats_admits->groupBy('movies.distributor_id')
+        
+        if ($branch_id) {
+            $all_time_booked_seats_admits->where('orders.branch_id', $branch_id);
+        }
+        
+        $all_time_booked_seats_admits = $all_time_booked_seats_admits
+            ->groupBy('movies.distributor_id')
             ->pluck('count', 'identifier');
-
-
-            $all_time_booked_seats_income = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-
+        
+        // Fetch all-time booked seats income grouped by distributor_id
+        $all_time_booked_seats_income = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
             ->select(DB::raw("movies.distributor_id as identifier"), DB::raw("SUM(order_seats.price) as count"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at')
             ->whereDate('order_seats.date', '<=', $dateRange['end']);
-            if ($branch_id) {
-                $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
-            }
-            $all_time_booked_seats_income=$all_time_booked_seats_income->groupBy('movies.distributor_id')
+        
+        if ($branch_id) {
+            $all_time_booked_seats_income->where('orders.branch_id', $branch_id);
+        }
+        
+        $all_time_booked_seats_income = $all_time_booked_seats_income
+            ->groupBy('movies.distributor_id')
             ->pluck('count', 'identifier');
-
+        
+        // Initialize footer aggregates
         $footer = [
             'distributor' => '-',
             'thursday' => 0,
@@ -157,37 +164,38 @@ class DailyAdmitsReportByDistributor extends DefaultReport
             'last_life_income' => 0,
             'percentage' => 0,
         ];
-
+        
+        // Fetch booked seats for current filter
         $booked_seats = OrderSeat::join('movies', 'order_seats.movie_id', '=', 'movies.id')
-        ->join('orders', 'order_seats.order_id', '=', 'orders.id')
-            ->select("order_seats.*",'orders.branch_id', DB::raw("movies.distributor_id as identifier"))
-            
-
+            ->join('orders', 'order_seats.order_id', '=', 'orders.id')
+            ->select("order_seats.*", 'orders.branch_id', DB::raw("movies.distributor_id as identifier"))
             ->whereNull('order_seats.deleted_at')
             ->whereNull('order_seats.refunded_at');
-            // ->whereBetween('order_seats.date', $dateRange)
-            if ($dateRange) {
-                $booked_seats->whereBetween('order_seats.date', $dateRange);
-            }
-            if ($branch_id) {
-                $booked_seats->where('orders.branch_id', $branch_id);
-            }
-            $booked_seats = $booked_seats->get()
+        
+        if ($dateRange) {
+            $booked_seats->whereBetween('order_seats.date', $dateRange);
+        }
+        if ($branch_id) {
+            $booked_seats->where('orders.branch_id', $branch_id);
+        }
+        
+        $booked_seats = $booked_seats->get()
             ->groupBy('identifier')
-
-            ->map(function ($order_seats) use ($last_week_booked_seats_admits,$last_week_booked_seats_income, $all_time_booked_seats_admits, $all_time_booked_seats_income,&$footer) {
-
-
+            ->map(function ($order_seats) use (
+                $last_week_booked_seats_admits,
+                $last_week_booked_seats_income,
+                $all_time_booked_seats_admits,
+                $all_time_booked_seats_income,
+                &$footer
+            ) {
                 $first_order_seat = $order_seats->first();
-
                 if (!$first_order_seat) {
                     return null;
                 }
-
-
-                $movie = $first_order_seat->movie ?? '';
-                $distributor = $movie->distributor->condensed_label ?? $movie->distributor?->label ?? '-';
-
+        
+                $movie = $first_order_seat->movie ?? null;
+                $distributor = $movie?->distributor->condensed_label ?? $movie?->distributor?->label ?? '-';
+        
                 $dayCounts = [
                     'thursday' => 0,
                     'friday' => 0,
@@ -197,6 +205,7 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                     'tuesday' => 0,
                     'wednesday' => 0,
                 ];
+        
                 $dayIncomes = [
                     'thursday' => 0,
                     'friday' => 0,
@@ -206,17 +215,15 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                     'tuesday' => 0,
                     'wednesday' => 0,
                 ];
-
-
+        
                 foreach ($order_seats as $order_seat) {
                     $dayName = strtolower(Carbon::parse($order_seat->date)->format('l'));
-                    $dayCounts[$dayName] += 1;
-                    $dayIncomes[$dayName] += $order_seat->price;
+                    if (isset($dayCounts[$dayName])) {
+                        $dayCounts[$dayName] += 1;
+                        $dayIncomes[$dayName] += $order_seat->price;
+                    }
                 }
-
-
-
-
+        
                 $data = [
                     'distributor' => $distributor,
                     'percentage' => 0,
@@ -227,7 +234,7 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                     'monday' => $dayCounts['monday'],
                     'tuesday' => $dayCounts['tuesday'],
                     'wednesday' => $dayCounts['wednesday'],
-
+        
                     'thursday_income' => $dayIncomes['thursday'],
                     'friday_income' => $dayIncomes['friday'],
                     'saturday_income' => $dayIncomes['saturday'],
@@ -235,105 +242,75 @@ class DailyAdmitsReportByDistributor extends DefaultReport
                     'monday_income' => $dayIncomes['monday'],
                     'tuesday_income' => $dayIncomes['tuesday'],
                     'wednesday_income' => $dayIncomes['wednesday'],
-
-                    'current_admits' => collect($dayCounts)->values()->sum(),
-                    'current_income' => collect($dayIncomes)->values()->sum(),
+        
+                    'current_admits' => array_sum($dayCounts),
+                    'current_income' => array_sum($dayIncomes),
+        
                     'last_week_admits' => $last_week_booked_seats_admits[$first_order_seat->identifier] ?? 0,
                     'last_week_income' => $last_week_booked_seats_income[$first_order_seat->identifier] ?? 0,
                     'last_life_admits' => $all_time_booked_seats_admits[$first_order_seat->identifier] ?? 0,
-                    'last_life_income' => $all_time_booked_seats_income[$first_order_seat->identifier] ?? 0
-           
+                    'last_life_income' => $all_time_booked_seats_income[$first_order_seat->identifier] ?? 0,
                 ];
-
-               
-                $footer['thursday'] += $data['thursday'];
-                $footer['friday'] += $data['friday'];
-                $footer['saturday'] += $data['saturday'];
-                $footer['sunday'] += $data['sunday'];
-                $footer['monday'] += $data['monday'];
-                $footer['tuesday'] += $data['tuesday'];
-                $footer['wednesday'] += $data['wednesday'];
-                $footer['thursday_income'] += $data['thursday_income'];
-                $footer['friday_income'] += $data['friday_income'];
-                $footer['saturday_income'] += $data['saturday_income'];
-                $footer['sunday_income'] += $data['sunday_income'];
-                $footer['monday_income'] += $data['monday_income'];
-                $footer['tuesday_income'] += $data['tuesday_income'];
-                $footer['wednesday_income'] += $data['wednesday_income'];
-
+        
+                // Accumulate footer totals as raw numbers
+                foreach (['thursday', 'friday', 'saturday', 'sunday', 'monday', 'tuesday', 'wednesday'] as $day) {
+                    $footer[$day] += $data[$day];
+                    $footer[$day . '_income'] += $data[$day . '_income'];
+                }
+        
                 $footer['current_admits'] += $data['current_admits'];
                 $footer['current_income'] += $data['current_income'];
                 $footer['last_week_admits'] += $data['last_week_admits'];
                 $footer['last_week_income'] += $data['last_week_income'];
                 $footer['last_life_admits'] += $data['last_life_admits'];
                 $footer['last_life_income'] += $data['last_life_income'];
-
-                $data['thursday'] = number_format($data['thursday']);
-                $data['friday'] = number_format($data['friday']);
-                $data['saturday'] = number_format($data['saturday']);
-                $data['sunday'] = number_format($data['sunday']);
-                $data['monday'] = number_format($data['monday']);
-                $data['tuesday'] = number_format($data['tuesday']);
-                $data['wednesday'] = number_format($data['wednesday']);
-
-                $data['thursday_income'] = number_format($data['thursday_income']);
-                $data['friday_income'] = number_format($data['friday_income']);
-                $data['saturday_income'] = number_format($data['saturday_income']);
-                $data['sunday_income'] = number_format($data['sunday_income']);
-                $data['monday_income'] = number_format($data['monday_income']);
-                $data['tuesday_income'] = number_format($data['tuesday_income']);
-                $data['wednesday_income'] = number_format($data['wednesday_income']);
-
+        
+                // Calculate percentage if last_life_admits > 0
+                if ($data['last_life_admits'] > 0) {
+                    $data['percentage'] = number_format(($data['current_admits'] / $data['last_life_admits']) * 100, 2);
+                } else {
+                    $data['percentage'] = number_format(0, 2);
+                }
+        
+                // Format numbers for display
+                foreach (['thursday', 'friday', 'saturday', 'sunday', 'monday', 'tuesday', 'wednesday'] as $day) {
+                    $data[$day] = number_format($data[$day]);
+                    $data[$day . '_income'] = number_format($data[$day . '_income']);
+                }
+        
                 $data['current_admits'] = number_format($data['current_admits']);
                 $data['current_income'] = number_format($data['current_income']);
                 $data['last_week_admits'] = number_format($data['last_week_admits']);
                 $data['last_week_income'] = number_format($data['last_week_income']);
                 $data['last_life_admits'] = number_format($data['last_life_admits']);
                 $data['last_life_income'] = number_format($data['last_life_income']);
-
-
+        
                 return $data;
-            })->filter()->values();
-
-            $total = $booked_seats->sum('current_admits');
-
-            $booked_seats = $booked_seats->map(function ($item) use ($total) {
-                $item['percentage'] = $total != 0 ? round(($item['current_admits'] / $total) * 100, 0) : 0;
-                return $item;
-            });
-    
-
-            $footer['thursday'] = number_format($footer['thursday']);
-            $footer['friday'] = number_format($footer['friday']);
-            $footer['saturday'] = number_format($footer['saturday']);
-            $footer['sunday'] = number_format($footer['sunday']);
-            $footer['monday'] = number_format($footer['monday']);
-            $footer['tuesday'] = number_format($footer['tuesday']);
-            $footer['wednesday'] = number_format($footer['wednesday']);
-    
-            $footer['thursday_income'] = number_format($footer['thursday_income']);
-            $footer['friday_income'] = number_format($footer['friday_income']);
-            $footer['saturday_income'] = number_format($footer['saturday_income']);
-            $footer['sunday_income'] = number_format($footer['sunday_income']);
-            $footer['monday_income'] = number_format($footer['monday_income']);
-            $footer['tuesday_income'] = number_format($footer['tuesday_income']);
-            $footer['wednesday_income'] = number_format($footer['wednesday_income']);
-    
-            $footer['current_admits'] = number_format($footer['current_admits']);
-            $footer['current_income'] = number_format($footer['current_income']);
-            $footer['last_week_admits'] = number_format($footer['last_week_admits']);
-            $footer['last_week_income'] = number_format($footer['last_week_income']);
-            $footer['last_life_admits'] = number_format($footer['last_life_admits']);
-            $footer['last_life_income'] = number_format($footer['last_life_income']);
-    
-            $footer['percentage'] = 100;
-    
-
-
-        $this->setFooter($footer);
-
-        return $booked_seats;
-
+            })
+            ->filter() // Remove null entries if any
+            ->values();
+        
+        // Format footer numbers after accumulation
+        foreach (['thursday', 'friday', 'saturday', 'sunday', 'monday', 'tuesday', 'wednesday'] as $day) {
+            $footer[$day] = number_format($footer[$day]);
+            $footer[$day . '_income'] = number_format($footer[$day . '_income']);
+        }
+        
+        $footer['current_admits'] = number_format($footer['current_admits']);
+        $footer['current_income'] = number_format($footer['current_income']);
+        $footer['last_week_admits'] = number_format($footer['last_week_admits']);
+        $footer['last_week_income'] = number_format($footer['last_week_income']);
+        $footer['last_life_admits'] = number_format($footer['last_life_admits']);
+        $footer['last_life_income'] = number_format($footer['last_life_income']);
+        $footer['percentage'] = number_format($footer['current_admits'] > 0 && $footer['last_life_admits'] > 0
+            ? ($footer['current_admits'] / $footer['last_life_admits']) * 100
+            : 0, 2);
+        
+        return [
+            'rows' => $booked_seats,
+            'footer' => $footer,
+        ];
+        
 
 
 
