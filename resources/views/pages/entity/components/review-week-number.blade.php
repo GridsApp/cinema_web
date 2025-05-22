@@ -176,7 +176,7 @@
         
         <!-- Edit button -->
         <div x-show="!edit" x-cloak>
-            <button tabindex="-1" type="button" @click="edit = true" class="underline text-blue-600">
+            <button tabindex="-1" type="button" @click="edit = true" class="underline">
                 Edit Week
             </button>
         </div>
@@ -188,7 +188,7 @@
                 tabindex="-1" 
                 type="button" 
                 @click="handleSave('{{ $branches_week->id }}')" 
-                class="underline text-green-600 flex items-center gap-2"
+                class="underline text-red-600 flex items-center gap-2"
             >
                 <template x-if="!isSaving">
                     <span>Save</span>
