@@ -69,10 +69,9 @@ class PaymentLookup extends Component
         }
 
 
-//       if(!$payment){
-//           $this->sendError("Payment not Found", "Payment not Found");
-//           return;
-//       }
+       if(is_null($this->payment) && is_null($this->transaction) && count($this->transaction_logs) == 0) {
+          return  $this->sendError("Payment not Found", "Payment not Found");
+       }
 
 
 
