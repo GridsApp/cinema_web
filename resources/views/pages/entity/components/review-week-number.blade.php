@@ -111,7 +111,7 @@
                                         <tbody>
                                             @foreach ($branches_weeks as $index => $branches_week)
                                   
-                                                <tr x-data="{edit : false , value : '{{$branches_week->week}}' , handleSave(id){ this.$wire.handleWeekUpdate('{{$branches_week->id}}',this.value); } }">
+                                                {{-- <tr x-data="{edit : false , value : '{{$branches_week->week}}' , handleSave(id){ this.$wire.handleWeekUpdate('{{$branches_week->id}}',this.value); } }">
                                                     <td class="@if($branches_week->week != $branches_week->max_week) !bg-red-50 @endif" > {{ $branches_week->id }} {{ $branches_week->branch }} / {{ $branches_week->theater }} - {{ now()->parse($branches_week->date)->format('d-m-Y') }} | {{ $branches_week->time }} 
                                                     </td>
                                                     <td class="@if($branches_week->week != $branches_week->max_week) !bg-red-50 @endif">
@@ -142,7 +142,77 @@
                                                         </div>
                                                     
                                                     </td>
-                                                </tr>
+                                                </tr> --}}
+
+                                               <tr x-data="{ 
+        edit: false, 
+        value: '{{ $branches_week->week }}', 
+        isSaving: false, 
+        handleSave(id) { 
+            this.isSaving = true; 
+            this.$wire.handleWeekUpdate(id, this.value).then(() => {
+                this.isSaving = false;
+                this.edit = false;
+            }); 
+        } 
+    }">
+    
+    <td class="@if($branches_week->week != $branches_week->max_week) !bg-red-50 @endif">
+        {{ $branches_week->id }} {{ $branches_week->branch }} / {{ $branches_week->theater }} - 
+        {{ now()->parse($branches_week->date)->format('d-m-Y') }} | {{ $branches_week->time }}
+    </td>
+
+    <td class="@if($branches_week->week != $branches_week->max_week) !bg-red-50 @endif">
+        <div x-show="edit" x-cloak>
+            <input tabindex="{{ $index + 1 }}" type="number" x-model="value" class="week-number-input">
+        </div>
+
+        <div x-show="!edit" x-cloak>
+            {{ $branches_week->week }}
+        </div>
+    </td>
+
+    <td class="@if($branches_week->week != $branches_week->max_week) !bg-red-50 @endif">
+        
+        <!-- Edit button -->
+        <div x-show="!edit" x-cloak>
+            <button tabindex="-1" type="button" @click="edit = true" class="underline text-blue-600">
+                Edit Week
+            </button>
+        </div>
+
+
+        <div class="flex gap-3 items-center" x-show="edit" x-cloak>
+
+            <button 
+                tabindex="-1" 
+                type="button" 
+                @click="handleSave('{{ $branches_week->id }}')" 
+                class="underline text-green-600 flex items-center gap-2"
+            >
+                <template x-if="!isSaving">
+                    <span>Save</span>
+                </template>
+                <template x-if="isSaving">
+                    <i class="fa-solid fa-spinner text-black animate-spin"></i>
+                    {{-- <span class="animate-spin w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full"></span> --}}
+                </template>
+            </button>
+
+        
+            <button 
+                tabindex="-1" 
+                type="button" 
+                @click="edit = false" 
+                class="underline text-gray-600"
+            >
+                Cancel
+            </button>
+        </div>
+
+    </td>
+</tr>
+
                                             @endforeach
                                         </tbody>
 
