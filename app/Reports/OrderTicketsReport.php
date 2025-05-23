@@ -28,7 +28,8 @@ class OrderTicketsReport extends DefaultReport
         $this->addFilter('filter_payment_method');
         $this->addFilter('filter_ticket_status');
         $this->addFilter('filter_pos_user');
-        // $this->addFilter('filter_reference');
+        $this->addFilter('filter_reference');
+        // $this->addFilter('filter_user');
         $this->addFilter('filter_user_phone');
         $this->addFilter('filter_amount_min');
         $this->addFilter('filter_amount_max');
@@ -44,6 +45,7 @@ class OrderTicketsReport extends DefaultReport
         $this->addColumn("created_at", "Created at");
         $this->addColumn("customer_name", "Customer");
         $this->addColumn("reference", "Reference");
+        $this->addColumn("user_id", "User ID");
         $this->addColumn("type", "Type");
         $this->addColumn("unit_price", "Price/Ticket");
         $this->addColumn("seats", "Seats");
@@ -79,6 +81,7 @@ class OrderTicketsReport extends DefaultReport
             'created_at' => 'Total',
             'customer_name' => '-',
             'reference' => '-',
+            'user_id' => '-',
             'type' => '-',
             'unit_price' => '-',
             'seats' => '-',
@@ -117,6 +120,7 @@ class OrderTicketsReport extends DefaultReport
             ->select([
                 'orders.id as order_id',
                 'orders.reference',
+                'orders.user_id',
                 'order_seats.id',
                 'orders.user_id',
                 'customers.name as customer_name',
@@ -153,6 +157,7 @@ class OrderTicketsReport extends DefaultReport
             ->when($this->filterResults['system_id'] ?? null, fn($q, $value) => $q->where('orders.system_id', $value))
             ->when($this->filterResults['payment_method_id'] ?? null, fn($q, $value) => $q->where('orders.payment_method_id', $value))
             ->when($this->filterResults['reference'] ?? null, fn($q, $value) => $q->where('orders.reference', 'like', "%$value%"))
+            // ->when($this->filterResults['user_id'] ?? null, fn($q, $value) => $q->where('orders.user_id', $value))
             ->when($this->filterResults['ticket_status'] ?? null, function ($q, $value) {
                 if ($value === 'refunded_tickets') {
                     $q->whereNotNull('order_seats.refunded_at');
@@ -210,6 +215,7 @@ class OrderTicketsReport extends DefaultReport
                 'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
                 'customer_name' => $row->customer_name ?? '',
                 'reference' => $row->reference,
+                'user_id' => $row->user_id,
                 'type' => $row->type,
                 'unit_price' => number_format($unit_price),
                 'seats' => $row->seats,
