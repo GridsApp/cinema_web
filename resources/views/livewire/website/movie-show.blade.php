@@ -58,12 +58,10 @@
                                     $reserved_seats = $nb_seats - $show['available_seats'];
                                     $percentage = ($show['available_seats'] / $nb_seats) * 100;
                                 @endphp
-                                {{-- @dd($show['time']); --}}
                                 <div class="time-button"
                                     :class="{ 'active': selectedTime === '{{ $show['time'] }}' &&
                                             selectedBranch === '{{ $firstBranch }}' &&
                                             selectedShowId === '{{ $show['id'] }}' }"
-                                    {{-- :class="{ 'active': selectedTime === '{{ $show['time'] }}' && selectedBranch === '{{ $firstBranch }}' }" --}}
                                     @click="
                                     selectedTime = '{{ $show['time'] }}'; 
                                     selectedBranch = '{{ $firstBranch }}'; 
@@ -72,9 +70,9 @@
                                 ">
                                     <div
                                         class="flex justify-center active-color bg-gray-100 gap-3 items-center rounded-full pr-5">
-                                        <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative"
-                                            style="width: 40px; height: 40px; background: conic-gradient(#c51a24 {{ 100 - $percentage }}%, white {{ 100 - $percentage }}%);">
-                                            <i class="fa-solid fa-loveseat z-10"></i>
+                                        <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative min-w-[40px]"
+                                            style="width: 63px; height: 40px; background: conic-gradient(#c51a24 {{ 100 - $percentage }}%, white {{ 100 - $percentage }}%);">
+                                            <i class="fa-solid fa-couch z-[999]"></i>
                                             <div class="absolute bg-white rounded-full"
                                                 style="width: 30px; height: 30px;"></div>
                                         </div>
@@ -120,7 +118,7 @@
                                         $reserved_seats = $nb_seats - $show['available_seats'];
                                         $percentage = ($show['available_seats'] / $nb_seats) * 100;
                                     @endphp
-                                    <div class="time-button" {{-- :class="{ 'active': selectedTime === '{{ $show['time'] }}' && selectedBranch === '{{ $firstBranch }}' }" --}}
+                                    <div class="time-button"
                                         :class="{ 'active': selectedTime === '{{ $show['time'] }}' &&
                                                 selectedBranch === '{{ $firstBranch }}' &&
                                                 selectedShowId === '{{ $show['id'] }}' }"
@@ -132,9 +130,9 @@
                                    ">
                                         <div
                                             class="flex justify-center active-color bg-gray-100 gap-3 items-center rounded-full pr-5">
-                                            <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative"
+                                            <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative min-w-[40px]"
                                                 style="width: 40px; height: 40px; background: conic-gradient(#c51a24 {{ 100 - $percentage }}%, white {{ 100 - $percentage }}%);">
-                                                <i class="fa-solid fa-loveseat z-10"></i>
+                                                <i class="fa-solid fa-couch z-[999]"></i>
                                                 <div class="absolute bg-white rounded-full"
                                                     style="width: 30px; height: 30px;"></div>
                                             </div>

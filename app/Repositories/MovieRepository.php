@@ -155,8 +155,10 @@ class MovieRepository implements MovieRepositoryInterface
 
         $today = now();
 
-        $strict = $today->format('d-m-Y') == $date->format('d-m-Y');
+        // $strict = $today->format('d-m-Y') == $date->format('d-m-Y');
 
+        $dateCarbon = \Carbon\Carbon::parse($date);
+$strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
         $times = [];
         if ($strict) {
             $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
@@ -168,15 +170,11 @@ class MovieRepository implements MovieRepositoryInterface
         $comingSoonOffset = now()->addMonths(8);
         $recentShowtimeCutoff = now();
 
-
-
         $grouped_movies = GroupMovie::whereNull('deleted_at')->get();
 
         
         $new_movie_ids = $grouped_movies->where('group_id' , 1)->pluck('movie_id')->toArray();
         $comming_soon_movie_ids = $grouped_movies->where('group_id' , 2)->pluck('movie_id')->toArray();
-
-
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug', 'orders')->whereNull('deleted_at')
             ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids, $times, $strict , $new_movie_ids ,$comming_soon_movie_ids) {
