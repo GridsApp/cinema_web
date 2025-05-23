@@ -43,9 +43,9 @@ class OrderTicketsReport extends DefaultReport
         }
 
         $this->addColumn("created_at", "Created at");
+        $this->addColumn("user_id", "User ID");
         $this->addColumn("customer_name", "Customer");
         $this->addColumn("reference", "Reference");
-        $this->addColumn("user_id", "User ID");
         $this->addColumn("type", "Type");
         $this->addColumn("unit_price", "Price/Ticket");
         $this->addColumn("seats", "Seats");
