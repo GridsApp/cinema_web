@@ -71,7 +71,7 @@
                                     <div
                                         class="flex justify-center active-color bg-gray-100 gap-3 items-center rounded-full pr-5">
                                         <div class="icon-seat border-2 flex justify-center bg-white items-center rounded-full relative min-w-[40px] max-w-[67px]"
-                                            style="width: 63px; height: 40px; background: conic-gradient(#c51a24 {{ 100 - $percentage }}%, white {{ 100 - $percentage }}%);">
+                                            style="width: 43px; height: 40px; background: conic-gradient(#c51a24 {{ 100 - $percentage }}%, white {{ 100 - $percentage }}%);">
                                             <i class="fa-solid fa-couch z-[999]"></i>
                                             <div class="absolute bg-white rounded-full"
                                                 style="width: 30px; height: 30px;"></div>

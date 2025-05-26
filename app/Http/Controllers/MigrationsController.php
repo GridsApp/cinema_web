@@ -486,7 +486,7 @@ class MigrationsController extends Controller
     public function addCoupons() {
 
         // $path = storage_path('app/data.csv');
-        $path = public_path('coupons/batch_09_05_2025.csv');
+        $path = public_path('coupons/batch_26_05_2025.csv');
 
         if (!file_exists($path) || !is_readable($path)) {
             return response()->json(['error' => 'CSV file not found or not readable.'], 400);
