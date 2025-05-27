@@ -166,25 +166,7 @@ class OrderRepository implements OrderRepositoryInterface
             $points_conversion = 1000;
             $total_points += $price / $points_conversion;
 
-            // $movie = Movie::find($cart_seat['movie_id']);
-
-            // $dist_share_percentage = 0;
-            // if ($movie && $movie->commission_settings) {
-            //     $settings = json_decode($movie->commission_settings, true);
-
-            //     $week = $cart_seat['week'];
-            //     $conditions = $settings['conditions'] ?? [];
-            //     $defaultPercentage = $settings['defaultPercentage'] ?? 0;
-
-
-            //     $index = $week - 1;
-
-            //     if (isset($conditions[$index])) {
-            //         $dist_share_percentage = $conditions[$index];
-            //     } else {
-            //         $dist_share_percentage = $defaultPercentage;
-            //     }
-            // }
+    
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
@@ -265,7 +247,14 @@ class OrderRepository implements OrderRepositoryInterface
             } elseif ($cart->user_id) {
                 $operator_type = "App\Models\User";
                 $operator_id = $cart->user_id;
-            } else {
+            } 
+            
+            // elseif ($cart->kiok_user_id) {
+            //     dd("heree");
+            //     $operator_type = "App\Models\Kiokuser";
+            //     $operator_id = $cart->kiok_user_id;
+            // } 
+            else {
                 $operator_type = null;
                 $operator_id = null;
             }

@@ -190,7 +190,12 @@ class  OrderController extends Controller
                     } elseif ($cart->user_id) {
                         $operator_type = "App\Models\User";
                         $operator_id = $cart->user_id;
-                    } else {
+                    }
+                    elseif ($cart->kiosk_user_id) {
+                        $operator_type = "App\Models\KioskUser";
+                        $operator_id = $cart->kiosk_user_id;
+                    }
+                    else {
                         $operator_type = null;
                         $operator_id = null;
                     }

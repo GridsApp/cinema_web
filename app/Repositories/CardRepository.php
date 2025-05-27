@@ -28,19 +28,17 @@ class CardRepository implements CardRepositoryInterface
     public function createWalletTransaction($type, $amount, $user, $description, $reference = null, $gateway_reference = null, $operator_id = null, $operator_type = null)
     {
 
-
-       
-
         if ($amount == 0) {
-          
+
             return false;
         }
 
         if (!$operator_type || !$operator_id) {
-                   
+
             return false;
         }
-  
+
+        // dd($operator_type);
         switch ($operator_type) {
             case "App\Models\PosUser":
                 $system_id = 2;
@@ -50,6 +48,10 @@ class CardRepository implements CardRepositoryInterface
                 $system_id = 1;
                 break;
 
+            case "App\Models\KioskUser":
+                $system_id = 4;
+                break;
+
             case "twa\cmsv2\Models\CmsUser":
                 $system_id = 5;
                 break;
@@ -57,9 +59,11 @@ class CardRepository implements CardRepositoryInterface
                 break;
         }
 
+
+        // dd($system_id);
         $active_card = $this->getActiveCard($user);
         if (!$active_card) {
-         
+
             return false;
         }
 
@@ -103,12 +107,12 @@ class CardRepository implements CardRepositoryInterface
     {
         if ($amount == 0) {
             return false;
-        }          
+        }
 
         // dd($user);
         $active_card = $this->getActiveCard($user);
 
-        
+
         // dd("here");
         if (!$active_card) {
             return false;
@@ -121,7 +125,7 @@ class CardRepository implements CardRepositoryInterface
 
 
 
-  
+
         $currentBalance = $lastTransaction->balance ?? 0;
 
         $multiplier = $type == "out" ? -1 : 1;
@@ -184,7 +188,7 @@ class CardRepository implements CardRepositoryInterface
 
         $result =  $transaction->balance ?? 0;
 
-        return (double) $result;
+        return (float) $result;
     }
 
     public function getLoyaltyTransactions($user)
@@ -218,7 +222,7 @@ class CardRepository implements CardRepositoryInterface
             ->where('user_id', $user->id)
             ->latest()->first();
 
-            // dd($transaction->balance);
+        // dd($transaction->balance);
 
         return $transaction->balance ?? 0;
     }
@@ -236,7 +240,7 @@ class CardRepository implements CardRepositoryInterface
             // dd($transaction->transactionable);
             $wallet_transactions[] = [
                 'date' => now()->parse($transaction->created_at)->format('d-m-Y'),
-              
+
                 'id' => $transaction->id,
                 'amount' => $transaction->amount,
                 'balance' => $transaction->balance,
@@ -344,33 +348,29 @@ class CardRepository implements CardRepositoryInterface
 
     public function updateUserCard($user_id, $barcode)
     {
-        
+
 
         try {
-      
-        DB::beginTransaction();
-        
-        UserCard::whereNull('deleted_at')->whereNull('disabled_at')->where('user_id', $user_id)
-            ->update([
-                'disabled_at' => now()
-        ]);
+
+            DB::beginTransaction();
+
+            UserCard::whereNull('deleted_at')->whereNull('disabled_at')->where('user_id', $user_id)
+                ->update([
+                    'disabled_at' => now()
+                ]);
 
 
-        $new_card = new UserCard;
-        $new_card->user_id = $user_id;
-        $new_card->barcode = $barcode;
-        $new_card->type = 'physical';
-        $new_card->save();
+            $new_card = new UserCard;
+            $new_card->user_id = $user_id;
+            $new_card->barcode = $barcode;
+            $new_card->type = 'physical';
+            $new_card->save();
 
-        DB::commit();
-
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        throw new Exception($th->getMessage());
-    }
-
-
-
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw new Exception($th->getMessage());
+        }
     }
     public function generateBarcode()
     {

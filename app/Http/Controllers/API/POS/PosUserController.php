@@ -121,30 +121,30 @@ class PosUserController extends Controller
   }
 
 
-  public function shiftSummaryCMS($id){
+  public function shiftSummaryCMS($id)
+  {
 
 
 
 
 
-      $pos_user = PosUser::find($id);
+    $pos_user = PosUser::find($id);
 
-      if(!$pos_user){
-          abort(404);
-      }
+    if (!$pos_user) {
+      abort(404);
+    }
 
-      if(!request()->input('date')){
-          return view('pages.shift-summary-cms-date' , ['pos_user' => $pos_user]);
-      }
+    if (!request()->input('date')) {
+      return view('pages.shift-summary-cms-date', ['pos_user' => $pos_user]);
+    }
 
-      request()->merge(['user' => $pos_user]);
-
-
-      $shiftSummary = $this->shiftSummary();
+    request()->merge(['user' => $pos_user]);
 
 
-      return view('pages.shift-summary-cms', ['result' => $shiftSummary]);
+    $shiftSummary = $this->shiftSummary();
 
+
+    return view('pages.shift-summary-cms', ['result' => $shiftSummary]);
   }
 
   public function logout()
@@ -226,86 +226,6 @@ class PosUserController extends Controller
 
   public function shiftSummary()
   {
-
-
-    $r =  json_decode('{
-            "cashier": {
-              "name": "Hajer",
-              "date": "2025-03-19",
-              "time": ""
-            },
-            "tables": [
-              {
-                "label": "Net Tickets : Cash (+)",
-                "header": [
-                  "Ticket",
-                  "Admits",
-                  "Amount"
-                ],
-                "body": [
-                  [
-                    "BF Gold Class",
-                    "6",
-                    "75,000 IQD"
-                  ],
-                  [
-                    "BF REG",
-                    "2",
-                    "10,000 IQD"
-                  ],
-                  [
-                    "REG",
-                    "20",
-                    "200,000 IQD"
-                  ]
-                ],
-                "footer": [
-                  "Total",
-                  "28",
-                  "285,000 IQD"
-                ],
-                "order": 1
-              },
-              {
-                "label": "Tickets Total : ",
-                "header": [
-                  "Ticket",
-                  "Quantity",
-                  "Amount"
-                ],
-                "body": [],
-                "footer": [
-                  "Total",
-                  "28",
-                  "285,000 IQD"
-                ],
-                "order": 2
-              },
-              {
-                "label": "Imtiyaz Tickets : Cash (-) ",
-                "header": [
-                  "Ticket",
-                  "Admits",
-                  "Amount"
-                ],
-                "body": [
-                  [
-                    "BF REG",
-                    "1",
-                    "5,000 IQD"
-                  ]
-                ],
-                "footer": [
-                  "Total",
-                  "1",
-                  "5,000 IQD"
-                ],
-                "order": 13
-              }
-            ],
-            "total": "280,000 IQD",
-            "printed_at": "2025-03-20 13:08:16"
-          }');
 
 
     $date = request()->input('date');
@@ -542,29 +462,16 @@ class PosUserController extends Controller
         $price_totals["7"] += $topups_obj['total'];
         $count_totals["7"] += $topups_obj['count'];
       }
-      // if (count($topup_funds_obj['result']) > 0) {
-      //     $result [] = [
-      //         'label' => 'Add Funds : ' . $payment_method->title . ($payment_method->provider == 'cash' ? " (+)" : ""),
-      //         'header' => ['Ticket', 'Quantity', 'Amount'],
-      //         'body' => [],
-      //         'footer' => ['Total', (string)$topup_funds_obj['count'], currency_format($topup_funds_obj['total'])],
-      //         'order' => 9
-      //     ];
-
-      //     $price_totals["9"] += $topup_funds_obj['total'];
-      //     $count_totals["9"] += $topup_funds_obj['count'];
-      // }
 
 
       if ($payment_method->key == "CASH") {
-        //    $total += $topup_funds_obj['total'] + $topups_obj['total'] + $items_obj['total'] + ($seats_obj['total']) - $seats_imtiyaz_obj['total'] + $refunded_obj['total'];
-        $total += $topups_obj['total'] + $items_obj['total'] + ($seats_obj['total']) - $seats_imtiyaz_obj['total'];
+       $total += $topups_obj['total'] + $items_obj['total'] + ($seats_obj['total']) - $seats_imtiyaz_obj['total'];
       }
     }
 
     $result = collect($result);
 
-    // dd($result);
+  
 
     if ($price_totals['1'] > 0) {
       $result->push(
@@ -616,31 +523,6 @@ class PosUserController extends Controller
       );
     }
 
-    // if($price_totals['9'] > 0) {
-    //     $result->push(
-    //         [
-    //             'label' => 'Add Funds Total : ',
-    //             'header' => ['Ticket', 'Quantity', 'Amount'],
-    //             'body' => [],
-    //             'footer' => ['Total', (string)$count_totals['9'], currency_format($price_totals['9'])],
-    //             'order' => 10
-    //         ]
-    //     );
-    // }
-
-    // if($price_totals['7'] > 0 || $price_totals['9'] > 0) {
-    //     $result->push(
-    //         [
-    //             'label' => 'Topups / Add Funds Total : ',
-    //             'header' => ['Ticket', 'Quantity', 'Amount'],
-    //             'body' => [],
-    //             'footer' => ['Total', (string)($count_totals['7'] + $count_totals['9']), currency_format($price_totals['7'] + $price_totals['9'])],
-    //             'order' => 11
-    //         ]
-    //     );
-    // }
-
-
 
     if ($total_discounts > 0) {
       $result->push(
@@ -660,7 +542,7 @@ class PosUserController extends Controller
     $result = collect($result)
       ->sortBy('order')->values()->toArray();
 
-    // return $result;
+
 
     $htmlTables = "";
 
@@ -708,13 +590,10 @@ class PosUserController extends Controller
       $htmlTables .= $htmlTable;
     }
 
-    // echo $htmlTables;
-    // return;
 
     $cashier_shift = $this->getShift($user->id, $date);
 
 
-    // dd($cashier_shift);
 
     return [
       'cashier' => [
