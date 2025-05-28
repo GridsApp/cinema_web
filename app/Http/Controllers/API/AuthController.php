@@ -184,33 +184,35 @@ class AuthController extends Controller
 
     public function loginUsingProvider()
     {
-
-        $form_data = clean_request([]);
-
+        $form_data = clean_request([
+            'email' => 'email',
+            'identifier' => 'string',
+            'login_provider' => 'string',
+            'signature' => 'string',
+            'token' => 'string',
+            'name' => 'string'
+        ]);
 
         $validator = Validator::make($form_data, [
-            'email' => 'email',
             'identifier' => 'required',
             'login_provider' => 'required',
             'signature' => 'required',
             'token' => 'required',
-
+            'email' => 'nullable|email',
+            'name' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
             return $this->responseValidation($validator);
         }
 
-
         if ($form_data['signature'] !== md5($form_data['login_provider'] . $form_data['token'])) {
             return $this->response(notification()->error('Signature did not match', 'Signature did not match'));
         }
 
-
         $login_provider = strtolower($form_data['login_provider']);
         $identifier = $form_data['identifier'];
-        $email = $form_data['email'];
-
+        $email = $form_data['email'] ?? null;
 
         $user = null;
         if (!empty($email)) {
@@ -224,7 +226,7 @@ class AuthController extends Controller
         if (!$user) {
             $user = new User();
             $user->name = $form_data['name'] ?? null;
-            $user->email = $form_data['email'] ?? null;
+            $user->email = $email;
             $user->login_provider = $login_provider;
             $user->token = $this->tokenRepository->createUserToken();
         }
@@ -235,7 +237,6 @@ class AuthController extends Controller
 
         $access_token = $this->tokenRepository->createAccessToken($user);
         $this->cardRepository->createCard($user);
-
 
         return $this->responseData([
             'user' => $user,
