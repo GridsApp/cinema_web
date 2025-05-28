@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -74,33 +75,61 @@ class IMDBRepository
         $final = null;
 
 
+        // if($image){
+
+        //     $field = config('fields.main_image');
+
+        //     [$name , $extension] = $this->splitOnLastDot($this->splitOnLastSlash($image)[1] ?? "");
+
+        //     $imageContents = file_get_contents($image);
+
+        //     $file = [
+        //         'file' => $image,
+        //         'crop' => isset($file['cropping']) ? [
+        //             'x' => 0,
+        //             'y' => 0,
+        //             'width' => 400,
+        //             'height' => 600
+        //         ] : null
+        //     ];
+        //     $final = (new UploadController($field))->uploadFromSource($file, $imageContents , $extension);
+
+        // }
         if($image){
-
-            $field = config('fields.main_image');
-
-            [$name , $extension] = $this->splitOnLastDot($this->splitOnLastSlash($image)[1] ?? "");
-
-            $imageContents = file_get_contents($image);
-
-
-
-            $file = [
-                'file' => $image,
-                'crop' => isset($file['cropping']) ? [
-                    'x' => 0,
-                    'y' => 0,
-                    'width' => 400,
-                    'height' => 600
-                ] : null
-            ];
-
-
-
-            $final = (new UploadController($field))->uploadFromSource($file, $imageContents , $extension);
-
-            
-
+            try {
+                $field = config('fields.main_image');
+    
+                [$name , $extension] = $this->splitOnLastDot($this->splitOnLastSlash($image)[1] ?? "");
+    
+                // Use Laravel's HTTP client instead of file_get_contents
+                $response = Http::get($image);
+                
+                if (!$response->successful()) {
+                    Log::error("Failed to fetch movie poster: " . $image);
+                    $imageContents = null;
+                } else {
+                    $imageContents = $response->body();
+                }
+    
+                if ($imageContents) {
+                    $file = [
+                        'file' => $image,
+                        'crop' => isset($file['cropping']) ? [
+                            'x' => 0,
+                            'y' => 0,
+                            'width' => 400,
+                            'height' => 600
+                        ] : null
+                    ];
+    
+                    $final = (new UploadController($field))->uploadFromSource($file, $imageContents, $extension);
+                }
+            } catch (\Exception $e) {
+                Log::error("Error processing movie poster: " . $e->getMessage());
+                $final = null;
+            }
         }
+
 
         $payload = [
 //                "movie_key" => $key,
