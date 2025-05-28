@@ -97,10 +97,9 @@ class WalletController extends Controller
         }
 
        
-        if(!in_array($payment_method->key , ['CASH'])){
+        if(!in_array($payment_method->key , ['CASH','CC-DC-QI-CARD','CC-DC-SWITCH'])){
             return $this->response(notification()->error('Payment Method Not Supported', 'Payment Method Not Supported'));
         }
-
 
 
         try {

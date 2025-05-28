@@ -18,7 +18,7 @@ class TimeSeeder extends Seeder
     {
 
         $start = Carbon::createFromTime(10, 0);
-        $end = Carbon::createFromTime(23, 0);
+        $end = Carbon::createFromTime(26, 0);
 
 
         DB::table('times')->truncate();
