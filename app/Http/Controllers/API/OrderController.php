@@ -190,12 +190,10 @@ class  OrderController extends Controller
                     } elseif ($cart->user_id) {
                         $operator_type = "App\Models\User";
                         $operator_id = $cart->user_id;
-                    }
-                    elseif ($cart->kiosk_user_id) {
+                    } elseif ($cart->kiosk_user_id) {
                         $operator_type = "App\Models\KioskUser";
                         $operator_id = $cart->kiosk_user_id;
-                    }
-                    else {
+                    } else {
                         $operator_type = null;
                         $operator_id = null;
                     }
@@ -344,15 +342,22 @@ class  OrderController extends Controller
                     if ($total_amount > 0 && $user_id) {
 
                         if ($order->pos_user_id) {
-
                             $operator_type = "App\Models\PosUser";
                             $operator_id = $order->pos_user_id;
+                        } elseif ($order->user_id) {
+                            $operator_type = "App\Models\User";
+                            $operator_id = $order->user_id;
+                        } elseif ($order->kiosk_user_id) {
+                            $operator_type = "App\Models\KioskUser";
+                            $operator_id = $order->kiosk_user_id;
                         } else {
                             $operator_type = null;
                             $operator_id = null;
                         }
 
+            
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
+                
                         $loyaltyTransaction =    $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
                     }
                 }
@@ -790,11 +795,10 @@ class  OrderController extends Controller
 
         if ($order->kiosk_user_id) {
 
-       
+
             try {
-               
+
                 $kiosk_user = $this->kioskUserRepository->getUserById($order->kiosk_user_id);
-  
             } catch (\Throwable $th) {
                 $kiosk_user = null;
             }
