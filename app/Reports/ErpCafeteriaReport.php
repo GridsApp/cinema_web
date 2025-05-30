@@ -25,6 +25,16 @@ class ErpCafeteriaReport extends DefaultReport
         $this->addFilter('filter_branch');
     }
 
+    public function getExportFileName($slug , $filters){
+        $str = $filters ? implode('_', array_map(function ($key, $value) {
+            return "{$key}_{$value}";
+        }, array_keys($filters), $filters)) : 'all';
+
+        $str = $slug . '_' . $str;
+
+        return $str;
+    }
+
 
     public function header()
     {

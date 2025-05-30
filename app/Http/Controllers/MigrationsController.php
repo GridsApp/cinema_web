@@ -525,4 +525,37 @@ class MigrationsController extends Controller
         return response()->json(['message' => 'CSV imported successfully.']);
 
     }
+
+
+    public function treatJsonReferences(){
+        // Get all orders where payment_reference contains a JSON-like string
+        $orders = DB::table('orders')
+            ->where('payment_reference', 'LIKE', '%{%')
+            ->get();
+
+        foreach ($orders as $order) {
+            try {
+                // Remove the trailing quote and add the closing brace
+                $jsonStr = rtrim($order->payment_reference, '"') . '"}';
+                
+                // dd($jsonStr);
+                // Decode the JSON
+                $jsonData = json_decode($jsonStr, true);
+                // dd($jsonData);
+                if ($jsonData && isset($jsonData['ecrRef'])) {
+                    // Update the payment_reference with the ecrRef value
+                    DB::table('orders')
+                        ->where('id', $order->id)
+                        ->update([
+                            'payment_reference' => $jsonData['ecrRef']
+                        ]);
+                }
+            } catch (\Exception $e) {
+                // Log error or handle it as needed
+                continue;
+            }
+        }
+
+        return response()->json(['message' => 'Payment references updated successfully.']);
+    }
 }

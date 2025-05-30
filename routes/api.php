@@ -146,13 +146,13 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
 
 
     Route::group(['prefix' => 'order', 'middleware' => AuthOptionalMiddleware::class], function () {
-        Route::post("/",  [\App\Http\Controllers\API\OrderController::class, 'get']);
+        Route::post("/",  [\App\Http\Controllers\API\OrderController::class, 'get'])->middleware([KIOSKPOSUserMiddleware::class, AuthMandatoryMiddleware::class]);
         Route::post("/attempt",  [\App\Http\Controllers\API\OrderController::class, 'attempt']);
         Route::post("/refund",  [\App\Http\Controllers\API\OrderController::class, 'refund'])->middleware(POSUserMiddleware::class);
         Route::post("/print",  [\App\Http\Controllers\API\OrderController::class, 'print'])->middleware([KIOSKPOSUserMiddleware::class,AuthMandatoryMiddleware::class,]);
         Route::get("/{order_id}/details",  [\App\Http\Controllers\API\OrderController::class, 'details']);
         Route::get("/reserved",  [\App\Http\Controllers\API\OrderController::class, 'getReservedTotal']);
-        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([KIOSKPOSUserMiddleware::class, AuthMandatoryMiddleware::class]);
+        Route::get("/last-order",  [\App\Http\Controllers\API\OrderController::class, 'PosGetLastOrderInfoforCashier'])->middleware([AuthMandatoryMiddleware::class , KIOSKPOSUserMiddleware::class]);
     });
 
     Route::prefix('movies')->group(function () {

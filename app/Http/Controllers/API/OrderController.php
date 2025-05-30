@@ -398,7 +398,6 @@ class  OrderController extends Controller
     //To be checked By hovig
     public function get()
     {
-
         $form_data = clean_request([]);
         $validator = Validator::make($form_data, [
             'barcode' => 'required',
@@ -407,80 +406,26 @@ class  OrderController extends Controller
         if ($validator->errors()->count() > 0) {
             return $this->responseValidation($validator);
         }
+
+        $user = request()->user;
+       
+
+        $user_type = request()->user_type;
+        $user_branch_id = $user->branch_id;
+        
         try {
             $order = $this->orderRepository->getOrderByBarcode($form_data['barcode']);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
 
+       
+        if($order->branch_id != $user_branch_id){
+            return $this->response(notification()->error('Access Denied', 'You do not have access to orders from other branches'));
+        }
 
+   
         return $this->details($order);
-
-        // $total_discount = 20000;
-
-
-        try {
-            $order_seats = $this->orderRepository->getOrderSeats($order->id,  false);
-        } catch (\Throwable $e) {
-            return $this->response(notification()->error('Order seats not found', $e->getMessage()));
-        }
-
-        $order_seats = $order_seats->map(function ($order_seat) {
-            return [
-                'label' => $order_seat->label,
-                'seat' => $order_seat->seat,
-                'price' => currency_format($order_seat->price),
-                'discount' => currency_format($order_seat->discount),
-                'final_price' => currency_format($order_seat->price),
-                'gained_points' => $order_seat->gained_points,
-                'show_details' => [
-                    'movie_name' => $order_seat->movie->name ?? '',
-                    'theater' => $order_seat->theater->hall_number ?? '',
-                    'showdate' => now()->parse($order_seat->date)->format('d M, Y') ?? '',
-                    'showtime' => isset($order_seat->time->iso) ? convertTo12HourFormat($order_seat->time->iso) : ''
-                ]
-            ];
-        });
-
-        try {
-            $order_items = $this->orderRepository->getOrderItems($order->id, false);
-        } catch (\Throwable $e) {
-            return $this->response(notification()->error('Order Items not found', $e->getMessage()));
-        }
-
-        $order_items = $order_items->map(function ($order_item) {
-            return [
-                'item_id' => $order_item->item_id,
-                // 'item_id' => $order_item->item_id,
-                'label' => $order_item->label,
-                'price' => currency_format($order_item->price),
-
-            ];
-        });
-
-
-        try {
-            $order_topups =  $this->orderRepository->getOrderTopups($order->id, false);
-        } catch (\Throwable $e) {
-            return $this->response(notification()->error('Order Topups not found', $e->getMessage()));
-        }
-
-        return $this->responseData([
-            'order' => [
-                'id' => $order->id,
-                'reference' => $order->reference,
-                'barcode' => $order->barcode,
-                'system' => $order->system->label ?? '',
-                'payment_method' => $order->paymentMethod->label ?? '',
-                'user' => $order->user?->only(['id', 'full_name', 'phone', 'email']),
-                'cashier' => $order->posUser?->only(['id', 'name']),
-                'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
-                'printed' => $order->printed
-            ],
-            'seats' => $order_seats,
-            'items' => $order_items,
-            'topups' => $order_topups
-        ]);
     }
 
     // To be testedd
@@ -495,7 +440,6 @@ class  OrderController extends Controller
             } catch (\Throwable $e) {
                 return $this->response(notification()->error('Order seats not found', $e->getMessage()));
             }
-
 
 
 

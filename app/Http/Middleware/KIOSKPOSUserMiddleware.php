@@ -23,6 +23,8 @@ class KIOSKPOSUserMiddleware
     {
        
 
+       
+
         if(request()->input("user_type") == "KIOSK" || request()->input("user_type") == "POS" ){
             return $next($request);
         }

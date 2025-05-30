@@ -45,6 +45,7 @@ class AuthMandatoryMiddleware
 
         $access_token = get_header_access_token();
 
+
   
         if (!$access_token) {
             return $this->response(notification()->error("Access Token is required", "Access Token is required"));

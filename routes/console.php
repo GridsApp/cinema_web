@@ -184,4 +184,23 @@ Artisan::command('twa:addCoupons', function () {
 
 
 
+
+Artisan::command('twa:treatJsonReferences', function () {
+
+    $this->comment("Started");
+
+//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+
+    (new \App\Http\Controllers\MigrationsController)->treatJsonReferences();
+
+
+
+    $this->comment("Finished");
+
+
+})->purpose('Transfering tables');
+
+
+
+
    
