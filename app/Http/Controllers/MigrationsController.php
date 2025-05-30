@@ -486,7 +486,7 @@ class MigrationsController extends Controller
     public function addCoupons() {
 
         // $path = storage_path('app/data.csv');
-        $path = public_path('coupons/batch_26_05_2025.csv');
+        $path = public_path('coupons/batch_30_05_2025.csv');
 
         if (!file_exists($path) || !is_readable($path)) {
             return response()->json(['error' => 'CSV file not found or not readable.'], 400);
@@ -510,11 +510,15 @@ class MigrationsController extends Controller
 
             $found = DB::table('coupons')->where('code' , $row['code'])->first();
         
-            $row['created_at'] = now();
-            $row['updated_at'] = now();
-
-            if(!$found){
-                DB::table('coupons')->insert($row);
+            if(!$found){      
+                DB::table('coupons')->insert([
+                    'label' => $row['label'],
+                    'code' => $row['code'],
+                    'discount_flat' => $row['discount_flat'],
+                    'expires_at' => $row['expires_at'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
             }
         }
  
