@@ -17,14 +17,15 @@ class TimeSeeder extends Seeder
     public function run(): void
     {
 
-        $start = Carbon::createFromTime(10, 0);
-        $end = Carbon::createFromTime(26, 0);
+        $start = Carbon::createFromTime(0, 0);
+        $end = Carbon::createFromTime(23, 45);
 
 
-        DB::table('times')->truncate();
+        DB::table('times_v2')->truncate();
+
 
         while ($start <= $end) {
-            DB::table('times')->insert([
+            DB::table('times_v2')->insert([
                 'iso' => $start->format('H:i'),
                 'label' => $start->format('h:i A')
             ]);

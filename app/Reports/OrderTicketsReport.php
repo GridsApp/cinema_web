@@ -149,7 +149,7 @@ class OrderTicketsReport extends DefaultReport
                 'refunded_manager_user.name as refunded_by_manager',
                 'systems.label as system',
             ])
-            ->when($dateRange, fn($q) => $q->whereBetween('order_seats.date', $dateRange))
+            ->when($dateRange, fn($q) => $q->whereBetween('order_seats.created_at', $dateRange))
             ->whereNull('order_seats.deleted_at')
             ->when($this->filterResults['branch_id'] ?? null, fn($q, $value) => $q->where('orders.branch_id', $value))
             ->when($this->filterResults['movie_id'] ?? null, fn($q, $value) => $q->where('order_seats.movie_id', $value))

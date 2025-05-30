@@ -49,28 +49,14 @@ class MovieController extends Controller
         } else {
             $date = now();
         }
+        $minutes = (int) get_setting('show_remove_time_offset') ?? 35;
 
+        $now = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes($minutes);
 
-        // $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id')
-        //     ->whereNull('deleted_at')
-        //     ->whereHas('movieShows', function ($q) use ($date, $theaters_ids) {
-        //         $q->whereDate('date', $date)
-        //             ->whereIn('theater_id', $theaters_ids);
-        //     })
-        //     ->with(['movieShows' => function ($query) use ($theaters_ids, $date) {
-        //         $query->whereIn('theater_id', $theaters_ids)
-        //             ->whereDate('date', $date);
-        //     }])
-
-        //     ->get();
-
-
-
-
-        $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
+        $current_time = (string) $now->format('H:i');
 
         $strict = true;
-        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
+        $strict=$strict && $now->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
 
         $round_time = round_time($current_time);
 

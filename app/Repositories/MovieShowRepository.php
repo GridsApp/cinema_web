@@ -13,19 +13,23 @@ use Illuminate\Support\Facades\DB;
 class MovieShowRepository implements MovieShowRepositoryInterface
 {
 
-    public function getMovieShows($branch_id, $movie_id, $date , $strict = false)
+    public function getMovieShows($branch_id, $movie_id, $date, $strict = false)
     {
 
-       
+
         $times = [];
 
-        $strict=$strict && now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
+        $minutes = (int) get_setting('show_remove_time_offset') ?? 35;
+
+        $now = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes($minutes);
+
+        $strict = $strict && $now->format('Y-m-d') >= now()->parse($date)->format('Y-m-d');
 
         // $strict = false;
 
-        if($strict){
-            $currentTime = (string) now()->setTimezone(env('TIMEZONE','Asia/Baghdad'))->format('H:i');
-            $times = Time::where('iso' , '>=' , $currentTime)->pluck('id')->toArray();
+        if ($strict) {
+            $currentTime = (string) $now->format('H:i');
+            $times = Time::where('iso', '>=', $currentTime)->pluck('id')->toArray();
         }
 
         return MovieShow::query()
@@ -36,8 +40,8 @@ class MovieShowRepository implements MovieShowRepositoryInterface
                 'theaters.label as theater_label',
                 'theaters.id as theater_id',
                 'price_groups.label as price_group',
-                'branches.label_'.app()->getLocale().' as branch',
-                
+                'branches.label_' . app()->getLocale() . ' as branch',
+
                 'times.id as time_id',
                 'price_groups.id as price_group_id',
                 'branches.id as branch_id',
@@ -47,8 +51,8 @@ class MovieShowRepository implements MovieShowRepositoryInterface
             ->whereDate('movie_shows.date', $date)
             ->where('movie_shows.movie_id', $movie_id)
 
-            ->when($strict , function($q) use ($times){
-                $q->whereIn('movie_shows.time_id' , $times);
+            ->when($strict, function ($q) use ($times) {
+                $q->whereIn('movie_shows.time_id', $times);
             })
 
             ->leftJoin('theaters', 'movie_shows.theater_id', 'theaters.id')
@@ -69,13 +73,13 @@ class MovieShowRepository implements MovieShowRepositoryInterface
                 'movie_shows.id',
                 'times.label as time',
                 'price_groups.label as price_group',
-                'branches.label_'.app()->getLocale().' as branch',
-                
+                'branches.label_' . app()->getLocale() . ' as branch',
+
                 'times.id as time_id',
                 'price_groups.id as price_group_id',
                 'branches.id as branch_id',
             )
-           
+
             ->whereNull('movie_shows.deleted_at')
             ->where('movie_shows.date', $date)
             ->where('movie_shows.movie_id', $movie_id)

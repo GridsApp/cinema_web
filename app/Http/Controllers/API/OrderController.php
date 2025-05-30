@@ -337,10 +337,7 @@ class  OrderController extends Controller
                 }
 
                 if ($payment_method->key != 'CASH') {
-
-
                     if ($total_amount > 0 && $user_id) {
-
                         if ($order->pos_user_id) {
                             $operator_type = "App\Models\PosUser";
                             $operator_id = $order->pos_user_id;
@@ -355,10 +352,26 @@ class  OrderController extends Controller
                             $operator_id = null;
                         }
 
-            
+                        // First check if user has enough points
+                        $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($order->user);
+                        if ($user_loyalty_balance < $total_points) {
+                            DB::rollBack();
+                            return $this->response(notification()->error('Refund Failed', 'User does not have enough loyalty points to refund'));
+                        }
+
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
-                
-                        $loyaltyTransaction =    $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
+                        
+                        if (!$walletTransaction) {
+                            DB::rollBack();
+                            return $this->response(notification()->error('Refund Failed', 'Failed to process wallet refund'));
+                        }
+
+                        $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
+                        
+                        if (!$loyaltyTransaction) {
+                            DB::rollBack();
+                            return $this->response(notification()->error('Refund Failed', 'Failed to process loyalty points refund'));
+                        }
                     }
                 }
             }
@@ -838,8 +851,7 @@ class  OrderController extends Controller
             'wallet_balance' => currency_format($user_wallet_balance),
             'order' => [
                 'id' => $order->id,
-                'order_date' => now()->parse($order->created_at)->format('d M, Y H:i:s'),
-
+                'order_date' => Carbon::parse($order->created_at)->setTimezone(env('CINEMA_TIMEZONE', 'UTC'))->format('d M, Y H:i:s'),
                 'long_id' =>  $order->long_id ?? '',
                 'reference' =>  $order->reference,
                 'barcode' =>  $order->barcode,
@@ -852,8 +864,7 @@ class  OrderController extends Controller
                     'label_ar' => $branch_user?->branch->label_ar ?? null
                 ],
                 'card_number' => $user_card_number->barcode ?? null,
-                'printed_at' => $order->printed_at,
-
+                'printed_at' => $order->printed_at ? Carbon::parse($order->printed_at)->setTimezone(env('CINEMA_TIMEZONE', 'UTC'))->format('d M, Y H:i:s') : null,
                 'subtotal' => currency_format($subtotal),
                 'discount' =>  currency_format($discount),
                 'total' =>  currency_format($total),

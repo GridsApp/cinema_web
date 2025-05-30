@@ -3944,6 +3944,21 @@ return [
     ],
 
 
+
+
+    'show_remove_time_offset' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Show remove time offset',
+        'placeholder' => 'Show remove time offset',
+        'name' => 'show_remove_time_offset',
+        'container' => 'col-span-12',
+    ],
+
+
     'distributor_contact_name' => [
         'id' => uniqid(),
         'livewire' => [
