@@ -68,7 +68,7 @@ class BoxOfficeReportController extends Controller
             ->leftJoin('orders', 'orders.id', '=', 'order_seats.order_id')
             ->groupBy('movies.id')
 
-            ->whereNull('movie_shows.deleted_at')
+            // ->whereNull('movie_shows.deleted_at')
             ->when($distributorId, fn($q) => $q->where('movies.distributor_id', $distributorId))
             ->when($branchId, fn($q) => $q->where('orders.branch_id', $branchId))
             ->when($start_date, fn($q) => $q->whereDate('order_seats.date', '>=', $start_date))
@@ -76,11 +76,13 @@ class BoxOfficeReportController extends Controller
             ->groupBy('movies.id')
 
             ->get()->map(function ($item) use (&$totals) {
+
                 $totals['sessions'] += $item->sessions;
                 $totals['admits'] += $item->admits;
                 $totals['gross'] += $item->gross;
                 $totals['tax'] += $item->tax;
                 $totals['net'] += $item->net;
+
 
                 return [
                     'movie_name' => $item->movie_name,
@@ -91,6 +93,8 @@ class BoxOfficeReportController extends Controller
                     'net' => number_format($item->net)
                 ];
             });
+
+
 
 
         $baseQuery2 = DB::table('movie_shows')
@@ -121,7 +125,7 @@ class BoxOfficeReportController extends Controller
             ->leftJoin('screen_types', 'movie_shows.screen_type_id', 'screen_types.id')
             ->leftJoin('times', 'movie_shows.time_id', 'times.id')
             ->leftJoin('distributors', 'movies.distributor_id', 'distributors.id')
-            ->whereNull('movie_shows.deleted_at')
+            // ->whereNull('movie_shows.deleted_at')
             ->when($distributorId, fn($q) => $q->where('movies.distributor_id', $distributorId))
             ->when($branchId, fn($q) => $q->where('orders.branch_id', $branchId))
             ->when($start_date, fn($q) => $q->whereDate('order_seats.date', '>=', $start_date))
@@ -129,9 +133,12 @@ class BoxOfficeReportController extends Controller
             ->groupBy('identifier')
             ->get();
 
+
+
         $baseQuery2 = $baseQuery2->groupBy('movie_id');
 
         $result = [];
+        // dd($baseQuery2);
         foreach ($baseQuery2 as $movie_id => $shows) {
 
             $movie_totals = [

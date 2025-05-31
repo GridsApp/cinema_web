@@ -74,9 +74,7 @@ class DailyAdmitsReport extends DefaultReport
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
-
         $dateRange = get_range_date($date);
-
 
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
