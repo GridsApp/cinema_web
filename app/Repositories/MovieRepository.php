@@ -157,11 +157,13 @@ class MovieRepository implements MovieRepositoryInterface
 
         // $strict = $today->format('d-m-Y') == $date->format('d-m-Y');
 
+        $minutes = (int) get_setting('show_remove_time_offset') ?? 35;
+
         $dateCarbon = \Carbon\Carbon::parse($date);
-$strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
+        $strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
         $times = [];
         if ($strict) {
-            $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes(35)->format('H:i');
+            $current_time = (string) now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes($minutes)->format('H:i');
             $round_time = round_time($current_time);
             $times = Time::whereNull('deleted_at')->where('iso', '>=', $round_time)->pluck('id')->toArray();
         }
@@ -172,12 +174,12 @@ $strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
 
         $grouped_movies = GroupMovie::whereNull('deleted_at')->get();
 
-        
-        $new_movie_ids = $grouped_movies->where('group_id' , 1)->pluck('movie_id')->toArray();
-        $comming_soon_movie_ids = $grouped_movies->where('group_id' , 2)->pluck('movie_id')->toArray();
+
+        $new_movie_ids = $grouped_movies->where('group_id', 1)->pluck('movie_id')->toArray();
+        $comming_soon_movie_ids = $grouped_movies->where('group_id', 2)->pluck('movie_id')->toArray();
 
         $movies = Movie::select('id', 'name', 'release_date', 'main_image', 'duration', 'genre_id', 'slug', 'orders')->whereNull('deleted_at')
-            ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids, $times, $strict , $new_movie_ids ,$comming_soon_movie_ids) {
+            ->where(function ($query) use ($today, $date, $oneMonthAgo, $recentShowtimeCutoff, $comingSoonOffset, $theaters_ids, $times, $strict, $new_movie_ids, $comming_soon_movie_ids) {
                 $query->whereHas('movieShows', function ($q) use ($recentShowtimeCutoff, $today, $date, $theaters_ids, $times, $strict) {
                     $q->whereNull('deleted_at')
                         ->when($strict, function ($q1) use ($times) {
@@ -186,19 +188,19 @@ $strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
                         ->whereDate('date', $date) // Now Showing
                         ->whereIn('theater_id', $theaters_ids);
                 })
-         
-                    ->orWhere(function ($q) use ($oneMonthAgo, $today, $theaters_ids , $new_movie_ids) {
 
-                        $q->whereIn('id' , $new_movie_ids);
+                    ->orWhere(function ($q) use ($oneMonthAgo, $today, $theaters_ids, $new_movie_ids) {
+
+                        $q->whereIn('id', $new_movie_ids);
 
                         // $q->whereBetween('release_date', [$oneMonthAgo, $today]) // New Movies
                         //     ->whereHas('movieShows', function ($subQ) use ($theaters_ids) {
                         //         $subQ->whereIn('theater_id', $theaters_ids);
                         //     });
                     })
-                    ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids , $comming_soon_movie_ids) {
+                    ->orWhere(function ($q) use ($today, $comingSoonOffset, $theaters_ids, $comming_soon_movie_ids) {
 
-                        $q->whereIn('id' , $comming_soon_movie_ids);
+                        $q->whereIn('id', $comming_soon_movie_ids);
                         // $q->where('coming_soon', 1); // Coming Soon
 
                         //                    $q->whereBetween('release_date', [$today, $comingSoonOffset])
@@ -213,7 +215,7 @@ $strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
                         $q1->whereIn('time_id', $times);
                     })
                     ->whereIn('theater_id', $theaters_ids);;
-            }]) 
+            }])
             ->orderBy('orders', 'ASC')
             ->get();
 
@@ -221,21 +223,21 @@ $strict = $today->format('d-m-Y') == $dateCarbon->format('d-m-Y');
         $available_genre_ids = $movies->pluck('genre_id')->flatten()->unique()->values();
         $genres = MovieGenre::select("id", "label_" . app()->getLocale() . ' as label')->whereIn('id', $available_genre_ids)->whereNull('deleted_at')->get();
 
-        return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset , $new_movie_ids  ,$comming_soon_movie_ids) {
+        return $movies->map(function ($movie) use ($genres, $today, $oneMonthAgo, $comingSoonOffset, $new_movie_ids, $comming_soon_movie_ids) {
 
 
             $categories = [];
             $release_date = now()->parse($movie->release_date);
 
-    
+
             if ($movie->movieShows->isNotEmpty()) {
                 $categories[] = 'now-showing';
             }
-        
-            if (in_array($movie->id , $new_movie_ids)) {
+
+            if (in_array($movie->id, $new_movie_ids)) {
                 $categories[] = 'new-movies';
             }
-            if (in_array($movie->id , $comming_soon_movie_ids)) {
+            if (in_array($movie->id, $comming_soon_movie_ids)) {
                 $categories[] = 'coming-soon';
             }
 

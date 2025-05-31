@@ -39,8 +39,6 @@ class DailyAdmitsReport extends DefaultReport
 
 
 
-
-
         $week_info = get_date_range($this->filterResults['date']);
         $dates =  CarbonPeriod::create($week_info['range'][0], $week_info['range'][1]);
 
