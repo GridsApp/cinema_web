@@ -360,14 +360,14 @@ class  OrderController extends Controller
                         }
 
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
-                        
+
                         if (!$walletTransaction) {
                             DB::rollBack();
                             return $this->response(notification()->error('Refund Failed', 'Failed to process wallet refund'));
                         }
 
                         $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
-                        
+
                         if (!$loyaltyTransaction) {
                             DB::rollBack();
                             return $this->response(notification()->error('Refund Failed', 'Failed to process loyalty points refund'));
@@ -408,24 +408,38 @@ class  OrderController extends Controller
         }
 
         $user = request()->user;
-       
+
 
         $user_type = request()->user_type;
         $user_branch_id = $user->branch_id;
-        
+
         try {
             $order = $this->orderRepository->getOrderByBarcode($form_data['barcode']);
         } catch (\Exception $e) {
             return $this->response(notification()->error('Order not found', $e->getMessage()));
         }
 
-       
-        if($order->branch_id != $user_branch_id){
+
+        // dd($order);
+
+        if ($order->branch_id != $user_branch_id) {
             return $this->response(notification()->error('Access Denied', 'You do not have access to orders from other branches'));
         }
 
-   
-        return $this->details($order);
+
+        $details =  $this->details($order, false);
+
+        $now = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('d-m-Y');
+        $now=now()->parse($now);
+        $exist_old_ticket = collect($details['tickets'])->where('not_formatted_date', '<', $now)->first();
+
+        // dd($details['tickets'],$now);
+
+        if ($exist_old_ticket) {
+            return $this->response(notification()->error('This order is past due', 'This order is past due'));
+        }
+
+        return $this->responseData($details);
     }
 
     // To be testedd
@@ -680,6 +694,7 @@ class  OrderController extends Controller
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
                 'branch' => $seats->theater->branch->label ?? '',
                 'date' => now()->parse($seats->date)->format('d M, Y'),
+                'not_formatted_date' => now()->parse($seats->date),
                 'time' => isset($seats->time->iso) ? convertTo12HourFormat($seats->time->iso) : '',
                 'theater' => $seats->theater->label ?? '',
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
@@ -712,6 +727,7 @@ class  OrderController extends Controller
                 'booking_id' => $seats->created_at ? now()->parse($seats->created_at)->format('Y-m') . '-' . $order->id : '',
                 'branch' => $seats->theater->branch->label ?? '',
                 'date' => now()->parse($seats->date)->format('d M, Y'),
+                'not_formatted_date' => now()->parse($seats->date),
                 'time' => isset($seats->time->iso) ? convertTo12HourFormat($seats->time->iso) : '',
                 'theater' => $seats->theater->label ?? '',
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
@@ -830,6 +846,8 @@ class  OrderController extends Controller
             return $result;
         }
     }
+
+
     public function print()
     {
         $form_data = clean_request([]);

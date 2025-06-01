@@ -39,8 +39,6 @@ class DailyAdmitsReport extends DefaultReport
 
 
 
-
-
         $week_info = get_date_range($this->filterResults['date']);
         $dates =  CarbonPeriod::create($week_info['range'][0], $week_info['range'][1]);
 
@@ -76,9 +74,7 @@ class DailyAdmitsReport extends DefaultReport
         $branch_id = $this->filterResults['branch_id'] ?? null;
 
 
-
         $dateRange = get_range_date($date);
-
 
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 

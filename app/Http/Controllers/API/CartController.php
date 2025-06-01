@@ -172,12 +172,30 @@ class CartController extends Controller
             return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
         }
 
+        $minutes = (int) get_setting('show_remove_time_offset') ?? 35;
+
+
+    
+        $now=now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes($minutes);
+
         try {
             $movie_show = $this->movieShowRepository->getMovieShowById($form_data['movie_show_id']);
         } catch (\Exception $th) {
             return $this->response(notification()->error('Movie Show Not found', $th->getMessage()));
         }
 
+       
+        // dd($movie_show->date.' '.$movie_show->time->iso);
+     
+        $check_show_date=  now()->parse($movie_show->date.' '.$movie_show->time->iso,env('TIMEZONE', 'Asia/Baghdad'));
+
+
+        // dd($now,$check_show_date);
+        if($now > $check_show_date){
+            return $this->response(notification()->error('Movie show expired','Movie show expired'));
+        }
+
+    
         try {
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
         } catch (\Exception $th) {

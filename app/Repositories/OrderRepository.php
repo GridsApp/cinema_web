@@ -294,7 +294,9 @@ class OrderRepository implements OrderRepositoryInterface
             $order = Order::query()->where(function ($query) use ($barcode) {
                 $query->orWhere('barcode', $barcode);
                 $query->orWhere('reference', $barcode);
-            })->whereNull('deleted_at')->firstOrFail();
+            })   
+            ->whereNull('deleted_at')
+            ->firstOrFail();
 
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Order with Barcode {$barcode} not found .");
