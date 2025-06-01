@@ -284,7 +284,7 @@ class  OrderController extends Controller
         $payment_method = $order->paymentMethod;
 
         if (!$payment_method) {
-            return $this->response(notification()->success('Refund Failed', 'Refund Failed'));
+            return $this->response(notification()->success('Refund Failed 0', 'Refund Failed'));
         }
 
         try {
@@ -356,21 +356,21 @@ class  OrderController extends Controller
                         $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($order->user);
                         if ($user_loyalty_balance < $total_points) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed', 'User does not have enough loyalty points to refund'));
+                            return $this->response(notification()->error('Refund Failed 1', 'User does not have enough loyalty points to refund'));
                         }
 
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
 
                         if (!$walletTransaction) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed', 'Failed to process wallet refund'));
+                            return $this->response(notification()->error('Refund Failed 2', 'Failed to process wallet refund'));
                         }
 
                         $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
 
                         if (!$loyaltyTransaction) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed', 'Failed to process loyalty points refund'));
+                            return $this->response(notification()->error('Refund Failed 3', 'Failed to process loyalty points refund'));
                         }
                     }
                 }
@@ -383,7 +383,7 @@ class  OrderController extends Controller
             );
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $this->response(notification()->error('Refund Failed', 'An error occurred: ' . $th->getMessage()));
+            return $this->response(notification()->error('Refund Failed 4', 'An error occurred: ' . $th->getMessage()));
         }
 
 
