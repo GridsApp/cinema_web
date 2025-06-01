@@ -486,15 +486,15 @@ class MigrationsController extends Controller
     public function addCoupons() {
 
         // $path = storage_path('app/data.csv');
-        $path = public_path('coupons/batch_30_05_2025.csv');
+        $path = public_path('coupons/batch_01_06_2025.csv');
 
         if (!file_exists($path) || !is_readable($path)) {
             return response()->json(['error' => 'CSV file not found or not readable.'], 400);
         }
- 
+
         $header = null;
         $data = [];
- 
+
         if (($handle = fopen($path, 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                 if (!$header) {
@@ -505,12 +505,12 @@ class MigrationsController extends Controller
             }
             fclose($handle);
         }
- 
+
         foreach ($data as $row) {
 
             $found = DB::table('coupons')->where('code' , $row['code'])->first();
-        
-            if(!$found){      
+
+            if(!$found){
                 DB::table('coupons')->insert([
                     'label' => $row['label'],
                     'code' => $row['code'],
@@ -521,7 +521,7 @@ class MigrationsController extends Controller
                 ]);
             }
         }
- 
+
         return response()->json(['message' => 'CSV imported successfully.']);
 
     }
@@ -537,7 +537,7 @@ class MigrationsController extends Controller
             try {
                 // Remove the trailing quote and add the closing brace
                 $jsonStr = rtrim($order->payment_reference, '"') . '"}';
-                
+
                 // dd($jsonStr);
                 // Decode the JSON
                 $jsonData = json_decode($jsonStr, true);
