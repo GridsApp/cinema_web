@@ -20,9 +20,9 @@ class OTPRepository implements OTPRepositoryInterface
         try {
             switch($driver){
                 case "mail" : 
-                    Log::info('Attempting to send OTP email to: ' . $user->email);
+                    // Log::info('Attempting to send OTP email to: ' . $user->email);
                     Mail::to($user->email)->send(new PasswordResetOTPMail($user->email , $otp));
-                    Log::info('OTP email sent successfully');
+                    // Log::info('OTP email sent successfully');
                     // Send Email
                     break;
             }
