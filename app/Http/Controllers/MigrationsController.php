@@ -521,9 +521,7 @@ class MigrationsController extends Controller
                 ]);
             }
         }
-
         return response()->json(['message' => 'CSV imported successfully.']);
-
     }
 
 
