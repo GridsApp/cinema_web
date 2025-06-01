@@ -72,11 +72,11 @@ class OrderRepository implements OrderRepositoryInterface
         $payment_method_id = $payment_attempt->payment_method_id;
 
         try {
-            
-  
+
+
             $cart = $this->cartRepository->getCartById($cart_id , $force);
-        
-           
+
+
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage());
         }
@@ -166,14 +166,13 @@ class OrderRepository implements OrderRepositoryInterface
             $points_conversion = 1000;
             $total_points += $price / $points_conversion;
 
-    
 
             $orderSeat = new OrderSeat();
             $orderSeat->seat = $cart_seat['seat'];
             $orderSeat->imtiyaz_phone = $cart_seat['imtiyaz_phone'];
             $orderSeat->label =  $this->getSeatLabel($cart_seat->zone);
             $orderSeat->price = $cart_seat['price'];
-            $orderSeat->gained_points = $price * $points_conversion;
+            $orderSeat->gained_points = $price / $points_conversion;
             $orderSeat->order_id = $order->id;
             $orderSeat->movie_show_id = $cart_seat['movie_show_id'];
             $orderSeat->movie_id = $cart_seat['movie_id'];
@@ -247,13 +246,13 @@ class OrderRepository implements OrderRepositoryInterface
             } elseif ($cart->user_id) {
                 $operator_type = "App\Models\User";
                 $operator_id = $cart->user_id;
-            } 
-            
+            }
+
             // elseif ($cart->kiok_user_id) {
             //     dd("heree");
             //     $operator_type = "App\Models\Kiokuser";
             //     $operator_id = $cart->kiok_user_id;
-            // } 
+            // }
             else {
                 $operator_type = null;
                 $operator_id = null;
@@ -294,7 +293,7 @@ class OrderRepository implements OrderRepositoryInterface
             $order = Order::query()->where(function ($query) use ($barcode) {
                 $query->orWhere('barcode', $barcode);
                 $query->orWhere('reference', $barcode);
-            })   
+            })
             ->whereNull('deleted_at')
             ->firstOrFail();
 
