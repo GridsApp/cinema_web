@@ -526,18 +526,18 @@ class MigrationsController extends Controller
 
 
     public function addReservedSeatsFromOrdersSeata() {
-        
-        $today = now()->format('Y-m-d');
-        
+
+        $today = now();
+
         // Get all order seats for today
-        $orderSeats = OrderSeat::whereDate('date', $today)
+        $orderSeats = OrderSeat::whereDate('date', '>' ,  $today)
             ->whereNull('deleted_at')
             ->whereNull('refunded_at')
             ->get();
-            
+
         $insertedCount = 0;
         $skippedCount = 0;
-        
+
         foreach ($orderSeats as $orderSeat) {
             // Check if this seat is already reserved
             $exists = DB::table('reserved_seats')
@@ -545,7 +545,7 @@ class MigrationsController extends Controller
                 ->where('seat', $orderSeat->seat)
                 ->whereNull('deleted_at')
                 ->exists();
-                
+
             if (!$exists) {
                 // Insert into reserved_seats
                 DB::table('reserved_seats')->insert([
@@ -560,7 +560,7 @@ class MigrationsController extends Controller
                 $skippedCount++;
             }
         }
-        
+
         // return response()->json([
         //     'message' => 'Migration completed',
         //     'inserted' => $insertedCount,
