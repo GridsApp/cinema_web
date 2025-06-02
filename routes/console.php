@@ -185,6 +185,22 @@ Artisan::command('twa:addCoupons', function () {
 
 
 
+Artisan::command('twa:addReservedSeatsFromOrdersSeat', function () {
+
+    $this->comment("Started");
+
+
+    (new \App\Http\Controllers\MigrationsController)->addReservedSeatsFromOrdersSeata();
+
+    $this->comment("Finished");
+
+
+})->purpose('Transfering tables');
+
+
+
+
+
 Artisan::command('twa:treatJsonReferences', function () {
 
     $this->comment("Started");

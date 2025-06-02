@@ -1153,7 +1153,7 @@ return [
         'name' => 'branch_id',
         'multiple' => false,
         'visible_selections' => 3,
-        'query_limit' => 50,
+        'query_limit' => 200,
         'options' => [
             'type' => 'query',
             'table' => 'branches',
@@ -1167,12 +1167,8 @@ return [
                 ],
             ]
         ],
-        // 'required' => true
+        'required' => true
     ],
-
-
-
-
 
     'branch_attribute' => [
         'id' => uniqid(),
@@ -1190,18 +1186,18 @@ return [
             'type' => 'query',
             'table' => 'branches',
             'field' => 'label_en',
-            // 'conditions' => [
-            //     [
-            //         'type' => 'where',
-            //         'column' => 'branches.id',
-            //         'operand' => null,
-            //         'value' => 3,
-            //     ],
-            // ]
+            'conditions' => [
+                [
+                    'type' => 'where',
+                    'column' => 'branches.id',
+                    'operand' => null,
+                    'value' => '{branch_id}',
+                ],
+            ]
+
         ],
 
     ],
-
 
     'item_branch' => [
         'id' => uniqid(),

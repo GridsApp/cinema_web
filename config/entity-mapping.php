@@ -19,7 +19,7 @@ return array (
   'cms-push-notification-templates' => 'App\\Entities\\CmsPushNotificationTemplatesEntity',
   'cms-sent-push-notifications' => 'App\\Entities\\CmsSentPushNotificationsEntity',
   'cms-user-roles' => 'twa\\cmsv2\\Entities\\CmsUserRoles',
-  'cms-users' => 'twa\\cmsv2\\Entities\\CmsUsers',
+  'cms-users' => 'App\\Entities\\CmsUsers',
   'company-purposes' => 'App\\Entities\\CompanyPurposesEntity',
   'coupons' => 'App\\Entities\\CouponsEntity',
   'distributors' => 'App\\Entities\\DistributorsEntity',
