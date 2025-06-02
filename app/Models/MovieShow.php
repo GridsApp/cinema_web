@@ -9,6 +9,10 @@ class MovieShow extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'deleted_at'
+    ];
+
     protected $casts = [
         'system_id' => 'array', 
     ];

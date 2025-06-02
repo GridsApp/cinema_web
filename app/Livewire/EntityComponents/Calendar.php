@@ -84,21 +84,64 @@ class Calendar extends Component
 
 
 
+    // public function deleteMovieShows(){
+        
+    //    MovieShow::whereIn('id' , $this->selected)
+    //         ->update([
+    //             'deleted_at' => now()
+    //         ]);
+        
+    //     $this->dispatch('empty-selected');
+        
+    //     $this->sendSuccess(...["Successfully Deleted",
+    //         "Movie Shows you have selected were successfully deleted"]);
+
+    //     $this->skipRender();
+        
+    // }
 
     public function deleteMovieShows(){
+        // Get all selected movie shows
+        $movieShows = MovieShow::whereIn('id', $this->selected)->get();
         
-       MovieShow::whereIn('id' , $this->selected)
-            ->update([
+        $deletedCount = 0;
+        $skippedCount = 0;
+        $pastShowsCount = 0;
+        
+        // Process each movie show
+        foreach ($movieShows as $movieShow) {
+            // Check if show is in the past
+            if (now()->parse($movieShow->date)->startOfDay()->lt(now()->startOfDay())) {
+                $pastShowsCount++;
+                continue;
+            }
+            
+            // Check for reserved seats
+            if ($movieShow->reserved()->count() > 0) {
+                $skippedCount++;
+                continue;
+            }
+            
+            // Delete movie shows without reserved seats and not in the past
+            $movieShow->update([
                 'deleted_at' => now()
             ]);
+            $deletedCount++;
+        }
         
         $this->dispatch('empty-selected');
         
-        $this->sendSuccess(...["Successfully Deleted",
-            "Movie Shows you have selected were successfully deleted"]);
+        $message = "Successfully deleted {$deletedCount} movie show(s).";
+        if ($skippedCount > 0) {
+            $message .= " {$skippedCount} movie show(s) with reserved seats were skipped.";
+        }
+        if ($pastShowsCount > 0) {
+            $message .= " {$pastShowsCount} past movie show(s) were skipped.";
+        }
+        
+        $this->sendSuccess(...["Deletion Summary", $message]);
 
         $this->skipRender();
-        
     }
 
     public function updateInfo($id , $dateIndex , $timeIndex ){

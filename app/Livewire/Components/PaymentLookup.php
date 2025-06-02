@@ -8,6 +8,8 @@ use App\Interfaces\UserRepositoryInterface;
 use App\Models\PaymentAttempt;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use App\Interfaces\CartRepositoryInterface;
+
 use twa\uikit\Traits\ToastTrait;
 
 class PaymentLookup extends Component
@@ -25,12 +27,14 @@ class PaymentLookup extends Component
 
 
     private OrderRepositoryInterface $orderepository;
+    private CartRepositoryInterface $cartRepository;
 
 
     public function __construct()
     {
 
         $this->orderepository = app(OrderRepositoryInterface::class);
+        $this->cartRepository = app(CartRepositoryInterface::class);
     }
 
     public function render()
@@ -87,9 +91,19 @@ class PaymentLookup extends Component
             return;
         }
 
+        if(!$attempt->user_id){
+            $this->sendError("Error", "Unable to treat");
+            return;
+        }
+
         try {
             DB::beginTransaction();
 
+        
+            $cart=  $this->cartRepository->createCart($attempt->user_id , 'USER', 1);
+            $this->cartRepository->addTopupToCart($cart->id, $attempt->amount);
+             
+            $attempt->reference = $cart->id;
             $attempt->completed_at = now();
             $attempt->save();
 

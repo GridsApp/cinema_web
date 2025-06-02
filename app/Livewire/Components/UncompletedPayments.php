@@ -3,10 +3,12 @@
 namespace App\Livewire\Components;
 
 use App\Interfaces\CardRepositoryInterface;
+use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\PaymentAttempt;
 use App\Models\PaymentAttemptLog;
+use App\Repositories\CartRepository;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
@@ -28,6 +30,7 @@ class UncompletedPayments extends Component
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
     private OrderRepositoryInterface $orderepository;
+    private CartRepositoryInterface $cartRepository;
 
 
     public function __construct()
@@ -35,11 +38,8 @@ class UncompletedPayments extends Component
         $this->cardRepository = app(CardRepositoryInterface::class);;
         $this->userRepository = app(UserRepositoryInterface::class);
         $this->orderepository = app(OrderRepositoryInterface::class);
+        $this->cartRepository = app(CartRepositoryInterface::class);
     }
-
-
-
-
 
 
 
@@ -58,21 +58,30 @@ class UncompletedPayments extends Component
             return;
         }
 
+  
+        if(!$attempt->user_id){
+            $this->sendError("Error", "Unable to treat");
+            return;
+        }
+
         try {
             DB::beginTransaction();
 
+        
+            $cart=  $this->cartRepository->createCart($attempt->user_id , 'USER', 1);
+            $this->cartRepository->addTopupToCart($cart->id, $attempt->amount);
+             
+            $attempt->reference = $cart->id;
             $attempt->completed_at = now();
             $attempt->save();
 
+        
             $this->orderepository->createOrderFromCart($attempt, null, true);
 
             DB::commit();
         } catch (\Throwable $th) {
 
-
-
             DB::rollBack();
-
             $this->sendError("Error", $th->getMessage());
 
             return;
