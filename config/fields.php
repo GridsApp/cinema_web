@@ -1163,7 +1163,7 @@ return [
                     'type' => 'where',
                     'column' => 'branches.id',
                     'operand' => null,
-                    'value' => 1,
+                    'value' => '{branch_id}',
                 ],
             ]
         ],
@@ -1224,7 +1224,7 @@ return [
                     'type' => 'where',
                     'column' => 'branches.id',
                     'operand' => null,
-                    'value' => 3,
+                    'value' => '{branch_id}',
                 ],
             ]
         ],
@@ -3539,7 +3539,7 @@ return [
                     'type' => 'where',
                     'column' => 'branches.id',
                     'operand' => null,
-                    'value' => 1,
+                    'value' => '{branch_id}',
                 ],
             ]
 
