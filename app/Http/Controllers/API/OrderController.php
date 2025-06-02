@@ -733,7 +733,7 @@ class  OrderController extends Controller
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
-                'gained_points' => $seats->gained_points,
+                'gained_points' => round($seats->gained_points),
                 'type' => $type,
                 'is_imtiyaz' => !empty($seats->imtiyaz_phone),
 
