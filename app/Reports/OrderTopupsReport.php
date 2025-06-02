@@ -42,6 +42,7 @@ class OrderTopupsReport extends DefaultReport
 
         $this->addColumn("created_at", "Date");
         $this->addColumn("customer_name", "Customer");
+        $this->addColumn("customer_id", "Customer ID");
         $this->addColumn("reference", "Reference");
         $this->addColumn("topup", "Top-up");
         $this->addColumn("unit_price", "Price");
@@ -69,6 +70,7 @@ class OrderTopupsReport extends DefaultReport
         $footer = [
             'created_at' => 'Total',
             'customer_name' => '-',
+            'customer_id' => '-',
             'reference' => '-',
             'topup' => '-',
             'unit_price' => '-',
@@ -95,6 +97,7 @@ class OrderTopupsReport extends DefaultReport
                 'orders.reference',
                 'orders.user_id',
                 'customers.name as customer_name',
+                'customers.id as customer_id',
                 'pos_users.name as booked_by',
                 'orders.branch_id',
                 'branches.label_en as branch',
@@ -172,6 +175,7 @@ class OrderTopupsReport extends DefaultReport
             $data = [
                 'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
                 'customer_name' => $row->customer_name ?? '',
+                'customer_id' => $row->customer_id ?? '',
                 'reference' => $row->reference,
                 'unit_price' => number_format($unit_price),
                 'nb_topups' => $topups_count,
