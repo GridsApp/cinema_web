@@ -134,7 +134,7 @@ Route::group([
   Route::get('/contact-us', [App\Http\Controllers\WEBSITE\ContactController::class, 'contact'])->name('contact');
   Route::get('/movies/listing', [\App\Http\Controllers\WEBSITE\MovieController::class, 'listing'])->name('movie-listing');
 
- 
+
 
   Route::get('/movie-details/{slug}', [\App\Http\Controllers\WEBSITE\MovieController::class, 'details'])->name('details');
 
