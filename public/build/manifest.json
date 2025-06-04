@@ -65,19 +65,19 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-C4EhPcSI.css",
+    "file": "assets/app-DWabqZZg.css",
     "src": "resources/scss/app.scss",
+    "isEntry": true
+  },
+  "vendor/twa/uikit/dist/app-BPs6yPis.js": {
+    "file": "assets/app-BPs6yPis-Szvur9kO.js",
+    "name": "app-BPs6yPis",
+    "src": "vendor/twa/uikit/dist/app-BPs6yPis.js",
     "isEntry": true
   },
   "vendor/twa/uikit/dist/app-DDp6jU5g.css": {
     "file": "assets/app-DDp6jU5g-CiDmapIp.css",
     "src": "vendor/twa/uikit/dist/app-DDp6jU5g.css",
-    "isEntry": true
-  },
-  "vendor/twa/uikit/dist/app-DSGB8meh.js": {
-    "file": "assets/app-DSGB8meh-ByPg8-Yn.js",
-    "name": "app-DSGB8meh",
-    "src": "vendor/twa/uikit/dist/app-DSGB8meh.js",
     "isEntry": true
   }
 }

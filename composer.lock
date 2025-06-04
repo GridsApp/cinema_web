@@ -7614,12 +7614,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewebaddicts/uikit.git",
-                "reference": "573499b29e2aa9a87243ab79b7a3f5475d4e973f"
+                "reference": "e678beb8423b869644945f68ad5d0a878202f4c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewebaddicts/uikit/zipball/573499b29e2aa9a87243ab79b7a3f5475d4e973f",
-                "reference": "573499b29e2aa9a87243ab79b7a3f5475d4e973f",
+                "url": "https://api.github.com/repos/thewebaddicts/uikit/zipball/e678beb8423b869644945f68ad5d0a878202f4c1",
+                "reference": "e678beb8423b869644945f68ad5d0a878202f4c1",
                 "shasum": ""
             },
             "require": {
@@ -7654,7 +7654,7 @@
                 "issues": "https://github.com/thewebaddicts/uikit/issues",
                 "source": "https://github.com/thewebaddicts/uikit/tree/main"
             },
-            "time": "2025-06-03T14:31:27+00:00"
+            "time": "2025-06-04T15:07:59+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
