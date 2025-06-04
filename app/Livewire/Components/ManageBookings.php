@@ -5,6 +5,7 @@ namespace App\Livewire\Components;
 use Livewire\Component;
 use App\Models\Movie;
 use App\Models\MovieShow;
+use App\Models\Theater;
 use Carbon\CarbonPeriod;
 use Livewire\Attributes\Url;
 use twa\uikit\Traits\ToastTrait;
@@ -41,12 +42,20 @@ class ManageBookings extends Component
 
         $cms_user = session('cms_user');
 
-        // $branch_id = $cms_user['attributes']['branch_id'] ?? null;
 
-        // dd($branch_id);
-
+        $field_permissions = session('field_permissions');
 
 
+        if(!$field_permissions){
+            $view_all = true;
+            $branchesId = null;
+            $theaters = [];
+        }else{
+            $view_all = false;
+            $branchesId = $field_permissions['branch_id'] ?? [];
+            $theaters = Theater::where('branch_id', $branchesId)->pluck('id')->toArray();
+        }
+        
         $date = now()->parse($this->date);
         $period = collect(CarbonPeriod::create($date, (clone $date)->addDays(30)))->map(function ($d) {
             return $d->format('d-m-Y');
@@ -74,7 +83,13 @@ class ManageBookings extends Component
             'screenType' => function ($query) {
                 $query->select('id', 'label');
             },
-        ])->whereNull('deleted_at')->where('date', $date)->get()
+        ])
+        
+        ->when(!$view_all, function ($query) use ($theaters) {
+            $query->whereIn('theater_id', $theaters);
+        })
+        
+        ->whereNull('deleted_at')->where('date', $date)->get()
             // ->where('theater.branch_id', $branch_id)
             ->map(function ($movie_show) use (&$visible) {
                 $movie = $movie_show->movie;
