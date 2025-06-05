@@ -37,13 +37,15 @@
                             <th>Label</th>
                             <th>Code</th>
                             <th>Used At</th>
+                            <th>Expires At</th>
                             <th>Order ID</th>
                             <th>Order Reference</th>
                             <th>User Name</th>
                             <th>Branch</th>
-                            <th>Movie</th>
                             <th>Theater</th>
-                            <th>Expires At</th>
+                            <th>Movie</th>
+
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -53,13 +55,14 @@
                                 <td>{{ $transaction->label }}</td>
                                 <td>{{ $transaction->code }}</td>
                                 <td>{{ $transaction->used_at ? \Carbon\Carbon::parse($transaction->used_at)->format('Y-m-d H:i:s') : 'Not Used' }}</td>
+                                <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}</td>
                                 <td>{{ $transaction->order_id }}</td>
                                 <td>{{ $transaction->order_reference }}</td>
                                 <td>{{ $transaction->user_name }}</td>
                                 <td>{{ $transaction->branch_name }}</td>
-                                <td>{{ $transaction->movie_name }}</td>
                                 <td>{{ $transaction->theater }}</td>
-                                <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}</td>
+                                <td>{{ $transaction->movie_name }}</td>
+                         
                             </tr>
                         @empty
                             <tr>
