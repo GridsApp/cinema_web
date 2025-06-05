@@ -2351,6 +2351,21 @@ return [
         'name' => 'code',
         'container' => 'col-span-6',
     ],
+
+
+    'coupon_code' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+
+        'label' => 'Coupon Code',
+        'placeholder' => 'Enter Coupon Code',
+        'name' => 'coupon_code',
+        'container' => 'col-span-6',
+    ],
     'discount_flat' => [
         'id' => uniqid(),
         'livewire' => [

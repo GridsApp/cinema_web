@@ -184,6 +184,7 @@ return [
                 'link' => "/cms/manage/users",
 
             ],
+            
 
             [
                 'key' => 'uncompleted-payments',
@@ -272,6 +273,12 @@ return [
                 'key' => 'coupons',
                 'label' => 'Coupons',
                 'link' => routeObject('entity', ['slug' => 'coupons'])
+            ],
+            [
+                'key' => 'manage-coupons',
+                'label' => 'Manage Coupons',
+                'link' => "/cms/manage/coupons",
+
             ],
             [
                 'label' => 'Items',
