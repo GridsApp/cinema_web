@@ -51,17 +51,17 @@
                     <tbody>
                         @forelse($transactions as $transaction)
                             <tr>
-                                <td>{{ $transaction->id ?? '-'}}</td>
+                                <td>{{ $transaction->id ?? '-' }}</td>
                                 <td>{{ $transaction->label ?? '-' }}</td>
-                                <td>{{ $transaction->code '-'}}</td>
+                                <td>{{ $transaction->code ?? '-' }}</td>
                                 <td>{{ $transaction->used_at ? \Carbon\Carbon::parse($transaction->used_at)->format('Y-m-d H:i:s') : 'Not Used' }}</td>
                                 <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}</td>
-                                <td>{{ $transaction->order_id '-'}}</td>
-                                <td>{{ $transaction->order_reference '-'}}</td>
-                                <td>{{ $transaction->user_name ?? '-'}}</td>
-                                <td>{{ $transaction->branch_name '-'}}</td>
-                                <td>{{ $transaction->theater '-'}}</td>
-                                <td>{{ $transaction->movie_name '-'}}</td>
+                                <td>{{ $transaction->order_id ?? '-' }}</td>
+                                <td>{{ $transaction->order_reference ?? '-' }}</td>
+                                <td>{{ $transaction->user_name ?? '-' }}</td>
+                                <td>{{ $transaction->branch_name ?? '-' }}</td>
+                                <td>{{ $transaction->theater ?? '-' }}</td>
+                                <td>{{ $transaction->movie_name ?? '-' }}</td>
                          
                             </tr>
                         @empty
