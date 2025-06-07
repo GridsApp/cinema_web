@@ -110,6 +110,7 @@ class UncompletedPayments extends Component
             ->whereNotNull('payment_attempts.converted_at')
             ->whereNull('payment_attempts.completed_at')
             ->whereNotNull('payment_attempts.user_id')
+            ->orderBy('payment_attempts.converted_at', 'desc')
             ->get();
     }
 
