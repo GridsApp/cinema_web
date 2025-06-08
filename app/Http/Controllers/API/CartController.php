@@ -851,7 +851,7 @@ class CartController extends Controller
 
         try {
            $cart =  Cart::where('id', $body['cart_id'])
-                ->where('expires_at', '>', now())
+//                ->where('expires_at', '>', now())
                 ->whereNull('deleted_at')
                 ->firstOrFail();
 
