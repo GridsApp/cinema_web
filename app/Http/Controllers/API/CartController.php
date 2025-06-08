@@ -14,6 +14,7 @@ use App\Interfaces\RewardRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
+use App\Models\Cart;
 use App\Models\CartImtiyaz;
 use App\Models\CartSeat;
 use App\Models\Coupon;
@@ -175,7 +176,7 @@ class CartController extends Controller
         $minutes = (int) get_setting('show_remove_time_offset') ?? 35;
 
 
-    
+
         $now=now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->subMinutes($minutes);
 
         try {
@@ -184,9 +185,9 @@ class CartController extends Controller
             return $this->response(notification()->error('Movie Show Not found', $th->getMessage()));
         }
 
-       
+
         // dd($movie_show->date.' '.$movie_show->time->iso);
-     
+
         $check_show_date=  now()->parse($movie_show->date.' '.$movie_show->time->iso,env('TIMEZONE', 'Asia/Baghdad'));
 
 
@@ -195,7 +196,7 @@ class CartController extends Controller
             return $this->response(notification()->error('Movie show expired','Movie show expired'));
         }
 
-    
+
         try {
             $theater_map = $this->theaterRepository->getTheaterMap($movie_show->theater_id);
         } catch (\Exception $th) {
@@ -215,7 +216,7 @@ class CartController extends Controller
 
         $reserved_seats = $this->cartRepository->getReservedSeats($form_data['movie_show_id']);
 
-    
+
         if ($seats->pluck('code')->intersect($reserved_seats)->count() > 0) {
             return $this->response(notification()->error('Seats Already Reserved', 'Seats Already Reserved'));
         }
@@ -791,7 +792,97 @@ class CartController extends Controller
                 'wallet_balance' => $card['wallet_balance'],
                 'type' => $card['type']
             ];
-        } 
+        }
+        elseif ($cartDetails['card_number']) {
+
+            try {
+                $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
+            } catch (\Exception $e) {
+                return $this->response(notification()->error('Card Not Found', 'The card number provided is invalid or does not exist.'));
+            }
+
+            // $card = $this->cardRepository->getCardByBarcode($cartDetails['card_number']);
+
+            try {
+                $user = $this->userRepository->getUserById($card->user_id);
+            } catch (\Exception $e) {
+                return $this->response(notification()->error('User Not Found', 'User Not Found.'));
+            }
+
+
+            $card = $this->cardRepository->getActiveCard($user, $card);
+
+
+            $card_info = [
+                'fullname' => $user->name,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'card_number' => $card['barcode'],
+                'loyalty_points_balance' => $card['loyalty_points_balance'],
+                'wallet_balance' => $card['wallet_balance'],
+                'type' => $card['type']
+            ];
+        } else {
+            $card_info = null;
+        }
+
+        return $this->responseData(([
+            'coupon_code' => $cartDetails["coupon_codes"],
+            'coupons' => $cartDetails["coupons"],
+            'imtiyaz' => $cartDetails["imtiyaz"],
+            'card_info' => $card_info ?? null,
+            'subtotal' => $cartDetails["subtotal"],
+            'lines' => $cartDetails["lines"],
+        ]));
+    }
+
+
+    public function details2()
+    {
+        $body = clean_request();
+        $check = $this->validateRequiredFields($body, ['cart_id']);
+
+        if ($check) {
+            return $this->response($check);
+        }
+
+        $user = request()->user;
+        $user_type = request()->user_type;
+
+        try {
+           $cart =  Cart::where('id', $body['cart_id'])
+                ->where('expires_at', '>', now())
+                ->whereNull('deleted_at')
+                ->firstOrFail();
+
+        } catch (\Exception $e) {
+            return $this->response(notification()->error('Error', $e->getMessage()));
+        }
+        $cartDetails = $this->cartRepository->getCartDetails($cart);
+
+
+        if ($cartDetails['user_id']) {
+
+            // get card info by user id
+
+            try {
+                $user = $this->userRepository->getUserById($cartDetails['user_id']);
+            } catch (\Throwable $th) {
+                throw new Exception($th->getMessage());
+            }
+
+            $card = $this->cardRepository->getActiveCard($user);
+
+            $card_info = [
+                'fullname' => $user->name,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'card_number' => $card['barcode'],
+                'loyalty_balance' => $card['loyalty_points_balance'],
+                'wallet_balance' => $card['wallet_balance'],
+                'type' => $card['type']
+            ];
+        }
         elseif ($cartDetails['card_number']) {
 
             try {

@@ -114,6 +114,7 @@ Route::group(['prefix' => 'v1', 'middleware' => LanguageMiddleware::class], func
         Route::post('/empty', [App\Http\Controllers\API\CartController::class, 'emptyCart']);
 
         Route::get('/details', [App\Http\Controllers\API\CartController::class, 'details']);
+        Route::get('/details2', [App\Http\Controllers\API\CartController::class, 'details2']);
 
 
         Route::post('/item/add', [App\Http\Controllers\API\CartController::class, 'addItemToCart']);
