@@ -111,7 +111,7 @@ class Hyperpay
         create_payment_log("PAID SUCCESSFULLY (FINAL RESPONSE)" , $response , $attempt->id , 'response');
 
         $attempt->converted_at = now();
-        $attempt->payment_reference = $response->resultDetails->AuthCode ?? "";
+        $attempt->payment_reference = $response->id ?? "";
         $attempt->save();
 
         return response(["row_id" => $attempt->row_id  , "row_model" => $attempt->row_model , 'payment_ref' => $attempt->payment_reference ] , 200);
