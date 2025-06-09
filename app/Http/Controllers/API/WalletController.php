@@ -46,7 +46,7 @@ class WalletController extends Controller
         if ($user_id == 7612) {
             $minimum_recharge_amount = 1000;
         }
-        
+
         $validator = Validator::make($form_data, [
             'amount' => 'required|numeric|min:'.$minimum_recharge_amount.'|max:'.$maximum_recharge_amount,
             'payment_method_id' => 'required'
@@ -59,8 +59,6 @@ class WalletController extends Controller
         // Payment Record 7612
 
    
-    
-    
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->user_id = $user_id;
         $payment_attempt->amount = $form_data['amount'];

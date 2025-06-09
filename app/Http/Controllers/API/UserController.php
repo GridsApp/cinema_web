@@ -335,12 +335,19 @@ class UserController extends Controller
         }
 
 
+        // dd($form_data);
 
+       
+        $timer = 30; 
+        
+    
         try {
-            $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id);
+            $cart = $this->cartRepository->createCart($user->id, $user_type, $system_id, $timer);
         } catch (\Exception $th) {
-            return  $this->response(notification()->error("Error", $th->getMessage()));
+            return $this->response(notification()->error("Error", $th->getMessage()));
         }
+
+
 
         $minimum_recharge_amount = get_setting("minimum_topup_amount");
         $maximum_recharge_amount =  get_setting("maximum_topup_amount");

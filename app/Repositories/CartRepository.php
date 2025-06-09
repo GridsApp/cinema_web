@@ -82,18 +82,16 @@ class CartRepository implements CartRepositoryInterface
        
         return $user_cart;
     }
-    public function createCart($user_id, $user_type, $system_id)
+    public function createCart($user_id, $user_type, $system_id, $timer = null)
     {
-        $minutes = (int) get_setting('timer_reset_card') ?? 1;
+       
+        $minutes = $timer ?? ((int) get_setting('timer_reset_card') ?? 5);
+    
 
-
-        // dd(get_setting('timer_reset_card'));
+        // dd($minutes);
         try {
-
-
             $field = get_user_field_from_type($user_type);
-
-
+    
             $cart = new Cart();
             $cart->{$field} = $user_id;
             $cart->system_id = $system_id;
@@ -102,6 +100,7 @@ class CartRepository implements CartRepositoryInterface
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    
         return $cart;
     }
     public function expireCart($cart_id)
