@@ -94,7 +94,8 @@ class CartController extends Controller
         //     'expires_at' => $cart->expires_at
         // ]);
 
-        $minutes = (int) get_setting('timer_reset_card') ?? 1;
+        $minutes= get_cart_timer_minutes($system_id) ?? 5;
+        // $minutes = (int) get_setting('timer_reset_card') ?? 1;
 
         return $this->responseData([
             'cart_id' => $cart->id,

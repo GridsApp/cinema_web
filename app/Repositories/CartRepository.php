@@ -63,35 +63,35 @@ class CartRepository implements CartRepositoryInterface
 
         return $user_cart;
     }
-    public function getCartById($cart_id , $force = false)
+    public function getCartById($cart_id, $force = false)
     {
 
 
         try {
 
             $user_cart = Cart::where('id', $cart_id)
-                ->when(!$force , function($q){
+                ->when(!$force, function ($q) {
                     $q->where('expires_at', '>', now())->whereNull('deleted_at');
                 })
-            ->firstOrFail();
-
-       
+                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Cart with ID {$cart_id} not found or expired.");
         }
-       
+
         return $user_cart;
     }
     public function createCart($user_id, $user_type, $system_id, $timer = null)
     {
-       
-        $minutes = $timer ?? ((int) get_setting('timer_reset_card') ?? 5);
-    
+
+        // $minutes = $timer ?? ((int) get_setting('timer_reset_card') ?? 5);
+        $minutes = $timer !== null
+            ? (int) $timer
+            : get_cart_timer_minutes($system_id);
 
         // dd($minutes);
         try {
             $field = get_user_field_from_type($user_type);
-    
+
             $cart = new Cart();
             $cart->{$field} = $user_id;
             $cart->system_id = $system_id;
@@ -100,14 +100,14 @@ class CartRepository implements CartRepositoryInterface
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-    
+
         return $cart;
     }
     public function expireCart($cart_id)
     {
         try {
             DB::beginTransaction();
-            $cart =   $this->getCartById($cart_id , true);
+            $cart =   $this->getCartById($cart_id, true);
             CartSeat::where('cart_id', $cart_id)->delete();
             CartItem::where('cart_id', $cart_id)->delete();
             CartTopup::where('cart_id', $cart_id)->delete();
@@ -124,7 +124,7 @@ class CartRepository implements CartRepositoryInterface
 
         try {
 
-            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->movie_id , $movie_show->date , $movie_show->time->iso);
+            $price = $this->priceGroupZoneRepository->getPriceByZonePerDate($zone_id, $movie_show->movie_id, $movie_show->date, $movie_show->time->iso);
 
             $cart_seat = new CartSeat();
             $cart_seat->seat = $seat;
@@ -139,8 +139,6 @@ class CartRepository implements CartRepositoryInterface
             $cart_seat->time_id = $movie_show->time_id;
             $cart_seat->price = $price;
             $cart_seat->save();
-
-
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -245,28 +243,28 @@ class CartRepository implements CartRepositoryInterface
 
         //     $cart = $this->getCartById($cart_id);
 
-            // $reward = Reward::findOrFail($user_reward->reward_id);
+        // $reward = Reward::findOrFail($user_reward->reward_id);
 
 
-            // $cart_seats = CartSeat::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
-            // $cart_items = CartItem::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
+        // $cart_seats = CartSeat::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
+        // $cart_items = CartItem::where('cart_id' , $cart_id)->whereNull('deleted_at')->get();
 
-            // $zones = $reward->zones;
-            // $items = $reward->items;
+        // $zones = $reward->zones;
+        // $items = $reward->items;
 
-            // foreach($cart_seats as $cart_seat){
-            //     if($cart_seat->)
-            // }
+        // foreach($cart_seats as $cart_seat){
+        //     if($cart_seat->)
+        // }
 
-            // foreach($cart_seats as $cart_seat){
+        // foreach($cart_seats as $cart_seat){
 
-            // }
+        // }
 
 
 
-            // foreach($items as $item){
+        // foreach($items as $item){
 
-            // }
+        // }
 
 
 
@@ -309,10 +307,10 @@ class CartRepository implements CartRepositoryInterface
 
         $cart_seats = CartSeat::whereNull('cart_seats.deleted_at')
             ->where('cart_seats.movie_show_id', $movie_show_id)
-            ->join('carts', function($q){
-               $q->on('cart_seats.cart_id', '=', 'carts.id');
-               $q->where('carts.expires_at', '>', now());
-               $q->whereNull('carts.deleted_at');
+            ->join('carts', function ($q) {
+                $q->on('cart_seats.cart_id', '=', 'carts.id');
+                $q->where('carts.expires_at', '>', now());
+                $q->whereNull('carts.deleted_at');
             })->pluck('seat');
 
         $reserved_seats = ReservedSeat::whereNull('deleted_at')
@@ -325,7 +323,7 @@ class CartRepository implements CartRepositoryInterface
     public function getCartSeats($cart_id, $grouped = false)
     {
 
-        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'cart_id', 'zone_id', 'theater_id' , 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
+        $select = $grouped ? [DB::raw("CONCAT(COALESCE(zone_id,'0') ,'_', COALESCE(movie_show_id, '0') , '_' , COALESCE(imtiyaz_phone , '0') ) as identifier"), 'cart_id', 'zone_id', 'theater_id', 'movie_show_id', 'price',  'imtiyaz_phone', DB::raw('count(*) as quantity')] : "*";
 
         try {
 
@@ -389,13 +387,13 @@ class CartRepository implements CartRepositoryInterface
     }
 
 
-    public function getCartImtiyaz($cart_id){
+    public function getCartImtiyaz($cart_id)
+    {
         try {
             return CartImtiyaz::whereNull('deleted_at')->where('cart_id', $cart_id)->get();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-
     }
 
 
@@ -423,7 +421,7 @@ class CartRepository implements CartRepositoryInterface
 
         return $cart_imtiyaz;
     }
-    public function removeImtiyazFromCart($cart_id , $phone)
+    public function removeImtiyazFromCart($cart_id, $phone)
     {
         try {
 
@@ -431,7 +429,7 @@ class CartRepository implements CartRepositoryInterface
 
             $cart_imtiyaz =  CartImtiyaz::query()
                 ->where('cart_id', $cart_id)
-                ->where('phone' , $phone)
+                ->where('phone', $phone)
                 ->whereNull('deleted_at');
 
             if ($cart_imtiyaz->count() > 0) {
@@ -448,40 +446,38 @@ class CartRepository implements CartRepositoryInterface
                 //     ]);
 
                 $cart_imtiyaz = CartImtiyaz::query()
-                ->where('cart_id', $cart_id)
-                ->whereNull('deleted_at')->pluck('phone')->toArray();
+                    ->where('cart_id', $cart_id)
+                    ->whereNull('deleted_at')->pluck('phone')->toArray();
 
                 //2
 
                 // dd($cart_imtiyaz);
 
                 $cart_seats =  CartSeat::query()
-                ->where('cart_id', $cart_id)
-                ->whereNull('deleted_at')
-                ->orderBy('price' , 'desc')
-                ->get();
+                    ->where('cart_id', $cart_id)
+                    ->whereNull('deleted_at')
+                    ->orderBy('price', 'desc')
+                    ->get();
 
 
-                foreach($cart_seats as $index => $cart_seat){
+                foreach ($cart_seats as $index => $cart_seat) {
 
-                    if($index % 2 == 1){
+                    if ($index % 2 == 1) {
                         $cart_seat->imtiyaz_phone = $cart_imtiyaz[0] ?? null;
                         unset($cart_imtiyaz[0]);
                         $cart_imtiyaz = array_values($cart_imtiyaz);
                         // $cart_imtiyaz = $cart_imtiyaz->values();
 
-                    }else{
+                    } else {
                         $cart_seat->imtiyaz_phone = null;
                     }
 
                     $cart_seat->save();
-
                 }
 
 
 
                 DB::commit();
-
             } else {
 
                 throw new Exception("No records found");
@@ -539,12 +535,11 @@ class CartRepository implements CartRepositoryInterface
     {
         try {
             $cart_coupon = CartCoupon::select('cart_coupons.id')->where('cart_coupons.cart_id', $cart_id)
-            ->join('coupons' , 'cart_coupons.coupon_id' , 'coupons.id')
-            ->where('coupons.code' , $coupon_code)
-            ->firstOrFail();
+                ->join('coupons', 'cart_coupons.coupon_id', 'coupons.id')
+                ->where('coupons.code', $coupon_code)
+                ->firstOrFail();
 
-            CartCoupon::where('id' , $cart_coupon->id)->delete();
-
+            CartCoupon::where('id', $cart_coupon->id)->delete();
         } catch (ModelNotFoundException $e) {
             throw new Exception($e->getMessage());
         } catch (Exception $e) {
@@ -566,7 +561,7 @@ class CartRepository implements CartRepositoryInterface
             $imtiyaz_phones = $this->getCartImtiyaz($cart_id)->pluck('phone');
 
 
-            $cart_seats = $this->getCartSeats($cart_id,true);
+            $cart_seats = $this->getCartSeats($cart_id, true);
             // $cart_seats2 = $this->getCartSeats($cart_id);
 
             // dd($cart_seats , $cart_seats2);
@@ -598,7 +593,7 @@ class CartRepository implements CartRepositoryInterface
                     'movie_show_id' => $cart_seat['movie_show_id'],
                     'seat' => $cart_seat['seat'],
                     'type' => "Seat",
-                    'theater' =>$cart_seat->theater->label,
+                    'theater' => $cart_seat->theater->label,
                     'label' => $zone->priceGroup->label . ' ' . ($zone->default == 1 ? '' : $zone->condensed_label),
                     'unit_price' => currency_format($unit_price),
                     'quantity' => $cart_seat['quantity'],
@@ -611,7 +606,7 @@ class CartRepository implements CartRepositoryInterface
             $total = $total_seats;
 
 
-            $cart_items = $this->getCartItems($cart_id ,true);
+            $cart_items = $this->getCartItems($cart_id, true);
             $item_ids = $cart_items->pluck('branch_item_id');
             $items = $this->itemRepository->getItemsById($item_ids)->keyBy('id');
 
@@ -637,7 +632,7 @@ class CartRepository implements CartRepositoryInterface
             $total += $cart_items->sum('price.value');
 
 
-            $cart_topups = $this->getCartTopups($cart_id , true);
+            $cart_topups = $this->getCartTopups($cart_id, true);
             $cart_topups = $cart_topups->map(function ($cart_topup) {
                 $unit_price = $cart_topup->amount;
 
@@ -685,7 +680,7 @@ class CartRepository implements CartRepositoryInterface
 
 
 
-            $cart_imtiyaz=$this->getCartImtiyaz($cart_id);
+            $cart_imtiyaz = $this->getCartImtiyaz($cart_id);
             $cart_imtiyaz = $cart_imtiyaz->map(function ($cart_imtiyaz) {
 
 
@@ -751,7 +746,4 @@ class CartRepository implements CartRepositoryInterface
     {
         return CartCoupon::whereNull('deleted_at')->where('cart_id', $cart_id)->count();
     }
-
-
-
 }

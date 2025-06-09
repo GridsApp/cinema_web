@@ -3955,6 +3955,44 @@ return [
     ],
 
 
+    'timer_expire_cart_pos' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Time Expire Cart Pos',
+        'placeholder' => 'Time Expire Cart Pos',
+        'name' => 'timer_expire_cart_pos',
+        'container' => 'col-span-12',
+    ],
+
+    'timer_expire_cart_app' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Time Expire Cart App',
+        'placeholder' => 'Time Expire Cart App',
+        'name' => 'timer_expire_cart_app',
+        'container' => 'col-span-12',
+    ],
+
+
+    'timer_expire_cart_kiosk' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Number::class,
+        'label' => 'Time Expire Cart Kiosk',
+        'placeholder' => 'Time Expire Cart Kiosk',
+        'name' => 'timer_expire_cart_kiosk',
+        'container' => 'col-span-12',
+    ],
+
+
 
 
     'show_remove_time_offset' => [

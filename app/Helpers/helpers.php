@@ -846,4 +846,21 @@ if (!function_exists('minutes_to_human')) {
          
         }
     }
+
+
+    if (!function_exists('get_cart_timer_minutes')) {
+        function get_cart_timer_minutes($system_id, $fallback = 5)
+        {
+            switch ($system_id) {
+                case 1:
+                    return (int) get_setting('timer_expire_cart_app') ?? $fallback;
+                case 2:
+                    return (int) get_setting('timer_expire_cart_pos') ?? $fallback;
+                case 4:
+                    return (int) get_setting('timer_expire_cart_kiosk') ?? $fallback;
+                default:
+                    return (int) get_setting('timer_reset_card') ?? $fallback;
+            }
+        }
+    }
 }
