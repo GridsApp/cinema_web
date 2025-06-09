@@ -40,6 +40,13 @@ class WalletController extends Controller
         $minimum_recharge_amount = 10000;
         $maximum_recharge_amount = 50000;
 
+
+        $user_id = request()->user->id;
+
+        if ($user_id == 7612) {
+            $minimum_recharge_amount = 1000;
+        }
+        
         $validator = Validator::make($form_data, [
             'amount' => 'required|numeric|min:'.$minimum_recharge_amount.'|max:'.$maximum_recharge_amount,
             'payment_method_id' => 'required'
@@ -49,10 +56,10 @@ class WalletController extends Controller
             return  $this->responseValidation($validator);
         }
 
-        // Payment Record
+        // Payment Record 7612
 
-        $user_id = request()->user->id;
-
+   
+    
     
         $payment_attempt = new PaymentAttempt();
         $payment_attempt->user_id = $user_id;
