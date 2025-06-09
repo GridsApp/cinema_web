@@ -220,7 +220,8 @@ class CardRepository implements CardRepositoryInterface
     {
         $transaction = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
-            ->latest()->first();
+            ->orderBy('id' , 'desc')
+            ->first();
 
         // dd($transaction->balance);
 
