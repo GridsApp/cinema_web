@@ -218,9 +218,14 @@ class CardRepository implements CardRepositoryInterface
 
     public function getWalletBalance($user)
     {
+        // $transaction = UserWalletTransaction::whereNull('deleted_at')
+        //     ->where('user_id', $user->id)
+        //     ->latest()->first();
+
         $transaction = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
-            ->latest()->first();
+            ->orderBy('created_at', 'desc')
+            ->first();
 
         // dd($transaction->balance);
 
@@ -230,9 +235,15 @@ class CardRepository implements CardRepositoryInterface
     public function getWalletTransactions($user)
     {
         $wallet_transactions = [];
+        // $transactions = UserWalletTransaction::whereNull('deleted_at')
+        //     ->where('user_id', $user->id)
+        //     ->get();
+
         $transactions = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
             ->get();
+
 
         foreach ($transactions as $transaction) {
 
@@ -279,8 +290,6 @@ class CardRepository implements CardRepositoryInterface
 
         $wallet_balance = $this->getWalletBalance($user);
         $loyalty_balance = $this->getLoyaltyBalance($user);
-
-
 
         $card = [
 

@@ -771,6 +771,7 @@ class CartController extends Controller
         $cartDetails = $this->cartRepository->getCartDetails($cart);
 
 
+        
 
         if ($cartDetails['user_id']) {
 
