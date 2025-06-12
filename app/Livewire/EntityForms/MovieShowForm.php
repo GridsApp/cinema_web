@@ -118,6 +118,7 @@ class MovieShowForm extends Component
         if(!$first_show_date){
             $first_show_date = $period->first() ?? null;
         }
+        // dd($this->form['color']);
 
         foreach ($period as $date) {
             $week = $this->calculateWeekNumber($date , $first_show_date);
