@@ -9,9 +9,7 @@
 
                 <div class="mb-5">
 
-                    {{-- <input type="text" wire:model="form.card_number">
-                @error('form.card_number') {{$message}} @enderror --}}
-
+            
                     {!! field('coupon_code') !!}
                 </div>
 
@@ -29,7 +27,7 @@
 
         @if ($this->form['coupon_code'])
 
-            @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel', 'title' => 'Coupon Details'])
+            @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel overflow-auto !p-0', 'title' => 'Coupon Details'])
                 <table class="twa-table table-auto">
                     <thead>
                         <tr>
@@ -40,12 +38,15 @@
                             <th>Expires At</th>
                             <th>Order ID</th>
                             <th>Order Reference</th>
+                            <th>User Id</th>
                             <th>User Name</th>
+                            <th>POS User ID</th>
+                            <th>POS User Name</th>
                             <th>Branch</th>
                             <th>Theater</th>
                             <th>Movie</th>
-
-                        
+                         
+                         
                         </tr>
                     </thead>
                     <tbody>
@@ -59,14 +60,18 @@
                                 <td>{{ $transaction->order_id ?? '-' }}</td>
                                 <td>{{ $transaction->order_reference ?? '-' }}</td>
                                 <td>{{ $transaction->user_name ?? '-' }}</td>
+                                <td>{{ $transaction->user_id ?? '-' }}</td>
+                                <td>{{ $transaction->pos_user_id ?? '-' }}</td>
+                                <td>{{ $transaction->pos_user_name ?? '-' }}</td>
                                 <td>{{ $transaction->branch_name ?? '-' }}</td>
                                 <td>{{ $transaction->theater ?? '-' }}</td>
                                 <td>{{ $transaction->movie_name ?? '-' }}</td>
-                         
+                            
+                             
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="11" class="text-center">No coupon found with this code</td>
+                                <td colspan="16" class="text-center">No coupon found with this code</td>
                             </tr>
                         @endforelse
                     </tbody>

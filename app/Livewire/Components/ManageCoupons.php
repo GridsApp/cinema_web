@@ -60,6 +60,8 @@ class ManageCoupons extends Component
             ->leftJoin(DB::raw('(SELECT DISTINCT order_id, movie_id, theater_id FROM order_seats) as order_seats'), 'orders.id', '=', 'order_seats.order_id')
             ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
             ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
+            ->leftJoin('pos_users as pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
+
             ->where('coupons.code', $this->form['coupon_code'])
             ->select([
                 'coupons.id',
@@ -72,9 +74,14 @@ class ManageCoupons extends Component
                 'orders.reference as order_reference',
                 'orders.branch_id',
                 'users.name as user_name',
+                'users.id as user_id',
                 'branches.label_en as branch_name',
                 'movies.name as movie_name',
-                'theaters.label as theater'
+                'theaters.label as theater',
+                'orders.pos_user_id',
+                'pos_users.name as pos_user_name',
+                'orders.kiosk_user_id',
+               
             ])
             ->distinct()
             ->get();
