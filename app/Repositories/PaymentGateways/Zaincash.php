@@ -99,7 +99,7 @@ class Zaincash
 
             if(isset($result['status']) && $result['status'] == 'success'){
 
-                create_payment_log("PAID SUCCESSFULLY" , $result , $attempt->id);
+                create_payment_log("PAID SUCCESSFULLY" , $result , $attempt->id,'response');
 
                 $attempt->converted_at = now();
                 $attempt->payment_reference = $result["operationid"] ?? "?";
