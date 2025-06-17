@@ -284,7 +284,7 @@ class  OrderController extends Controller
         $payment_method = $order->paymentMethod;
 
         if (!$payment_method) {
-            return $this->response(notification()->success('Refund Failed 0', 'Refund Failed'));
+            return $this->response(notification()->error('Refund Failed 0', 'Refund Failed'));
         }
 
         try {

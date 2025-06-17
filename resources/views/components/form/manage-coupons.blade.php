@@ -59,8 +59,9 @@
                                 <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}</td>
                                 <td>{{ $transaction->order_id ?? '-' }}</td>
                                 <td>{{ $transaction->order_reference ?? '-' }}</td>
-                                <td>{{ $transaction->user_name ?? '-' }}</td>
+                              
                                 <td>{{ $transaction->user_id ?? '-' }}</td>
+                                <td>{{ $transaction->user_name ?? '-' }}</td>
                                 <td>{{ $transaction->pos_user_id ?? '-' }}</td>
                                 <td>{{ $transaction->pos_user_name ?? '-' }}</td>
                                 <td>{{ $transaction->branch_name ?? '-' }}</td>
