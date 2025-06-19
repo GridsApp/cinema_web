@@ -330,11 +330,14 @@ class  OrderController extends Controller
                 $order_seat->save();
 
 
+                // dd($total_points);
+
                 try {
 
                     $this->theaterRepository->removeFromReservedSeats($order_seat['movie_show_id'], $order_seat['seat']);
                 } catch (\Throwable $th) {
                 }
+            }
 
                 if ($payment_method->key != 'CASH') {
                     if ($total_amount > 0 && $user_id) {
@@ -354,6 +357,8 @@ class  OrderController extends Controller
 
                         // First check if user has enough points
                         $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($order->user);
+
+                        // dd($user_loyalty_balance, $total_points);
                         if ($user_loyalty_balance < $total_points) {
                             DB::rollBack();
                             return $this->response(notification()->error('Refund Failed 1', 'User does not have enough loyalty points to refund'));
@@ -374,7 +379,7 @@ class  OrderController extends Controller
                         }
                     }
                 }
-            }
+            
 
             DB::commit();
             return $this->responseData(
@@ -387,13 +392,6 @@ class  OrderController extends Controller
         }
 
 
-
-
-
-        // return $this->responseData(
-        //     $this->details($order_id, false),
-        //     notification()->success('Refund Successful', 'Your order has been successfully refunded')
-        // );
     }
     //To be checked By hovig
     public function get()
