@@ -232,7 +232,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::get('/movie-shows/logs', [MovieShowsLogsController::class, 'render'])->name('movie-shows-logs');
 
-  Route::get('/movie-shows/test', [MovieShowsLogsController::class, 'test'])->name('movie-shows-test');
+  // Route::get('/movie-shows/test', [MovieShowsLogsController::class, 'test'])->name('movie-shows-test');
 
 
   Route::get('/review/week-numbers', [ReviewWeekNumbersController::class, 'render'])->name('review-week-numbers');

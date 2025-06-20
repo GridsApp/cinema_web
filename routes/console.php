@@ -19,7 +19,7 @@ Artisan::command('twa:entities', function () {
     $other_files = File::files(base_path('vendor/twa/cmsv2/src/Entities'));
 
 
-    $files = [...$files , ...$other_files];
+    $files = [...$files, ...$other_files];
     // $files = \Illuminate\Support\Facades\File::files();
 
     $config = [];
@@ -50,14 +50,14 @@ Artisan::command('twa:entities', function () {
 
 
 
-    Artisan::command('twa:migrate', function () {
+Artisan::command('twa:migrate', function () {
 
-        $this->comment("Started");
+    $this->comment("Started");
 
-        (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
+    (new twa\cmsv2\Http\Controllers\EntityController)->migrate();
 
-        $this->comment("Finished");
-    })->purpose('Migrating tables');
+    $this->comment("Finished");
+})->purpose('Migrating tables');
 
 
 
@@ -99,7 +99,7 @@ Artisan::command('twa:updateVite', function () {
 
     $viteConfigPath = base_path('vite.config.js');
 
-    if(!file_exists($viteConfigPath)){
+    if (!file_exists($viteConfigPath)) {
         return;
     }
 
@@ -110,22 +110,19 @@ Artisan::command('twa:updateVite', function () {
 
     $pattern = "/input:\s*\[([^\]]*)\]/";
 
-    foreach($assets as $asset){
+    foreach ($assets as $asset) {
 
-        $newInput1 = '"'.$asset.'"';
+        $newInput1 = '"' . $asset . '"';
 
         if (preg_match($pattern, $content, $matches)) {
             $existingInputs = trim($matches[1]);
             $updatedInputs = $existingInputs ? "$existingInputs, $newInput1" : $newInput1;
             $content = preg_replace($pattern, "input: [$updatedInputs]", $content);
-
         } else {
-
         }
     }
 
     file_put_contents($viteConfigPath, $content);
-
 });
 
 
@@ -133,15 +130,13 @@ Artisan::command('twa:dataTransfer', function () {
 
     $this->comment("Started");
 
-//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+    //    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
 
     (new \App\Http\Controllers\MigrationsController)->migrateCoupons();
 
 
 
     $this->comment("Finished");
-
-
 })->purpose('Transfering tables');
 
 
@@ -151,15 +146,13 @@ Artisan::command('twa:calculateDistShare {limit}', function ($limit) {
 
     $this->comment("Started");
 
-//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+    //    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
 
-    (new \App\Http\Controllers\MigrationsController)->calculateDistShare($limit , $this);
+    (new \App\Http\Controllers\MigrationsController)->calculateDistShare($limit, $this);
 
 
 
     $this->comment("Finished");
-
-
 })->purpose('Transfering tables');
 
 
@@ -170,15 +163,13 @@ Artisan::command('twa:addCoupons', function () {
 
     $this->comment("Started");
 
-//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+    //    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
 
     (new \App\Http\Controllers\MigrationsController)->addCoupons();
 
 
 
     $this->comment("Finished");
-
-
 })->purpose('Transfering tables');
 
 
@@ -193,8 +184,6 @@ Artisan::command('twa:addReservedSeatsFromOrdersSeat', function () {
     (new \App\Http\Controllers\MigrationsController)->addReservedSeatsFromOrdersSeata();
 
     $this->comment("Finished");
-
-
 })->purpose('Transfering tables');
 
 
@@ -205,18 +194,11 @@ Artisan::command('twa:treatJsonReferences', function () {
 
     $this->comment("Started");
 
-//    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
+    //    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
 
     (new \App\Http\Controllers\MigrationsController)->treatJsonReferences();
 
 
 
     $this->comment("Finished");
-
-
 })->purpose('Transfering tables');
-
-
-
-
-   

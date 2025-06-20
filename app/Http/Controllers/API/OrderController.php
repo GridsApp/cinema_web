@@ -303,16 +303,15 @@ class  OrderController extends Controller
 
         $order_seats_with_imtiyaz_phone = $order_seats->whereNotNull('imtiyaz_phone');
         if ($order_seats_with_imtiyaz_phone->count() > 0) {
-            return $this->response(notification()->error("Unable to refund", "Can't refund seats with imtiyaz_phone associated."));
+            return $this->response(notification()->error("Refund Blocked: Imtiyaz Phone Linked", "Can't refund seats with imtiyaz_phone associated."));
         }
 
-        // dd($order_seats);
         $order_coupons = OrderCoupon::where('order_id', $order_id)
             ->get();
 
 
         if ($order_coupons->count() > 0) {
-            return $this->response(notification()->error("Unable to refund", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
+            return $this->response(notification()->error("Refund Blocked: Discounted Seats", "Can't refund discounted seats:" . $order_seats->where('discount', '>', 0)->pluck('id')->implode(",")));
         }
 
         $total_amount = 0;
@@ -361,21 +360,21 @@ class  OrderController extends Controller
                         // dd($user_loyalty_balance, $total_points);
                         if ($user_loyalty_balance < $total_points) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed 1', 'User does not have enough loyalty points to refund'));
+                            return $this->response(notification()->error('Insufficient Loyalty Points', 'User does not have enough loyalty points to refund'));
                         }
 
                         $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
 
                         if (!$walletTransaction) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed 2', 'Failed to process wallet refund'));
+                            return $this->response(notification()->error('Wallet Refund Failed', 'Failed to process wallet refund'));
                         }
 
                         $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
 
                         if (!$loyaltyTransaction) {
                             DB::rollBack();
-                            return $this->response(notification()->error('Refund Failed 3', 'Failed to process loyalty points refund'));
+                            return $this->response(notification()->error('Loyalty Points Deduction Failed', 'Failed to process loyalty points refund'));
                         }
                     }
                 }

@@ -169,6 +169,8 @@ class MovieShowLogsForm extends Component
 
     public function submit()
     {
+
+       
         $cms_user = session('cms_user');
 
         $pendingLogs = MovieShowCreationLog::whereNull('deleted_at')
@@ -181,7 +183,11 @@ class MovieShowLogsForm extends Component
             return;
         }
 
+       
+
         $data = collect($this->json)->map(function ($item) use ($cms_user) {
+            // $week = calculate_week_from_start_year($item['date']['value']);
+
             return [
                 'cms_user_id'     => $cms_user->id,
                 'movie_id'        => $item['movie']['value'],
@@ -192,6 +198,7 @@ class MovieShowLogsForm extends Component
                 'status'  => "pending",
                 'created_at'      => now(),
                 'updated_at'      => now(),
+                // 'group' => md5($item['movie']['value'].$item['theater']['value'].$item['time']['value'].$week)
             ];
         })->toArray();
 
@@ -203,6 +210,8 @@ class MovieShowLogsForm extends Component
             ->where('status', 'pending')
             ->get();
 
+
+    
         foreach ($newLogs as $log) {
             ProcessMovieShowCreationLogs::dispatch($log);
         }
@@ -212,175 +221,5 @@ class MovieShowLogsForm extends Component
     }
 
 
-    //REMOVE
-    // public function save()
-    // {
-    //     $required_array = [
-    //         'form.movie_id' => 'required',
-    //         'form.screen_type_id' => 'required',
-    //         'form.theater_ids' => 'required|array',
-    //         'form.time_ids' => 'required|array',
-    //         'form.date_from' => 'required',
-    //         'form.date_to' => 'required',
-
-    //     ];
-
-
-
-
-
-    //     $required_messages = [
-    //         'form.movie_id' => 'movie',
-    //         'form.screen_type_id' => 'screen type',
-    //         'theater_ids' => 'theater',
-    //         'time_ids' => 'time',
-    //         'form.date_from' => 'date from',
-    //         'form.date_to' => 'date to',
-
-    //     ];
-
-    //     $this->validate($required_array, [], $required_messages);
-
-
-    //     $movie = Movie::find($this->form['movie_id']);
-
-    //     if (!$movie) {
-    //         return;
-    //     }
-
-
-    //     $period = CarbonPeriod::create($this->form['date_from'], $this->form['date_to']);
-    //     $group = uniqid();
-    //     $slots = ceil($movie->duration / 15);
-    //     $cms_user = session('cms_user');
-    //     $cms_user_id = $cms_user->id;
-
-    //     foreach ($this->form['theater_ids'] as $theater_id) {
-    //         $theater = Theater::find($theater_id);
-    //         if (!$theater) continue;
-
-    //         $first_show_date = $this->getDateOfFirstMovieShowInBranch($this->form['movie_id'], $theater->branch_id)
-    //             ?? $period->first();
-
-    //         foreach ($this->form['time_ids'] as $time_id) {
-    //             $this->validate([
-    //                 'form.time_ids' => [new TimeConflictRule($theater_id, $period, $time_id, $movie->duration)],
-    //             ]);
-
-    //             foreach ($period as $date) {
-    //                 $week = $this->calculateWeekNumber($date, $first_show_date);
-
-
-    //                 $movie_show = new MovieShowCreationLog();
-    //                 $movie_show->cms_user_id = $cms_user_id;
-    //                 $movie_show->screen_type_id = $this->form['screen_type_id'];
-    //                 $movie_show->theater_id = $theater_id;
-    //                 $movie_show->movie_id = $this->form['movie_id'];
-    //                 $movie_show->time_id = $time_id;
-
-    //                 $movie_show->duration = $movie->duration;
-    //                 $movie_show->date = $date;
-    //                 $movie_show->visibility = 0;
-    //                 $movie_show->group = $group;
-    //                 $movie_show->week = $week;
-    //                 $movie_show->status = 'pending';
-    //                 $movie_show->message = null;
-
-    //                 $movie_show->save();
-
-    //                 dispatch(new \App\Jobs\ProcessMovieShowCreationLogs());
-    //             }
-    //         }
-    //     }
-
-    //     $this->resetForm();
-    //     $this->dispatch('record-created-' . $this->uniqeid);
-    //     $this->sendSuccess("Created", "Record successfully created");
-    // }
+    
 }
-
-    //REMOVE
-    // public function save()
-    // {
-    //     $required_array = [
-    //         'form.movie_id' => 'required',
-    //         'form.screen_type_id' => 'required',
-    //         'form.theater_ids' => 'required|array',
-    //         'form.time_ids' => 'required|array',
-    //         'form.date_from' => 'required',
-    //         'form.date_to' => 'required',
-
-    //     ];
-
-
-
-
-
-    //     $required_messages = [
-    //         'form.movie_id' => 'movie',
-    //         'form.screen_type_id' => 'screen type',
-    //         'theater_ids' => 'theater',
-    //         'time_ids' => 'time',
-    //         'form.date_from' => 'date from',
-    //         'form.date_to' => 'date to',
-
-    //     ];
-
-    //     $this->validate($required_array, [], $required_messages);
-
-
-    //     $movie = Movie::find($this->form['movie_id']);
-
-    //     if (!$movie) {
-    //         return;
-    //     }
-
-
-    //     $period = CarbonPeriod::create($this->form['date_from'], $this->form['date_to']);
-    //     $group = uniqid();
-    //     $slots = ceil($movie->duration / 15);
-    //     $cms_user = session('cms_user');
-    //     $cms_user_id = $cms_user->id;
-
-    //     foreach ($this->form['theater_ids'] as $theater_id) {
-    //         $theater = Theater::find($theater_id);
-    //         if (!$theater) continue;
-
-    //         $first_show_date = $this->getDateOfFirstMovieShowInBranch($this->form['movie_id'], $theater->branch_id)
-    //             ?? $period->first();
-
-    //         foreach ($this->form['time_ids'] as $time_id) {
-    //             $this->validate([
-    //                 'form.time_ids' => [new TimeConflictRule($theater_id, $period, $time_id, $movie->duration)],
-    //             ]);
-
-    //             foreach ($period as $date) {
-    //                 $week = $this->calculateWeekNumber($date, $first_show_date);
-
-
-    //                 $movie_show = new MovieShowCreationLog();
-    //                 $movie_show->cms_user_id = $cms_user_id;
-    //                 $movie_show->screen_type_id = $this->form['screen_type_id'];
-    //                 $movie_show->theater_id = $theater_id;
-    //                 $movie_show->movie_id = $this->form['movie_id'];
-    //                 $movie_show->time_id = $time_id;
-
-    //                 $movie_show->duration = $movie->duration;
-    //                 $movie_show->date = $date;
-    //                 $movie_show->visibility = 0;
-    //                 $movie_show->group = $group;
-    //                 $movie_show->week = $week;
-    //                 $movie_show->status = 'pending';
-    //                 $movie_show->message = null;
-
-    //                 $movie_show->save();
-
-    //                 dispatch(new \App\Jobs\ProcessMovieShowCreationLogs());
-    //             }
-    //         }
-    //     }
-
-    //     $this->resetForm();
-    //     $this->dispatch('record-created-' . $this->uniqeid);
-    //     $this->sendSuccess("Created", "Record successfully created");
-    // }

@@ -834,6 +834,30 @@ if (!function_exists('minutes_to_human')) {
         }
     }
 
+    if (!function_exists('calculate_week_from_start_year')) {
+        function calculate_week_from_start_year($date)
+        {
+            $date = Carbon::parse($date);
+            $yearStart = Carbon::parse($date->year . '-01-01')->startOfDay();
+
+            // If the year starts on Thursday, use it; otherwise, get the next Thursday
+            if ($yearStart->dayOfWeek === Carbon::THURSDAY) {
+                $firstThursday = $yearStart->copy();
+            } else {
+                $firstThursday = $yearStart->copy()->modify('next thursday');
+            }
+
+            if ($date->lt($firstThursday)) {
+                return 1;
+            }
+            $daysDiff = $firstThursday->diffInDays($date->copy()->startOfDay());
+            $weekNumber = intdiv($daysDiff, 7) + 1;
+            return $weekNumber;
+        }
+    }
+
+    
+
     if (!function_exists('get_range_date')) {
         function get_range_date($date)
         {

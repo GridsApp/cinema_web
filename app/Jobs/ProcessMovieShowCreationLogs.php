@@ -30,6 +30,7 @@ class ProcessMovieShowCreationLogs implements ShouldQueue
     {
         $log = $this->log;
 
+    
 
         $movie = Movie::find($log->movie_id);
         $theater = Theater::find($log->theater_id);
@@ -43,13 +44,6 @@ class ProcessMovieShowCreationLogs implements ShouldQueue
 
 
         $slots = ceil($movie->duration / 15);
-
-
-        // $validator = Validator::make(
-        //     ['time_id' => $log->time_id],
-        //     ['time_id' => [new TimeConflictRule($log->theater_id, [$log->date], $log->time_id, $movie->duration)]]
-        // );
-
 
         if (!validate_movie_show(
             $log->theater_id,
@@ -65,11 +59,7 @@ class ProcessMovieShowCreationLogs implements ShouldQueue
         }
 
 
-
-
         $first_show_date = $this->getDateOfFirstMovieShowInBranch($log->movie_id, $theater->branch_id);
-
-
         $week = $this->calculateWeekNumber(new \DateTime($log->date), $first_show_date ?? new \DateTime($log->date));
 
         try {
@@ -82,7 +72,11 @@ class ProcessMovieShowCreationLogs implements ShouldQueue
             $movie_show->duration = $movie->duration;
             $movie_show->date = $log->date;
             $movie_show->visibility = 0;
-            $movie_show->group = uniqid();
+            // $movie_show->group = $log->group ?? uniqid();
+
+            $weekNb = calculate_week_from_start_year($log->date);
+            $movie_show->group = md5($log->movie_id.$log->theater_id.$log->time_id.$weekNb);
+            
             $movie_show->color = "#000000";
             $movie_show->week = $week;
             $movie_show->save();
