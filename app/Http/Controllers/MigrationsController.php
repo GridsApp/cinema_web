@@ -246,8 +246,6 @@ class MigrationsController extends Controller
                     $card_type = 'digital';
                 }
 
-
-
                 $card_id = DB::table('user_cards')->insertGetId([
                     'user_id' => $new_user_id,
                     'barcode' => $card_number,
@@ -255,7 +253,6 @@ class MigrationsController extends Controller
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
-
 
 
                 if ($total_wallet_balance > 0) {
@@ -267,11 +264,9 @@ class MigrationsController extends Controller
                         'description' => 'System Migration',
                         'user_id' => $new_user_id,
                         'reference' => 'SYS',
-
                         'system_id' => 5,
                         'transactionable_id' => 1,
                         'transactionable_type' => 'twa\cmsv2\Models\CmsUser',
-
                         'created_at' => now(),
                         'updated_at' => now()
                     ]);
@@ -341,7 +336,6 @@ class MigrationsController extends Controller
                 dd($th);
             }
         }
-
     }
 
 
@@ -483,7 +477,8 @@ class MigrationsController extends Controller
         }
     }
 
-    public function addCoupons() {
+    public function addCoupons()
+    {
 
         // $path = storage_path('app/data.csv');
         $path = public_path('coupons/batch_12_06_2025.csv');
@@ -508,9 +503,9 @@ class MigrationsController extends Controller
 
         foreach ($data as $row) {
 
-            $found = DB::table('coupons')->where('code' , $row['code'])->first();
+            $found = DB::table('coupons')->where('code', $row['code'])->first();
 
-            if(!$found){
+            if (!$found) {
                 DB::table('coupons')->insert([
                     'label' => $row['label'],
                     'code' => $row['code'],
@@ -525,12 +520,13 @@ class MigrationsController extends Controller
     }
 
 
-    public function addReservedSeatsFromOrdersSeata() {
+    public function addReservedSeatsFromOrdersSeata()
+    {
 
         $today = now();
 
         // Get all order seats for today
-        $orderSeats = OrderSeat::whereDate('date', '>' ,  $today)
+        $orderSeats = OrderSeat::whereDate('date', '>',  $today)
             ->whereNull('deleted_at')
             ->whereNull('refunded_at')
             ->get();
@@ -570,7 +566,8 @@ class MigrationsController extends Controller
     }
 
 
-    public function treatJsonReferences(){
+    public function treatJsonReferences()
+    {
         // Get all orders where payment_reference contains a JSON-like string
         $orders = DB::table('orders')
             ->where('payment_reference', 'LIKE', '%{%')

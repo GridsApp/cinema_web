@@ -69,7 +69,7 @@ class CardRepository implements CardRepositoryInterface
 
         $lastTransaction = UserWalletTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
-            ->latest()
+            ->orderBy('id' , 'DESC')
             ->first();
 
         $currentBalance = $lastTransaction->balance ?? 0;

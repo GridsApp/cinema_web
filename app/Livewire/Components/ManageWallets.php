@@ -120,10 +120,6 @@ class ManageWallets extends Component
 
         try {
 
-
-
-
-
             $operator_id = $cms_user->id;
             // dd($operator_id);
 
