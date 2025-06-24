@@ -126,7 +126,7 @@ class OrderCafeteriaReport extends DefaultReport
                 $query->where('customers.phone' , $this->filterResults['phone']);
             })
             ->when(!empty($this->filterResults['system_id']), function ($query) {
-                $query->where('orders.system_id', $this->filterResults['filtesystem_idr_system']);
+                $query->where('orders.system_id', $this->filterResults['system_id']);
             })
             ->when(!empty($this->filterResults['payment_method_id']), function ($query) {
                 $query->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
