@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Exports\ReportExport;
 use App\Http\Controllers\GroupMoviesController;
 use App\Http\Controllers\ManageCouponsController;
+use App\Http\Controllers\ManagePointsController;
 use App\Http\Controllers\MovieShowsLogsController;
 use App\Http\Controllers\ReviewWeekNumbersController;
 use App\Http\Controllers\UserController;
@@ -205,6 +206,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
 
   Route::get("/manage/bookings", [ManageBookingController::class, 'render'])->name('manage-bookings');
   Route::get("/manage/wallets", [ManageWalletController::class, 'render'])->name('manage-wallets');
+  Route::get("/manage/points", [ManagePointsController::class, 'render'])->name('manage-points');
 
   Route::get("/manage/coupons", [ManageCouponsController::class, 'render'])->name('manage-coupons');
  

@@ -120,7 +120,7 @@ class CardRepository implements CardRepositoryInterface
 
         $lastTransaction = UserLoyaltyTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
-            ->latest()
+            ->orderBy('id' , 'desc')
             ->first();
 
 
@@ -183,7 +183,9 @@ class CardRepository implements CardRepositoryInterface
 
         $transaction = UserLoyaltyTransaction::whereNull('deleted_at')
             ->where('user_id', $user->id)
-            ->latest()->first();
+            ->orderBy('id' , 'desc')
+            ->orderBy('id' , 'desc')
+            ->first();
 
 
         $result =  $transaction->balance ?? 0;

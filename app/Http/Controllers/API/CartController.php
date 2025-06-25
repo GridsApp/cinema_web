@@ -413,93 +413,7 @@ class CartController extends Controller
         }
     }
 
-    // public function addImtiyazToCart()
-    // {
-    //     $form_data = clean_request([]);
-    //     $check = $this->validateRequiredFields($form_data, ['cart_id', 'phones']);
-
-    //     if ($check) {
-    //         return $this->response($check);
-    //     }
-
-    //     if (!is_array($form_data['phones']) || empty($form_data['phones'])) {
-    //         return $this->response(notification()->error('Invalid Phones data', 'Phones must be an array and not empty'));
-    //     }
-
-    //     $user = request()->user;
-    //     $user_type = request()->user_type;
-
-    //     try {
-    //         $cart = $this->cartRepository->checkCart($form_data['cart_id'], $user->id, $user_type);
-    //     } catch (\Exception $th) {
-    //         return $this->response(notification()->error('Cart is Expired', $th->getMessage()));
-    //     }
-
-
-    //     $cart_coupon_count = $this->cartRepository->getCouponCountFromCart($form_data['cart_id']);
-
-    //     if ($cart_coupon_count > 0) {
-    //         return $this->response(notification()->error('Imtiyaz can not be added with coupon', "Imtiyaz can not be added with coupon"));
-    //     }
-
-
-    //     // $cart_imtiyaz = CartImtiyaz::whereNull('deleted_at')->where('cart_id', $form_data['cart_id'])->get();
-
-    //     try {
-    //         $cart_imtiyaz =  $this->cartRepository->getImtiyazByCartId($form_data['cart_id']);
-    //         $count_imtiyaz = count($cart_imtiyaz);
-    //     } catch (\Throwable $th) {
-    //         return $this->response(notification()->error('Imtiyaz not found ', $th->getMessage()));
-    //     }
-
-
-    //     if ($count_imtiyaz > 0) {
-    //         return $this->response(notification()->error('Imityaz already added', 'Imityaz already added'));
-    //     }
-
-    //     try {
-    //         $cart_seats = $this->cartRepository->getCartSeats($form_data['cart_id']);
-    //         $count_seats = count($cart_seats);
-    //     } catch (\Throwable $th) {
-    //         return $this->response(notification()->error('Seats not found ', $th->getMessage()));
-    //     }
-
-    //     //  CartSeat::whereNull('deleted_at')->where('cart_id', $form_data['cart_id'])->orderBy('price', 'DESC')->get();
-
-
-
-    //     $eligibility = $count_seats % 2 == 0 ? $count_seats / 2 : ($count_seats - 1) / 2;
-
-
-    //     if (count($form_data['phones']) > $eligibility) {
-    //         return $this->response(notification()->error('Not eligible', 'Not eligible'));
-    //     }
-
-
-    //     try {
-    //         DB::beginTransaction();
-
-    //         $i = 1;
-
-    //         foreach ($form_data['phones'] as $phone) {
-    //             $this->cartRepository->addImtiyazToCart($form_data['cart_id'], $phone);
-
-    //             $cart_seat = $cart_seats[$i] ?? null;
-
-    //             if ($cart_seat) {
-    //                 $cart_seat->imtiyaz_phone = $phone;
-    //                 $cart_seat->save();
-    //             }
-
-    //             $i = $i + 2;
-    //         }
-    //         DB::commit();
-    //     } catch (\Exception $th) {
-    //         DB::rollBack();
-    //         return $this->response(notification()->error('Error adding imtiyaz to cart', $th->getMessage()));
-    //     }
-    //     return $this->response(notification()->success('Imtiyaz Phone added to the cart successfully', 'Imtiyaz Phone added to the cart successfully'));
-    // }
+   
 
     public function addImtiyazToCart()
     {
@@ -643,12 +557,15 @@ class CartController extends Controller
 
 
         try {
-            $this->cartRepository->checkCouponInCart($form_data['cart_id'], $coupon->id);
-            return $this->response(notification()->error('Coupon was already added to cart', "Coupon was already added to cart"));
+           $cart_coupon =  $this->cartRepository->checkCouponInCart($form_data['cart_id'], $coupon->id);
         } catch (\Exception $th) {
+            return $this->response(notification()->error('Something went wrong in coupon', "Something went wrong in coupon"));
+
         }
 
-
+        if($cart_coupon){
+            return $this->response(notification()->error('Coupon was already added to cart', "Coupon was already added to cart"));
+        }
 
 
         // Check if total of seats is > 0
@@ -853,7 +770,7 @@ class CartController extends Controller
 
         try {
            $cart =  Cart::where('id', $body['cart_id'])
-//                ->where('expires_at', '>', now())
+
                 ->whereNull('deleted_at')
                 ->firstOrFail();
 

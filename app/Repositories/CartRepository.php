@@ -493,16 +493,12 @@ class CartRepository implements CartRepositoryInterface
     public function checkCouponInCart($cart_id, $coupon_id)
     {
 
-        try {
-
             return CartCoupon::query()
                 ->whereNull('deleted_at')
                 ->where('coupon_id', $coupon_id)
                 ->where('cart_id', $cart_id)
-                ->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e->getMessage());
-        }
+                ->first();
+      
     }
     public function addCouponToCart($cart_id, $coupon)
     {

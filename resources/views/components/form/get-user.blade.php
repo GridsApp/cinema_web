@@ -31,9 +31,13 @@
                     'classes' => '',
                     'title' => 'User Info',
                     'actions' => $this->barcode
-                        ? '<div> <a target="_blank"  href="' .
-                            url('/cms/users/update/' . $user->id) .
-                            '" class="btn btn-primary"> Edit User</a> </div>'
+                        ? '<div style="display: flex; gap: 8px; align-items: center;">'
+                            . '<a target="_blank" href="' . url('/cms/users/update/' . $user->id) . '" class="btn btn-primary"> Edit User</a>'
+                            . (empty($user->blocked_at)
+                                ? '<form wire:submit.prevent="blockUser" style="display:inline;"><button type="submit" class="btn bg-red-500 text-white">Block</button></form>'
+                                : '<span class="text-danger" style="margin-left: 8px;font-size:10px;">Blocked at: ' . $user->blocked_at . '</span>'
+                            )
+                            . '</div>'
                         : '',
                 ])
                     <table class="twa-table table-auto">
@@ -159,6 +163,11 @@
                 @component('CMSView::components.panels.default', [
                     'classes' => 'manage-wallet-panel',
                     'title' => 'Loyalty Transactions',
+                    'actions' => $this->barcode
+                        ? '<div> <a target="_blank" href="' .
+                            route('manage-points', ['form[card_number]' => $this->barcode]) .
+                            '" class="btn btn-primary"> Top-up</a> </div>'
+                        : '',
                 ])
                     <table class="twa-table table-auto">
                         <thead>
@@ -176,7 +185,7 @@
                         <tbody>
 
                             @forelse($loyaltyTransactions as $transaction)
-                                {{-- @dd($transaction); --}}
+
 
 
                                 <tr>
@@ -205,7 +214,7 @@
                                     BALANCE
                                 </th>
                                 <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]">
-                                    {{ currency_format($balance)['display'] }}
+                                    {{ currency_format($loyaltyBalance)['display'] }}
                                 </th>
                             </tr>
                         </tbody>

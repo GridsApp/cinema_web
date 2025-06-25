@@ -21,11 +21,11 @@ class TimeSeeder extends Seeder
         $end = Carbon::createFromTime(23, 45);
 
 
-        DB::table('times_v2')->truncate();
+        DB::table('times')->truncate();
 
 
         while ($start <= $end) {
-            DB::table('times_v2')->insert([
+            DB::table('times')->insert([
                 'iso' => $start->format('H:i'),
                 'label' => $start->format('h:i A')
             ]);

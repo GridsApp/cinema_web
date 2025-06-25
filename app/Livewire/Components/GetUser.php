@@ -4,6 +4,7 @@ namespace App\Livewire\Components;
 
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
 
@@ -18,7 +19,7 @@ class GetUser extends Component
 
     public $user;
     public $barcode = null;
-    public $loyaltyBalance;
+    public $loyaltyBalance =0;
     public $loyaltyTransactions = [];
 
     private CardRepositoryInterface $cardRepository;
@@ -98,7 +99,8 @@ class GetUser extends Component
         $this->balance = collect($this->transactions)->last()['balance'] ?? 0;
         $this->user = $user;
         $this->loyaltyTransactions = $this->cardRepository->getLoyaltyTransactions($user);
-        $this->loyaltyBalance = $user->loyalty_balance ?? 0;
+        // dd($this->loyaltyTransactions);
+        $this->loyaltyBalance =  collect($this->loyaltyTransactions)->last()['balance'] ?? 0;
     }
 
 
@@ -106,5 +108,30 @@ class GetUser extends Component
     {
 
         return view('components.form.get-user');
+    }
+
+    public function blockUser()
+    {
+
+        // dd($this->user);
+        if (!$this->user) {
+            $this->sendError("Error", "No user selected.");
+            return;
+        }
+
+        try {
+
+
+         
+            // dd($this->user->blocked_at);
+            $user = $this->user;
+            $user->blocked_at = now();
+            $user->save();
+            // Refresh user data
+            $this->user = $this->userRepository->getUserById($user->id, true);
+            $this->sendSuccess("Success", "User has been blocked.");
+        } catch (\Throwable $th) {
+            $this->sendError("Error", "Failed to block user.");
+        }
     }
 }

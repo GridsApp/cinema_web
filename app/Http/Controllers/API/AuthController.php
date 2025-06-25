@@ -69,8 +69,15 @@ class AuthController extends Controller
 
         $user = $this->userRepository->getVerifiedUserByPhone($phone_number);
 
-        if($user){
-            return $this->response(notification()->error('Already registered' , 'This account is already registered'));
+        // if($user){
+        //     return $this->response(notification()->error('Already registered' , 'This account is already registered'));
+        // }
+
+        if ($user) {
+            if (!empty($user->blocked_at)) {
+                return $this->response(notification()->error('Account Blocked', 'This account is blocked and cannot register.'));
+            }
+            return $this->response(notification()->error('Already registered', 'This account is already registered'));
         }
 
         $user = $this->userRepository->createVerifiedUser($phone_number, $form_data["password"]);
@@ -119,6 +126,9 @@ class AuthController extends Controller
 
         if(!$user){
             return $this->response(notification()->error("Yoou have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
+        }
+        if (!empty($user->blocked_at)) {
+            return $this->response(notification()->error('Account Blocked', 'This account is blocked and cannot login.'));
         }
 
         if (md5($form_data['password']) != $user->password) {
