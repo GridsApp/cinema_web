@@ -121,11 +121,31 @@ class GetUser extends Component
 
         try {
 
-
-         
-            // dd($this->user->blocked_at);
             $user = $this->user;
             $user->blocked_at = now();
+            $user->save();
+            // Refresh user data
+            $this->user = $this->userRepository->getUserById($user->id, true);
+            $this->sendSuccess("Success", "User has been blocked.");
+        } catch (\Throwable $th) {
+            $this->sendError("Error", "Failed to block user.");
+        }
+    }
+
+
+    public function unblockUser()
+    {
+
+      
+        if (!$this->user) {
+            $this->sendError("Error", "No user selected.");
+            return;
+        }
+
+        try {
+
+            $user = $this->user;
+            $user->blocked_at = null;
             $user->save();
             // Refresh user data
             $this->user = $this->userRepository->getUserById($user->id, true);

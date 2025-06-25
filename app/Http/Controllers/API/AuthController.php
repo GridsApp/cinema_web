@@ -43,9 +43,6 @@ class AuthController extends Controller
             'phone' => 'phone'
         ]);
 
-
-        // Here
-
         $validator = Validator::make($form_data, [
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => [
@@ -74,7 +71,7 @@ class AuthController extends Controller
         // }
 
         if ($user) {
-            if (!empty($user->blocked_at)) {
+            if ($user->blocked_at) {
                 return $this->response(notification()->error('Account Blocked', 'This account is blocked and cannot register.'));
             }
             return $this->response(notification()->error('Already registered', 'This account is already registered'));
@@ -89,25 +86,15 @@ class AuthController extends Controller
             'access_token' => $this->tokenRepository->createAccessToken($user)
         ]);
 
-
-        // return $this->responseData([
-        //     'user_token' =>  $user->token,
-        //     'verify_drivers' => $this->otpRepository->getDrivers(),
-        // ]);
     }
 
     public function login()
     {
-
-
         $form_data = clean_request([
             'phone' => 'phone'
         ]);
 
         $validator = Validator::make($form_data, [
-            // 'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
-            // 'password' => 'required'
-
             'phone' => ['required', 'regex:/^\+?[0-9]+$/', 'phone'],
             'password' => [
                 'required',
@@ -127,7 +114,7 @@ class AuthController extends Controller
         if(!$user){
             return $this->response(notification()->error("Yoou have entered invalid phone/password or not verified", 'You have entered invalid phone/password or not verified'));
         }
-        if (!empty($user->blocked_at)) {
+        if ($user->blocked_at) {
             return $this->response(notification()->error('Account Blocked', 'This account is blocked and cannot login.'));
         }
 
@@ -143,10 +130,6 @@ class AuthController extends Controller
 
     public function check()
     {
-
-
-        // We removed the validation
-
 
         $form_data = clean_request([
             'phone' => 'phone'

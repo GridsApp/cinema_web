@@ -35,13 +35,18 @@
                             . '<a target="_blank" href="' . url('/cms/users/update/' . $user->id) . '" class="btn btn-primary"> Edit User</a>'
                             . (empty($user->blocked_at)
                                 ? '<form wire:submit.prevent="blockUser" style="display:inline;"><button type="submit" class="btn bg-red-500 text-white">Block</button></form>'
-                                : '<span class="text-danger" style="margin-left: 8px;font-size:10px;">Blocked at: ' . $user->blocked_at . '</span>'
+                                : '<form wire:submit.prevent="unblockUser" style="display:inline; margin-left:8px;"><button type="submit" class="btn bg-green-500 text-white">Unblock</button></form>'
                             )
                             . '</div>'
                         : '',
                 ])
                     <table class="twa-table table-auto">
                         <tbody>
+
+                            <tr>
+                                <td> <strong> ID </strong> </td>
+                                <td>{{ $user->id ?? '-' }}</td>
+                            </tr>
                             <tr>
                                 <td> <strong> Name </strong> </td>
                                 <td>{{ $user->name ?? '-' }}</td>
@@ -73,6 +78,13 @@
                                 <td><strong>Date of Marriage </strong></td>
                                 <td>{{ $user->dom ?? '-' }}</td>
                             </tr>
+
+                            @if($user->blocked_at)
+                            <tr>
+                                <td> <strong> Blocked at </strong> </td>
+                                <td>{{ $user->blocked_at ?? '-' }}</td>
+                            </tr>
+                            @endif
 
 
                             @if ($user->deleted_at)
@@ -166,7 +178,7 @@
                     'actions' => $this->barcode
                         ? '<div> <a target="_blank" href="' .
                             route('manage-points', ['form[card_number]' => $this->barcode]) .
-                            '" class="btn btn-primary"> Top-up</a> </div>'
+                            '" class="btn btn-primary"> Manage Loyalty</a> </div>'
                         : '',
                 ])
                     <table class="twa-table table-auto">
@@ -213,8 +225,9 @@
                                     class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">
                                     BALANCE
                                 </th>
+                           {{-- @dd($loyaltyBalance); --}}
                                 <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]">
-                                    {{ currency_format($loyaltyBalance)['display'] }}
+                                    {{ $loyaltyBalance }}
                                 </th>
                             </tr>
                         </tbody>
