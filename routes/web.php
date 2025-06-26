@@ -36,9 +36,10 @@ Route::get('test/test/test', function () {
 
 
   $entity = get_entity("coupons");
-  $path = "entity_imports/coupons/coupons_20250626_100353.csv";
+  // $path = "entity_imports/coupons/coupons_20250626_100353.csv";
+  $path="entity_imports/coupons/batch_20250626_191316.csv";
 
-  (new \twa\cmsv2\Jobs\EntityImportFileJob($entity, $path))->handle();
+  // (new \twa\cmsv2\Jobs\EntityImportFileJob($entity, $path))->handle();
 
 
 });
