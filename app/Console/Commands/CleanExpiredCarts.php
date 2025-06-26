@@ -2,9 +2,15 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+
 use App\Models\Cart;
-use Carbon\Carbon;
+use App\Models\CartItem;
+use App\Models\CartSeat;
+use App\Models\CartTopup;
+use App\Models\CartCoupon;
+use App\Models\CartImtiyaz;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class CleanExpiredCarts extends Command
 {
@@ -27,22 +33,26 @@ class CleanExpiredCarts extends Command
      */
     public function handle()
     {
-        $expiredCarts = \App\Models\Cart::where('expires_at', '<', now())->get();
-        $count = 0;
-    
-        foreach ($expiredCarts as $cart) {
-           
-            $cart->seats()->delete();
-            $cart->coupons()->delete();
-            $cart->imtiyaz()->delete();
-            $cart->items()->delete();
-            $cart->topups()->delete();
-    
-          
-            $cart->delete();
-            $count++;
+        $expiredCartsIds = Cart::select('id')->where('expires_at', '<', now())->pluck('id');
+
+        try {
+
+            DB::beginTransaction();
+
+
+            CartSeat::whereIn('cart_id', $expiredCartsIds)->delete();
+            CartCoupon::whereIn('cart_id', $expiredCartsIds)->delete();
+            CartImtiyaz::whereIn('cart_id', $expiredCartsIds)->delete();
+            CartItem::whereIn('cart_id', $expiredCartsIds)->delete();
+            CartTopup::whereIn('cart_id', $expiredCartsIds)->delete();
+
+            Cart::whereIn('id', $expiredCartsIds)->delete();
+
+            DB::commit();
+            $this->info("Deleted expired carts and their related records.");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $this->error("Not Deleted.");
         }
-    
-        $this->info("Deleted $count expired carts and their related records.");
     }
 }

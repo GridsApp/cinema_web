@@ -5,9 +5,9 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use \Illuminate\Support\Facades\File;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+// Artisan::command('inspire', function () {
+//     $this->comment(Inspiring::quote());
+// })->purpose('Display an inspiring quote')->hourly();
 
 
 Artisan::command('twa:entities', function () {
@@ -157,20 +157,6 @@ Artisan::command('twa:calculateDistShare {limit}', function ($limit) {
 
 
 
-
-
-Artisan::command('twa:addCoupons', function () {
-
-    $this->comment("Started");
-
-    //    (new \App\Http\Controllers\MigrationsController)->migrateUsers($limit , $this);
-
-    (new \App\Http\Controllers\MigrationsController)->addCoupons();
-
-
-
-    $this->comment("Finished");
-})->purpose('Transfering tables');
 
 
 
