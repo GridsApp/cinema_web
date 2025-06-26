@@ -121,7 +121,7 @@ class ManageWallets extends Component
         try {
 
             $operator_id = $cms_user->id;
-            // dd($operator_id);
+          
 
             $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], null, null, $operator_id, "twa\cmsv2\Models\CmsUser");
             $this->sendSuccess("Success", "Transaction created successfully.");
