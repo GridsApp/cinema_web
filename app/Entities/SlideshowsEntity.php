@@ -10,6 +10,8 @@ class SlideshowsEntity extends Entity
     public $tableName = "slideshows";
     public $slug = "slideshows";
 
+    public $enableSorting = true;
+    public $sortingCardLabel = "label_en";
 
     public $params = [
         'pagination' => 20,
@@ -29,7 +31,7 @@ class SlideshowsEntity extends Entity
 
     public function columns(){
         $this->addColumn("image");
-        $this->addColumn("label",['translatable'=>true]);
+        $this->addColumn("label_en",['translatable'=>true]);
         
         return $this->columns;
     }

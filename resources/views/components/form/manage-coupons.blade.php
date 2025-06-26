@@ -9,7 +9,7 @@
 
                 <div class="mb-5">
 
-            
+
                     {!! field('coupon_code') !!}
                 </div>
 
@@ -27,7 +27,10 @@
 
         @if ($this->form['coupon_code'])
 
-            @component('CMSView::components.panels.default', ['classes' => 'manage-wallet-panel overflow-auto !p-0', 'title' => 'Coupon Details'])
+            @component('CMSView::components.panels.default', [
+                'classes' => 'manage-wallet-panel overflow-auto !p-0',
+                'title' => 'Coupon Details',
+            ])
                 <table class="twa-table table-auto">
                     <thead>
                         <tr>
@@ -46,8 +49,7 @@
                             <th>Theater</th>
                             <th>Movie</th>
                             <th>Show Time</th>
-                         
-                         
+                            <th >Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,11 +58,13 @@
                                 <td>{{ $transaction->id ?? '-' }}</td>
                                 <td>{{ $transaction->label ?? '-' }}</td>
                                 <td>{{ $transaction->code ?? '-' }}</td>
-                                <td>{{ $transaction->used_at ? \Carbon\Carbon::parse($transaction->used_at)->format('Y-m-d H:i:s') : 'Not Used' }}</td>
-                                <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}</td>
+                                <td>{{ $transaction->used_at ? \Carbon\Carbon::parse($transaction->used_at)->format('Y-m-d H:i:s') : 'Not Used' }}
+                                </td>
+                                <td>{{ $transaction->expires_at ? \Carbon\Carbon::parse($transaction->expires_at)->format('Y-m-d H:i:s') : 'N/A' }}
+                                </td>
                                 <td>{{ $transaction->order_id ?? '-' }}</td>
                                 <td>{{ $transaction->order_reference ?? '-' }}</td>
-                              
+
                                 <td>{{ $transaction->user_id ?? '-' }}</td>
                                 <td>{{ $transaction->user_name ?? '-' }}</td>
                                 <td>{{ $transaction->pos_user_id ?? '-' }}</td>
@@ -69,8 +73,16 @@
                                 <td>{{ $transaction->theater ?? '-' }}</td>
                                 <td>{{ $transaction->movie_name ?? '-' }}</td>
                                 <td>{{ $transaction->show_time ?? '-' }}</td>
-                            
-                             
+                                <td>
+                                    @if($transaction->used_at)
+                                        <span class="badge bg-success">Used</span>
+                                    @else
+                                        <a href="{{ route('edit-manage-coupons', ['id' => $transaction->id]) }}"
+                                            class="btn !border !border-gray-300 btn-sm ">
+                                            Edit
+                                        </a>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>

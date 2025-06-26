@@ -31,8 +31,16 @@ use Illuminate\Http\Request;
 
 
 Route::get('test/test/test', function () {
-  dump(now()->parse("06-05-2025"));
-  dd(validate_movie_show(8, now()->parse("06-05-2025"), 37, 7, []));
+  // dump(now()->parse("06-05-2025"));
+  // dd(validate_movie_show(8, now()->parse("06-05-2025"), 37, 7, []));
+
+
+  $entity = get_entity("coupons");
+  $path = "entity_imports/coupons/coupons_20250626_100353.csv";
+
+  (new \twa\cmsv2\Jobs\EntityImportFileJob($entity, $path))->handle();
+
+
 });
 
 
@@ -209,6 +217,7 @@ Route::group(['prefix' => 'cms', 'middleware' => \twa\cmsv2\Http\Middleware\CmsA
   Route::get("/manage/points", [ManagePointsController::class, 'render'])->name('manage-points');
 
   Route::get("/manage/coupons", [ManageCouponsController::class, 'render'])->name('manage-coupons');
+  Route::get("edit/coupon/{id}", [ManageCouponsController::class, 'editCoupons'])->name('edit-manage-coupons');
  
 
 

@@ -10,4 +10,10 @@ class ManageCouponsController extends Controller
     {
         return view('pages.manage-coupons');
     }
+
+    public function editCoupons($id)
+    {
+        // dd($id);
+        return view('pages.edit-manage-coupons', ['id' => $id]);
+    }
 }

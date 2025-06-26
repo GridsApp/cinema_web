@@ -477,47 +477,7 @@ class MigrationsController extends Controller
         }
     }
 
-    public function addCoupons()
-    {
-
-        // $path = storage_path('app/data.csv');
-        $path = public_path('coupons/batch_12_06_2025.csv');
-
-        if (!file_exists($path) || !is_readable($path)) {
-            return response()->json(['error' => 'CSV file not found or not readable.'], 400);
-        }
-
-        $header = null;
-        $data = [];
-
-        if (($handle = fopen($path, 'r')) !== false) {
-            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
-                if (!$header) {
-                    $header = $row;
-                } else {
-                    $data[] = array_combine($header, $row);
-                }
-            }
-            fclose($handle);
-        }
-
-        foreach ($data as $row) {
-
-            $found = DB::table('coupons')->where('code', $row['code'])->first();
-
-            if (!$found) {
-                DB::table('coupons')->insert([
-                    'label' => $row['label'],
-                    'code' => $row['code'],
-                    'discount_flat' => $row['discount_flat'],
-                    'expires_at' => $row['expires_at'],
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-        }
-        return response()->json(['message' => 'CSV imported successfully.']);
-    }
+ 
 
 
     public function addReservedSeatsFromOrdersSeata()

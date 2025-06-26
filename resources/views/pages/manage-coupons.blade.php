@@ -3,12 +3,12 @@
 @section('content')
 
 <style>
-    .twa-table tbody tr td:last-child{
+    /* .twa-table tbody tr td:last-child{
         position: unset !important;
-    }
-    .twa-table thead th:last-child{
+    } */
+    /* .twa-table thead th:last-child{
         position: unset !important;
-    }
+    } */
 </style>
 <div class="container-fixed">
   

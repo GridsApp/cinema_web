@@ -39,5 +39,22 @@ class CouponsEntity extends Entity
         return $this->columns;
     }
 
+    public function importColumns(){
+
+        $this->addImportColumn("label");
+        $this->addImportColumn("code" , true);
+        $this->addImportColumn("discount_flat");
+        $this->addImportColumn("expires_at");
+    
+        return $this->import_columns;
+    }
+
+    public function importConditions($query){
+
+        $query = $query->whereNull('used_at');
+
+        return $query;
+    }
+
 
 }

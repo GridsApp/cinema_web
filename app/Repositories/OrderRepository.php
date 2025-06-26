@@ -248,11 +248,6 @@ class OrderRepository implements OrderRepositoryInterface
                 $operator_id = $cart->user_id;
             }
 
-            // elseif ($cart->kiok_user_id) {
-            //     dd("heree");
-            //     $operator_type = "App\Models\Kiokuser";
-            //     $operator_id = $cart->kiok_user_id;
-            // }
             else {
                 $operator_type = null;
                 $operator_id = null;

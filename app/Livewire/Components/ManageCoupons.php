@@ -4,6 +4,7 @@ namespace App\Livewire\Components;
 
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\Coupon;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
@@ -19,7 +20,7 @@ class ManageCoupons extends Component
     public $form = [];
 
     public $transactions = [];
-
+    public $editingCoupon = null;
    
 
 
@@ -55,6 +56,7 @@ class ManageCoupons extends Component
             ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
             ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
             ->leftJoin('pos_users as pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
+
             ->where('coupons.code', $this->form['coupon_code'])
             ->select([
                 'coupons.id',
@@ -87,6 +89,9 @@ class ManageCoupons extends Component
         $this->form['coupon_code'] = null;
         $this->transactions = [];
     }
+
+  
+
 
     public function render()
     {

@@ -57,23 +57,25 @@ class ContentController extends Controller
                 break;
         }
     }
-
     public function getSlideshows()
     {
-        $slideshows = Slideshow::whereNull('deleted_at')->get()->map(function ($slideshow) {
-            return [
-                'id' => $slideshow->id,
-                'label' => $slideshow->label,
-                'text' => $slideshow->text,
-                'image' => get_image($slideshow->image),
-                'cta_label' => $slideshow->cta_label,
-                'cta_link' => $slideshow->cta_link,
-            ];
-        });
-
+        $slideshows = Slideshow::whereNull('deleted_at')
+            ->orderBy('orders', 'ASC')
+            ->get()
+            ->map(function ($slideshow) {
+                return [
+                    'id' => $slideshow->id,
+                    'label' => $slideshow->label,
+                    'text' => $slideshow->text,
+                    'image' => get_image($slideshow->image),
+                    'cta_label' => $slideshow->cta_label,
+                    'cta_link' => $slideshow->cta_link,
+                ];
+            });
+    
         return $this->responseData($slideshows);
     }
-
+    
 
     public function getFaqs()
     {
