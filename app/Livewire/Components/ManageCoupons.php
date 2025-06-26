@@ -20,14 +20,7 @@ class ManageCoupons extends Component
 
     public $transactions = [];
 
-    // private CardRepositoryInterface $cardRepository;
-    // private UserRepositoryInterface $userRepository;
-
-    // public function __construct()
-    // {
-    //     $this->cardRepository = app(CardRepositoryInterface::class);;
-    //     $this->userRepository = app(UserRepositoryInterface::class);
-    // }
+   
 
 
     public function mount()
@@ -57,11 +50,11 @@ class ManageCoupons extends Component
             ->leftJoin('orders', 'coupons.order_id', '=', 'orders.id')
             ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-            ->leftJoin(DB::raw('(SELECT DISTINCT order_id, movie_id, theater_id FROM order_seats) as order_seats'), 'orders.id', '=', 'order_seats.order_id')
+            ->leftJoin(DB::raw('(SELECT DISTINCT order_id, movie_id, theater_id, time_id FROM order_seats) as order_seats'), 'orders.id', '=', 'order_seats.order_id')
             ->leftJoin('movies', 'order_seats.movie_id', '=', 'movies.id')
+            ->leftJoin('times', 'order_seats.time_id', '=', 'times.id')
             ->leftJoin('theaters', 'order_seats.theater_id', '=', 'theaters.id')
             ->leftJoin('pos_users as pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
-
             ->where('coupons.code', $this->form['coupon_code'])
             ->select([
                 'coupons.id',
@@ -77,6 +70,7 @@ class ManageCoupons extends Component
                 'users.id as user_id',
                 'branches.label_en as branch_name',
                 'movies.name as movie_name',
+                'times.label as show_time',
                 'theaters.label as theater',
                 'orders.pos_user_id',
                 'pos_users.name as pos_user_name',

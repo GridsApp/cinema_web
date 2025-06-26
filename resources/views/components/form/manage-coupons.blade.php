@@ -45,6 +45,7 @@
                             <th>Branch</th>
                             <th>Theater</th>
                             <th>Movie</th>
+                            <th>Show Time</th>
                          
                          
                         </tr>
@@ -67,6 +68,7 @@
                                 <td>{{ $transaction->branch_name ?? '-' }}</td>
                                 <td>{{ $transaction->theater ?? '-' }}</td>
                                 <td>{{ $transaction->movie_name ?? '-' }}</td>
+                                <td>{{ $transaction->show_time ?? '-' }}</td>
                             
                              
                             </tr>
