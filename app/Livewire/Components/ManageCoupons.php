@@ -27,7 +27,9 @@ class ManageCoupons extends Component
     public function mount()
     {
 
-       
+        if (!empty($this->form['coupon_code'])) {
+            $this->searchByCouponCode();
+        }
         if(!isset($this->form['coupon_code'])){
             $this->form['coupon_code'] = '';
         }

@@ -72,9 +72,9 @@ class EditManageCoupons extends Component
         $this->editingCoupon->discount_flat = $this->form['discount_flat'];
         $this->editingCoupon->expires_at = $this->form['expires_at'];
         $this->editingCoupon->save();
-        $this->sendSuccess("Success", "Success");
+        // $this->sendSuccess("Success", "Success");
 
-        // Redirect to manage coupons page with the updated code as a query parameter
+     
         return redirect()->route('manage-coupons', ['form[coupon_code]' => $this->editingCoupon->code]);
     }
 

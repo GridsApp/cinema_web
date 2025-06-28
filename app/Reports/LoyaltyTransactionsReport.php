@@ -86,7 +86,7 @@ class LoyaltyTransactionsReport extends DefaultReport
 
         $baseQuery = DB::table('user_loyalty_transactions')
             ->leftJoin('users as customers', 'user_loyalty_transactions.user_id', '=', 'customers.id')
-            ->join('orders', 'user_loyalty_transactions.reference', '=', 'orders.id')
+            ->leftJoin('orders', 'user_loyalty_transactions.reference', '=', 'orders.id')
             ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
             ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
             ->leftJoin('user_cards', 'user_loyalty_transactions.user_card_id', '=', 'user_cards.id')
