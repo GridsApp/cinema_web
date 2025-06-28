@@ -42,6 +42,7 @@ class WalletTransactionsReport extends DefaultReport
         $this->addColumn("client_name", "Client Name");
         $this->addColumn("client_email", "Client Email");
         $this->addColumn("client_phone", "Client Phone");
+        $this->addColumn("pos_user_name", "POS User");
         $this->addColumn("transaction_date", "Creation Date");
         $this->addColumn("transaction_time", "Creation Time");
         $this->addColumn("system", "Via");
@@ -69,6 +70,7 @@ class WalletTransactionsReport extends DefaultReport
             'client_name' => '-',
             'client_email' => '-',
             'client_phone' => '-',
+            'pos_user_name' => '-',
             'transaction_date' => '-',
             'transaction_time' => '-',
             'system' => '-',
@@ -83,11 +85,13 @@ class WalletTransactionsReport extends DefaultReport
             ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
             ->leftJoin('systems', 'user_wallet_transactions.system_id', '=', 'systems.id')
             ->leftJoin('user_cards', 'user_wallet_transactions.user_card_id', '=', 'user_cards.id')
+            ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
             ->select([
                 'user_cards.barcode as card_number',
                 'customers.name as customer_name',
                 'customers.email as customer_email',
                 'customers.phone as customer_phone',
+                'pos_users.name as pos_user_name',
 
                 'user_wallet_transactions.created_at',
                 'user_wallet_transactions.long_id',
@@ -154,6 +158,7 @@ class WalletTransactionsReport extends DefaultReport
                     'client_name' => $row->customer_name ?? '-',
                     'client_email' => $row->customer_email ?? '-',
                     'client_phone' => $row->customer_phone ?? '-',
+                    'pos_user_name' => $row->pos_user_name ?? '-',
                     'transaction_date' => $createdAt->format('d-m-Y'),
                     'transaction_time' => $createdAt->format('H:i:s'),
                     'system' => $row->system ?? '-',
