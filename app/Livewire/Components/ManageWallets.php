@@ -4,9 +4,12 @@ namespace App\Livewire\Components;
 
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\OrderTopup;
+use App\Repositories\OrderRepository;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
+use Illuminate\Support\Facades\DB;
 
 class ManageWallets extends Component
 {
@@ -22,11 +25,13 @@ class ManageWallets extends Component
 
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
+    private OrderRepository $orderRepository;
 
     public function __construct()
     {
-        $this->cardRepository = app(CardRepositoryInterface::class);;
+        $this->cardRepository = app(CardRepositoryInterface::class);
         $this->userRepository = app(UserRepositoryInterface::class);
+        $this->orderRepository = app(OrderRepository::class);
     }
 
 
@@ -119,13 +124,36 @@ class ManageWallets extends Component
         }
 
         try {
-
+            DB::beginTransaction();
             $operator_id = $cms_user->id;
-          
 
             $this->cardRepository->createWalletTransaction($type, $this->form['amount'], $user, $this->form['description'], null, null, $operator_id, "twa\cmsv2\Models\CmsUser");
+
+            // Add order and order_topup for both topup and deduct (as per your last change)
+            $order = new \App\Models\Order();
+            $order->user_id = $user->id;
+            $order->system_id = 5; // or set as needed
+            $order->barcode = $this->orderRepository->generateBarcode();
+            $order->reference = $this->orderRepository->generateReference();
+            // Try to get branch_id from cms_user
+            $order->branch_id = $cms_user->branch_id ?? ($cms_user->branch_attribute['id'] ?? null);
+            $order->payment_method_id = null; // set if you have payment method info
+            // $order->description = $this->form['description'];
+            $order->save();
+            $order->long_id = $this->orderRepository->generateLongId($order->id);
+            $order->save();
+
+            // Create OrderTopup
+            $orderTopup = new \App\Models\OrderTopup();
+            $orderTopup->order_id = $order->id;
+            $orderTopup->price = $this->form['amount'];
+            $orderTopup->label = $this->form['description'] ?? 'Wallet Topup';
+            $orderTopup->save();
+
+            DB::commit();
             $this->sendSuccess("Success", "Transaction created successfully.");
         } catch (\Throwable $th) {
+            DB::rollBack();
             $this->sendError("Error", "Failed to create the transaction. Please try again later.");
         }
 
