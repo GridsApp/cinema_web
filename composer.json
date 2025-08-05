@@ -22,9 +22,8 @@
         "riverskies/laravel-mobile-detect": "^1.3",
         "stevebauman/location": "^7.5",
         "tallstackui/tallstackui": "^1.35",
-        "twa/cmsv2": "dev-main",
-        "twa/omni-push": "dev-master",
-        "twa/uikit": "dev-main"
+        "twa/cmsv2": "1.0.1",
+        "twa/uikit": "1.0.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
