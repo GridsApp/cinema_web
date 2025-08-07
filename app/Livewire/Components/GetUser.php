@@ -171,7 +171,7 @@ class GetUser extends Component
                 'order_coupons.amount',
                 'orders.id as order_id'
             )
-            ->orderBy('coupons.used_at', 'desc')
+            ->orderByDesc('coupons.used_at')
             ->get()
             ->toArray();
     }
