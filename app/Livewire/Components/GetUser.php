@@ -5,6 +5,7 @@ namespace App\Livewire\Components;
 use App\Interfaces\CardRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use twa\uikit\Traits\ToastTrait;
 
@@ -19,8 +20,9 @@ class GetUser extends Component
 
     public $user;
     public $barcode = null;
-    public $loyaltyBalance =0;
+    public $loyaltyBalance = 0;
     public $loyaltyTransactions = [];
+    public $userCoupons = [];
 
     private CardRepositoryInterface $cardRepository;
     private UserRepositoryInterface $userRepository;
@@ -56,27 +58,26 @@ class GetUser extends Component
             $type = "email";
         } elseif (str($input)->contains('+')) {
             $type = "phone";
-        }elseif (is_numeric($input) && strlen($input) < 10) {
+        } elseif (is_numeric($input) && strlen($input) < 10) {
             $type = "id";
-        } 
-         else {
+        } else {
             $type = "card";
         }
 
         try {
             switch ($type) {
                 case "email":
-                    $user = $this->userRepository->getUserByEmail($this->form['phone_email_card_number'],true);
+                    $user = $this->userRepository->getUserByEmail($this->form['phone_email_card_number'], true);
                     break;
 
                 case "phone":
-                    $user = $this->userRepository->getUserByPhone($this->form['phone_email_card_number'],true);
+                    $user = $this->userRepository->getUserByPhone($this->form['phone_email_card_number'], true);
                     break;
                 case "id":
-                    $user = $this->userRepository->getUserById($input,true);
+                    $user = $this->userRepository->getUserById($input, true);
                     break;
                 case "card":
-                    $user = $this->userRepository->getUserByCardNumber($this->form['phone_email_card_number'],true);
+                    $user = $this->userRepository->getUserByCardNumber($this->form['phone_email_card_number'], true);
                     break;
             }
         } catch (\Throwable $th) {
@@ -136,7 +137,7 @@ class GetUser extends Component
     public function unblockUser()
     {
 
-      
+
         if (!$this->user) {
             $this->sendError("Error", "No user selected.");
             return;
@@ -153,5 +154,25 @@ class GetUser extends Component
         } catch (\Throwable $th) {
             $this->sendError("Error", "Failed to block user.");
         }
+    }
+
+    public function getUserCoupons($userId)
+    {
+        $this->userCoupons = DB::table('coupons')
+            ->join('order_coupons', 'coupons.id', '=', 'order_coupons.coupon_id')
+            ->join('orders', 'orders.id', '=', 'order_coupons.order_id')
+            ->where('orders.user_id', $userId)
+            ->select(
+                'coupons.label',
+                'coupons.code',
+                'coupons.discount_flat',
+                'coupons.expires_at',
+                'coupons.used_at',
+                'order_coupons.amount',
+                'orders.id as order_id'
+            )
+            ->orderBy('coupons.used_at', 'desc')
+            ->get()
+            ->toArray();
     }
 }

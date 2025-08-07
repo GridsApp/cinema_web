@@ -31,13 +31,14 @@
                     'classes' => '',
                     'title' => 'User Info',
                     'actions' => $this->barcode
-                        ? '<div style="display: flex; gap: 8px; align-items: center;">'
-                            . '<a target="_blank" href="' . url('/cms/users/update/' . $user->id) . '" class="btn btn-primary"> Edit User</a>'
-                            . (empty($user->blocked_at)
+                        ? '<div style="display: flex; gap: 8px; align-items: center;">' .
+                            '<a target="_blank" href="' .
+                            url('/cms/users/update/' . $user->id) .
+                            '" class="btn btn-primary"> Edit User</a>' .
+                            (empty($user->blocked_at)
                                 ? '<form wire:submit.prevent="blockUser" style="display:inline;"><button type="submit" class="btn bg-red-500 text-white">Block</button></form>'
-                                : '<form wire:submit.prevent="unblockUser" style="display:inline; margin-left:8px;"><button type="submit" class="btn bg-green-500 text-white">Unblock</button></form>'
-                            )
-                            . '</div>'
+                                : '<form wire:submit.prevent="unblockUser" style="display:inline; margin-left:8px;"><button type="submit" class="btn bg-green-500 text-white">Unblock</button></form>') .
+                            '</div>'
                         : '',
                 ])
                     <table class="twa-table table-auto">
@@ -79,11 +80,11 @@
                                 <td>{{ $user->dom ?? '-' }}</td>
                             </tr>
 
-                            @if($user->blocked_at)
-                            <tr>
-                                <td> <strong> Blocked at </strong> </td>
-                                <td>{{ $user->blocked_at ?? '-' }}</td>
-                            </tr>
+                            @if ($user->blocked_at)
+                                <tr>
+                                    <td> <strong> Blocked at </strong> </td>
+                                    <td>{{ $user->blocked_at ?? '-' }}</td>
+                                </tr>
                             @endif
 
 
@@ -197,9 +198,6 @@
                         <tbody>
 
                             @forelse($loyaltyTransactions as $transaction)
-
-
-
                                 <tr>
                                     <td> #{{ $transaction['id'] }} </td>
                                     <td> {{ $transaction['type'] == 'in' ? 'Topup' : 'Deduct' }} </td>
@@ -225,7 +223,7 @@
                                     class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d] ">
                                     BALANCE
                                 </th>
-                           {{-- @dd($loyaltyBalance); --}}
+                                {{-- @dd($loyaltyBalance); --}}
                                 <th class="py-[10px] text-center text-[14px] font-bold bg-gray-50 text-[#78829d]">
                                     {{ $loyaltyBalance }}
                                 </th>
@@ -235,6 +233,43 @@
                 @endcomponent
 
             @endif
+
+
+            @component('CMSView::components.panels.default', [
+                'classes' => 'manage-wallet-panel',
+                'title' => 'Used Coupons',
+            ])
+                <table class="twa-table table-auto">
+                    <thead>
+                        <tr>
+                            <th>Label</th>
+                            <th>Code</th>
+                            <th>Discount</th>
+                            <th>Used Amount</th>
+                            <th>Order ID</th>
+                            <th>Used At</th>
+                            <th>Expires At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($userCoupons as $coupon)
+                            <tr>
+                                <td>{{ $coupon->label }}</td>
+                                <td>{{ $coupon->code }}</td>
+                                <td>{{ currency_format($coupon->discount_flat)['display'] ?? '-' }}</td>
+                                <td>{{ currency_format($coupon->amount)['display'] ?? '-' }}</td>
+                                <td>#{{ $coupon->order_id }}</td>
+                                <td>{{ $coupon->used_at ?? '-' }}</td>
+                                <td>{{ $coupon->expires_at ?? '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7">No Coupons Used</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            @endcomponent
 
 
 
