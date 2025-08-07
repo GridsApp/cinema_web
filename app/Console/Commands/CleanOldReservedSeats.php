@@ -29,16 +29,16 @@ class CleanOldReservedSeats extends Command
     {
         $today = Carbon::today();
 
-        // Get all movie_show_ids from reserved_seats
-        $movieShowIds = DB::table('reserved_seats')->select('movie_show_id')->distinct()->pluck('movie_show_id');
+      
+        // $movieShowIds = DB::table('reserved_seats')->select('movie_show_id')->distinct()->pluck('movie_show_id');
 
-        // Get movie_show_ids where the show date is before today
+       
         $oldShowIds = DB::table('movie_shows')
-            ->whereIn('id', $movieShowIds)
-            ->where('date', '<', $today)
+            // ->whereIn('id', $movieShowIds)
+            ->whereDate('date', '<', $today)
             ->pluck('id');
 
-        // Delete reserved_seats for these old shows
+     
         $deleted = DB::table('reserved_seats')
             ->whereIn('movie_show_id', $oldShowIds)
             ->delete();
