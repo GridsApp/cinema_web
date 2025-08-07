@@ -102,6 +102,7 @@ class GetUser extends Component
         $this->loyaltyTransactions = $this->cardRepository->getLoyaltyTransactions($user);
         // dd($this->loyaltyTransactions);
         $this->loyaltyBalance =  collect($this->loyaltyTransactions)->last()['balance'] ?? 0;
+        $this->getUserCoupons($user->id);
     }
 
 
@@ -158,6 +159,8 @@ class GetUser extends Component
 
     public function getUserCoupons($userId)
     {
+
+      
         $this->userCoupons = DB::table('coupons')
             ->join('order_coupons', 'coupons.id', '=', 'order_coupons.coupon_id')
             ->join('orders', 'orders.id', '=', 'order_coupons.order_id')
