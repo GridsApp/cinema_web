@@ -40,9 +40,9 @@ class SurveyRatingsReport extends DefaultReport
             ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
             : null;
     
-        $baseQuery = DB::table('surveys')
-            ->join('orders', 'surveys.order_id', '=', 'orders.id')
-            ->when($dateRange, fn($q) => $q->whereBetween('surveys.created_at', $dateRange))
+        $baseQuery = DB::table('survey_results')
+            ->join('orders', 'survey_results.order_id', '=', 'orders.id')
+            ->when($dateRange, fn($q) => $q->whereBetween('survey_results.created_at', $dateRange))
             ->when(!empty($this->filterResults['branch_id']), fn($q) =>
                 $q->where('orders.branch_id', $this->filterResults['branch_id']))
             ->when(!empty($this->filterResults['pos_user_id']), fn($q) =>
