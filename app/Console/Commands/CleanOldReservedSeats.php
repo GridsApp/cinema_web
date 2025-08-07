@@ -30,11 +30,11 @@ class CleanOldReservedSeats extends Command
         $today = Carbon::today();
 
       
-        // $movieShowIds = DB::table('reserved_seats')->select('movie_show_id')->distinct()->pluck('movie_show_id');
+        $movieShowIds = DB::table('reserved_seats')->select('movie_show_id')->distinct()->pluck('movie_show_id');
 
        
         $oldShowIds = DB::table('movie_shows')
-            // ->whereIn('id', $movieShowIds)
+            ->whereIn('id', $movieShowIds)
             ->whereDate('date', '<', $today)
             ->pluck('id');
 

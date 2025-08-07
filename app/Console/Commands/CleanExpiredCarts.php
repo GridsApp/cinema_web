@@ -33,6 +33,8 @@ class CleanExpiredCarts extends Command
      */
     public function handle()
     {
+
+        
         $expiredCartsIds = Cart::select('id')->where('expires_at', '<', now())->pluck('id');
 
         try {
