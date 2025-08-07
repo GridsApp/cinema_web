@@ -10,7 +10,7 @@ use \Illuminate\Support\Facades\File;
 // })->purpose('Display an inspiring quote')->hourly();
 
 Artisan::command('schedule:run-daily-tasks', function () {
-    $this->call('carts:clean-expired');
+    // $this->call('carts:clean-expired');
     $this->call('reserved-seats:clean-old');
 })->describe('Run daily cleanup tasks for expired carts and old reserved seats');
 
