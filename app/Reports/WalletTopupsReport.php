@@ -90,7 +90,7 @@ class WalletTopupsReport extends DefaultReport
                 'payment_methods.label as payment_method',
                 'order_topups.price as unit_price',
                 'order_topups.label as topup',
-                DB::raw('SUM(price) as amount'),
+                DB::raw('SUM(order_topups.price) as amount'),
                 DB::raw("CONCAT(order_topups.id,'_',orders.reference) as computed_identifier"),
                 'order_topups.created_at',
                 'systems.label as system',
