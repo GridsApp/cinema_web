@@ -29,6 +29,8 @@ return [
         "wallet-transactions-report" => App\Reports\WalletTransactionsReport::class,
         "daily-admits-compact" => App\Reports\DailyAdmitsCompactReport::class,
         "survey-ratings-report" => App\Reports\SurveyRatingsReport::class,
+        "user-survey-ratings-report" => App\Reports\UserSurveyRatingsReport::class,
+        
 
     ]
 

@@ -47,141 +47,138 @@ class ConcessionSalesReport extends DefaultReport
         $this->addColumn("system", "Via");
         $this->addColumn("payment_method", "Payment Method");
         $this->addColumn("category", "Category");
-        
     }
 
 
 
     public function rows()
     {
-    
-       
-        
-    if (!$this->filterResults) {
-        return;
-    }
 
-    
-    $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
-        ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
-        : null;
-    
-    $footer = [
-        'created_at' => 'Total',
-        'reference' => '-',
-        'item' => '-',
-        'unit_price' => '-',
-        'nb_items' => 0,
-        'total_price' => 0,
-        'branch' => '-',
-        'booked_by' => '-',
-        'system' => '-',
-        'payment_method' => '-',
-        'category' => '-',
-    ];
-    
-    $baseQuery = DB::table('order_items')
-        ->join('orders', 'order_items.order_id', '=', 'orders.id')
-        ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
 
-        ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
-        ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-        ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
-        ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
-        ->leftJoin('items', 'order_items.item_id', '=', 'items.id')
-        ->select([
-            'orders.id as order_id',
-            'orders.reference',
-            'orders.user_id',
-            'pos_users.name as booked_by',
-            'branches.label_en as branch',
-            'branches.condensed_name as branch_condensed',
-            'orders.payment_method_id',
-            'payment_methods.label as payment_method',
-            'items.category as category',
-            'order_items.price as unit_price',
-            'order_items.label as item',
-            DB::raw('COUNT(*) as items_count'),
-            DB::raw("CONCAT(order_items.item_id,'_',orders.reference) as computed_identifier"),
-            'order_items.created_at',
-            'systems.label as system',
-        ])
-        ->whereNull('order_items.deleted_at')
-        ->where('items.category', '=', 'glasses');
-    
-    if ($dateRange) {
-        $baseQuery->whereBetween('order_items.created_at', $dateRange);
-    }
-    
-    if (!empty($this->filterResults['branch_id'])) {
-        $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
-    }
-    
-    if (!empty($this->filterResults['phone'])) {
-        $baseQuery->where('customers.phone' , $this->filterResults['phone']);
 
-    }
-    
-    if (!empty($this->filterResults['system_id'])) {
-        $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
-    }
-    
-    if (!empty($this->filterResults['payment_method_id'])) {
-        $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
-    }
-    
-    if (!empty($this->filterResults['reference'])) {
-        $baseQuery->where('orders.reference',$this->filterResults['reference']);
-    }
-    
-    $baseQuery->groupBy('computed_identifier');
-    
+        if (!$this->filterResults) {
+            return;
+        }
 
-    if($this->pagination){
-        $results = $baseQuery->paginate($this->pagination);
-    }else{
 
-        $results = $baseQuery->get();
-    }
+        $dateRange = isset($this->filterResults['start_date'], $this->filterResults['end_date'])
+            ? [Carbon::parse($this->filterResults['start_date'])->startOfDay(), Carbon::parse($this->filterResults['end_date'])->endOfDay()]
+            : null;
 
-  
-    $fn = function ($row) use (&$footer) {
-        $unit_price = $row->unit_price;
-        $items_count = $row->items_count;
-        $total_price = $unit_price * $items_count;
-    
-        $data = [
-            'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
-            'reference' => $row->reference,
-            'unit_price' => number_format($unit_price),
-            'nb_items' => $items_count,
-            'total_price' => number_format($total_price),
-            'item' => $row->item,
-            'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
-            'booked_by' => $row->booked_by ?? '-',
-            'system' => $row->system ?? '-',
-            'payment_method' => $row->payment_method ?? '-',
-            'category' => $row->category ?? '-',
+        $footer = [
+            'created_at' => 'Total',
+            'reference' => '-',
+            'item' => '-',
+            'unit_price' => '-',
+            'nb_items' => 0,
+            'total_price' => 0,
+            'branch' => '-',
+            'booked_by' => '-',
+            'system' => '-',
+            'payment_method' => '-',
+            'category' => '-',
         ];
-    
-        $footer['nb_items'] += $items_count;
-        $footer['total_price'] += $total_price;
-    
-        return $data;
-    };
 
-    if($this->pagination){
-        $rows = $results->through($fn);
-    }else{
-        $rows = $results->map($fn)->filter()->values();
-    }
-     
-    $footer['total_price'] = number_format($footer['total_price']);
-    
-    $this->setFooter($footer);
-    
-    return $rows;
-    
+        $baseQuery = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->leftJoin('users as customers', 'orders.user_id', '=', 'customers.id')
+
+            ->leftJoin('pos_users', 'orders.pos_user_id', '=', 'pos_users.id')
+            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
+            ->leftJoin('payment_methods', 'orders.payment_method_id', '=', 'payment_methods.id')
+            ->leftJoin('systems', 'orders.system_id', '=', 'systems.id')
+            ->leftJoin('items', 'order_items.item_id', '=', 'items.id')
+            ->select([
+                'orders.id as order_id',
+                'orders.reference',
+                'orders.user_id',
+                'pos_users.name as booked_by',
+                'branches.label_en as branch',
+                'branches.condensed_name as branch_condensed',
+                'orders.payment_method_id',
+                'payment_methods.label as payment_method',
+                'items.category as category',
+                'order_items.price as unit_price',
+                'order_items.label as item',
+                DB::raw('COUNT(*) as items_count'),
+                DB::raw("CONCAT(order_items.item_id,'_',orders.reference) as computed_identifier"),
+                'order_items.created_at',
+                'systems.label as system',
+            ])
+            ->whereNull('order_items.deleted_at')
+            ->where('items.category', '=', 'glasses');
+
+        if ($dateRange) {
+            $baseQuery->whereBetween('order_items.created_at', $dateRange);
+        }
+
+        if (!empty($this->filterResults['branch_id'])) {
+            $baseQuery->where('orders.branch_id', $this->filterResults['branch_id']);
+        }
+
+        if (!empty($this->filterResults['phone'])) {
+            $baseQuery->where('customers.phone', $this->filterResults['phone']);
+        }
+
+        if (!empty($this->filterResults['system_id'])) {
+            $baseQuery->where('orders.system_id', $this->filterResults['system_id']);
+        }
+
+        if (!empty($this->filterResults['payment_method_id'])) {
+            $baseQuery->where('orders.payment_method_id', $this->filterResults['payment_method_id']);
+        }
+
+        if (!empty($this->filterResults['reference'])) {
+            $baseQuery->where('orders.reference', $this->filterResults['reference']);
+        }
+
+        $baseQuery->groupBy('computed_identifier');
+
+
+        if ($this->pagination) {
+            $results = $baseQuery->paginate($this->pagination);
+        } else {
+
+            $results = $baseQuery->get();
+        }
+
+
+        $fn = function ($row) use (&$footer) {
+            $unit_price = $row->unit_price;
+            $items_count = $row->items_count;
+            $total_price = $unit_price * $items_count;
+
+            $data = [
+                'created_at' => Carbon::parse($row->created_at)->format('d-m-Y H:i'),
+                'reference' => $row->reference,
+                'unit_price' => number_format($unit_price),
+                'nb_items' => $items_count,
+                'total_price' => number_format($total_price),
+                'item' => $row->item,
+                'branch' => !empty($row->branch_condensed) ? $row->branch_condensed : $row->branch,
+                'booked_by' => $row->booked_by ?? '-',
+                'system' => $row->system ?? '-',
+                'payment_method' => $row->payment_method ?? '-',
+                'category' => $row->category ?? '-',
+            ];
+
+            $footer['nb_items'] += $items_count;
+            $footer['total_price'] += $total_price;
+
+            return $data;
+        };
+
+        if ($this->pagination) {
+            $rows = $results->through($fn);
+        } else {
+            $rows = $results->map($fn)->filter()->values();
+        }
+
+        $footer['total_price'] = number_format($footer['total_price']);
+
+        $this->setFooter($footer);
+
+        return $rows;
     }
 
 

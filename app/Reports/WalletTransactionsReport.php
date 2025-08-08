@@ -149,10 +149,8 @@ class WalletTransactionsReport extends DefaultReport
     
     
                     'long_id' => $row->long_id,
-                    // 'reference' =>  $row->reference ?? '-',
                     'description' => $row->description ?? '-',
                     'card_number' => $row->card_number ?? '-',
-    
                     'type' => $row->type ?? '-',
                     'amount' => $rawAmount,
                     'client_name' => $row->customer_name ?? '-',
@@ -166,8 +164,6 @@ class WalletTransactionsReport extends DefaultReport
                 ];
     
                 $footer['amount'] += $data['amount'];
-    
-    
     
                 $data['amount'] = number_format($data['amount']);
     

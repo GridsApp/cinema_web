@@ -85,8 +85,8 @@ class SoaReport extends DefaultReport
         $dateRange = get_range_date($date);
         $lastWeekDateRange = get_range_date(now()->parse($date)->subWeek());
 
-        // dd($dateRange);
-        $aggregates = function ($dateRange, $operator = 'between',$branch_id) {
+
+        $aggregates = function ($dateRange, $operator = 'between', $branch_id) {
             $query = OrderSeat::select(
                 DB::raw("movie_id as identifier"),
                 DB::raw("COUNT(*) as admits"),
@@ -116,7 +116,7 @@ class SoaReport extends DefaultReport
 
 
         $results = DB::table('order_seats')
-        ->join('orders', 'orders.id', '=', 'order_seats.order_id') 
+            ->join('orders', 'orders.id', '=', 'order_seats.order_id')
 
             ->join('movies', 'order_seats.movie_id', '=', 'movies.id')
             ->leftJoin('distributors', 'movies.distributor_id', '=', 'distributors.id')
@@ -132,7 +132,7 @@ class SoaReport extends DefaultReport
                 DB::raw('COUNT(order_seats.id) as tickets_sold'),
                 DB::raw('SUM(order_seats.price) as total_sales')
             )
-            ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id)) 
+            ->when($branch_id, fn($q) => $q->where('orders.branch_id', $branch_id))
 
             ->whereBetween('order_seats.date', $dateRange)
             ->whereNull('order_seats.deleted_at')
