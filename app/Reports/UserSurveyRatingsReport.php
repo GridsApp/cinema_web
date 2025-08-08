@@ -14,8 +14,8 @@ class UserSurveyRatingsReport extends DefaultReport
     {
         $this->addFilter('filter_start_date');
         $this->addFilter('filter_end_date');
-        // $this->addFilter('filter_branch');
-        // $this->addFilter('filter_pos_user');
+        $this->addFilter('filter_branch');
+        $this->addFilter('filter_pos_user');
     }
 
     public function header()
