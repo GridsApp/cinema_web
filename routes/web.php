@@ -30,19 +30,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 
-Route::get('test/test/test', function () {
-  // dump(now()->parse("06-05-2025"));
-  // dd(validate_movie_show(8, now()->parse("06-05-2025"), 37, 7, []));
-
-
-  $entity = get_entity("coupons");
-  // $path = "entity_imports/coupons/coupons_20250626_100353.csv";
-  $path="entity_imports/coupons/batch_20250626_191316.csv";
-
-  // (new \twa\cmsv2\Jobs\EntityImportFileJob($entity, $path))->handle();
-
-
-});
+Route::get('test/test/test', [WeekController::class,'test']);
 
 
 Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');

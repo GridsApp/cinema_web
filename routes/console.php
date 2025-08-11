@@ -3,6 +3,7 @@
 use App\Models\MovieShow;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\File;
 
 // Artisan::command('inspire', function () {
@@ -168,6 +169,57 @@ Artisan::command('twa:calculateDistShare {limit}', function ($limit) {
 })->purpose('Transfering tables');
 
 
+
+Artisan::command('twa:movePlayerIds' , function(){
+
+    $path = public_path('onesignal/users_playerid_mapping.csv'); 
+
+if (($handle = fopen($path, 'r')) !== false) {
+    // Skip header row
+    fgetcsv($handle);
+
+    $i = 0;
+    while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+
+        $player_session = trim($data[6]);
+        $playerId = trim($data[7]);
+        $tagsJson = $data[17];
+
+        // Decode JSON from tags column
+        $tags = json_decode($tagsJson, true);
+
+        if (json_last_error() === JSON_ERROR_NONE && isset($tags['user_id'])) {
+            $userId = $tags['user_id'];
+
+            // Update user in DB
+
+
+            $user =  DB::table('users')
+                ->where('id', $userId)
+                ->first();
+            
+
+            if(($user && now()->parse($user->player_session) < now()->parse($player_session)) 
+            || ($user && !$user->player_id)){
+                DB::table('users')
+                ->where('id', $userId)
+                ->update([
+                    'player_session' => $player_session,
+                    'player_id' => $playerId
+                ]);
+            }         
+
+        }
+
+        $i++;
+
+        $this->comment(count($data) ." : ". $i);
+    }
+
+    fclose($handle);
+}
+
+})->purpose("here");
 
 
 
