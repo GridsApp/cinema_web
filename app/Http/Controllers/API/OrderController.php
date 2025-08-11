@@ -13,6 +13,7 @@ use App\Interfaces\PosUserRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\ZoneRepositoryInterface;
+use App\Jobs\SendOrderPushNotification;
 use App\Models\MovieShow;
 use App\Models\Order;
 use App\Models\OrderCoupon;
@@ -62,6 +63,10 @@ class  OrderController extends Controller
         $this->kioskUserRepository = $kioskUserRepository;
     }
 
+
+   
+
+
     public function createOrder($cart_id, $payment_method, $payment_reference = null)
     {
 
@@ -108,6 +113,9 @@ class  OrderController extends Controller
 
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
+
+                   
+                
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', $th->getMessage()));
                 }
@@ -116,6 +124,7 @@ class  OrderController extends Controller
                 $payment_attempt->completed_at = now();
                 $payment_attempt->converted_at = now();
                 $payment_attempt->save();
+
 
                 return $this->responseData([
                     'order_id' => $order["order_id"],
@@ -175,6 +184,8 @@ class  OrderController extends Controller
 
                 try {
                     $order = $this->orderRepository->createOrderFromCart($payment_attempt, $branch_id);
+                   
+                
                 } catch (\Throwable $th) {
                     return $this->response(notification()->error('Order not completed', 'Your order has not been completed'));
                 }
@@ -214,6 +225,7 @@ class  OrderController extends Controller
 
                 break;
         }
+        
     }
 
 
@@ -338,47 +350,47 @@ class  OrderController extends Controller
                 }
             }
 
-                if ($payment_method->key != 'CASH') {
-                    if ($total_amount > 0 && $user_id) {
-                        if ($order->pos_user_id) {
-                            $operator_type = "App\Models\PosUser";
-                            $operator_id = $order->pos_user_id;
-                        } elseif ($order->user_id) {
-                            $operator_type = "App\Models\User";
-                            $operator_id = $order->user_id;
-                        } elseif ($order->kiosk_user_id) {
-                            $operator_type = "App\Models\KioskUser";
-                            $operator_id = $order->kiosk_user_id;
-                        } else {
-                            $operator_type = null;
-                            $operator_id = null;
-                        }
+            if ($payment_method->key != 'CASH') {
+                if ($total_amount > 0 && $user_id) {
+                    if ($order->pos_user_id) {
+                        $operator_type = "App\Models\PosUser";
+                        $operator_id = $order->pos_user_id;
+                    } elseif ($order->user_id) {
+                        $operator_type = "App\Models\User";
+                        $operator_id = $order->user_id;
+                    } elseif ($order->kiosk_user_id) {
+                        $operator_type = "App\Models\KioskUser";
+                        $operator_id = $order->kiosk_user_id;
+                    } else {
+                        $operator_type = null;
+                        $operator_id = null;
+                    }
 
-                        // First check if user has enough points
-                        $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($order->user);
+                    // First check if user has enough points
+                    $user_loyalty_balance = $this->cardRepository->getLoyaltyBalance($order->user);
 
-                        // dd($user_loyalty_balance, $total_points);
-                        if ($user_loyalty_balance < $total_points) {
-                            DB::rollBack();
-                            return $this->response(notification()->error('Insufficient Loyalty Points', 'User does not have enough loyalty points to refund'));
-                        }
+                    // dd($user_loyalty_balance, $total_points);
+                    if ($user_loyalty_balance < $total_points) {
+                        DB::rollBack();
+                        return $this->response(notification()->error('Insufficient Loyalty Points', 'User does not have enough loyalty points to refund'));
+                    }
 
-                        $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
+                    $walletTransaction = $this->cardRepository->createWalletTransaction("in", $total_amount, $order->user, "Recharge wallet", $order->id, null, $operator_id, $operator_type);
 
-                        if (!$walletTransaction) {
-                            DB::rollBack();
-                            return $this->response(notification()->error('Wallet Refund Failed', 'Failed to process wallet refund'));
-                        }
+                    if (!$walletTransaction) {
+                        DB::rollBack();
+                        return $this->response(notification()->error('Wallet Refund Failed', 'Failed to process wallet refund'));
+                    }
 
-                        $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
+                    $loyaltyTransaction = $this->cardRepository->createLoyaltyTransaction("out", $total_points, $order->user, "Remove points of ticket", $order->id);
 
-                        if (!$loyaltyTransaction) {
-                            DB::rollBack();
-                            return $this->response(notification()->error('Loyalty Points Deduction Failed', 'Failed to process loyalty points refund'));
-                        }
+                    if (!$loyaltyTransaction) {
+                        DB::rollBack();
+                        return $this->response(notification()->error('Loyalty Points Deduction Failed', 'Failed to process loyalty points refund'));
                     }
                 }
-            
+            }
+
 
             DB::commit();
             return $this->responseData(
@@ -389,8 +401,6 @@ class  OrderController extends Controller
             DB::rollBack();
             return $this->response(notification()->error('Refund Failed 4', 'An error occurred: ' . $th->getMessage()));
         }
-
-
     }
     //To be checked By hovig
     public function get()
@@ -427,7 +437,7 @@ class  OrderController extends Controller
         $details =  $this->details($order, false);
 
         $now = now()->setTimezone(env('TIMEZONE', 'Asia/Baghdad'))->format('d-m-Y');
-        $now=now()->parse($now);
+        $now = now()->parse($now);
         $exist_old_ticket = collect($details['tickets'])->where('not_formatted_date', '<', $now)->first();
 
         // dd($details['tickets'],$now);
@@ -697,7 +707,7 @@ class  OrderController extends Controller
                 'theater_number' => (int) ($seats->theater->hall_number ?? 0),
                 'seats' => $seats->seat,
                 'price' => currency_format($seats->price),
-                'gained_points' =>round( $seats->gained_points),
+                'gained_points' => round($seats->gained_points),
                 'type' => $type,
                 'is_imtiyaz' => !empty($seats->imtiyaz_phone),
             ];

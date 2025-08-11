@@ -21,7 +21,7 @@ interface OrderRepositoryInterface
     public function getPosuserLastOrder($pos_user_id);
     public function generateLongId($id);
 
-
+    public function sendSurveyNotification($order , $datetime , $offset = 3);
     public function getOrderCoupons($order_id);
     // public function getOrderSeats($order_id);
 }

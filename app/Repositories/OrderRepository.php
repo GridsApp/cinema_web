@@ -12,6 +12,7 @@ use App\Interfaces\PriceGroupZoneRepositoryInterface;
 use App\Interfaces\TheaterRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Jobs\CalculateDistShare;
+use App\Jobs\SendOrderPushNotification;
 use App\Models\BranchItem;
 use App\Models\Cart;
 use App\Models\CartCoupon;
@@ -28,6 +29,8 @@ use App\Models\OrderTopup;
 use App\Models\PaymentMethod;
 use App\Models\ReservedSeat;
 use App\Models\Theater;
+use App\Models\Time;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +68,7 @@ class OrderRepository implements OrderRepositoryInterface
 
 
 
-    public function createOrderFromCart($payment_attempt, $branch_id = null , $force = false)
+    public function createOrderFromCart($payment_attempt, $branch_id = null, $force = false)
     {
 
         $cart_id = $payment_attempt->reference;
@@ -74,9 +77,7 @@ class OrderRepository implements OrderRepositoryInterface
         try {
 
 
-            $cart = $this->cartRepository->getCartById($cart_id , $force);
-
-
+            $cart = $this->cartRepository->getCartById($cart_id, $force);
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage());
         }
@@ -86,14 +87,13 @@ class OrderRepository implements OrderRepositoryInterface
         if ($user_id == null) {
 
             try {
-                if($cart->card_number) {
+                if ($cart->card_number) {
                     $user_card = $this->cardRepository->getCardByBarcode($cart->card_number);
                     $user_id =  $user_card->user_id ?? null;
-                }else{
+                } else {
                     $user_card = null;
                     $user_id = null;
                 }
-
             } catch (\Throwable $th) {
 
                 $user_id = null;
@@ -102,6 +102,8 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         $cart_seats = $this->cartRepository->getCartSeats($cart_id);
+
+
         $cart_items = $this->cartRepository->getCartItems($cart_id);
         $cart_topups = $this->cartRepository->getCartTopups($cart_id);
         $cart_coupons = $this->cartRepository->getCartCoupons($cart_id);
@@ -246,9 +248,7 @@ class OrderRepository implements OrderRepositoryInterface
             } elseif ($cart->user_id) {
                 $operator_type = "App\Models\User";
                 $operator_id = $cart->user_id;
-            }
-
-            else {
+            } else {
                 $operator_type = null;
                 $operator_id = null;
             }
@@ -261,13 +261,58 @@ class OrderRepository implements OrderRepositoryInterface
 
         dispatch(new CalculateDistShare($order->id));
 
+
+
+        try {
+
+            if (count($cart_seats) > 0 && $order->user_id) {
+                $user = $this->userRepository->getUserById($order->user_id);
+
+                if (!empty($user->player_id)) {
+                    $time = Time::find($cart_seats[0]['time_id'])->iso;
+                    $date = now()->parse($cart_seats[0]['date']);
+                    $datetime = $date->format('Y-m-d') . " " . $time . ":00";
+
+                    $this->sendSurveyNotification($order, $datetime);
+                }
+            }
+        } catch (\Throwable $th) {
+        }
+
+
+
+
         return [
             'order_id' => $order->id,
+            'user_id' => $order->user_id,
             'cart_seats' => $cart_seats,
             'cart_items' => $cart_items,
             'cart_topups' => $cart_topups,
+
         ];
     }
+
+
+    public function sendSurveyNotification($order, $datetime, $offset = 3)
+    {
+
+        $user_id = $order->user_id;
+
+        if (!$user_id) {
+            return null;
+        }
+
+        if ($order->survey_submitted == 1) {
+            return;
+        }
+
+        $notificationTime = now()->parse($datetime)->addHours($offset);
+
+        SendOrderPushNotification::dispatch($user_id)
+            ->delay($notificationTime);
+    }
+
+
     public function getUserOrders($user_id)
     {
 
@@ -289,9 +334,8 @@ class OrderRepository implements OrderRepositoryInterface
                 $query->orWhere('barcode', $barcode);
                 $query->orWhere('reference', $barcode);
             })
-            ->whereNull('deleted_at')
-            ->firstOrFail();
-
+                ->whereNull('deleted_at')
+                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException("Order with Barcode {$barcode} not found .");
         }
@@ -349,8 +393,6 @@ class OrderRepository implements OrderRepositoryInterface
                     $query->groupBy('identifier');
                 })
                 ->get();
-
-
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -547,20 +589,21 @@ class OrderRepository implements OrderRepositoryInterface
         return $number;
     }
 
-    public function getSeatLabel($zone){
+    public function getSeatLabel($zone)
+    {
 
         $label = "";
 
-        if($zone->default != 1){
+        if ($zone->default != 1) {
             $label = $zone->label;
         }
 
         $priceGroupLabel = $zone->priceGroup->label ?? '';
 
-        if(!empty($priceGroupLabel)){
-            $label =  $priceGroupLabel.' '. $label;
+        if (!empty($priceGroupLabel)) {
+            $label =  $priceGroupLabel . ' ' . $label;
         }
 
-        return $label ;
+        return $label;
     }
 }

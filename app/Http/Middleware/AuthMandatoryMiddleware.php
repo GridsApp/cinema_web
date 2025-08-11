@@ -47,12 +47,14 @@ class AuthMandatoryMiddleware
 
 
   
+      
         if (!$access_token) {
             return $this->response(notification()->error("Access Token is required", "Access Token is required"));
         }
 
         $access_token = $this->tokenRepository->getActiveAccessToken($access_token);
 
+    
         if (!$access_token) {
             return $this->response(notification()->error("Access Token has expired or is invalid", "Access Token has expired or is invalid"));
         }

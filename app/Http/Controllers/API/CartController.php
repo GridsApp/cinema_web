@@ -193,6 +193,8 @@ class CartController extends Controller
 
 
         // dd($now,$check_show_date);
+
+        // dd($now,$check_show_date);
         if($now > $check_show_date){
             return $this->response(notification()->error('Movie show expired','Movie show expired'));
         }

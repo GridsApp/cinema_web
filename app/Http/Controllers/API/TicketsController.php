@@ -26,6 +26,7 @@ class TicketsController extends Controller
     public function history()
     {
         $user = request()->user;
+        // dd($user);
 
         $order_seats = OrderSeat::whereNull('order_seats.deleted_at')
             ->join('orders', 'orders.id', 'order_seats.order_id')
@@ -39,14 +40,24 @@ class TicketsController extends Controller
         }
         $order_seats = $order_seats->map(function ($seats, $movie_show_id) {
 
+
             $order = $seats->pluck('order')->first();
             $movieShow = $seats->pluck('movieShow')->first();
-            $movie_image = get_image($movieShow->movie->main_image);
+
+            $movie = $movieShow->movie ?? null;
+
+            if(!$movie){
+                return null;
+            }
+       
+       
+            $movie_image = get_image($movie->main_image);
 
             $show_datetime = now()->parse($movieShow->date . ' ' . $movieShow->time->iso);
-            $movie_duration = $movieShow->movie->duration ?? 0; // Movie duration in minutes
+            $movie_duration = $movie->duration ?? 0; // Movie duration in minutes
             $end_datetime = $show_datetime->addMinutes($movie_duration);
 
+           
 
             if (!$end_datetime->isBefore(now())) {
                 return null;
@@ -64,11 +75,11 @@ class TicketsController extends Controller
 
 
             return [
-                'movie_name' => $movieShow->movie->name ?? '',
+                'movie_name' => $movie->name ?? '',
                 'movie_image' => $movie_image ?? '',
                 'showdate' => now()->parse($movieShow->date)->format('d M, Y') ?? '',
                 'showtime' => isset($movieShow->time->iso) ? convertTo12HourFormat($movieShow->time->iso) : '',
-                'duration' => $movieShow->movie->duration,
+                'duration' => $movie->duration,
                 'branch' => $movieShow->theater->branch->label ?? '',
                 'theater' => $movieShow->theater->label ?? '',
                 'screen_type' => $movieShow->screenType->label ?? '',
@@ -84,6 +95,8 @@ class TicketsController extends Controller
             ];
         })->filter()->values();
 
+
+        
         return $this->responseData(
             $order_seats,
         );
