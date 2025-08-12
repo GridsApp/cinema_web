@@ -30,8 +30,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 
-Route::get('test/test/test', [WeekController::class,'test']);
-
 
 Route::get('/privacy-policy', [\App\Http\Controllers\WEBSITE\PrivacyPolicyController::class, 'render'])->name('privacy-policy');
 

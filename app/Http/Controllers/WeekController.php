@@ -51,47 +51,5 @@ class WeekController extends Controller
             $end_date->isoFormat('ddd D-MMM') . "</div>";
     }
 
-    public function test()
-    {
-
-
-
-        // $playerID = "f5cce57a-e00c-4ba6-99ab-568a356be797";
-        $playerID = "8748ebc5-9bd3-4b05-9baa-d293f479df22";
-
-        $conditions = [
-            "condition" => [],
-            "value" => []
-        ];
-
-
-        $titles = [
-            'en' => 'hi',
-            'ar' => 'hi'
-        ];
-        $messages = [
-            'en' => 'hello',
-            'ar' => 'hello'
-        ];
-
-        $data = [];
-
-        $config = config('omnipush.onesignal');
-        (new \twa\cmsv2\Http\Controllers\OneSignalController($config['data']))->sendPush($titles,$messages,$conditions , $data , null , $playerID);
-
-
-        return;
-
-
-        $order = Order::find(916754);
-
-
-
-        // dd(now());
-
-        $this->orderRepository->sendSurveyNotification($order, '2025-08-08 11:24:00', 0);
-
-
    
-    }
 }
