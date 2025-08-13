@@ -60,7 +60,7 @@ Route::post('/survey', [App\Http\Controllers\SurveyController::class, 'submitSur
 
 
 
-Route::view('/app/update/google', 'pages.update-google');
+Route::view('/', 'welcome');
 
 Route::prefix('payment')->group(function () {
   Route::get('/initialize/{payment_attempt_id}', [App\Http\Controllers\API\PaymentController::class, 'initialize'])->name('payment.initialize');

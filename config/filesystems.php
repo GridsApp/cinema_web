@@ -75,7 +75,7 @@ return [
             'endpoint' => env('R2_SPACES_ENDPOINT'),            
             'region' => env('R2_SPACES_REGION'),            
             'bucket' => env('R2_SPACES_BUCKET'),            
-            'root' => rtrim(str_replace(['http://', 'https://'], '', env('DATA_URL')), '/'),            
+            'root' => rtrim(str_replace(['http://', 'https://'], '', env('DATA_URL'))??'', '/'),            
             'visibility' => 'private',            
             'throw' => false
         ]
