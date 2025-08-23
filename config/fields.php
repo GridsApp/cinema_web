@@ -4053,4 +4053,16 @@ return [
         'name' => 'status'
     ],
 
+    'phone_number' => [
+        'id' => uniqid(),
+        'livewire' => [
+            'wire:model' => 'form.{name}',
+        ],
+        'type' => twa\uikit\FieldTypes\Textfield::class,
+        'label' => 'Phone number',
+        'placeholder' => 'Enter Phone number',
+        'name' => 'phone_number'
+    ],
+
+
 ];
